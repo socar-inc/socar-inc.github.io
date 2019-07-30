@@ -23,7 +23,7 @@ description              : "SOCAR 기술 블로그"
 url                      : "https://tech.socarcorp.kr"
 baseurl                  : ""
 repository               : "socar-inc/socar-inc.github.io" # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
-teaser                   : "https://www.socar.kr/static/images/home-bg-main-1.jpg" # path of fallback teaser image, e.g. "/assets/images/500x300.png"
+teaser                   : "/assets/images/home-bg-main-1.jpg" # path of fallback teaser image, e.g. "/assets/images/500x300.png"
 logo                     : # path of logo image to display in the masthead, e.g. "/assets/images/88x88.png"
 masthead_title           : # overrides the website title displayed in the masthead, use " " for no title
 # breadcrumbs            : false # true, false (default)
