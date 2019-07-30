@@ -9,11 +9,25 @@ To add new posts, simply add a file in the `_posts` directory that follows the c
 
 Jekyll also offers powerful support for code snippets:
 
-​```python
-def print_hi(name):
-  print("hello", name)
-print_hi('Tom')
-​```
+This is python code.
+
+```python
+def print_hi(name)
+  print "Hi, #{name}"
+```
+
+This is javascript code.
+
+```javascript
+const para = document.querySelector('p');
+
+para.addEventListener('click', updateName);
+
+function updateName() {
+  let name = prompt('Enter a new name');
+  para.textContent = 'Player 1: ' + name;
+}
+```
 
 Check out the [Jekyll docs][jekyll-docs] for more info on how to get the most out of Jekyll. File all bugs/feature requests at [Jekyll’s GitHub repo][jekyll-gh]. If you have questions, you can ask them on [Jekyll Talk][jekyll-talk].
 
