@@ -17,7 +17,6 @@ linkedin_username:
 google_analytics:   UA-XXXXXXXXX-X # out your google-analytics code
 
 # Build settings
-markdown:           kramdown
 paginate:           5
 paginate_path:      "/posts/page:num/"
 plugins:
@@ -25,4 +24,7 @@ plugins:
   - jekyll-paginate
   - jekyll-sitemap ## Uncomment this line to silently generate a sitemaps.org compliant sitemap for your Jekyll site
 
-highlighter: rouge
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
