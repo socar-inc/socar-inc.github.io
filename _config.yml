@@ -20,7 +20,7 @@ title_separator          : "-"
 subtitle                 : # site tagline that appears below site title in masthead
 name                     : "SOCAR"
 description              : "SOCAR 기술 블로그"
-url                      : "https://tech.socarcorp.kr"
+url                      : "https://socar-dorma.github.io"
 baseurl                  : ""
 repository               : "socar-inc/socar-inc.github.io" # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
 teaser                   : "/assets/images/home-bg-main-1.jpg" # path of fallback teaser image, e.g. "/assets/images/500x300.png"
@@ -106,7 +106,7 @@ analytics:
 
 # Site Author
 author:
-  name             : "Your Name"
+  name             : "SOCAR"
   avatar           : # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
   bio              : "I am an **amazing** person."
   location         : "Somewhere"
