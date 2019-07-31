@@ -24,7 +24,12 @@ plugins:
   - jekyll-paginate
   - jekyll-sitemap ## Uncomment this line to silently generate a sitemaps.org compliant sitemap for your Jekyll site
 
-markdown: kramdown
+# Conversion
+markdown:    kramdown
+highlighter: rouge
+
+# Markdown Processors
 kramdown:
   input: GFM
+  auto_ids: true
   syntax_highlighter: rouge
