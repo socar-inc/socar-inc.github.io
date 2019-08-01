@@ -296,7 +296,7 @@ $ docker kill freeradius-server
   - client.conf
     - `SHARED_SECRET` 실행시 환경변수로 지정합니다.
 
-```properties
+```conf
 client localhost {
   # ...
 	secret = $ENV{SHARED_SECRET}
@@ -309,7 +309,7 @@ client localhost {
     - eap 처리 설정 + authorize와 authenticate 단계에서 python 모듈을 사용하도록 추가
     - authorize 단계에서 실행된 python script에서 `Auth-Type=KEYCLOAK`를 설정 할 예정.
 
-```properties
+```conf
 server default {
 
     authorize {
@@ -340,7 +340,7 @@ server default {
     - `mods-enabled/eap`에서 EAP-TTLS의 `virtual-server`로 inner-tunnel이 설정됨.
     - 들어온 RADIUS요청이 EAP-TTLS일 경우 `sites-enabled/default`에서 eap 관련 처리가 되고 inner-tunnel로 전달 됨.
 
-```properties
+```conf
 server inner-tunnel {
     authorize {
         # ...
@@ -363,7 +363,7 @@ server inner-tunnel {
     - tls, ttls 관련 설정을 빼고 다른 EAP Type 들은 주석처리.
     - `private_key_password`는 인증서 생성시에 만들때 쓴 암호 입력.
 
-```properties
+```conf
 eap {
   # ...
 	default_eap_type = ttls
@@ -419,7 +419,7 @@ eap {
     - Dockerfile에서 이미지 생성시 추가하는 모듈들의 docker image 내 경로를 확인해서 추가해 주어야함.
     - 아래는 `pycrypto`가 설치된 경로를 추가한 설정임. (아래 Docker file 참조)
 
-```properties
+```conf
 python {
 	python_path="/usr/lib/python2.7/:/usr/local/lib/python2.7/dist-packages:${modconfdir}/python/:/usr/lib/python2.7/lib-dynload/"
 	module = keycloak
