@@ -72,12 +72,28 @@ tags:
 
 <div class="mermaid">
 graph TD;
-  subgraph Kubernetes
+  subgraph Wifi
+    CISCO_ROUTER[Cisco 무선공유기]
+  end
+
+  subgraph Linux-Servers
+    PAM_RADIUS[SSH 접속]
+  end
+
+  subgraph Kubernetes-Cluster
     KEYCLOAK[Keycloak]
+    WEB_APP[웹서비스]
   end
   
   subgraph Other-Server
     FREE_RADIUS[FreeRADIUS]
   end
-  KEYCLOAK---|인증|FREE_RADIUS
+
+  CISCO_ROUTER-->|RADIUS Protocol|FREE_RADIUS
+  FREE_RADIUS-->|HTTP API|KEYCLOAK
+  WEB_APP-->|HTTP API|KEYCLOAK
+  PAM_RADIUS -->|RADIUS Protocol|FREE_RADIUS
+  USER -->|관리시스템 접속|WEB_APP
+  USER -->|Wifi 접속|CISCO_ROUTER
+  USER -->|SSH 접속|PAM_RADIUS
 </div>
