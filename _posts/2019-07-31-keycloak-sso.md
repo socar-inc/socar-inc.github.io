@@ -45,14 +45,18 @@ tags:
 ###### 1. Web 사이트 인증
   - OpenID / SAML 프로토콜 지원 및 Java client 지원
   - reverse proxy로 동작하는 [gatekeepr](https://github.com/keycloak/keycloak-gatekeeper)를 이용해 Web Application에서는 인증 / 권한 코드를 작성하지 않고 처리 가능
+
 ###### 2. Wifi 인증
   - 사내에 Cisco 라우터를 사용하고 있고, RADIUS 프로토콜을 지원하므로 [RADIUS 서버](https://ko.wikipedia.org/wiki/RADIUS)를 구축하면 가능
   - [FreeRADIUS](https://freeradius.org)의 [Python 모듈](https://wiki.freeradius.org/modules/Rlm_python)에서 keycloak API를 호출해서 인증을 처리 하면 가능
+
 ###### 3. SSH 인증(+ Sudo 인증)
   - [sshd_config](https://linux.die.net/man/5/sshd_config)설정에서 UsePAM 옵션을 활성화 시키고 [pam_radius_auth.so](https://github.com/FreeRADIUS/pam_radius)를 사용해 RADIUS 서버를 통해서 인증 가능
+
 ###### 4. 2차 인증 (OTP) 지원
   - 지원됨.
   - Wifi 인증시에는 사용하지 않을 예정이며, SSH(+ sudo) 인증시에는 [Access-Challenge + Reply-Message](https://www.iana.org/assignments/radius-types/radius-types.xhtml)를 회신하면 [pam_radius_auth.so](https://github.com/FreeRADIUS/pam_radius)에서 사용자에게 추가 입력을 받을 수 있음
+
 ###### 5. 유연한 권한 설정(Authorization)
   - keycloak의 권한 설정은 상당히(~~과하게~~) 유연함. ([참고](https://www.keycloak.org/docs/4.8/authorization_services/))
 
@@ -68,8 +72,12 @@ tags:
 
 <div class="mermaid">
 graph TD;
-    A-->B;
-    A-->C;
-    B-->D;
-    C-->D;
+  subgraph Kubernetes
+    KEYCLOAK[Keycloak]
+  end
+  
+  subgraph Other-Server
+    FREE_RADIUS[FreeRADIUS]
+  end
+  KEYCLOAK---|인증|FREE_RADIUS
 </div>
