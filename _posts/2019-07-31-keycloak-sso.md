@@ -62,14 +62,12 @@ tags:
 
 -----
 
-## 설치 계획
+## 설치 계획 및 구성
 - Keycloak은 `Kubernetes 클러스터`에 설치
 - FreeRADIUS는 `별도 서버에 docker-compose`로 설치
   - RADIUS 프로토콜은 `UDP` Port2개를 사용합니다.(default: 1812, 1813)
   - ~~`UDP`는 AWS에서 Load Balancer를 사용할 수 없습니다.~~ [셋팅 완료 후 .. 얼마 전부터 지원시작](https://aws.amazon.com/ko/blogs/aws/new-udp-load-balancing-for-network-load-balancer/)
-
-
-
+- 대략적인 구성은 아래와 같습니다
 <div class="mermaid">
 graph TD;
   subgraph Wifi
