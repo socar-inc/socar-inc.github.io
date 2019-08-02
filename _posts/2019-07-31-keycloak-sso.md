@@ -3,6 +3,7 @@ layout: post
 title: "Keycloak를 이용한 SSO 구축(web + wifi + ssh)"
 date: 2019-07-31 17:20:00 +0900
 category: security
+author: dorma
 tags:
     - keycloak
     - sso
