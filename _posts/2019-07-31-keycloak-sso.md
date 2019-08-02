@@ -10,7 +10,7 @@ tags:
     - sso
 ---
 
-Photo by [Zhen](https://unsplash.com/@zhenhu2424?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) Hu on [Unsplash](https://unsplash.com/search/photos/lock?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)
+###### Photo by [Zhen](https://unsplash.com/@zhenhu2424?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) Hu on [Unsplash](https://unsplash.com/search/photos/lock?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)
 
 ## 사내 SSO(Single Sign-On) 구축하기
   이번에 쏘카에서 사내 보안 강화를 위해 SSO를 구축 하였습니다.
