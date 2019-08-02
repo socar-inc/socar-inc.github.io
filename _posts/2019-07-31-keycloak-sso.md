@@ -22,7 +22,7 @@ tags:
   5. 유연한 권한 설정(Authorization)
 ```
 
-  여러 유료 솔루션([Gluu](https://www.gluu.org/), [Google Identity Platform](https://developers.google.com/identity/) 등)도 검토 하였으나 설치형 + 오픈소스로 무료로 사용 가능한 [`Keycloak`](https://www.keycloak.org/)으로 구축으로 방향을 잡았습니다.
+  Identity Provider로 여러 유료 솔루션([Gluu](https://www.gluu.org/), [Google Identity Platform](https://developers.google.com/identity/) 등)도 검토 하였으나 설치형 + 오픈소스로 무료로 사용 가능한 [`Keycloak`](https://www.keycloak.org/)으로 구축으로 방향을 잡았습니다.
   
   Wifi 인증([FreeRADIUS에서 LDAP 모듈 지원](https://freeradius.org/modules/?s=ldap&mod=rlm_ldap))이나 ssh인증([pam_ldap](https://www.tldp.org/HOWTO/archived/LDAP-Implementation-HOWTO/pamnss.html))의 경우 OpenLDAP과 연동해서 처리 하는 방법에 대한 자료가 더 많지만, Web기반으로 운용 가능한 시스템을 더 선호해서 Keycloak을 선정하게 되었습니다. ~~험한길을 가게 되었습니다.~~
 
@@ -45,7 +45,7 @@ tags:
 
 ##### 1. Web 사이트 인증
   - OpenID / SAML 프로토콜 지원 및 Java client 지원
-  - reverse proxy로 동작하는 [gatekeepr](https://github.com/keycloak/keycloak-gatekeeper)를 이용해 Web Application에서는 인증 / 권한 코드를 작성하지 않고 처리 가능
+  - reverse proxy로 동작하는 [gatekeepr](https://github.com/keycloak/keycloak-gatekeeper)를 이용해 Web Application에서는 인증 / 권한 코드를 작성하지 않고도 처리 가능
 
 ##### 2. Wifi 인증
   - 사내에 Cisco 라우터를 사용하고 있고, RADIUS 프로토콜을 지원하므로 [RADIUS 서버](https://ko.wikipedia.org/wiki/RADIUS)를 구축하면 가능
@@ -55,7 +55,7 @@ tags:
   - [sshd_config](https://linux.die.net/man/5/sshd_config)설정에서 UsePAM 옵션을 활성화 시키고 [pam_radius_auth.so](https://github.com/FreeRADIUS/pam_radius)를 사용해 RADIUS 서버를 통해서 인증 가능
 
 ##### 4. 2차 인증 (OTP) 지원
-  - 지원됨.
+  - TOTP 지원
   - Wifi 인증시에는 사용하지 않을 예정이며, SSH(+ sudo) 인증시에는 [Access-Challenge + Reply-Message](https://www.iana.org/assignments/radius-types/radius-types.xhtml)를 회신하면 [pam_radius_auth.so](https://github.com/FreeRADIUS/pam_radius)에서 사용자에게 추가 입력을 받을 수 있음
 
 ##### 5. 유연한 권한 설정(Authorization)
@@ -65,7 +65,7 @@ tags:
 
 ## 설치 계획 및 구성
 - Keycloak은 `Kubernetes 클러스터`에 설치
-- FreeRADIUS는 `별도 서버에 docker-compose`로 설치
+- FreeRADIUS는 `별도 서버에 docker-compose`로 설치(kubernetes 클러스터에 설치해도 상관 없음)
   - RADIUS 프로토콜은 `UDP` Port2개를 사용합니다.(default: 1812, 1813)
   - ~~`UDP`는 AWS에서 Load Balancer를 사용할 수 없습니다.~~ [셋팅 완료 후 .. 얼마 전부터 지원시작](https://aws.amazon.com/ko/blogs/aws/new-udp-load-balancing-for-network-load-balancer/)
 - 대략적인 구성은 아래와 같습니다
@@ -98,6 +98,7 @@ graph TD;
 </div>
 
 -----
+
 ## Kubernetes(AWS EKS)에 Keycloak 설치
   - **[helm](https://helm.sh/)이 설치되어 있어야 합니다.**
   - Keycloak는 [Helm Chart](https://github.com/codecentric/helm-charts/tree/master/charts/keycloak)로 제공 되고 있습니다.
@@ -182,6 +183,7 @@ helm install --name keycloak -f values.yaml codecentric/keycloak
     - https://www.keycloak.org/documentation.html
 
 -----
+
 ## RADIUS 서버 설치 및 Keycloak 연동 설정
 
 ##### 1. [EAP(확장 가능 인증 프로토콜)](https://ko.wikipedia.org/wiki/%ED%99%95%EC%9E%A5_%EA%B0%80%EB%8A%A5_%EC%9D%B8%EC%A6%9D_%ED%94%84%EB%A1%9C%ED%86%A0%EC%BD%9C)
@@ -219,7 +221,7 @@ graph LR;
 
 ##### 4. FreeRADIUS 설정 및 Docker Image 생성
   - [Docker Hub에 공개되어 있는 이미지](https://hub.docker.com/r/freeradius/freeradius-server/)를 그대로 이용하면 좋지만... 기본 이미지는 `python`을 지원하지 않습니다. 
-  - Python 모듈에서 암복호화 기능도 사용할 예정이므로 [pycrypto](https://pypi.org/project/pycrypto/)도 필요합니다.
+  - 저는 Python 모듈에서 암복호화 기능도 사용할 예정이므로 [pycrypto](https://pypi.org/project/pycrypto/)도 필요합니다.
   - FreeRADIUS 설정 파일들은 굳이 Docker Image에 넣지 않고 실행시 mount 해도 상관없습니다만, 저는 Docker Image에 설정파일을 수정해서 포함 시켰습니다.
   - FreeRADIUS에서 사용 할 인증서 파일도 생성해서 이미지에 포함시킵니다.(이것도.. 실행시 mount 해도 무방합니다.)
 
@@ -234,7 +236,7 @@ $ docker cp freeradius-server:/etc/freeradius freeradius-config
 $ docker kill freeradius-server
 ```
 
-  - 설정 디렉토리 구조(수정 불필요 파일은 생략..)
+  - 설정 디렉토리 구조(수정 불필요한 파일은 생략..)
 
 ```
 .
@@ -268,6 +270,9 @@ $ docker kill freeradius-server
 ```
 
 **step 2. 인증서 생성(Wifi 인증)**
+  - **`make`와 `openssl`이 설치되어 있어야 합니다.**
+    - [make 설치](https://macnews.tistory.com/4243)
+    - [openssl 설치](http://egloos.zum.com/popfly/v/6035802)
   - `Wifi 인증`에 `EAP-TLS`, `EAP-TTLS` 등을 사용해야 할 경우 필요합니다. 아닐 경우 다음 단게로...
   - 추출한 설정 디렉토리중 [`certs/README`](https://github.com/redBorder/freeradius/blob/master/raddb/certs/README)를 참조해서 진행합니다.
   - 추가로 [`이곳`](https://wiki.alpinelinux.org/wiki/FreeRadius_EAP-TLS_configuration)도 참조하시면 좋습니다.
@@ -293,8 +298,9 @@ $ docker kill freeradius-server
 
 **step 3. FreeRADIUS 기본 설정**
   - `...` 부분은 기본 설정 유지한 부분.
-  - client.conf
+  - `client.conf`
     - `SHARED_SECRET` 실행시 환경변수로 지정합니다.
+      - RADIUS 프로토콜에서 attribute를 암/복호화 할때 사용합니다.
 
 ```conf
 client localhost {
@@ -304,10 +310,10 @@ client localhost {
 }
 ```
 
-  - sites-enabled/default
-    - 기본 리퀘스트 처리를 위한 설정.
-    - eap 처리 설정 + authorize와 authenticate 단계에서 python 모듈을 사용하도록 추가
-    - authorize 단계에서 실행된 python script에서 `Auth-Type=KEYCLOAK`를 설정 할 예정.
+  - `sites-enabled/default`
+    - 기본 리퀘스트 처리를 위한 설정입니다.
+    - eap 처리 설정 + authorize와 authenticate 단계에서 python 모듈을 사용하도록 추가합니다.
+    - authorize 단계에서 실행된 python script에서 `Auth-Type=KEYCLOAK`를 설정 할 예정입니다.
 
 ```conf
 server default {
@@ -336,9 +342,9 @@ server default {
 
 ```
 
-  - sites-enabled/inner-tunnel
-    - `mods-enabled/eap`에서 EAP-TTLS의 `virtual-server`로 inner-tunnel이 설정됨.
-    - 들어온 RADIUS요청이 EAP-TTLS일 경우 `sites-enabled/default`에서 eap 관련 처리가 되고 inner-tunnel로 전달 됨.
+  - `sites-enabled/inner-tunnel`
+    - `mods-enabled/eap`에서 EAP-TTLS의 `virtual-server`로 inner-tunnel이 설정 됩니다.
+    - 들어온 RADIUS요청이 EAP-TTLS일 경우 `sites-enabled/default`에서 eap 관련 처리가 되고 inner-tunnel로 전달 됩니다.
 
 ```conf
 server inner-tunnel {
@@ -358,10 +364,10 @@ server inner-tunnel {
 }
 ```
 
-  - mods-enabled/eap
-    - `default_eap_type`은 `ttls(EAP-TTLS)`로 지정.
-    - tls, ttls 관련 설정을 빼고 다른 EAP Type 들은 주석처리.
-    - `private_key_password`는 인증서 생성시에 만들때 쓴 암호 입력.
+  - `mods-enabled/eap`
+    - `default_eap_type`은 `ttls(EAP-TTLS)`로 지정 합니다.
+    - tls, ttls 관련 설정을 빼고 다른 EAP Type 들은 주석처리 합니다.
+    - `private_key_password`는 인증서 생성시에 만들때 쓴 암호 입력를 입력합니다.
 
 ```conf
 eap {
@@ -412,12 +418,12 @@ eap {
 }
 ```
 
-  - mods-enabled/python
-    - python 모듈 실행 설정
-    - `python_path`에 `:`로 구분해서 참조 할 모듈의 path를 지정.
+  - `mods-enabled/python`
+    - python 모듈 실행 설정 입니다.
+    - `python_path`에 `:`로 구분해서 참조 할 모듈의 path를 지정
     - command line에서 python을 실행하는 경우 기본 python module 및 추가 설치된 module 들의 path가 기본 설정된 채로 실행되지만 FreeRADIUS에서 python을 실행해 줄때는 그렇지 않으므로 스크립트에서 사용 할(import 하는..) 모듈 들이 있는 path를 추가해 주어야함.
-    - Dockerfile에서 이미지 생성시 추가하는 모듈들의 docker image 내 경로를 확인해서 추가해 주어야함.
-    - 아래는 `pycrypto`가 설치된 경로를 추가한 설정임. (아래 Docker file 참조)
+    - Dockerfile에서 이미지 생성시 추가하는 모듈들의 docker image 내 경로를 확인해서 추가해 주어야 합니다.
+    - 아래는 `pycrypto`가 설치된 경로를 추가한 설정입니다. (아래 Docker file 참조)
 
 ```conf
 python {
@@ -438,14 +444,14 @@ python {
 }
 ```
 
-  - mods-config/python/keycloak.py
+  - `mods-config/python/keycloak.py`
     - 원래 해당 디렉토리에는 `radiusd.py` / `example.py` 두개 파일이 있습니다.
-    - `radiusd.py`는 반환값 상수 및 로그 출력을 위한 함수가 선언되어 있습니다.(자동생성된 파일로 수정해도 반영되지 않습니다.)
-    - `example.py` -> `keycloak.py`로 변경(위 mods-enabled/python 파일에서도 미리 변경해두었음.) 
+    - `radiusd.py`는 반환값 상수 및 로그 출력을 위한 함수가 선언되어 있습니다.(**자동생성된 파일로 수정해도 의미가 없습니다.**)
+    - `example.py` -> `keycloak.py`로 변경(위 mods-enabled/python 파일에서도 module 명을 미리 변경했습니다.) 
     - 각 단계별 함수에 넘어오는 `p`는 `tuple`이며, 일반적으로 `(('User-Name', 'dorma'), ('User-Password', 'password'), ('NAS-Identifier', 'client-identifier'), ...)`으로 전달 됩니다.
-    - 인증 방식이 `PAP`가 아닐 경우 `User-Password`는 전달되지 않습니다.
-    - `authorize`단계에서는 username / password가 있는 경우 `Auth-Type=KEYCLOAK`으로 설정하며, `authenticate`단계에서 실제 인증을 처리. 
-      - sites-enabled 설정의 authenticate에서 Auth-Type 분기처리가 되어있어서 username / password가 없으면 authenticate 함수는 호출되지 않음.
+    - **인증 방식이 `PAP`가 아닐 경우 `User-Password`는 전달되지 않습니다.**
+    - `authorize`단계에서는 username / password가 있는 경우 `Auth-Type=KEYCLOAK`으로 설정하며, `authenticate`단계에서 실제 인증을 처리 합니다.
+      - sites-enabled 설정의 authenticate에서 Auth-Type 분기처리가 되어있어서 username / password가 없으면 authenticate 함수는 호출되지 않습니다.
     - 실제 인증처리 로직은 [keycloak API](https://www.keycloak.org/docs-api/6.0/rest-api/index.html) 참고 하셔서 구현하시면 됩니다.
       - 꼭 keycloak과 연동 안하고 python으로 어떤 처리든 하고 결과만 반환하면 되니 원하는 서버 혹은 DB 베이스로 인증처리를 하시면 됩니다.
 
@@ -503,10 +509,10 @@ def getUserPassword(p) :
  ```
 
 **step 4. Docker Image 생성**
-  - [Docker Hub에 공개되어 있는 이미지](https://hub.docker.com/r/freeradius/freeradius-server/)를 베이스.
+  - [Docker Hub에 공개되어 있는 이미지](https://hub.docker.com/r/freeradius/freeradius-server/)를 베이스
     1. python 설치
     2. python 추가 모듈 설치(아래 예시는 [pycrypto](https://pypi.org/project/pycrypto/), pycrypto는 설치시 빌드가 필요해서 build-essential도 설치했다가 설치 후 제거)
-    3. 위에서 수정한 설정파일들을 설정 디렉토리(`/etc/raddb`) 아래에 덮어씀.
+    3. 위에서 수정한 설정파일들을 설정 디렉토리(`/etc/raddb`) 아래에 덮어쓰기
 
 ```docker
 FROM freeradius/freeradius-server:3.0.17
@@ -658,7 +664,7 @@ $ docker run -v $(pwd):/pam_radius -w /pam_radius pam_builder make
 ##### 5. `sshd` 설정
   - [pam_radius_auth.so 설정 옵션](https://github.com/FreeRADIUS/pam_radius/blob/master/USAGE) 참고
   - `/etc/pam.d/sshd` 설정.
-     - `@include common-auth`을 남겨두고. pam_radius_auth.so의 pam option을 `[default=ignore]`로 설정 하면 pam_radius_auth.so를 이용한 인증이 실패 할 경우 기본 linux 사용자 인증 방식으로 인증 가능.
+     - `@include common-auth`을 남겨두고. pam_radius_auth.so의 pam option을 `[default=ignore]`로 설정 하면 pam_radius_auth.so를 이용한 인증이 실패 할 경우 기본 linux 사용자 인증 방식으로 인증 가능합니다.
      - `client_id`는 RADIUS서버로 전달 될때 `NAS-Identifier`로 전달되니 여러대의 서버에 설정 할 경우 서버 및 ssh, sudo를 구분 할 수 있는 값을 사용하면 됩니다.([RADIUS 서버 설치 및 Keycloak 연동 설정](/posts/keycloak-radius)의 python 모듈에서 `NAS-Identifier` 값으로 분기처리 가능.)
 
 ```conf
@@ -680,7 +686,7 @@ ChallengeResponseAuthentication yes
 # ...
 ```
 
-  - `/etc/ssh/sshd_config` 추가설정
+  - `(선택사항)` `/etc/ssh/sshd_config` 추가설정
     - 특정 사용자(keycloak / radius-server 접속 불가시 사용)를 제외하고 RSA key를 이용한 로그인을 막고 싶은 경우.
     - 아래 예시와 같이 `AuthorizedKeysFile`를 절대경로로 지정.
 
@@ -701,3 +707,19 @@ auth [success=done default=ignore] /opt/pam/pam_radius_auth.so client_id=sudo-10
 @include common-auth
 # ...
 ```
+
+-----
+
+## Cisco 무선 공유기 설정
+  - `무선 공유기에서 RADIUS 서버와 연동 설정을 하고 SSID를 띄웁니다.
+    - ~~자세한 설정은 네트워크 관리자에게 문의하세요?!~~
+    - 참고: [Cisco 라우터에서 FreeRADIUS 연동 설정 하기](https://www.cisco.com/c/en/us/support/docs/wireless-mobility/wireless-lan-wlan/211263-Configure-802-1x-PEAP-with-FreeRadius.html)
+
+
+## 정리 + 추가로 가능한 것
+  - `Keycloak + FreeRADIUS + pam_radius_auth.so + keycloak API로 인증처리 python 스크립트 작성`으로 web, wifi, ssh 인증을 `1개의 ID로 각종 사내 서비스 인증`을 구축 과정을 정리해 보았습니다.
+    - 사실 `설치 및 설정`이 과정의 대부분이고 개발(코드작성)은 `python 스크립트 100~200줄 정도`하였습니다.
+  - wifi나 ssh 인증 같은 경우 패스워드를 공유해서 사용하는 경우 보안의 구멍이 될 수 있습니다. 보완책으로 패스워드를 주기적으로 변경하는 방법을 사용하는데 wifi의 경우 크게 문제가 되지 않지만 ssh 인증 같은 경우는 서버 대수가 늘어나면 주기적인 변경이 쉽지 않습니다.
+  - **위 설정의 경우 ssh 접속전에 서버별로 계정은 미리 생성이 되어있어야 접속이 가능** 하지만 이후 패스워드 변경 등은 개별 사용자별로 관리가 가능합니다.
+  - 위에서는 자세히 설명하지는 않았지만 keycloak의 권한관리(authorization)를 잘 설정하고 python 스크립트에서 인증 + 권한확인을 처리하게 되면 **개별 사용자별로 특정 서버에 대한 접근을 허용할지에 대한 관리도 가능**해집니다.
+  - 그 밖에도 [keycloak-gatekeepr](https://github.com/keycloak/keycloak-gatekeeper)를 잘 활용하면 API서버에서는 인증/권한 관련 코드를 한줄도 작성하지 않고 기능만 작성한 후에 gatekeeper를 활용해 url / http method 별로 접근 권한 처리도 할 수 있습니다.
