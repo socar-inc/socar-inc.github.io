@@ -5,6 +5,7 @@ date: 2019-07-31 17:20:00 +0900
 category: security
 background: '/assets/images/zhen-hu-ppPciOz6Cbs-unsplash.jpg'
 author: dorma
+comments: true
 tags:
     - keycloak
     - sso
