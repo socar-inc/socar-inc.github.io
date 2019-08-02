@@ -37,7 +37,7 @@ tags:
   - keycloak-gatekeeper 등을 이용하면 Web 사이트 권한 처리도 용이
 ```
 
-  - github: https://github.com/keycloak/keycloak
+  - github: [https://github.com/keycloak/keycloak](https://github.com/keycloak/keycloak)
   - [RedHat SSO](https://access.redhat.com/products/red-hat-single-sign-on)의 오픈소스 버전
 
 -----
@@ -176,7 +176,7 @@ keycloak:
 helm install --name keycloak -f values.yaml codecentric/keycloak
 ```
 
-  - `권장사항` 설치 후 위 `keycloak.mydomain.com/auth/admin`로 접속 후 `values.yaml`의 username / password에 설정한 비밀번호로 로그인 후 패스워드를 변경 합니다.
+  - `(권장사항)` 설치 후 위 `keycloak.mydomain.com/auth/admin`로 접속 후 `values.yaml`의 username / password에 설정한 비밀번호로 로그인 후 패스워드를 변경 합니다.
     - values.yaml 파일을 저장해두거나 git에 올려 두거나 할 경우 노출 위험이 있습니다.
   - 상세 설정은 keycloak의 공식 문서를 참조
     - https://www.keycloak.org/documentation.html
