@@ -22,7 +22,7 @@ tags:
   5. 유연한 권한 설정(Authorization)
 ```
 
-  여러 유료 솔루션(([Gluu](https://www.gluu.org/), [Google Identity Platform](https://developers.google.com/identity/) 등)도 검토 하였으나 설치형 + 오픈소스로 무료로 사용 가능한 [`Keycloak`](https://www.keycloak.org/)으로 구축으로 방향을 잡았습니다.
+  여러 유료 솔루션([Gluu](https://www.gluu.org/), [Google Identity Platform](https://developers.google.com/identity/) 등)도 검토 하였으나 설치형 + 오픈소스로 무료로 사용 가능한 [`Keycloak`](https://www.keycloak.org/)으로 구축으로 방향을 잡았습니다.
   
   Wifi 인증([FreeRADIUS에서 LDAP 모듈 지원](https://freeradius.org/modules/?s=ldap&mod=rlm_ldap))이나 ssh인증([pam_ldap](https://www.tldp.org/HOWTO/archived/LDAP-Implementation-HOWTO/pamnss.html))의 경우 OpenLDAP과 연동해서 처리 하는 방법에 대한 자료가 더 많지만, Web기반으로 운용 가능한 시스템을 더 선호해서 Keycloak을 선정하게 되었습니다. ~~험한길을 가게 되었습니다.~~
 
@@ -270,7 +270,7 @@ $ docker kill freeradius-server
 **step 2. 인증서 생성(Wifi 인증)**
   - `Wifi 인증`에 `EAP-TLS`, `EAP-TTLS` 등을 사용해야 할 경우 필요합니다. 아닐 경우 다음 단게로...
   - 추출한 설정 디렉토리중 [`certs/README`](https://github.com/redBorder/freeradius/blob/master/raddb/certs/README)를 참조해서 진행합니다.
-  - 추가로 [이곳](https://wiki.alpinelinux.org/wiki/FreeRadius_EAP-TLS_configuration)도 참조하시면 좋습니다.
+  - 추가로 [`이곳`](https://wiki.alpinelinux.org/wiki/FreeRadius_EAP-TLS_configuration)도 참조하시면 좋습니다.
   - 먼저 기존 파일을 제거합니다. (`아래 작업들은 cert 디렉토리에서 수행합니다.`)
   
   ```bash
@@ -513,7 +513,7 @@ FROM freeradius/freeradius-server:3.0.17
 
 RUN \
   apt-get update --force-yes -y && \
-  apt-get install -o Dpkg::Options::="--force-confold" --force-yes -y python python-dev curl build-essential
+  apt-get install --force-yes -y python python-dev curl build-essential
 
 RUN curl -o pycrypto-2.6.1.tar.gz https://ftp.dlitz.net/pub/dlitz/crypto/pycrypto/pycrypto-2.6.1.tar.gz
 RUN tar -xzf pycrypto-2.6.1.tar.gz
@@ -578,4 +578,126 @@ SHARED_SECRET=<my-shared-secret>
 
 ```bash
 $ docker-compose up -d
+```
+
+-----
+
+## Keycloak 유저로 ssh 로그인 하기
+  - `Ubuntu Linux` 기준으로 설정을 진행합니다.
+
+-----
+###### 1. 구성도
+<div class="mermaid">
+graph TD;
+  subgraph Linux
+    CLIENT[시작: ssh/sudo] -->|1. PAM 모듈 호출| PAM(pam_radius_auth.so)
+    PAM -->|6. 인증 완료| CLIENT
+  end
+  
+  subgraph Radius-Server
+    PAM --> |2. RADIUS 요청| RADIUS_SERVER
+  end
+
+  subgraph Keycloak
+    RADIUS_SERVER -->|3. 권한확인 요청| KEYCLOAK[Keycloak]
+    KEYCLOAK -->|4. 권한확인 응답| RADIUS_SERVER
+  end
+  
+  RADIUS_SERVER -->|5. RADIUS 응답| PAM
+</div>
+
+-----
+
+###### 2. [`pam_radius_auth.so`](https://github.com/FreeRADIUS/pam_radius) 빌드 하기
+  - 저는 Mac을 사용하므로 ubuntu docker 이미지를 사용해서 빌드합니다.
+  - 다운로드 혹은 clone 받은 소스 디렉토리에서 진행 합니다.
+  - 빌드용 이미지 생성을 위한 Dockerfile
+
+```docker
+FROM ubuntu
+
+RUN \
+  apt-get update --force-yes -y && \
+  apt-get install --yes build-essential libpam0g-dev make
+```
+
+  - docker build
+
+```bash
+$ docker build -t pam_builder .
+```
+
+  - docker run
+
+```bash
+$ docker run -v $(pwd):/pam_radius -w /pam_radius pam_builder ./configure
+$ docker run -v $(pwd):/pam_radius -w /pam_radius pam_builder make
+```
+
+  - 빌드가 완료되면 `pam_radius_auth.so`파일이 생성됩니다.
+
+-----
+
+####### 3. `pam_radius_auth.so` 업로드 하기
+  - 저는 ubuntu 서버에 업로드 후 `/opt/pam/pam_radius_auth.so` 경로에 위치 시켰습니다.
+
+-----
+
+####### 4. `pam_radius_auth.so` 설정하기
+  1. `/etc/raddb/server` 파일 생성
+    - 소스상의 [`pam_radius_auth.conf`](https://github.com/FreeRADIUS/pam_radius/blob/master/pam_radius_auth.conf) 파일 참조.
+
+```bash
+...
+# server[:port]             shared_secret      timeout (s)  source_ip            vrf
+<radius-server>:<auth-port>	     <shared_secret>		<timeout>
+...
+```
+
+-----
+###### 5. `sshd` 설정
+  - [pam_radius_auth.so 설정 옵션](https://github.com/FreeRADIUS/pam_radius/blob/master/USAGE) 참고
+  - `/etc/pam.d/sshd` 설정.
+     - `@include common-auth`을 남겨두고. pam_radius_auth.so의 pam option을 `[default=ignore]`로 설정 하면 pam_radius_auth.so를 이용한 인증이 실패 할 경우 기본 linux 사용자 인증 방식으로 인증 가능.
+     - `client_id`는 RADIUS서버로 전달 될때 `NAS-Identifier`로 전달되니 여러대의 서버에 설정 할 경우 서버 및 ssh, sudo를 구분 할 수 있는 값을 사용하면 됩니다.([RADIUS 서버 설치 및 Keycloak 연동 설정](/posts/keycloak-radius)의 python 모듈에서 `NAS-Identifier` 값으로 분기처리 가능.)
+
+```conf
+# ...
+# Standard Un*x authentication.
+auth [success=done default=ignore]	/opt/pam/pam_radius_auth.so client_id=ssh-10.100.13.179 force_prompt prompt_attribute
+@include common-auth
+# ...
+```
+
+  - `/etc/ssh/sshd_config` 기본 설정.
+    - `PasswordAuthentication no` 설정시 sshd에서 기본으로 출력하는 비밀번호를 묻는 prompt를 노출하지 않습니다.
+    - `ChallengeResponseAuthentication yes` 설정시 PAM 모듈에서 사용자에게 노출 할 prompt 메세지를 핸들링 할 수 있습니다.
+
+```conf
+# ...
+PasswordAuthentication no
+ChallengeResponseAuthentication yes
+# ...
+```
+
+  - `/etc/ssh/sshd_config` 추가설정
+    - 특정 사용자(keycloak / radius-server 접속 불가시 사용)를 제외하고 RSA key를 이용한 로그인을 막고 싶은 경우.
+    - 아래 예시와 같이 `AuthorizedKeysFile`를 절대경로로 지정.
+
+```conf
+AuthorizedKeysFile	/home/dorma/.ssh/authorized_keys
+``` 
+
+-----
+
+###### 6. `sudo` 설정
+  - `/etc/pam.d/sudo` 설정.
+     - `@include common-auth`을 남겨두고. pam_radius_auth.so의 pam option을 `[default=ignore]`로 설정 하면 pam_radius_auth.so를 이용한 인증이 실패 할 경우 기본 linux 사용자 인증 방식으로 인증 가능.
+     - `client_id`는 RADIUS서버로 전달 될때 `NAS-Identifier`로 전달되니 여러대의 서버에 설정 할 경우 서버 및 ssh, sudo를 구분 할 수 있는 값을 사용하면 됩니다.([RADIUS 서버 설치 및 Keycloak 연동 설정](/posts/keycloak-radius)의 python 모듈에서 `NAS-Identifier` 값으로 분기처리 가능.)
+
+```conf
+# ...
+auth [success=done default=ignore] /opt/pam/pam_radius_auth.so client_id=sudo-10.100.13.179 force_prompt prompt_attribute
+@include common-auth
+# ...
 ```
