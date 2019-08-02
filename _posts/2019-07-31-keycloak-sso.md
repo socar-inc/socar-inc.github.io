@@ -10,7 +10,9 @@ tags:
     - sso
 ---
 
-###### Photo by [Zhen](https://unsplash.com/@zhenhu2424?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) Hu on [Unsplash](https://unsplash.com/search/photos/lock?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)
+<div style="text-align: right;">
+Photo by [Zhen](https://unsplash.com/@zhenhu2424?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) Hu on [Unsplash](https://unsplash.com/search/photos/lock?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)
+</div>
 
 
 ## 사내 SSO(Single Sign-On) 구축하기
