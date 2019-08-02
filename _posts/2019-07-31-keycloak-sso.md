@@ -3,10 +3,18 @@ layout: post
 title: "Keycloak를 이용한 SSO 구축(web + wifi + ssh)"
 date: 2019-07-31 17:20:00 +0900
 category: security
+background: '/assets/images/zhen-hu-ppPciOz6Cbs-unsplash.jpg'
+author: dorma
+comments: true
 tags:
     - keycloak
     - sso
 ---
+
+<div class="photo-copyright">
+Photo by <a href="https://unsplash.com/@zhenhu2424?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Zhen Hu</a> on <a href="https://unsplash.com/search/photos/lock?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
+</div>
+
 
 ## 사내 SSO(Single Sign-On) 구축하기
   이번에 쏘카에서 사내 보안 강화를 위해 SSO를 구축 하였습니다.
