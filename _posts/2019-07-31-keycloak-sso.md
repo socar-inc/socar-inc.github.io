@@ -638,12 +638,12 @@ $ docker run -v $(pwd):/pam_radius -w /pam_radius pam_builder make
 
 -----
 
-####### 3. `pam_radius_auth.so` 업로드 하기
+###### 3. `pam_radius_auth.so` 업로드 하기
   - 저는 ubuntu 서버에 업로드 후 `/opt/pam/pam_radius_auth.so` 경로에 위치 시켰습니다.
 
 -----
 
-####### 4. `pam_radius_auth.so` 설정하기
+###### 4. `pam_radius_auth.so` 설정하기
   1. `/etc/raddb/server` 파일 생성
     - 소스상의 [`pam_radius_auth.conf`](https://github.com/FreeRADIUS/pam_radius/blob/master/pam_radius_auth.conf) 파일 참조.
 
