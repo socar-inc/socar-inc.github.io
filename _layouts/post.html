@@ -52,3 +52,7 @@ layout: default
       </div>
     </div>
   </div>
+
+  {% if page.comments %}
+  {% include comments.html %}
+  {% endif %}
