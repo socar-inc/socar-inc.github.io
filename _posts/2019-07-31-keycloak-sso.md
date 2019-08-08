@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Keycloak를 이용한 SSO 구축(web + wifi + ssh)"
+subtitle: "ID 하나로 백오피스 + Wifi + 서버(SSH)에 접속 가능한 환경 구축하기"
 date: 2019-07-31 17:20:00 +0900
 category: security
 background: '/assets/images/zhen-hu-ppPciOz6Cbs-unsplash.jpg'
@@ -730,4 +731,4 @@ auth [success=done default=ignore] /opt/pam/pam_radius_auth.so client_id=sudo-10
   - wifi나 ssh 인증 같은 경우 패스워드를 공유해서 사용하는 경우 보안의 구멍이 될 수 있습니다. 보완책으로 패스워드를 주기적으로 변경하는 방법을 사용하는데 wifi의 경우 크게 문제가 되지 않지만 ssh 인증 같은 경우는 서버 대수가 늘어나면 주기적인 변경이 쉽지 않습니다.
   - **위 설정의 경우 ssh 접속전에 서버별로 계정은 미리 생성이 되어있어야 접속이 가능** 하지만 이후 패스워드 변경 등은 개별 사용자별로 관리가 가능합니다.
   - 위에서는 자세히 설명하지는 않았지만 keycloak의 권한관리(authorization)를 잘 설정하고 python 스크립트에서 인증 + 권한확인을 처리하게 되면 **개별 사용자별로 특정 서버에 대한 접근을 허용할지에 대한 관리도 가능**해집니다.
-  - 그 밖에도 [keycloak-gatekeepr](https://github.com/keycloak/keycloak-gatekeeper)를 잘 활용하면 API서버에서는 인증/권한 관련 코드를 한줄도 작성하지 않고 기능만 작성한 후에 gatekeeper를 활용해 url / http method 별로 접근 권한 처리도 할 수 있습니다.
+  - 그 밖에도 [keycloak-gatekeeper](https://github.com/keycloak/keycloak-gatekeeper)를 잘 활용하면 API서버에서는 인증/권한 관련 코드를 한줄도 작성하지 않고 기능만 작성한 후에 gatekeeper를 활용해 url / http method 별로 접근 권한 처리도 할 수 있습니다.
