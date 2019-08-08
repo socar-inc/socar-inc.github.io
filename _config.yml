@@ -1,11 +1,12 @@
 theme: jekyll-theme-clean-blog
 
 title:              SOCAR Tech Blog
-email:              tech@socar.kr
+email:              recruit@socar.kr
 description:        쏘카 기술 블로그
 author:             SOCAR
 baseurl:            ""
 url:                "https://tech.socarcorp.kr"
+exposeEmail:        false
 
 # Social Profiles
 twitter_username:   carnsharing
