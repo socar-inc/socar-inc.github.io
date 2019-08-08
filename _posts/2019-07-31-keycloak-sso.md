@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Keycloak를 이용한 SSO 구축(web + wifi + ssh)"
-subtitle: "한개 ID로 백오피스 + Wifi + 서버(SSH)에 접속 가능한 환경 구축하기"
+subtitle: "ID 하나로 백오피스 + Wifi + 서버(SSH)에 접속 가능한 환경 구축하기"
 date: 2019-07-31 17:20:00 +0900
 category: security
 background: '/assets/images/zhen-hu-ppPciOz6Cbs-unsplash.jpg'
