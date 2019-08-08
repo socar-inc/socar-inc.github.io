@@ -7,7 +7,7 @@
     <div class="row">
       <div class="col-lg-8 col-md-10 mx-auto">
         <ul class="list-inline text-center">
-          {% if site.email && site.exposeEmail %}
+          {% if site.email and site.exposeEmail %}
           <li class="list-inline-item">
             <a href="mailto:{{ site.email | encode_email }}">
               <span class="fa-stack fa-lg">
