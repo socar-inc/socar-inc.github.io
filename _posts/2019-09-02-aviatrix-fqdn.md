@@ -23,7 +23,7 @@ On-premise 환경에서는 현재 회사의 성장세를 따라가기 어렵다�
 ---
 
 #### Cloud 환경에서 Outbound 트래픽 에 대한 관리를 어떻게 할까?
-- Cloud platform에서 TCP/IP Outbound 에 대해서는 로그 및 관리가 다양한 Management Service로 지원하고 있지만, Outbound 트래픽 중에 [FQDN](https://en.wikipedia.org/wiki/Fully_qualified_domain_name) 에 대한 지원은 Cloud platform에서 Management Service로는 대처가 어렵다고 판단하고 쏘카에 맞는 요구사항을 정리 하고 오픈소스, 유료 솔루션과 비교 하는 절차를 진행하였습니다. 요구사항은 아래와 같이 정리 했습니다. 
+- Cloud platform에서 TCP/IP Outbound 에 대해서는 로그 및 관리가 다양한 Management Service로 지원하고 있지만, Outbound 트래픽 중에 [FQDN](https://en.wikipedia.org/wiki/Fully_qualified_domain_name) 에 대한 지원은 Cloud platform에서 Management Service로 대처가 어렵다고 판단하고 쏘카에 맞는 요구사항을 아래와 같이 정리 했습니다. 
 
 ```markdown
 * 내부 요구사항 (Outbound - FQDN) +@(TCP/IP)
@@ -35,7 +35,7 @@ On-premise 환경에서는 현재 회사의 성장세를 따라가기 어렵다�
 ```
 
 - 위와 같은 요구사항을 정리하고 난 이후에 든 생각은 하나였습니다. `있을까?`  
-그 이후에는 오픈소스[Squid](https://aws.amazon.com/ko/blogs/security/how-to-add-dns-filtering-to-your-nat-instance-with-squid/), 유료 솔루션([paloalto](https://aws.amazon.com/marketplace/pp/B00PJ2V04O?qid=1567422902264&sr=0-2&ref_=srh_res_product_title), [Cisco vMX](https://aws.amazon.com/marketplace/pp/B01N49IN0S?qid=1567422994913&sr=0-16&ref_=srh_res_product_title) 등)을 검토 하였으며, 선정 과정에서 국내에서는 레퍼런스가 없는, [`Aviatrix`](https://aws.amazon.com/marketplace/pp/B079T2HGWG?qid=1567423038998&sr=0-1&ref_=srh_res_product_title) 솔루션을 선정하였습니다. 국내 레퍼런스는 없지만 해외 레퍼런스의 경우에는 NASA, Netflix, hyatt 등을 가지고 있었으며 다른 유료 솔루션들과는 다르게 필요한 Service(FQDN, Multiple Accounts)에 대한 비용 발생 및 [IaC](https://en.wikipedia.org/wiki/Infrastructure_as_code) 배포 및 구성이 Aviatrix 솔루션을 선정하여 도입하게 되었습니다.
+그 이후에는 오픈소스([Squid](https://aws.amazon.com/ko/blogs/security/how-to-add-dns-filtering-to-your-nat-instance-with-squid/)), 유료 솔루션([paloalto](https://aws.amazon.com/marketplace/pp/B00PJ2V04O?qid=1567422902264&sr=0-2&ref_=srh_res_product_title), [Cisco vMX](https://aws.amazon.com/marketplace/pp/B01N49IN0S?qid=1567422994913&sr=0-16&ref_=srh_res_product_title) 등)을 검토 하여, 선정 과정에서 국내에서는 레퍼런스가 없는 [`Aviatrix`](https://aws.amazon.com/marketplace/pp/B079T2HGWG?qid=1567423038998&sr=0-1&ref_=srh_res_product_title) 솔루션을 선정하였습니다. 해외 레퍼런스의 경우에는 NASA, Netflix, hyatt 등 을 가지고 있었으며 다른 유료 솔루션들과는 다르게 필요한 Service(FQDN, TransitGW, VPN)에 대한 비용 발생 및 [IaC](https://en.wikipedia.org/wiki/Infrastructure_as_code) 배포, 구성이 Aviatrix 솔루션을 선정하게 되었습니다.
 
 ---
 
@@ -45,7 +45,7 @@ Aviatrix 솔루션 테스트를 위해 AWS Marketplace 에서 Aviatrix 솔루션
 - [AWS-Marketplace (Aviatrix Secure Networking Platform - Custom)](https://aws.amazon.com/marketplace/pp/B0155GB0MA?ref_=aws-mp-console-subscription-detail)
 
 설치 방법은 두가지를 제공합니다.
-![1](/img/posts_aviatrix/cloudformation-image.png)
+![1](/img/posts_aviatrix/cloudformation-image.png){: width="700" height="400"}{: .center}{: .center}
 
 1. Amazon Machine Image
 2. CloudFormation Template
@@ -58,24 +58,25 @@ CloudFormation 배포가 완료된 상태에서 output 카테고리에서 Aviatr
 https://AviatrixControllerEIP
 ```
 
-![2](/img/posts_aviatrix/cloudformation-output.png)
+![2](/img/posts_aviatrix/cloudformation-output.png){: width="700" height="400"}{: .center}{: .center}
 
 - AviatrixControllerEIP 접속 이후 관리자 아이디 및 버전을 설정 합니다.  
 - 위의 설정을 완료할 경우에는 초기 로그인화면에서 Onboarding 화면이 노출됩니다.  
 - 해당 부분에서 이용하고 있는 Cloud platform을 지정하고 추가적인 설정을 진행 합니다.
 
 모든 설정을 완료한 이후에 제공되는 Aviatrix의 사용자 페이지 입니다.
-![3](/img/posts_aviatrix/aviatrix-1.png)
+![3](/img/posts_aviatrix/aviatrix-1.png){: width="700" height="400"}{: .center}{: .center}
 - 위의 많은 카테고리 중에 FQDN을 로깅하고, 관리할 수 있는 카테고리가 보이네요. EC2 의 Outbound 에 대한 트래픽을 로깅 및 관리하기 위해서 우선적으로 Gateway의 설정이 필요하여, Aviatrix 사용자 카테고리에서 Gateway 설정으로 이동 합니다.
 
 New Gateway 설정을 진행 합니다.
-![10](/img/posts_aviatrix/aviatrix-gw-add.png)
-- 위의 이미지에서 체크하지않은 많은 선택적인 기능들이 있습니다. 암호화 및 VPN 이용 등 다양한 아키텍처 구성이 가능 합니다. "OK"을 클릭할 경우에는 퍼센트에 대한 상태 이미지가 노출됩니다. 이후 작업은 직접 설치를 진행하지 않아도 자동으로 설치 및 Gateway 서버에 대한 환경이 구성 됩니다. `(HA구성의 경우에는 다양한 방법을 제공하고 있습니다. 이번 블로그 에서는 다루지 않기 때문에 아래에 링크를 참조해 드립니다.)`
+![10](/img/posts_aviatrix/aviatrix-gw-add.png){: width="700" height="400"}{: .center}{: .center}
+- "OK"을 클릭할 경우에는 퍼센트에 대한 상태 이미지가 노출됩니다. 이후 작업은 직접 설치를 진행하지 않아도 자동으로 설치 및 Gateway 서버에 대한 환경이 구성 됩니다. `(HA구성의 경우에는 다양한 방법을 제공하고 있으며, 위의 이미지에서 체크하지 않은 많은 기능 들은 이번 블로그 에서는 다루지 않기 때문에 아래에 링크를 참조해 드립니다.)`
     * [`Gateway-HA`](https://docs.aviatrix.com/HowTos/gateway.html#gateway-single-az-ha)
     * [`HA-옵션`](https://docs.aviatrix.com/Solutions/gateway_ha.html)
+    * [`Gateway`](https://docs.aviatrix.com/HowTos/gateway.html)
 
-Private Subnet의 Route Table을 생성하여, 외부로 나가는 모든 트래픽이 Aviatrix-GW을 통해서 나가도록 설정을 진행 합니다. `"0.0.0.0/0"` 에 대한 Target을 Aviatrix-GW `ENI`을 지정하면 됩니다. 하지만 최대한의 자동화를 진행하기 위해서 Aviatrix Controller 사용자 웹페이지에서 gateway > Aviatrix-GW: Edit > Source NAT 을 통한 설정 가능 합니다.
-![11](/img/posts_aviatrix/route-table-avi.png)
+Private Subnet의 Route Table을 생성하여, 외부로 나가는 모든 트래픽이 Aviatrix-GW을 통해서 나가도록 설정을 진행 합니다. `"0.0.0.0/0"` 에 대한 Target을 Aviatrix-GW `ENI`을 지정 합니다. 자동 등록을 원할 경우 Aviatrix Controller 사용자 웹페이지에서 gateway > Aviatrix-GW: Edit > Source NAT 을 통한 설정 가능 합니다.
+![11](/img/posts_aviatrix/route-table-avi.png){: width="700" height="400"}{: .center}{: .center}
 
 FQDN 로깅 및 관리를 위하여, Aviatrix Controller 사용자 웹페이지에서 `security > Egress Control > Egress FQDN Filter` 부분을 설정합니다.
 
@@ -83,7 +84,7 @@ FQDN 로깅 및 관리를 위하여, Aviatrix Controller 사용자 웹페이지�
 2. 이후 `Prod환경` 도입의 경우에는 Egress FQDN View Log 을 확인하고, 사용하고 있는 FQDN을 보안성에 맞도록 분리하여, Egress FQDN Filter을 White List기반으로 변경할 수 있는 환경을 사전에 대비 합니다.
 
 테스트를 위해서 FQDN Filter을 아래의 이미지와 같이 `White` 설정 이후에, Aviatrix-GW을 바라 보고 있는 `private-route-table`의 `private-Subnet`의 `인스턴스`에서 다음 명령어를 실행 하였습니다.
-![12](/img/posts_aviatrix/fqdn-list.png)
+![12](/img/posts_aviatrix/fqdn-list.png){: width="700" height="400"}{: .center}{: .center}
 ```bash
 curl -L -k -s -o /dev/null -w "%{http_code}\n" https://www.naver.com
 curl -L -k -s -o /dev/null -w "%{http_code}\n" https://google.com
@@ -91,6 +92,7 @@ curl -L -k -s -o /dev/null -w "%{http_code}\n" https://www.google.com
 curl -L -k -s -o /dev/null -w "%{http_code}\n" https://docs.google.com
 ```
 - 위의 테스트에 대한 Egress FQDN View Log
+
 ```r
 2019-09-01T16:40:35.886612+00:00 ip-172-31-14-85 avx-nfq: AviatrixFQDNRule[CRIT]nfq_ssl_handle_client_hello() L#274  Gateway=Aviatrix-GW S_IP=172.31.24.52 D_IP=210.89.164.90 hostname=www.naver.com state=NO_MATCH drop_reason=NOT_WHITELISTED
 2019-09-01T16:40:53.442375+00:00 ip-172-31-14-85 avx-nfq: AviatrixFQDNRule[CRIT]nfq_ssl_handle_client_hello() L#274  Gateway=Aviatrix-GW S_IP=172.31.24.52 D_IP=172.217.27.78 hostname=google.com state=MATCHED
@@ -106,7 +108,7 @@ curl -L -k -s -o /dev/null -w "%{http_code}\n" https://docs.google.com
 
 #### **`AWS Account with Aviatrix Gateway Architecture`**
 
-![13](/img/posts_aviatrix/fqdn-architecture.png)
+![13](/img/posts_aviatrix/fqdn-architecture.png){: width="700" height="400"}{: .center}{: .center}
 1. `Private Subnet` 에서의 Outbound 발생 시 자체 설정한 `route table`을 참조
 2. route table 에서 `"0.0.0.0/0"` 트래픽을 Aviatrix Gateway의 `ENI`로 전달
 3. Aviatrix Gateway에 설정되어있는 `Aviatrix Controller` 정책에 따라 Outbound 트래픽 체크 이후에, Aviatrix Gateway에 Internet gateway로 전달
@@ -124,6 +126,7 @@ curl -L -k -s -o /dev/null -w "%{http_code}\n" https://docs.google.com
 아래의 소스는 CloudFormation Template의 일부 내용 입니다.
 
 - EC2 생성 과정에서 aviatrix-role-ec2를 등록하는 내용 입니다.
+
 ```json
         "IAMRoleParam": {
             "Description": "Determine if IAM roles aviatrix-role-ec2 and aviatrix-role-app should be created.",
@@ -136,6 +139,7 @@ curl -L -k -s -o /dev/null -w "%{http_code}\n" https://docs.google.com
         },
 ```
 - EC2에 등록하기 위한 role-ec2를 생성하는 내용 입니다.
+
 ```json
         "AviatrixRoleEC2": {
             "Type": "AWS::IAM::Role",
@@ -161,6 +165,7 @@ curl -L -k -s -o /dev/null -w "%{http_code}\n" https://docs.google.com
         },
 ```
 - 여기서 주목할 점이 있습니다, role-app을 사용할 수 Service에 "Ref": "AWS::AccountId" 등록을 통해서 가능하도록 설정되는 것을 알수 있습니다.
+
 ```json
         "AviatrixRoleApp": {
             "Type": "AWS::IAM::Role",
@@ -194,6 +199,7 @@ curl -L -k -s -o /dev/null -w "%{http_code}\n" https://docs.google.com
         },
 ```
 - 여기서 주목할 점은 role/aviatrix-* 설정에 있습니다. 해당 설정을 통해서 role-ec2의 policy설정을 통해 arn:aws:iam::123456789:role/aviatrix-role-app의 policy을 할당 받아서 사용할 수 있게 됩니다.
+
 ```json
         "CreateAviatrixAssumeRolePolicy": {
             "Type": "AWS::IAM::ManagedPolicy",
@@ -227,6 +233,7 @@ curl -L -k -s -o /dev/null -w "%{http_code}\n" https://docs.google.com
         },
 ```
 - role-app policy 의 경우에는 아래 추가된 이미지 처럼 많은 Action이 정의 되어있습니다.
+
 ```json
         "CreateAviatrixAppPolicy": {
             "Type": "AWS::IAM::ManagedPolicy",
@@ -241,13 +248,13 @@ curl -L -k -s -o /dev/null -w "%{http_code}\n" https://docs.google.com
                             "Effect": "Allow",
                             "Action": [..........................
 ```
-![4](/img/posts_aviatrix/role-check.png)
+![4](/img/posts_aviatrix/role-check.png){: width="700" height="400"}{: .center}{: .center}
 
 CloudFormation Template으 로 구성된 `AWS 인프라의 이미지`를 통해 정리할 경우 아래와 같은 구성이 설정 됩니다.
 
 1. Aviatrix Controller Instance 에 role-ec2 설정
 
-![5](/img/posts_aviatrix/role-ec2.png)
+![5](/img/posts_aviatrix/role-ec2.png){: width="700" height="400"}{: .center}{: .center}
 
 2. role-ec2 에 대한 policy 는 아래와 같이 설정되며, 해당 설정에서 `STS 설정을 주의 깊게 이헤 합니다`. 해당 부분을 JSON 형태로 확인하면 이해가 더 쉽게 된다.
 ```json
@@ -259,15 +266,15 @@ CloudFormation Template으 로 구성된 `AWS 인프라의 이미지`를 통해 
             "Effect": "Allow"
         },
 ```
-![6](/img/posts_aviatrix/role-ec2-policy.png)
+![6](/img/posts_aviatrix/role-ec2-policy.png){: width="700" height="400"}{: .center}{: .center}
 
 3. Aviatrix Controller 웹페이지 `Onboarding 카테고리`에서 Cloud platform에 맞게 설정을 하게 되면 AWS의 경우 `role-app`을 `role-ec2`가 `role-app`의 `policy`을 `위임` 받아서 사용할 수 있는 상태가 된다. role-ec2는 Aviatrix Controller Instance 에 등록 되어있는 role 이기 때문에, Aviatrix Controller 웹페이지에서 role-app에 적용 되어있는 policy 에 대한 이용이 가능하다, `멀티 Account`의 경우에는 `멀티 Account`에 설정 되어 있는 `role-app`에 대한 `AccountId Trust 등록`을 진행하여, `멀티 Account`의 `role-app`을 `Controller Account`의 `role-app`가 `공유` 받아 사용하는 방법으로 `동일` 합니다.
 
-![7](/img/posts_aviatrix/role-app-trust.png)
+![7](/img/posts_aviatrix/role-app-trust.png){: width="700" height="400"}{: .center}{: .center}
 
 #### **`Multiple AWS Accounts with Role Switchin Aviatrix Architecture`**
 
-![8](/img/posts_aviatrix/role-ec2-app-muac.png)
+![8](/img/posts_aviatrix/role-ec2-app-muac.png){: width="700" height="400"}{: .center}{: .center}
 
 ---
 
