@@ -295,12 +295,61 @@ CloudFormation Template으로 구성된 `AWS 인프라의 이미지`를 통해 �
 #### `Aviatrix 유용한 기능`
 
 1. [HA(High Availability)](https://en.wikipedia.org/wiki/High_availability)
+    * `HA` 구성은 모든 인프라의 기본으로 Aviatrix 솔루션을 사용할 경우에도 아래와 같은 간단한 작업으로 적용이 가능합니다.
 
-    1. Gateway > Edit > Gateway Single AZ HA "Enable"
-    2. Geteway > Edit > Gateway for High Availability Peering
-        1. HA 구성을 위해 운영되는 Gateway Subnet이 아닌 다른 Subnet을 선택합니다.
+* Gateway > Edit > Gateway Single AZ HA "Enable"
+* Geteway > Edit > Gateway for High Availability Peering
+    * HA 구성을 위해 운영되는 Gateway Subnet과 다른 [AZ](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html) Public-Subnet 를 선택합니다.
 
 ![20](/img/posts_aviatrix/geteway-ha-public-b.png){: width="725" height="400"}{: .center}{: .center}
+
+* HA 구성을 위한 설정은 마무리하였으며, 정상적인 Failover 가 되는지 확인을 위해 아래 구성을 진행하였습니다.
+```markdown
+* Private-Subnet 에서 운영되는 인스턴스에 대한 실시간 모니터링 설정
+* Failover 기능 테스트를 위해 Aviatrix-GW 인스턴스를 AWS Console 에서 강제 종료(STOP)
+* Private-Subnet 에서 운영되는 인스턴스에 대한 실시간 모니터링 지표 확인
+```
+
+* Failover 기능을 테스트하기 전의 Aviatrix Gateway 상태 이미지입니다.
+
+![21](/img/posts_aviatrix/gateway-status.png){: width="725" height="200"}{: .center}{: .center}
+* Failover 기능을 테스트하기 위해 Gateway를 강제 종료한 Aviatrix Gateway 상태 이미지입니다.
+
+![22](/img/posts_aviatrix/gateway-status-2.png){: width="725" height="200"}{: .center}{: .center}
+
+* **`테스트 결과`**
+    * Private-Subnet 에서 운영되고 있는 인스턴스에 모니터링 에이전트(telegraf)를 설정하여, ICMP 프로토콜을 이용한 `1s` 기준으로 `Packet Loss` 현상도 발생하지 않았습니다.
+
+![23](/img/posts_aviatrix/monitoring.png){: width="725" height="400"}{: .center}{: .center}
+
+* Aviatrix-Gateway HA Failover 프로세스
+```
+1. AviatrixController 에서 Gateway Health Check
+2. 문제가 되는 Gateway Health Check 실패 확인
+3. HA 구성 확인
+4. HA 구성한 Gateway로 네트워크 트래픽 변경
+    * 문제가 되는 Gateway로 설정되어 있던 Route Table 업데이트
+    예) Private-Subnet > Route Table > "0.0.0.0/0" Target Gateway ENI 업데이트
+```
+
+2. [Egress FQDN Discovery](https://docs.aviatrix.com/HowTos/fqdn_discovery.html)
+    * 해당 기능은 실 서버에 적용하기에 앞서 실 서버에서 FQDN outbound의 사용 내용을 정리하는데 유용한 기능입니다.
+
+* Seciruty > Egress Control > (Optional) Egress FQDN Discovery > Gateway "Start" (선택된 Gateway는 FQDN Filter에 연결이 안 되어 있어야 합니다.)
+
+![23](/img/posts_aviatrix/fqdn-discovery-start.png){: width="725" height="400"}{: .center}{: .center}
+
+* 테스트를 위해서 Private-Subnet 에서 운영되고 있는 인스턴스에서 아래의 명령어를 실행합니다.
+```bash
+curl -L -k -s -o /dev/null -w "%{http_code}\n" https://tech.socarcorp.kr
+```
+
+* 위의 HA 테스트로 인해서 변경된 Aviatrix-GW-hagw 에서 발생한 FQDN 내용을 확인할 수 있습니다.
+
+![23](/img/posts_aviatrix/fqdn-discovery-status.png){: width="725" height="400"}{: .center}{: .center}
+
+* **`테스트 결과`**
+    * FQDN Discovery 기능을 통해 실 서버 FQDN Outbound를 모두 사전에 확인하고, 필요 유무에 따라서 FQDN Filter 정책 정의에 유용합니다.
 
 ---
 
