@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "AWS VPC 에서의 FQDN outbound control "
+title: "AWS VPC 에서의 FQDN outbound control 하기"
 subtitle: "Aviatrix 솔루션을 이용한 Outbound FQDN 관리하기"
 date: 2019-09-02 20:00:00 +0900
 category: security
@@ -16,7 +16,7 @@ tags:
 Photo by <a href="https://unsplash.com/@andreoiide?utm_medium=referral&amp;utm_campaign=photographer-credit&amp;utm_content=creditBadge">Andrea Enríquez Cousiño</a>
 </div>
 
-### AWS VPC 에서 FQDN Outbound Control
+### AWS VPC 에서 FQDN Outbound Control 하기
 
 On-premise 환경에서는 현재 회사의 성장세를 따라가기 어렵다고 판단하고, 1년 전부터 Cloud 환경으로 마이그레이션을 진행 하고 있습니다. 현재는 중요 서비스의 90% 이상이 Cloud 환경으로 마이그레이션 되었으며, 그 과정에서 많은 부분이 축소, 보완 되었습니다. 보안성 역시 여러 기준을 갖고 보완 진행하였고, 그 과정에서 있었던 여러 고민들 중에 공감 할 수 있는 내용을 공유하고자 합니다.
 
@@ -294,7 +294,7 @@ CloudFormation Template으로 구성된 `AWS 인프라의 이미지`를 통해 �
 
 #### `Aviatrix 유용한 기능`
 
-1. [HA(High Availability)](https://en.wikipedia.org/wiki/High_availability)
+##### **[HA(High Availability)](https://en.wikipedia.org/wiki/High_availability)**
     * `HA` 구성은 모든 인프라의 기본으로 Aviatrix 솔루션을 사용할 경우에도 아래와 같은 간단한 작업으로 적용이 가능합니다.
 
 * Gateway > Edit > Gateway Single AZ HA "Enable"
@@ -322,7 +322,7 @@ CloudFormation Template으로 구성된 `AWS 인프라의 이미지`를 통해 �
 
 ![23](/img/posts_aviatrix/monitoring.png){: width="725" height="400"}{: .center}{: .center}
 
-* Aviatrix-Gateway HA Failover 프로세스
+* `Aviatrix-Gateway HA Failover 프로세스`
 
 ```markdown
 1. AviatrixController 에서 Gateway Health Check
@@ -333,7 +333,7 @@ CloudFormation Template으로 구성된 `AWS 인프라의 이미지`를 통해 �
     예) Private-Subnet > Route Table > "0.0.0.0/0" Target Gateway ENI 업데이트
 ```
 
-2. [Egress FQDN Discovery](https://docs.aviatrix.com/HowTos/fqdn_discovery.html)
+##### **[Egress FQDN Discovery](https://docs.aviatrix.com/HowTos/fqdn_discovery.html)**
     * 해당 기능은 실 서버에 적용하기에 앞서 실 서버에서 FQDN outbound의 사용 내용을 정리하는데 유용한 기능입니다.
 
 * Seciruty > Egress Control > (Optional) Egress FQDN Discovery > Gateway "Start" (선택된 Gateway는 FQDN Filter에 연결이 안 되어 있어야 합니다.)
