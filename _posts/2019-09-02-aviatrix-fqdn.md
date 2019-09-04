@@ -24,8 +24,8 @@ On-premise 환경에서는 현재 회사의 성장세를 따라가기 어렵다�
 
 #### Outbound FQDN Filetring을 `왜` 하려는 걸까요? 이유는 아래와 같습니다.
 - 보안적인 요구사항
-- google.com 등 `IP Renge`가 넓고, [CDN](https://en.wikipedia.org/wiki/Content_delivery_network) 서비스 같은 지속 해서 변하는 IP에 대한 대응
-- AWS - Security Groups and ACL [Limits](https://docs.aws.amazon.com/vpc/latest/userguide/amazon-vpc-limits.html)
+- google.com 등 `IP Renge`가 넓고, [CDN](https://en.wikipedia.org/wiki/Content_delivery_network) 서비스 같은 지속 해서 변하는 IP 대응
+- AWS - Security Groups and ACL [`Limits`](https://docs.aws.amazon.com/vpc/latest/userguide/amazon-vpc-limits.html)
 
 #### Cloud 환경에서 Outbound 트래픽 에 대한 관리를 어떻게 할까?
 - Cloud platform 에서 TCP/IP Outbound 에 대해서는 로그 및 관리를 다양한 Management Service 로 지원하고 있지만, Outbound 트래픽 중에 [FQDN](https://en.wikipedia.org/wiki/Fully_qualified_domain_name) 에 대한 지원은 Management Service 만으로 대처가 어렵다고 판단하여 쏘카에 맞는 요구사항을 아래와 같이 정리 했습니다.
@@ -304,6 +304,7 @@ CloudFormation Template으로 구성된 `AWS 인프라의 이미지`를 통해 �
 ![20](/img/posts_aviatrix/geteway-ha-public-b.png){: width="725" height="400"}{: .center}{: .center}
 
 * HA 구성을 위한 설정은 마무리하였으며, 정상적인 Failover 가 되는지 확인을 위해 아래 구성을 진행하였습니다.
+
 ```markdown
 * Private-Subnet 에서 운영되는 인스턴스에 대한 실시간 모니터링 설정
 * Failover 기능 테스트를 위해 Aviatrix-GW 인스턴스를 AWS Console 에서 강제 종료(STOP)
@@ -312,18 +313,18 @@ CloudFormation Template으로 구성된 `AWS 인프라의 이미지`를 통해 �
 
 * Failover 기능을 테스트하기 전의 Aviatrix Gateway 상태 이미지입니다.
 
-![21](/img/posts_aviatrix/gateway-status.png){: width="725" height="200"}{: .center}{: .center}
+![21](/img/posts_aviatrix/gateway-status.png){: width="725" height="50"}{: .center}{: .center}
 * Failover 기능을 테스트하기 위해 Gateway를 강제 종료한 Aviatrix Gateway 상태 이미지입니다.
 
-![22](/img/posts_aviatrix/gateway-status-2.png){: width="725" height="200"}{: .center}{: .center}
+![22](/img/posts_aviatrix/gateway-status-2.png){: width="725" height="50"}{: .center}{: .center}
 
-* **`테스트 결과`**
-    * Private-Subnet 에서 운영되고 있는 인스턴스에 모니터링 에이전트(telegraf)를 설정하여, ICMP 프로토콜을 이용한 `1s` 기준으로 `Packet Loss` 현상도 발생하지 않았습니다.
+* **`테스트 결과:`** Private-Subnet 에서 운영되고 있는 인스턴스에 모니터링 에이전트(telegraf)를 설정하여, ICMP 프로토콜을 이용한 `1s` 기준으로 `Packet Loss` 현상도 발생하지 않았습니다.
 
 ![23](/img/posts_aviatrix/monitoring.png){: width="725" height="400"}{: .center}{: .center}
 
 * Aviatrix-Gateway HA Failover 프로세스
-```
+
+```markdown
 1. AviatrixController 에서 Gateway Health Check
 2. 문제가 되는 Gateway Health Check 실패 확인
 3. HA 구성 확인
@@ -337,19 +338,19 @@ CloudFormation Template으로 구성된 `AWS 인프라의 이미지`를 통해 �
 
 * Seciruty > Egress Control > (Optional) Egress FQDN Discovery > Gateway "Start" (선택된 Gateway는 FQDN Filter에 연결이 안 되어 있어야 합니다.)
 
-![23](/img/posts_aviatrix/fqdn-discovery-start.png){: width="725" height="400"}{: .center}{: .center}
+![23](/img/posts_aviatrix/fqdn-discovery-start.png){: width="725" height="220"}{: .center}{: .center}
 
 * 테스트를 위해서 Private-Subnet 에서 운영되고 있는 인스턴스에서 아래의 명령어를 실행합니다.
+
 ```bash
 curl -L -k -s -o /dev/null -w "%{http_code}\n" https://tech.socarcorp.kr
 ```
 
 * 위의 HA 테스트로 인해서 변경된 Aviatrix-GW-hagw 에서 발생한 FQDN 내용을 확인할 수 있습니다.
 
-![23](/img/posts_aviatrix/fqdn-discovery-status.png){: width="725" height="400"}{: .center}{: .center}
+![23](/img/posts_aviatrix/fqdn-discovery-status.png){: width="725" height="220"}{: .center}{: .center}
 
-* **`테스트 결과`**
-    * FQDN Discovery 기능을 통해 실 서버 FQDN Outbound를 모두 사전에 확인하고, 필요 유무에 따라서 FQDN Filter 정책 정의에 유용합니다.
+* **`테스트 결과:`** FQDN Discovery 기능을 통해 실 서버 FQDN Outbound를 모두 사전에 확인하고, 필요 유무에 따라서 FQDN Filter 정책 정의에 유용합니다.
 
 ---
 
