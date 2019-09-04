@@ -295,7 +295,7 @@ CloudFormation Template으로 구성된 `AWS 인프라의 이미지`를 통해 �
 #### `Aviatrix 유용한 기능`
 
 ##### **[HA(High Availability)](https://en.wikipedia.org/wiki/High_availability)**
-    * `HA` 구성은 모든 인프라의 기본으로 Aviatrix 솔루션을 사용할 경우에도 아래와 같은 간단한 작업으로 적용이 가능합니다.
+HA 구성은 모든 인프라의 기본으로 Aviatrix 솔루션을 사용할 경우에도 아래와 같은 간단한 작업으로 적용이 가능합니다.
 
 * Gateway > Edit > Gateway Single AZ HA "Enable"
 * Geteway > Edit > Gateway for High Availability Peering
@@ -334,7 +334,8 @@ CloudFormation Template으로 구성된 `AWS 인프라의 이미지`를 통해 �
 ```
 
 ##### **[Egress FQDN Discovery](https://docs.aviatrix.com/HowTos/fqdn_discovery.html)**
-    * 해당 기능은 실 서버에 적용하기에 앞서 실 서버에서 FQDN outbound의 사용 내용을 정리하는데 유용한 기능입니다.
+
+해당 기능은 실 서버에 적용하기에 앞서 실 서버에서 FQDN outbound의 사용 내용을 정리하는데 유용한 기능입니다.
 
 * Seciruty > Egress Control > (Optional) Egress FQDN Discovery > Gateway "Start" (선택된 Gateway는 FQDN Filter에 연결이 안 되어 있어야 합니다.)
 
