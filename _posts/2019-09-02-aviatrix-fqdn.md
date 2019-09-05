@@ -126,10 +126,74 @@ curl -L -k -s -o /dev/null -w "%{http_code}\n" https://docs.google.com
 
 ---
 
-#### `CloudFormation Template의 role, policy`
+#### `Aviatrix 유용한 기능`
+
+##### **1. [HA(High Availability)](https://en.wikipedia.org/wiki/High_availability)**
+HA 구성은 모든 인프라의 기본으로 Aviatrix 솔루션을 사용할 경우에도 아래와 같은 간단한 작업으로 적용이 가능합니다.
+
+* Gateway > Edit > Gateway Single AZ HA "Enable"
+* Geteway > Edit > Gateway for High Availability Peering
+    * HA 구성을 위해 운영되는 Gateway Subnet과 다른 [AZ](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html) Public-Subnet 를 선택합니다.
+
+![20](/img/posts_aviatrix/geteway-ha-public-b.png){: width="725" height="400"}{: .center}{: .center}
+
+* HA 구성을 위한 설정은 마무리하였으며, 정상적인 Failover 가 되는지 확인을 위해 아래 구성을 진행하였습니다.
+
+```markdown
+* Private-Subnet 에서 운영되는 인스턴스에 대한 실시간 모니터링 설정
+* Failover 기능 테스트를 위해 Aviatrix-GW 인스턴스를 AWS Console 에서 강제 종료(STOP)
+* Private-Subnet 에서 운영되는 인스턴스에 대한 실시간 모니터링 지표 확인
+```
+
+* Failover 기능을 테스트하기 전의 Aviatrix Gateway 상태 이미지입니다.
+
+![21](/img/posts_aviatrix/gateway-status.png){: width="725" height="50"}{: .center}{: .center}
+* Failover 기능을 테스트하기 위해 Gateway를 강제 종료한 Aviatrix Gateway 상태 이미지입니다.
+
+![22](/img/posts_aviatrix/gateway-status-2.png){: width="725" height="50"}{: .center}{: .center}
+
+* **`테스트 결과:`** Private-Subnet 에서 운영되고 있는 인스턴스에 모니터링 에이전트(telegraf)를 설정하여, ICMP 프로토콜을 이용한 `1s` 기준으로 `Packet Loss` 현상도 발생하지 않았습니다.
+
+![23](/img/posts_aviatrix/monitoring.png){: width="725" height="400"}{: .center}{: .center}
+
+* `Aviatrix-Gateway HA Failover 프로세스`
+
+```markdown
+1. AviatrixController 에서 Gateway Health Check
+2. 문제가 되는 Gateway Health Check 실패 확인
+3. HA 구성 확인
+4. HA 구성한 Gateway로 네트워크 트래픽 변경
+    * 문제가 되는 Gateway로 설정되어 있던 Route Table 업데이트
+    예) Private-Subnet > Route Table > "0.0.0.0/0" Target Gateway ENI 업데이트
+```
+
+##### **2. [Egress FQDN Discovery](https://docs.aviatrix.com/HowTos/fqdn_discovery.html)**
+
+해당 기능은 실 서버에 적용하기에 앞서 실 서버에서 FQDN outbound의 사용 내용을 정리하는데 유용한 기능입니다.
+
+* Seciruty > Egress Control > (Optional) Egress FQDN Discovery > Gateway "Start" (선택된 Gateway는 FQDN Filter에 연결이 안 되어 있어야 합니다.)
+
+![23](/img/posts_aviatrix/fqdn-discovery-start.png){: width="725" height="220"}{: .center}{: .center}
+
+* 테스트를 위해서 Private-Subnet 에서 운영되고 있는 인스턴스에서 아래의 명령어를 실행합니다.
+
+```bash
+curl -L -k -s -o /dev/null -w "%{http_code}\n" https://tech.socarcorp.kr
+```
+
+* 위의 HA 테스트로 인해서 변경된 Aviatrix-GW-hagw 에서 발생한 FQDN 내용을 확인할 수 있습니다.
+
+![23](/img/posts_aviatrix/fqdn-discovery-status.png){: width="725" height="220"}{: .center}{: .center}
+
+* **`테스트 결과:`** FQDN Discovery 기능을 통해 실 서버 FQDN Outbound를 모두 사전에 확인하고, 필요 유무에 따라서 FQDN Filter 정책 정의에 유용합니다.
+
+---
+
+#### `Bonus! CloudFormation Template의 role, policy 이해하기`
 ```markdown
 * CloudFormation Template은 어떤 내용을 가지고 있을까?
 * 왜 Gateway 서버가 자동으로 설치 되었을까?
+* 왜 Private-Subnet Route Table 은 자동으로 업데이트가 되었을까?
 * 멀티 Account 구성은 어떻게 가능할까?
 ```
 위에 대한 내용은 CloudFormation Template의 `role`, `policy` 관계를 보면 알 수 있습니다.
@@ -262,15 +326,15 @@ curl -L -k -s -o /dev/null -w "%{http_code}\n" https://docs.google.com
 
 CloudFormation Template으로 구성된 `AWS 인프라의 이미지`를 통해 정리할 경우, 아래와 같은 구성이 설정 됩니다.
 
-1. Aviatrix Controller Instance 에 role-ec2 설정
+* Aviatrix Controller Instance 에 role-ec2 설정
 
 ![5](/img/posts_aviatrix/role-ec2.png){: width="725" height="300"}{: .center}{: .center}
 
-2. role-ec2 에 대한 policy 는 아래와 같이 설정되며, 해당 설정에서 `STS 설정`을 주의 깊게 이해 합니다.
+* role-ec2 에 대한 policy 는 아래와 같이 설정되며, 해당 설정에서 `STS 설정`을 주의 깊게 이해 합니다.
 
 ![6](/img/posts_aviatrix/role-ec2-policy.png){: width="725" height="300"}{: .center}{: .center}
 
-3. 위의 이미지를 JSON 형태로 확인하면 이해가 더 쉽습니다.
+* 위의 이미지를 JSON 형태로 확인하면 이해가 더 쉽습니다.
 
 ```json
         {
@@ -282,76 +346,13 @@ CloudFormation Template으로 구성된 `AWS 인프라의 이미지`를 통해 �
         },
 ```
 
-4. Aviatrix Controller 웹페이지의 `Onboarding 카테고리`에서 Cloud platform에 맞게 설정을 하게 되면, AWS의 경우 `role-ec2`가 `role-app`의 `policy`을 `위임` 받아서 사용할 수 있는 상태가 됩니다. role-ec2는 Aviatrix Controller Instance에 등록 되어있는 role 이기 때문에, Aviatrix Controller 웹페이지에서 role-app에 적용 되어있는 policy 에 대한 이용이 가능합니다. `멀티 Account`의 경우에는 `멀티 Account`에 설정 되어 있는 `role-app`에 대한 `AccountId Trust 등록`을 진행하여, `멀티 Account`의 `role-app`을 `Controller Account`의 `role-app`이 `공유` 받아 사용하는 방법으로 `동일` 합니다.
+* Aviatrix Controller 웹페이지의 `Onboarding 카테고리`에서 Cloud platform에 맞게 설정을 하게 되면, AWS의 경우 `role-ec2`가 `role-app`의 `policy`을 `위임` 받아서 사용할 수 있는 상태가 됩니다. role-ec2는 Aviatrix Controller Instance에 등록 되어있는 role 이기 때문에, Aviatrix Controller 웹페이지에서 role-app에 적용 되어있는 policy 에 대한 이용이 가능합니다. `멀티 Account`의 경우에는 `멀티 Account`에 설정 되어 있는 `role-app`에 대한 `AccountId Trust 등록`을 진행하여, `멀티 Account`의 `role-app`을 `Controller Account`의 `role-app`이 `공유` 받아 사용하는 방법으로 `동일` 합니다.
 
 ![7](/img/posts_aviatrix/role-app-trust.png){: width="725" height="300"}{: .center}{: .center}
 
 #### **`Multiple AWS Accounts with Role Switchin Aviatrix Architecture`**
 
 ![8](/img/posts_aviatrix/role-ec2-app-muac.png){: width="725" height="400"}{: .center}{: .center}
-
----
-
-#### `Aviatrix 유용한 기능`
-
-##### **1. [HA(High Availability)](https://en.wikipedia.org/wiki/High_availability)**
-HA 구성은 모든 인프라의 기본으로 Aviatrix 솔루션을 사용할 경우에도 아래와 같은 간단한 작업으로 적용이 가능합니다.
-
-* Gateway > Edit > Gateway Single AZ HA "Enable"
-* Geteway > Edit > Gateway for High Availability Peering
-    * HA 구성을 위해 운영되는 Gateway Subnet과 다른 [AZ](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html) Public-Subnet 를 선택합니다.
-
-![20](/img/posts_aviatrix/geteway-ha-public-b.png){: width="725" height="400"}{: .center}{: .center}
-
-* HA 구성을 위한 설정은 마무리하였으며, 정상적인 Failover 가 되는지 확인을 위해 아래 구성을 진행하였습니다.
-
-```markdown
-* Private-Subnet 에서 운영되는 인스턴스에 대한 실시간 모니터링 설정
-* Failover 기능 테스트를 위해 Aviatrix-GW 인스턴스를 AWS Console 에서 강제 종료(STOP)
-* Private-Subnet 에서 운영되는 인스턴스에 대한 실시간 모니터링 지표 확인
-```
-
-* Failover 기능을 테스트하기 전의 Aviatrix Gateway 상태 이미지입니다.
-
-![21](/img/posts_aviatrix/gateway-status.png){: width="725" height="50"}{: .center}{: .center}
-* Failover 기능을 테스트하기 위해 Gateway를 강제 종료한 Aviatrix Gateway 상태 이미지입니다.
-
-![22](/img/posts_aviatrix/gateway-status-2.png){: width="725" height="50"}{: .center}{: .center}
-
-* **`테스트 결과:`** Private-Subnet 에서 운영되고 있는 인스턴스에 모니터링 에이전트(telegraf)를 설정하여, ICMP 프로토콜을 이용한 `1s` 기준으로 `Packet Loss` 현상도 발생하지 않았습니다.
-
-![23](/img/posts_aviatrix/monitoring.png){: width="725" height="400"}{: .center}{: .center}
-
-* `Aviatrix-Gateway HA Failover 프로세스`
-
-```markdown
-1. AviatrixController 에서 Gateway Health Check
-2. 문제가 되는 Gateway Health Check 실패 확인
-3. HA 구성 확인
-4. HA 구성한 Gateway로 네트워크 트래픽 변경
-    * 문제가 되는 Gateway로 설정되어 있던 Route Table 업데이트
-    예) Private-Subnet > Route Table > "0.0.0.0/0" Target Gateway ENI 업데이트
-```
-
-##### **2. [Egress FQDN Discovery](https://docs.aviatrix.com/HowTos/fqdn_discovery.html)**
-
-해당 기능은 실 서버에 적용하기에 앞서 실 서버에서 FQDN outbound의 사용 내용을 정리하는데 유용한 기능입니다.
-
-* Seciruty > Egress Control > (Optional) Egress FQDN Discovery > Gateway "Start" (선택된 Gateway는 FQDN Filter에 연결이 안 되어 있어야 합니다.)
-
-![23](/img/posts_aviatrix/fqdn-discovery-start.png){: width="725" height="220"}{: .center}{: .center}
-
-* 테스트를 위해서 Private-Subnet 에서 운영되고 있는 인스턴스에서 아래의 명령어를 실행합니다.
-
-```bash
-curl -L -k -s -o /dev/null -w "%{http_code}\n" https://tech.socarcorp.kr
-```
-
-* 위의 HA 테스트로 인해서 변경된 Aviatrix-GW-hagw 에서 발생한 FQDN 내용을 확인할 수 있습니다.
-
-![23](/img/posts_aviatrix/fqdn-discovery-status.png){: width="725" height="220"}{: .center}{: .center}
-
-* **`테스트 결과:`** FQDN Discovery 기능을 통해 실 서버 FQDN Outbound를 모두 사전에 확인하고, 필요 유무에 따라서 FQDN Filter 정책 정의에 유용합니다.
 
 ---
 
