@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "AWS VPC 에서의 FQDN outbound control 하기"
-subtitle: "Aviatrix 솔루션을 이용한 Outbound FQDN 관리하기"
+subtitle: "Aviatrix 솔루션을 이용한 FQDN Outbound Control 하기"
 date: 2019-09-02 20:00:00 +0900
 category: security
 background: '/assets/images/andrea-enriquez-cousino-4hBCxfrlpoM-unsplash.jpg'
