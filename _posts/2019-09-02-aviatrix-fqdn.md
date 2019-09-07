@@ -126,8 +126,7 @@ graph LR
     A[Instance]
     A -->|Active| B[Aviatrix Gateway]
     A -->|Standby| C[Aviatrix Gateway HA]
-    B -->|Route Tables(Public)| D(Internet Gateway) -->E[Internet]
-    C -->|Route Tables(Public)| D(Internet Gateway) -->E[Internet]
+    B -->|Route Tables(Public)| D(Internet Gateway)
 </div>
 
 1. `Private Subnet` 에서의 Outbound 발생 시 자체 설정한 `route table`을 참조
