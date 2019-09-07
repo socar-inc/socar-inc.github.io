@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "AWS VPC 에서의 FQDN outbound control 하기"
-subtitle: "Aviatrix 솔루션을 이용한 FQDN Outbound Control 하기"
+subtitle: "Aviatrix Gateway를 이용한 FQDN Outbound Control 하기"
 date: 2019-09-02 20:00:00 +0900
 category: security
 background: '/assets/images/andrea-enriquez-cousino-4hBCxfrlpoM-unsplash.jpg'
@@ -18,30 +18,31 @@ Photo by <a href="https://unsplash.com/@andreoiide?utm_medium=referral&amp;utm_c
 
 ### AWS VPC 에서 FQDN Outbound Control 하기
 
-On-premise 환경에서는 현재 회사의 성장세를 따라가기 어렵다고 판단하고, 1년 전부터 Cloud 환경으로 마이그레이션을 진행 하고 있습니다. 현재는 중요 서비스의 90% 이상이 Cloud 환경으로 마이그레이션 되었으며, 그 과정에서 많은 부분이 축소, 보완 되었습니다. 보안성 역시 여러 기준을 갖고 보완 진행하였고, 그 과정에서 있었던 여러 고민들 중에 공감 할 수 있는 내용을 공유하고자 합니다.
+On-premise 환경에서는 현재 회사의 성장세를 따라가기 어렵다고 판단하고, 1년 전부터 Cloud 환경으로 마이그레이션을 진행 하고 있습니다. 현재는 중요 서비스의 90% 이상이 Cloud 환경으로 마이그레이션 되었으며, 그 과정에서 인프라를 구성하는 많은 구성 요소가 변경,대체 되었습니다. 또한 여러 보안 요구사항을 만족시키기 위해서 추가적인 시스템 도입에 대해서 고민하였고, 그 과정에서 도입했던 유용한 솔루션에 대해서 공유하고자 합니다.
 
 ---
 
-#### Outbound FQDN Filetring을 `왜` 하려는 걸까요? 이유는 아래와 같습니다.
-- 보안적인 요구사항
-- google.com 등 `IP Renge`가 넓고, [CDN](https://en.wikipedia.org/wiki/Content_delivery_network) 서비스 같은 지속 해서 변하는 IP 대응
-- AWS - Security Groups and ACL [`Limits`](https://docs.aws.amazon.com/vpc/latest/userguide/amazon-vpc-limits.html)
+#### Outbound FQDN filtering을 하려는 이유
+- `멀웨어 2차 확산 방지` (멀웨어에 감염된 경우 Outbound FQDN Filtering을 통해 멀웨어 [C&C](https://ko.wikipedia.org/wiki/C%26C_(%EC%95%85%EC%84%B1_%EC%86%8C%ED%94%84%ED%8A%B8%EC%9B%A8%EC%96%B4)) 서버에 연결하지 못하게 하고, 악성 코드가 컴퓨터의 데이터를 내보내려고 하면 대상에 연결하지 못하게 할 수 있습니다.)
+- Outbound 트래픽에 대한 무단 활동 감지
+- google.com 등 `IP Range`가 넓고, [CDN](https://en.wikipedia.org/wiki/Content_delivery_network) 서비스 같은 지속 해서 변하는 IP 대응
+- AWS - Security Groups 기준 Inbound or outbound rules per security group은 60개로 [제한](https://docs.aws.amazon.com/vpc/latest/userguide/amazon-vpc-limits.html) 됩니다. Inbound 관점에서 인터넷에서 고객 서비스는 특이사항이 아닐 수 있으나, Outbound 관점에서는 updates.ubuntu.com(IP 15), Github(IP 12) 등 타사의 업데이트 및 API를 생각하면 60개의 IP 제한은 충분하지 않다는 것을 알 수 있습니다.
 
-#### Cloud 환경에서 Outbound 트래픽 에 대한 관리를 어떻게 할까?
-- Cloud platform 에서 TCP/IP Outbound 에 대해서는 로그 및 관리를 다양한 Management Service 로 지원하고 있지만, Outbound 트래픽 중에 [FQDN](https://en.wikipedia.org/wiki/Fully_qualified_domain_name) 에 대한 지원은 Management Service 만으로 대처가 어렵다고 판단하여 쏘카에 맞는 요구사항을 아래와 같이 정리 했습니다.
+#### Cloud 환경에서 Outbound 트래픽에 대한 관리를 어떻게 할까?
+- Cloud platform 에서 TCP/IP Outbound에 대해서는 로그 및 관리를 다양한 Management Service로 지원하고 있지만, Outbound 트래픽 중에 [FQDN](https://en.wikipedia.org/wiki/Fully_qualified_domain_name)에 대한 지원은 Management Service 만으로 대처가 어렵다고 판단하여 쏘카에 맞는 요구사항을 아래와 같이 정리 했습니다.
 
 ```markdown
-* 내부 요구사항 (Outbound - FQDN) +@(TCP/IP)
-* 내부 요구사항 (HTTP/HTTPS) +@((Wildcard)*.domain.com)
-* 내부 요구사항 (Multiple Accounts and Clouds)
-* 편의성 (Automation)
+* Outbound - FQDN filtering +@(TCP/IP)
+* HTTP/HTTPS +@((Wildcard)*.domain.com)
+* Multiple Accounts and Clouds
 * 확장성, 관리 (Infrastructure as code, Update)
 * 안정성 (다양한 레퍼런스, Monitoring, HA)
+* 편의성
 * 비용
 ```
 
 - 위와 같은 요구사항을 정리하고 난 이후에 든 생각은 하나였습니다. `있을까?`  
-그 이후에는 오픈소스([Squid](https://aws.amazon.com/ko/blogs/security/how-to-add-dns-filtering-to-your-nat-instance-with-squid/)), 유료 솔루션([paloalto](https://aws.amazon.com/marketplace/pp/B00PJ2V04O?qid=1567422902264&sr=0-2&ref_=srh_res_product_title), [Cisco vMX](https://aws.amazon.com/marketplace/pp/B01N49IN0S?qid=1567422994913&sr=0-16&ref_=srh_res_product_title) 등)을 검토 하였고, 그 중 국내에서는 레퍼런스를 찾아보기 어려운 [`Aviatrix`](https://aws.amazon.com/marketplace/pp/B079T2HGWG?qid=1567423038998&sr=0-1&ref_=srh_res_product_title) 솔루션을 선정하였습니다. 선정 과정에서 확인해본 결과 해외 레퍼런스의 경우에는 NASA, Netflix, Hyatt 등이 있었으며, 요구 사항에서 필요로 하는 Service(FQDN, TransitGW, VPN)에 대한 비용 발생 및 [IaC](https://en.wikipedia.org/wiki/Infrastructure_as_code) 배포, 구성이 타 유료 솔루션보다 이점이 있다는 것을 감안하여 Aviatrix 솔루션을 선정하게 되었습니다. (선정 과정에서 도움이 된 링크를 공유합니다.)
+그 이후에는 오픈소스([Squid](https://aws.amazon.com/ko/blogs/security/how-to-add-dns-filtering-to-your-nat-instance-with-squid/)), 유료 솔루션([paloalto](https://aws.amazon.com/marketplace/pp/B00PJ2V04O?qid=1567422902264&sr=0-2&ref_=srh_res_product_title), [Cisco vMX](https://aws.amazon.com/marketplace/pp/B01N49IN0S?qid=1567422994913&sr=0-16&ref_=srh_res_product_title) 등)을 검토 하였고, 그 중 국내에서는 레퍼런스를 찾아보기 쉽지 않지만 [`Aviatrix`](https://aws.amazon.com/marketplace/pp/B079T2HGWG?qid=1567423038998&sr=0-1&ref_=srh_res_product_title) 솔루션을 선정하였습니다. 선정 과정에서 확인해본 결과 해외 레퍼런스의 경우에는 NASA, Netflix, Hyatt 등이 있었으며, 요구 사항에서 필요로 하는 Service(FQDN, TransitGW, VPN)에 대한 비용 발생 및 [IaC](https://en.wikipedia.org/wiki/Infrastructure_as_code) 배포, 구성이 타 유료 솔루션보다 이점이 있다는 것을 감안하여 Aviatrix 솔루션을 선정하게 되었습니다. 선정 과정에서 도움이 된 링크를 공유합니다.
 
     * [AWS 기반 Aviatrix FQDN Egress Filtering](https://aws.amazon.com/quickstart/architecture/aviatrix-fqdn-egress-filtering/?nc1=h_ls)
     * [Controlling Outbound VPC Traffic](https://www.aviatrix.com/solutions/egress-security.php)
@@ -60,7 +61,7 @@ Aviatrix 솔루션 테스트를 위해, AWS Marketplace 에서 Aviatrix 솔루�
 1. Amazon Machine Image
 2. CloudFormation Template
 
-원활한 테스트를 위해 CloudFormation Template을 선택하여 진행합니다. Amazon Machine Image를 통한 구성 시에는 role, network 구성 등의 추가 설정이 필요합니다. 상세 설치 과정은 Aviatrix에서 Guide를 제공하고 있습니다.`(빠른 테스트 환경 구축을 위해 CloudFormation Template의 role, policy 등 설정은 아래에 별도로 기재해 드리겠습니다.)`
+원활한 테스트를 위해 CloudFormation Template을 선택하여 진행합니다. Amazon Machine Image를 통한 구성 시에는 role, network 구성 등의 추가 설정이 필요합니다. 상세 설치 과정은 Aviatrix에서 Guide를 제공하고 있습니다. `(CloudFormation Template 의 IAM role, policy 등은 아래에 별도 분석하겠습니다.)`
 - [Aviatrix CloudFormation Template Guide](https://docs.aviatrix.com/StartUpGuides/aviatrix-cloud-controller-startup-guide.html)
 
 CloudFormation 배포가 완료된 상태에서 output 카테고리에서 AviatrixControllerEIP 정보를 확인합니다. EIP에 대한 구성을 하지 않을 경우에는 AviatrixControllerPrivateIP 정보를 확인하여 웹 접속 주소로 사용 됩니다. `PrivateIP는 초기 임시 패스워드로도 구성` 됩니다.
@@ -119,6 +120,16 @@ curl -L -k -s -o /dev/null -w "%{http_code}\n" https://docs.google.com
 #### **`AWS Account with Aviatrix Gateway Architecture`**
 
 ![13](/img/posts_aviatrix/fqdn-architecture.png){: width="725" height="800"}{: .center}{: .center}
+
+<div class="mermaid">
+graph LR
+    A[Instance]
+    A -->|Active| B[Aviatrix Gateway]
+    A -->|Standby| C[Aviatrix Gateway HA]
+    B -->|Route Tables(Public)| D(Internet Gateway) -->E[Internet]
+    C -->|Route Tables(Public)| D(Internet Gateway) -->E[Internet]
+</div>
+
 1. `Private Subnet` 에서의 Outbound 발생 시 자체 설정한 `route table`을 참조
 2. route table 에서 `"0.0.0.0/0"` 트래픽을 Aviatrix Gateway의 `ENI`로 전달
 3. Aviatrix Gateway에 설정되어있는 `Aviatrix Controller` 정책에 따라 Outbound 트래픽 체크 이후에, Aviatrix Gateway에 Internet gateway로 전달
@@ -357,7 +368,7 @@ CloudFormation Template으로 구성된 `AWS 인프라의 이미지`를 통해 �
 ---
 
 ### 정리
-* 자세한 설명을 하기 위해 많은 이미지가 추가 되었지만, 실질적으로는 AWS 마켓플레이스에서 라이센스 구입 이후에 진행되는 절차가 간단하며 사용자가 직접 `수동`으로 작업해야하는 내용이 `없습니다`.
+* 자세한 설명을 하기 위해 많은 이미지가 추가 되었지만, 실질적으로는 AWS 마켓플레이스에서 라이센스 구입 이후에 진행되는 절차가 간단하며 사용자가 직접 `수동`으로 작업해야하는 내용이 `거의 없습니다.`.
 * Aviatrix의 경우에는 기존의 Cisco 및 paloalto와는 다른 Cloud 환경에 맞게 개발이 되었다는 것을 쉽게 느낄 수 있었습니다. `Role`의 `활용` 및 위에서는 자세하게 다루지 않았지만, `"EXPORT TO TERRAFORM"` 카테고리 부분에서 리소스 형식에 맞는 *.tf 파일들을 다운로드 받아서 `IaC` 환경에 활용이 가능합니다.
 * 테스트 과정에서는 단일 Account를 활용 하였지만, 실질적으로 쏘카에서는 `Transit GW`를 이용한 `트래픽 중앙` 관리를 통해서 운영하고 있기 때문에 On-premise 적용 등 다양한 아키텍처 구성이 가능 합니다.
 * 매니저 Cloud Platform에서 모두 운영이 가능하기 때문에 이후 확장성 및 특정 Cloud Platform에 [`lock-in`](https://en.wikipedia.org/wiki/Vendor_lock-in) 되지 않는다는 장점이 있습니다.
