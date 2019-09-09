@@ -125,17 +125,17 @@ curl -L -k -s -o /dev/null -w "%{http_code}\n" https://docs.google.com
 
 <div class="mermaid">
 graph LR
-    Instance -->|Private Route Tables| B(Aviatrix Gateway) -->|Public Route Tables| C(Internet Gateway / Internet)
+    Instance-->|Private Route Tables| Aviatrix Gateway-->|Public Route Tables|Internet Gateway/Internet
 </div>
 
 * Aviatrix Controller Folw
 
 <div class="mermaid">
 graph LR
-    A(Aviatrix Controller)
-    A -->|Public Route Tables| B{Internet}
-    B -->|HealthCheck| C[Aviatrix Gateway]
-    B -->|HealthCheck| D[Aviatrix Gateway HA]
+    A[Aviatrix Controller] -->|Public Route Tables| B(Internet Gateway)
+    B --> C{Internet}
+    C -->|HealthCheck| D[Aviatrix Gateway]
+    C -->|HealthCheck| E[Aviatrix Gateway HA]
 </div>
 
 1. `Private Subnet` 에서의 Outbound 발생 시 자체 설정한 `route table`을 참조
