@@ -56,7 +56,7 @@ Aviatrix 솔루션 테스트를 위해, AWS Marketplace 에서 Aviatrix 솔루�
 - [AWS-Marketplace (Aviatrix Secure Networking Platform - Custom)](https://aws.amazon.com/marketplace/pp/B0155GB0MA?ref_=aws-mp-console-subscription-detail)
 
 설치 방법은 두가지를 제공합니다.
-![1](/img/posts_aviatrix/cloudformation-image.png){: width="725" height="400"}{: .center}{: .center}
+![1](/img/posts_aviatrix/cloudformation-image.png)
 
 1. Amazon Machine Image
 2. CloudFormation Template
