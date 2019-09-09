@@ -129,11 +129,18 @@ graph LR;
     ag -->|2. Public Route Tables| igw(Internet Gateway)
     igw -->|3| int[Internet]
     ac(시작: Aviatix Controller) --> internet2[Internet]
-    internet2[Internet]-->|2.Health Check| ag
-    internet2[Internet]-->|2.Health Check| agha(Aviatix Gateway HA)
+    internet2[Internet]-->|Health Check| ag
+    internet2[Internet]-->|Health Check| agha(Aviatix Gateway HA)
     ag-->|Failover| agha(Aviatix Gateway HA)
     agha-->|Failover| ag
 </div>
+
+* `Private Subnet` 에서의 Outbound 발생 시 자체 설정한 `Route table`을 참조
+* Route table 에서 `"0.0.0.0/0"` 통신을 Aviatrix Gateway의 [`ENI`](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-eni.html)로 전달
+* Aviatrix Gateway에 설정되어있는 `Aviatrix Controller` 정책에 따라 Outbound 트래픽 체크 이후에, Aviatrix Gateway에 Internet gateway로 전달
+* Internet Gateway을 요청한 통신을 외부(Internet)로 전달
+* `Aviatrix Controller`의 경우 Internet을 통해 Aviatrix Gateway Health Check
+* Aviatrix Gateway 장애 발생시 Gateway HA의 `ENI`로 `Private Subnet`의 `Route table`에 `"0.0.0.0/0"` 업데이트
 
 ---
 
@@ -168,6 +175,40 @@ HA 구성은 모든 인프라의 기본으로 Aviatrix 솔루션을 사용할 �
 ![23](/img/posts_aviatrix/monitoring.png){: width="100%" height="100%"}
 
 * `Aviatrix-Gateway HA Failover 프로세스`
+
+<div class="mermaid">
+graph TB
+    subgraph Public_A
+Controller[Controller]
+end
+    Controller -x |1.Health Check 실패|Gateway
+    Controller -x |2.Role-을 이용한 tables update|Private_RouteTables
+    Private_RouteTables -x |3.traffic|Gateway_HA
+    Controller-->|Health Check |Gateway
+    Controller-->|Health Check|Gateway_HA
+    subgraph Public
+    subgraph Public_B
+Gateway[Gateway]
+end
+    Gateway-->Public_RouteTables
+    subgraph Public_C
+Gateway_HA[Gateway_HA]
+end
+end
+    Gateway_HA-->Public_RouteTables
+    subgraph Private
+    subgraph Private_A
+Instance-A[Instance-A]
+end
+    Instance-A-->Private_RouteTables
+    subgraph Private_B
+Instance-B[Instance-B]
+end
+    Instance-B-->Private_RouteTables
+    Private_RouteTables-->Gateway
+end
+    Public_RouteTables-->Internet
+</div>
 
 ```markdown
 1. AviatrixController 에서 Gateway Health Check
