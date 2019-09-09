@@ -123,10 +123,10 @@ curl -L -k -s -o /dev/null -w "%{http_code}\n" https://docs.google.com
 
 <div class="mermaid">
 graph LR
-    A[Instance]
-    A -->|Active| B[Aviatrix Gateway]
-    A -->|Standby| C[Aviatrix Gateway HA]
-    B -->|Route Tables(Public)| D(Internet Gateway)
+    A[Hard edge] -->|Link text| B(Round edge)
+    B --> C{Decision}
+    C -->|One| D[Result one]
+    C -->|Two| E[Result two]
 </div>
 
 1. `Private Subnet` 에서의 Outbound 발생 시 자체 설정한 `route table`을 참조
