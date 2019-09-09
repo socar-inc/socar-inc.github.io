@@ -124,11 +124,13 @@ curl -L -k -s -o /dev/null -w "%{http_code}\n" https://docs.google.com
 * Instance Outbound Flow
 
 <div class="mermaid">
-graph LR
-    Instance-->|Private Route Tables| Aviatrix Gateway-->|Public Route Tables|Internet Gateway/Internet
+graph LR;
+  CLIENT[시작: Instance] -->|1. Private Route Tables 요청| Aviatix Gateway(Aviatirx_Gateway)
+    Aviatix Gateway -->|2. Public Route Tables 요청| Internet Gateway(Internet_Gateway)
+    Internet Gateway -->|3| Internet[Internet]
+    Aviatrix Controller -->|HealthCheck| Aviatix Gateway
+    Aviatrix Controller -->|HealthCheck| Aviatix Gateway HA
 </div>
-
-* Aviatrix Controller Folw
 
 <div class="mermaid">
 graph LR
