@@ -125,7 +125,7 @@ curl -L -k -s -o /dev/null -w "%{http_code}\n" https://docs.google.com
 
 <div class="mermaid">
 graph LR
-    A[Instance] -->|Route Tables(Private)| B(Aviatrix Gateway) -->|Route Tables(Public)| C(Internet Gateway / Internet)  
+    Instance -->|Private Route Tables| B(Aviatrix Gateway) -->|Public Route Tables| C(Internet Gateway / Internet)
 </div>
 
 * Aviatrix Controller Folw
@@ -133,7 +133,7 @@ graph LR
 <div class="mermaid">
 graph LR
     A(Aviatrix Controller)
-    A -->|Route Tables(Public)| B{Internet}
+    A -->|Public Route Tables| B{Internet}
     B -->|HealthCheck| C[Aviatrix Gateway]
     B -->|HealthCheck| D[Aviatrix Gateway HA]
 </div>
