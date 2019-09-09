@@ -121,29 +121,19 @@ curl -L -k -s -o /dev/null -w "%{http_code}\n" https://docs.google.com
 
 ![13](/img/posts_aviatrix/fqdn-architecture.png){: width="100%" height="100%"}
 
-* Instance Outbound Flow
+* Instance Outbound Flow & Aviatix Controller Gateway HA Flow
 
 <div class="mermaid">
 graph LR;
-  CLIENT[시작: Instance] -->|1. Private Route Tables 요청| Aviatix Gateway(Aviatirx_Gateway)
-    Aviatix Gateway -->|2. Public Route Tables 요청| Internet Gateway(Internet_Gateway)
-    Internet Gateway -->|3| Internet[Internet]
-    Aviatrix Controller -->|HealthCheck| Aviatix Gateway
-    Aviatrix Controller -->|HealthCheck| Aviatix Gateway HA
+  CLIENT[시작: Instance] -->|1.Private  Route Tables| ag(Aviatix Gateway)
+    ag -->|2. Public Route Tables| igw(Internet Gateway)
+    igw -->|3| int[Internet]
+    ac(시작: Aviatix Controller) --> internet2[Internet]
+    internet2[Internet]-->|2.Health Check| ag
+    internet2[Internet]-->|2.Health Check| agha(Aviatix Gateway HA)
+    ag-->|Failover| agha(Aviatix Gateway HA)
+    agha-->|Failover| ag
 </div>
-
-<div class="mermaid">
-graph LR
-    A[Aviatrix Controller] -->|Public Route Tables| B(Internet Gateway)
-    B --> C{Internet}
-    C -->|HealthCheck| D[Aviatrix Gateway]
-    C -->|HealthCheck| E[Aviatrix Gateway HA]
-</div>
-
-1. `Private Subnet` 에서의 Outbound 발생 시 자체 설정한 `route table`을 참조
-2. route table 에서 `"0.0.0.0/0"` 트래픽을 Aviatrix Gateway의 `ENI`로 전달
-3. Aviatrix Gateway에 설정되어있는 `Aviatrix Controller` 정책에 따라 Outbound 트래픽 체크 이후에, Aviatrix Gateway에 Internet gateway로 전달
-4. Internet Gateway을 요청한 내부 트래픽을 외부로 전달
 
 ---
 
