@@ -56,7 +56,7 @@ Aviatrix 솔루션 테스트를 위해, AWS Marketplace 에서 Aviatrix 솔루�
 - [AWS-Marketplace (Aviatrix Secure Networking Platform - Custom)](https://aws.amazon.com/marketplace/pp/B0155GB0MA?ref_=aws-mp-console-subscription-detail)
 
 설치 방법은 두가지를 제공합니다.
-![1](/img/posts_aviatrix/cloudformation-image.png)
+![1](/img/posts_aviatrix/cloudformation-image.png){: width="100%" height="100%"}
 
 1. Amazon Machine Image
 2. CloudFormation Template
@@ -69,7 +69,7 @@ CloudFormation 배포가 완료된 상태에서 output 카테고리에서 Aviatr
 https://AviatrixControllerEIP
 ```
 
-![2](/img/posts_aviatrix/cloudformation-output.png){: width="725" height="400"}{: .center}{: .center}
+![2](/img/posts_aviatrix/cloudformation-output.png){: width="370" height="400"}{: .center}{: .center}
 
 - AviatrixControllerEIP 접속 이후 관리자 아이디 및 버전을 설정 합니다.  
 - 위의 설정을 완료할 경우에는 초기 로그인화면에서 Onboarding 화면이 노출됩니다.  
@@ -119,7 +119,7 @@ curl -L -k -s -o /dev/null -w "%{http_code}\n" https://docs.google.com
 
 #### **`AWS Account with Aviatrix Gateway Architecture`**
 
-![13](/img/posts_aviatrix/fqdn-architecture.png){: width="725" height="800"}{: .center}{: .center}
+![13](/img/posts_aviatrix/fqdn-architecture.png)
 
 <div class="mermaid">
 graph LR
