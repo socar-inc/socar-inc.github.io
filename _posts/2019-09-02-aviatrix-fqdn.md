@@ -1,7 +1,7 @@
 ---
 layout: post
-title: "AWS VPC 에서의 FQDN outbound control 하기"
-subtitle: "Aviatrix Gateway를 이용한 FQDN Outbound Control 하기"
+title: "AWS VPC에서 FQDN Outbound Control"
+subtitle: "Aviatrix Gateway를 이용한 FQDN Outbound Control"
 date: 2019-09-02 20:00:00 +0900
 category: security
 background: '/assets/images/andrea-enriquez-cousino-4hBCxfrlpoM-unsplash.jpg'
@@ -10,13 +10,14 @@ comments: true
 tags:
     - outbound
     - aviatrix
+    - fqdn
 ---
 
 <div class="photo-copyright">
 Photo by <a href="https://unsplash.com/@andreoiide?utm_medium=referral&amp;utm_campaign=photographer-credit&amp;utm_content=creditBadge">Andrea Enríquez Cousiño</a>
 </div>
 
-### AWS VPC 에서 FQDN Outbound Control 하기
+### AWS VPC에서 FQDN Outbound Control
 
 On-premise 환경에서는 현재 회사의 성장세를 따라가기 어렵다고 판단하고, 1년 전부터 Cloud 환경으로 마이그레이션을 진행 하고 있습니다. 현재는 중요 서비스의 90% 이상이 Cloud 환경으로 마이그레이션 되었으며, 그 과정에서 인프라를 구성하는 많은 구성 요소가 변경,대체 되었습니다. 또한 여러 보안 요구사항을 만족시키기 위해서 추가적인 시스템 도입에 대해서 고민하였고, 그 과정에서 도입했던 유용한 솔루션에 대해서 공유하고자 합니다.
 
@@ -29,7 +30,7 @@ On-premise 환경에서는 현재 회사의 성장세를 따라가기 어렵다�
 - AWS - Security Groups 기준 Inbound or outbound rules per security group은 60개로 [제한](https://docs.aws.amazon.com/vpc/latest/userguide/amazon-vpc-limits.html) 됩니다. Inbound 관점에서 인터넷에서 고객 서비스는 특이사항이 아닐 수 있으나, Outbound 관점에서는 updates.ubuntu.com(IP 15), Github(IP 12) 등 타사의 업데이트 및 API를 생각하면 60개의 IP 제한은 충분하지 않다는 것을 알 수 있습니다.
 
 #### Cloud 환경에서 Outbound 트래픽에 대한 관리를 어떻게 할까?
-- Cloud platform 에서 TCP/IP Outbound에 대해서는 로그 및 관리를 다양한 Management Service로 지원하고 있지만, Outbound 트래픽 중에 [FQDN](https://en.wikipedia.org/wiki/Fully_qualified_domain_name)에 대한 지원은 Management Service 만으로 대처가 어렵다고 판단하여 쏘카에 맞는 요구사항을 아래와 같이 정리 했습니다.
+- Cloud platform에서 TCP/IP Outbound에 대해서는 로그 및 관리를 다양한 Management Service로 지원하고 있지만, Outbound 트래픽 중에 [FQDN](https://en.wikipedia.org/wiki/Fully_qualified_domain_name)에 대한 지원은 Management Service 만으로 대처가 어렵다고 판단하여 쏘카에 맞는 요구사항을 아래와 같이 정리 했습니다.
 
 ```markdown
 * Outbound - FQDN filtering +@(TCP/IP)
@@ -52,7 +53,7 @@ On-premise 환경에서는 현재 회사의 성장세를 따라가기 어렵다�
 
 #### Aviatrix 솔루션 구축을 통한 요구사항 검토 (AWS)
 
-Aviatrix 솔루션 테스트를 위해, AWS Marketplace 에서 Aviatrix 솔루션을 선택 후 Free Trial 이용이 가능한 Custom 유형을 선택하여 테스트 초기 환경을 구성합니다. AWS 인프라(EC2 등) 사용 금액이 발생하기 때문에 EC2 Type은 최소 스펙을 선택하여 테스트를 진행 합니다.
+Aviatrix 솔루션 테스트를 위해, AWS Marketplace에서 Aviatrix 솔루션을 선택 후 Free Trial 이용이 가능한 Custom 유형을 선택하여 테스트 초기 환경을 구성합니다. AWS 인프라(EC2 등) 사용 금액이 발생하기 때문에 EC2 Type은 최소 스펙을 선택하여 테스트를 진행 합니다.
 - [AWS-Marketplace (Aviatrix Secure Networking Platform - Custom)](https://aws.amazon.com/marketplace/pp/B0155GB0MA?ref_=aws-mp-console-subscription-detail)
 
 설치 방법은 두가지를 제공합니다.
@@ -77,24 +78,24 @@ https://AviatrixControllerEIP
 
 모든 설정을 완료한 이후에 제공되는 Aviatrix의 사용자 페이지 입니다.
 ![3](/img/posts_aviatrix/aviatrix-1.png){: width="100%" height="100%"}
-- 위의 많은 카테고리 중에 FQDN을 로깅하고, 관리할 수 있는 카테고리가 보이네요. EC2 의 Outbound 에 대한 트래픽을 로깅 및 관리하기 위해서 우선적으로 Gateway의 설정이 필요하여, Aviatrix 사용자 카테고리에서 Gateway 설정으로 이동 합니다.
+- 위의 많은 카테고리 중에 FQDN을 로깅하고, 관리할 수 있는 카테고리가 보이네요. EC2 의 Outbound 트래픽을 로깅 및 관리하기 위해서 우선적으로 Gateway의 설정이 필요해서, Aviatrix 사용자 카테고리에서 Gateway 설정으로 이동 합니다.
 
 New Gateway 설정을 진행 합니다.
 ![10](/img/posts_aviatrix/aviatrix-gw-add.png){: width="100%" height="100%"}
-- "OK"을 클릭할 경우에는 퍼센트에 대한 상태 이미지가 노출됩니다. 이후 작업은 직접 설치를 진행하지 않아도 자동으로 설치 및 Gateway 서버에 대한 환경이 구성 됩니다. `(HA 구성의 경우에는 다양한 방법을 제공하고 있어 아래 링크를 추가해 드립니다, Aviatrix의 유용한 기능(HA, Egress FQDN Discovery)은 별도로 블로그 하단에 분류하였습니다.)`
+- "OK"을 클릭할 경우에는 퍼센트에 대한 상태 이미지가 노출됩니다. 이후 작업은 직접 설치를 진행하지 않아도 자동으로 설치 및 Gateway 서버에 대한 환경이 구성 됩니다. `(HA 구성의 경우에는 다양한 방법을 제공하고 있어 아래 링크를 추가해 드립니다, Aviatrix 깊게 들여다보기(HA, Egress FQDN Discovery) 내용은 블로그 하단에 분류하였습니다.)`
     * [`Gateway`](https://docs.aviatrix.com/HowTos/gateway.html)
     * [`Gateway-HA`](https://docs.aviatrix.com/HowTos/gateway.html#gateway-single-az-ha)
     * [`HA-옵션`](https://docs.aviatrix.com/Solutions/gateway_ha.html)
 
-Private Subnet의 Route Table을 생성하여, 외부로 나가는 모든 트래픽이 Aviatrix-GW를 통해서 나가도록 설정을 진행 합니다. `"0.0.0.0/0"` 에 대한 Target으로 Aviatrix-GW `ENI`를 지정 합니다. 자동 등록을 원할 경우 Aviatrix Controller 사용자 웹페이지에서 gateway > Aviatrix-GW: Edit > Source NAT 을 통한 설정이 가능 합니다.
+Private Subnet의 Route Table을 생성해, 외부로 나가는 모든 트래픽이 Aviatrix-GW를 통해서 나가도록 설정을 진행 합니다. `"0.0.0.0/0"` 에 대한 Target을 Aviatrix-GW `ENI`로 지정 합니다. 자동 등록을 원할 경우 Aviatrix Controller 사용자 웹페이지에서 gateway > Aviatrix-GW: Edit > Source NAT를 통한 설정이 가능 합니다.
 ![11](/img/posts_aviatrix/route-table-avi.png){: width="100%" height="100%"}
 
-FQDN 로깅 및 관리를 위하여, Aviatrix Controller 사용자 웹페이지에서 `security > Egress Control > Egress FQDN Filter` 부분을 설정합니다.
+FQDN 로깅 및 관리를 위해, Aviatrix Controller 사용자 웹페이지에서 `security > Egress Control > Egress FQDN Filter`를 설정합니다.
 
 1. Egress FQDN Filter 생성 White List/Black List > Black 지정
-2. 이후 `실서버 환경` 도입의 경우에는 Egress FQDN View Log 을 확인하고, 사용하고 있는 FQDN을 보안성에 맞도록 분리하여, Egress FQDN Filter을 White List기반으로 변경할 수 있는 환경을 사전에 대비 합니다.
+2. 이후 `실서버 환경` 도입의 경우 Egress FQDN View Log를 확인하고, 사용하고 있는 FQDN을 보안성에 맞도록 분리하여, Egress FQDN Filter를 White List기반으로 변경할 수 있는 환경을 사전에 대비 합니다.
 
-테스트를 위해서 FQDN Filter 를 아래의 이미지와 같이 `White` 설정한 이후에, Aviatrix-GW 를 바라 보고 있는 `private-route-table` 의 `private-Subnet` `인스턴스`에서 다음 명령어를 실행 하였습니다.
+테스트를 위해서 FQDN Filter를 아래의 이미지와 같이 `White` 설정한 이후에, Aviatrix-GW를 바라 보고 있는 `private-route-table` 의 `private-Subnet` `인스턴스`에서 다음 명령어를 실행 하였습니다.
 ![12](/img/posts_aviatrix/fqdn-list.png){: width="100%" height="100%"}
 ```bash
 curl -L -k -s -o /dev/null -w "%{http_code}\n" https://www.naver.com
@@ -112,10 +113,10 @@ curl -L -k -s -o /dev/null -w "%{http_code}\n" https://docs.google.com
 2019-09-01T16:41:21.940692+00:00 ip-172-31-14-85 avx-nfq: AviatrixFQDNRule[CRIT]nfq_ssl_handle_client_hello() L#274  Gateway=Aviatrix-GW S_IP=172.31.24.52 D_IP=172.217.26.14 hostname=docs.google.com state=MATCHED
 2019-09-01T16:41:22.323298+00:00 ip-172-31-14-85 avx-nfq: AviatrixFQDNRule[CRIT]nfq_ssl_handle_client_hello() L#274  Gateway=Aviatrix-GW S_IP=172.31.24.52 D_IP=172.217.25.77 hostname=accounts.google.com state=MATCHED
 ```
-- 위의 로그를 통해 `state`를 확인하고 후속 조치가 가능합니다. Aviatrix 솔루션에 대한 다양한 로그 관리 및 시각화 등이 가능하기 때문에, 별도로 추가로 확인하고 싶으신 내용은 아래의 링크에서 확인해 주시기 바랍니다.
+- 위 로그를 통해 `state`를 확인하고 후속 조치가 가능합니다. Aviatrix 솔루션에 대한 다양한 로그 관리 및 시각화 등이 가능하기 때문에, 별도 추가로 확인하고 싶으신 내용은 아래의 링크에서 확인해 주시기 바랍니다.
     * [Aviatrix-Logging](https://docs.aviatrix.com/HowTos/AviatrixLogging.html)
 
-- 위의 부분에서 `google.com` FQDN에 대해서 [호스트 명](https://en.wikipedia.org/wiki/Fully_qualified_domain_name)을 지정 하지 않을 경우에는 `"*"`로 적용 됩니다. 별도로 `*.google.com`을 등록하여도 가능 합니다.
+- 위 내용에서 `google.com` FQDN에 대해서 [호스트 명](https://en.wikipedia.org/wiki/Fully_qualified_domain_name)을 지정하지 않을 때에는 `"*"`로 적용됩니다. 별도로 `*.google.com`을 등록하여도 가능합니다.
 
 #### **`AWS Account with Aviatrix Gateway Architecture`**
 
@@ -125,8 +126,8 @@ curl -L -k -s -o /dev/null -w "%{http_code}\n" https://docs.google.com
 
 <div class="mermaid">
 graph LR;
-  CLIENT[시작: Instance] -->|1.Private  Route Tables| ag(Aviatix Gateway)
-    ag -->|2. Public Route Tables| igw(Internet Gateway)
+  CLIENT[시작: Instance] -->|1.Private  Route Table| ag(Aviatix Gateway)
+    ag -->|2. Public Route Table| igw(Internet Gateway)
     igw -->|3| int[Internet]
     ac(시작: Aviatix Controller) --> internet2[Internet]
     internet2[Internet]-->|Health Check| ag
@@ -135,8 +136,8 @@ graph LR;
     agha-->|Failover| ag
 </div>
 
-* `Private Subnet` 에서의 Outbound 발생 시 자체 설정한 `Route table`을 참조
-* Route table 에서 `"0.0.0.0/0"` 통신을 Aviatrix Gateway의 [`ENI`](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-eni.html)로 전달
+* `Private Subnet`에서의 Outbound 발생 시 자체 설정한 `Route table`을 참조
+* Route table에서 `"0.0.0.0/0"` 통신을 Aviatrix Gateway의 [`ENI`](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-eni.html)로 전달
 * Aviatrix Gateway에 설정되어있는 `Aviatrix Controller` 정책에 따라 Outbound 트래픽 체크 이후에, Aviatrix Gateway에 Internet gateway로 전달
 * Internet Gateway을 요청한 통신을 외부(Internet)로 전달
 * `Aviatrix Controller`의 경우 Internet을 통해 Aviatrix Gateway Health Check
@@ -147,20 +148,20 @@ graph LR;
 #### `Aviatrix 깊게 들여다보기`
 
 ##### **1. [HA(High Availability)](https://en.wikipedia.org/wiki/High_availability)**
-HA 구성은 모든 인프라의 기본으로 Aviatrix 솔루션을 사용할 경우에도 아래와 같은 간단한 작업으로 적용이 가능합니다.
+HA 구성은 모든 인프라의 기본으로 Aviatrix를 사용할 경우에도 아래와 같은 간단한 작업으로 적용이 가능합니다.
 
 * Gateway > Edit > Gateway Single AZ HA "Enable"
 * Geteway > Edit > Gateway for High Availability Peering
-    * HA 구성을 위해 운영되는 Gateway Subnet과 다른 [AZ](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html) Public-Subnet 를 선택합니다.
+    * HA 구성을 위해 운영 중인 Gateway Subnet과 다른 [AZ](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html)의 Public-Subnet을 선택합니다.
 
 ![20](/img/posts_aviatrix/geteway-ha-public-b.png){: width="100%" height="100%"}
 
-* HA 구성을 위한 설정은 마무리하였으며, 정상적인 Failover 가 되는지 확인을 위해 아래 구성을 진행하였습니다.
+* HA 구성을 위한 설정은 마무리하였으며, 정상적인 Failover가 되는지 확인을 위해 아래 구성을 진행하였습니다.
 
 ```markdown
-* Private-Subnet 에서 운영되는 인스턴스에 대한 실시간 모니터링 설정
-* Failover 기능 테스트를 위해 Aviatrix-GW 인스턴스를 AWS Console 에서 강제 종료(STOP)
-* Private-Subnet 에서 운영되는 인스턴스에 대한 실시간 모니터링 지표 확인
+* Private-Subnet에서 운영되는 인스턴스에 대한 실시간 모니터링 설정
+* Failover 기능 테스트를 위해 Aviatrix-GW 인스턴스를 AWS Console에서 강제 종료(STOP)
+* Private-Subnet에서 운영되는 인스턴스에 대한 실시간 모니터링 지표 확인
 ```
 
 * Failover 기능을 테스트하기 전의 Aviatrix Gateway 상태 이미지입니다.
@@ -170,11 +171,11 @@ HA 구성은 모든 인프라의 기본으로 Aviatrix 솔루션을 사용할 �
 
 ![22](/img/posts_aviatrix/gateway-status-2.png){: width="100%" height="100%"}
 
-* **`테스트 결과:`** Private-Subnet 에서 운영되고 있는 인스턴스에 모니터링 에이전트(telegraf)를 설정하여, ICMP 프로토콜을 이용한 `1s` 기준으로 `Packet Loss` 현상도 발생하지 않았습니다.
+* **`테스트 결과:`** Private-Subnet에서 운영되고 있는 인스턴스에 모니터링 에이전트(telegraf)를 설정하여, ICMP 프로토콜을 이용한 `1s` 기준으로 `Packet Loss` 현상이 발생 되지 않았습니다. 웹사이트 기준에서는 Gateway가 Failover 되는 시점을 인지할 수 없는 정도입니다.
 
 ![23](/img/posts_aviatrix/monitoring.png){: width="100%" height="100%"}
 
-* `Aviatrix-Gateway HA Failover 프로세스`
+* `Aviatrix-Gateway HA Flow`
 
 <div class="mermaid">
 graph TB
@@ -182,80 +183,73 @@ graph TB
 Controller[Controller]
 end
     Controller -x |1.Health Check 실패|Gateway
-    Controller -x |2.AWS-Role을 이용한 Tables update|Private_RouteTables
-    Private_RouteTables -x |3.traffic|Gateway_HA
+    Controller -x |2.AWS-Role을 이용한 table update|Private_Routetable
+    Private_Routetable -x |3.traffic|Gateway_HA
     Controller-->|Health Check |Gateway
     Controller-->|Health Check|Gateway_HA
     subgraph Public
     subgraph Public_B
 Gateway[Gateway]
 end
-    Gateway-->Public_RouteTables
+    Gateway-->Public_Routetable
     subgraph Public_C
 Gateway_HA[Gateway_HA]
 end
 end
-    Gateway_HA-->Public_RouteTables
+    Gateway_HA-->Public_Routetable
     subgraph Private
     subgraph Private_A
 Instance-A[Instance-A]
 end
-    Instance-A-->Private_RouteTables
+    Instance-A-->Private_Routetable
     subgraph Private_B
 Instance-B[Instance-B]
 end
-    Instance-B-->Private_RouteTables
-    Private_RouteTables-->Gateway
+    Instance-B-->Private_Routetable
+    Private_Routetable-->Gateway
 end
-    Public_RouteTables-->Internet
+    Public_Routetable-->Internet
 </div>
 
-
-* AviatrixController 에서 Gateway Health Check
-* 문제가 되는 Gateway Health Check 실패 확인
-* HA 구성 확인
-* HA 구성한 Gateway로 네트워크 트래픽 변경
-    * 문제가 되는 Gateway로 설정되어 있던 Route Table 업데이트
-    * 예) Private-Subnet > Route Table > "0.0.0.0/0" Target Gateway ENI 업데이트
+* AviatrixController -> Gateway [Health Check] -> Fail
+* Gateway_HA로 네트워크 트래픽 변경
+    * 문제 되는 Gateway로 설정되어 있던 Route Table 업데이트
+    * 예) Private-Subnet > Route Table > "0.0.0.0/0" Target Gateway_HA ENI로 업데이트
 
 ##### **2. [Egress FQDN Discovery](https://docs.aviatrix.com/HowTos/fqdn_discovery.html)**
 
-해당 기능은 실 서버에 적용하기에 앞서 실 서버에서 FQDN outbound의 사용 내용을 정리하는데 유용한 기능입니다.
+해당 기능은 실 서버에 적용하기에 앞서 실 서버에서 FQDN outbound의 사용 리스트를 정리하는데 유용한 기능입니다.
 
 * Seciruty > Egress Control > (Optional) Egress FQDN Discovery > Gateway "Start" (선택된 Gateway는 FQDN Filter에 연결이 안 되어 있어야 합니다.)
 
 ![23](/img/posts_aviatrix/fqdn-discovery-start.png){: width="100%" height="100%"}
 
-* 테스트를 위해서 Private-Subnet 에서 운영되고 있는 인스턴스에서 아래의 명령어를 실행합니다.
+* 테스트를 위해 Private-Subnet에서 운영되고 있는 인스턴스에서 아래 명령어를 실행합니다.
 
 ```bash
 curl -L -k -s -o /dev/null -w "%{http_code}\n" https://tech.socarcorp.kr
 ```
 
-* 위의 HA 테스트로 인해서 변경된 Aviatrix-GW-hagw 에서 발생한 FQDN 내용을 확인할 수 있습니다.
+* 위 HA 테스트로 인해 변경된 Aviatrix-GW-hagw에서 발생한 FQDN 내용을 확인할 수 있습니다.
 
 ![23](/img/posts_aviatrix/fqdn-discovery-status.png){: width="100%" height="100%"}
 
-* **`테스트 결과:`** FQDN Discovery 기능을 통해 실 서버 FQDN Outbound를 모두 사전에 확인하고, 필요 유무에 따라서 FQDN Filter 정책 정의에 유용합니다.
+* **`테스트 결과:`** FQDN Discovery 기능을 통해 실 서버 FQDN Outbound를 모두 사전에 확인하고, 필요 유무에 따라서 FQDN Filter 정책을 정의하는 데 유용합니다.
 
 ##### **3. HTTPS/TLS 통신을 Gateway가 가로채서 어디로 가는지 확인할 수 있는 이유**
-* 위 내용을 보면서 HTTPS/TLS 통신을 Gateway가 어떻게? 개로 채지 라는 의문점이 있습니다, 해당 내용은 SNI에 대한 이해가 필요해서 SNI 내용을 정리해 드립니다.
+* 2번 내용을 보면 HTTPS/TLS 통신을 Gateway가 어떻게? 개로 채지 라는 의문점이 있습니다, 해당 내용은 SNI에 대한 이해가 필요해서 SNI 내용을 정리해 드립니다.
 * SNI(Server Name Indication)
-    * 두 TCP 피어간 암호화된 TLS 터널을 설정할 수 있습니다. 클아이언트는 서버에 대한 IP 주소 만 알고 있어도 TLS 핸드 쉐이크를 수행 할 수 있지만, 서버가 각각 고유한 TLS 인증서를 가진 여러 개의 독립 사이트를 동일한 IP 주소로 호스팅하려는 문제를 해결하기 위해 SNI 확장이 TLS 프로토콜에 도입되었습니다. 이러한 부분으로 SNI는 암호화 통신을 하기 전에 `ClientHello` 과정에 적용됩니다.
+    * 두 TCP 피어간 암호화된 TLS 터널을 설정할 수 있고, 클아이언트는 서버에 대한 IP 주소 만 알고 있어도 TLS Handshake를 수행 할 수 있지만, 서버가 각각 고유한 TLS 인증서를 가진 여러 개의 독립 사이트를 동일한 IP 주소로 운영하는 문제를 해결하기 위해 SNI 확장이 TLS 프로토콜에 도입되었습니다.
+    * SNI는 여러 개의 독립 사이트 중에 하나의 사이트를 지정 하기 위해 필요한 필드입니다.
+    * 하지만, TLS Handshake에서 암호화 통신을 하기 전인 `ClientHello` 과정에 적용됩니다.
+
+* TLS Handshake
 
 <div class="mermaid">
 sequenceDiagram
 opt 암호화 X
-opt  Client Hello
-opt Client Hello 상세 Flow 
-    Client ->> Gateway: Outbound Traffic
-Note right of Gateway: SNI 를 통한 <br>FQDN Filter
-    Gateway -->> Gateway: FQDN Filter
-    Gateway ->> Server: Outbound Traffic
-    end
-    Client ->> Server: Client Hello
-    end
-    Server ->> Client: Server Hello
+    Client ->> Server: ClientHello
+    Server ->> Client: ServerHello
     end
 opt 암호화
     Server ->> Client: ServerCertificate
@@ -266,13 +260,34 @@ opt 암호화
     Server -> Client: Application Date
 </div>
 
+* TLS Handshake > ClientHello
+
+<div class="mermaid">
+sequenceDiagram
+    Client ->> Gateway: TLS ClientHello, SNI=www.socar.kr, Client`s Diffie-Hellman Key
+opt FQDN Filter
+    Client --> Gateway: SNI Check
+Note right of Client: FQDN Filter 성공
+    Gateway ->> Server: TLS ClientHello, SNI=www.socar.kr, Client`s Diffie-Hellman Key
+end
+opt FQDN Filter
+    Client --> Gateway: SNI Check
+Note right of Client: FQDN Filter 실패
+    Gateway -->> Client: TLS ClientHello, SNI=www.socar.kr, Client`s Diffie-Hellman Key
+end
+</div>
+
+* Gateway가 SNI 필드를 확인하는 방법은 `암호화가 되지 않은 평문`으로 전송하기 때문입니다.
+* 사용자 입장에서는 SNI는 접속하려는 사이트 주소가 `암호화되지 않은 평문`으로 전송되기 때문에, `타인`이 중간에 트래픽을 가로채서 `사용자가 조회하는 사이트`를 확인 할 수 있습니다.
+* TLS 1.3 최종안이 조율되는 시기에는 `Encrypted SNI`로 인해서 Gateway가 SNI 필드를 확인하는 방법이 불가능 할 수도 있었지만, `TLS 1.3 최종안` 에서는 `필수`가 아닌, `확장` 기능으로써 추가되었습니다.
+
 ##### **4. Aviatrix-CloudFormation Template의 role, policy 이해하기**
-```markdown
+
 * CloudFormation Template은 어떤 내용을 가지고 있을까?
 * 왜 Gateway 서버가 자동으로 설치 되었을까?
 * 왜 Private-Subnet Route Table 은 자동으로 업데이트가 되었을까?
 * 멀티 Account 구성은 어떻게 가능할까?
-```
+
 위에 대한 내용은 CloudFormation Template의 `role`, `policy` 관계를 보면 알 수 있습니다.
 아래의 소스는 CloudFormation Template의 일부 내용 입니다.
 
@@ -435,9 +450,10 @@ CloudFormation Template으로 구성된 `AWS 인프라의 이미지`를 통해 �
 ### 정리
 * 자세한 설명을 하기 위해 많은 이미지가 추가 되었지만, 실질적으로는 AWS 마켓플레이스에서 라이센스 구입 이후에 진행되는 절차가 간단하며 사용자가 직접 `수동`으로 작업해야하는 내용이 `거의 없습니다.`.
 * Aviatrix의 경우에는 기존의 Cisco 및 paloalto와는 다른 Cloud 환경에 맞게 개발이 되었다는 것을 쉽게 느낄 수 있었습니다. `Role`의 `활용` 및 위에서는 자세하게 다루지 않았지만, `"EXPORT TO TERRAFORM"` 카테고리 부분에서 리소스 형식에 맞는 *.tf 파일들을 다운로드 받아서 `IaC` 환경에 활용이 가능합니다.
-* 테스트 과정에서는 단일 Account를 활용 하였지만, 실질적으로 쏘카에서는 `Transit GW`를 이용한 `트래픽 중앙` 관리를 통해서 운영하고 있기 때문에 On-premise 적용 등 다양한 아키텍처 구성이 가능 합니다.
+* 테스트 과정에서는 단일 Account를 활용 하였지만, 실질적으로 쏘카는 `Transit GW`를 이용한 `트래픽 중앙` 관리를 통해서 운영하고 있기 때문에 On-premise 적용 등 다양한 아키텍처 구성이 가능 합니다.
 * 매니저 Cloud Platform에서 모두 운영이 가능하기 때문에 이후 확장성 및 특정 Cloud Platform에 [`lock-in`](https://en.wikipedia.org/wiki/Vendor_lock-in) 되지 않는다는 장점이 있습니다.
 * 그 밖에 `사용한 만큼만 지불`하는 Cloud 방식에 맞는 `라이센스 정책`도 비용적인 부분에서는 많은 장점이 있다고 생각 했습니다.
+* `많은 장점` 가운데 `지속가능성`에 대한 문제! TLS 1.3 최종안이 적용된 지 얼마 되지 않은 상황이지만, Gateway가 SNI 필드를 통해 FQDN Filter 과정이 이후 SNI `암호화` 이후 `FQDN Filter`를 `어떻게 진행`할 것인가에 대한 `문제점`이 있습니다.
 
 ---
 
