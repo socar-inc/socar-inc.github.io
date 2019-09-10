@@ -144,7 +144,7 @@ graph LR;
 
 ---
 
-#### `Aviatrix 유용한 기능`
+#### `Aviatrix 깊게 들여다보기`
 
 ##### **1. [HA(High Availability)](https://en.wikipedia.org/wiki/High_availability)**
 HA 구성은 모든 인프라의 기본으로 Aviatrix 솔루션을 사용할 경우에도 아래와 같은 간단한 작업으로 적용이 가능합니다.
@@ -182,7 +182,7 @@ graph TB
 Controller[Controller]
 end
     Controller -x |1.Health Check 실패|Gateway
-    Controller -x |2.Role-을 이용한 tables update|Private_RouteTables
+    Controller -x |2.AWS-Role을 이용한 Tables update|Private_RouteTables
     Private_RouteTables -x |3.traffic|Gateway_HA
     Controller-->|Health Check |Gateway
     Controller-->|Health Check|Gateway_HA
@@ -210,14 +210,13 @@ end
     Public_RouteTables-->Internet
 </div>
 
-```markdown
-1. AviatrixController 에서 Gateway Health Check
-2. 문제가 되는 Gateway Health Check 실패 확인
-3. HA 구성 확인
-4. HA 구성한 Gateway로 네트워크 트래픽 변경
+
+* AviatrixController 에서 Gateway Health Check
+* 문제가 되는 Gateway Health Check 실패 확인
+* HA 구성 확인
+* HA 구성한 Gateway로 네트워크 트래픽 변경
     * 문제가 되는 Gateway로 설정되어 있던 Route Table 업데이트
-    예) Private-Subnet > Route Table > "0.0.0.0/0" Target Gateway ENI 업데이트
-```
+    * 예) Private-Subnet > Route Table > "0.0.0.0/0" Target Gateway ENI 업데이트
 
 ##### **2. [Egress FQDN Discovery](https://docs.aviatrix.com/HowTos/fqdn_discovery.html)**
 
@@ -239,9 +238,35 @@ curl -L -k -s -o /dev/null -w "%{http_code}\n" https://tech.socarcorp.kr
 
 * **`테스트 결과:`** FQDN Discovery 기능을 통해 실 서버 FQDN Outbound를 모두 사전에 확인하고, 필요 유무에 따라서 FQDN Filter 정책 정의에 유용합니다.
 
----
+##### **3. HTTPS/TLS 통신을 Gateway가 가로채서 어디로 가는지 확인할 수 있는 이유**
+* 위 내용을 보면서 HTTPS/TLS 통신을 Gateway가 어떻게? 개로 채지 라는 의문점이 있습니다, 해당 내용은 SNI에 대한 이해가 필요해서 SNI 내용을 정리해 드립니다.
+* SNI(Server Name Indication)
+    * 두 TCP 피어간 암호화된 TLS 터널을 설정할 수 있습니다. 클아이언트는 서버에 대한 IP 주소 만 알고 있어도 TLS 핸드 쉐이크를 수행 할 수 있지만, 서버가 각각 고유한 TLS 인증서를 가진 여러 개의 독립 사이트를 동일한 IP 주소로 호스팅하려는 문제를 해결하기 위해 SNI 확장이 TLS 프로토콜에 도입되었습니다. 이러한 부분으로 SNI는 암호화 통신을 하기 전에 `ClientHello` 과정에 적용됩니다.
 
-#### `Bonus! CloudFormation Template의 role, policy 이해하기`
+<div class="mermaid">
+sequenceDiagram
+opt 암호화 X
+opt  Client Hello
+opt Client Hello 상세 Flow 
+    Client ->> Gateway: Outbound Traffic
+Note right of Gateway: SNI 를 통한 <br>FQDN Filter
+    Gateway -->> Gateway: FQDN Filter
+    Gateway ->> Server: Outbound Traffic
+    end
+    Client ->> Server: Client Hello
+    end
+    Server ->> Client: Server Hello
+    end
+opt 암호화
+    Server ->> Client: ServerCertificate
+    Server ->> Client: ServerHelloDone
+    Client ->> Server: KeyExhange/ChangeCipherSpec/Finished
+    Server ->> Client: ChangeCipherSpec/Finished
+    end
+    Server -> Client: Application Date
+</div>
+
+##### **4. Aviatrix-CloudFormation Template의 role, policy 이해하기**
 ```markdown
 * CloudFormation Template은 어떤 내용을 가지고 있을까?
 * 왜 Gateway 서버가 자동으로 설치 되었을까?
