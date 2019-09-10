@@ -93,7 +93,7 @@ Private Subnet의 Route Table을 생성해, 외부로 나가는 모든 트래픽
 FQDN 로깅 및 관리를 위해, Aviatrix Controller 사용자 웹페이지에서 `security > Egress Control > Egress FQDN Filter`를 설정합니다.
 
 1. Egress FQDN Filter 생성 White List/Black List > Black 지정
-2. 이후 `실서버 환경` 도입의 경우 Egress FQDN View Log를 확인하고, 사용하고 있는 FQDN을 보안성에 맞도록 분리하여, Egress FQDN Filter를 White List기반으로 변경할 수 있는 환경을 사전에 대비 합니다.
+2. 이후 `실 서버 환경` 도입의 경우 Egress FQDN View Log를 확인하고, 사용하고 있는 FQDN을 보안성에 맞도록 분리하여, Egress FQDN Filter를 White List기반으로 변경할 수 있는 환경을 사전에 대비 합니다.
 
 테스트를 위해서 FQDN Filter를 아래의 이미지와 같이 `White` 설정한 이후에, Aviatrix-GW를 바라 보고 있는 `private-route-table` 의 `private-Subnet` `인스턴스`에서 다음 명령어를 실행 하였습니다.
 ![12](/img/posts_aviatrix/fqdn-list.png){: width="100%" height="100%"}
@@ -122,17 +122,17 @@ curl -L -k -s -o /dev/null -w "%{http_code}\n" https://docs.google.com
 
 ![13](/img/posts_aviatrix/fqdn-architecture.png){: width="100%" height="100%"}
 
-* Instance Outbound Flow & Aviatix Controller Gateway HA Flow
+* Instance Outbound Flow & Aviatrix Controller Gateway HA Flow
 
 <div class="mermaid">
 graph LR;
-  CLIENT[시작: Instance] -->|1.Private  Route Table| ag(Aviatix Gateway)
+  CLIENT[시작: Instance] -->|1.Private  Route Table| ag(Aviatrix Gateway)
     ag -->|2. Public Route Table| igw(Internet Gateway)
     igw -->|3| int[Internet]
-    ac(시작: Aviatix Controller) --> internet2[Internet]
+    ac(시작: Aviatrix Controller) --> internet2[Internet]
     internet2[Internet]-->|Health Check| ag
-    internet2[Internet]-->|Health Check| agha(Aviatix Gateway HA)
-    ag-->|Failover| agha(Aviatix Gateway HA)
+    internet2[Internet]-->|Health Check| agha(Aviatrix Gateway HA)
+    ag-->|Failover| agha(Aviatrix Gateway HA)
     agha-->|Failover| ag
 </div>
 
@@ -151,10 +151,10 @@ graph LR;
 HA 구성은 모든 인프라의 기본으로 Aviatrix를 사용할 경우에도 아래와 같은 간단한 작업으로 적용이 가능합니다.
 
 * Gateway > Edit > Gateway Single AZ HA "Enable"
-* Geteway > Edit > Gateway for High Availability Peering
+* Gateway > Edit > Gateway for High Availability Peering
     * HA 구성을 위해 운영 중인 Gateway Subnet과 다른 [AZ](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html)의 Public-Subnet을 선택합니다.
 
-![20](/img/posts_aviatrix/geteway-ha-public-b.png){: width="100%" height="100%"}
+![20](/img/posts_aviatrix/Gateway-ha-public-b.png){: width="100%" height="100%"}
 
 * HA 구성을 위한 설정은 마무리하였으며, 정상적인 Failover가 되는지 확인을 위해 아래 구성을 진행하였습니다.
 
@@ -171,7 +171,7 @@ HA 구성은 모든 인프라의 기본으로 Aviatrix를 사용할 경우에도
 
 ![22](/img/posts_aviatrix/gateway-status-2.png){: width="100%" height="100%"}
 
-* **`테스트 결과:`** Private-Subnet에서 운영되고 있는 인스턴스에 모니터링 에이전트(telegraf)를 설정하여, ICMP 프로토콜을 이용한 `1s` 기준으로 `Packet Loss` 현상이 발생 되지 않았습니다. 웹사이트 기준에서는 Gateway가 Failover 되는 시점을 인지할 수 없는 정도입니다.
+* **`테스트 결과:`** Private-Subnet에서 운영되고 있는 인스턴스에 모니터링 에이전트(Telegraf)를 설정하여, ICMP 프로토콜을 이용한 `1s` 기준으로 `Packet Loss` 현상이 발생 되지 않았습니다. 웹사이트 기준에서는 Gateway가 Failover 되는 시점을 인지할 수 없는 정도입니다.
 
 ![23](/img/posts_aviatrix/monitoring.png){: width="100%" height="100%"}
 
@@ -220,7 +220,7 @@ end
 
 해당 기능은 실 서버에 적용하기에 앞서 실 서버에서 FQDN outbound의 사용 리스트를 정리하는데 유용한 기능입니다.
 
-* Seciruty > Egress Control > (Optional) Egress FQDN Discovery > Gateway "Start" (선택된 Gateway는 FQDN Filter에 연결이 안 되어 있어야 합니다.)
+* Security > Egress Control > (Optional) Egress FQDN Discovery > Gateway "Start" (선택된 Gateway는 FQDN Filter에 연결이 안 되어 있어야 합니다.)
 
 ![23](/img/posts_aviatrix/fqdn-discovery-start.png){: width="100%" height="100%"}
 
@@ -239,7 +239,7 @@ curl -L -k -s -o /dev/null -w "%{http_code}\n" https://tech.socarcorp.kr
 ##### **3. HTTPS/TLS 통신을 Gateway가 가로채서 어디로 가는지 확인할 수 있는 이유**
 * 2번 내용을 보면 HTTPS/TLS 통신을 Gateway가 어떻게? 개로 채지 라는 의문점이 있습니다, 해당 내용은 SNI에 대한 이해가 필요해서 SNI 내용을 정리해 드립니다.
 * SNI(Server Name Indication)
-    * 두 TCP 피어간 암호화된 TLS 터널을 설정할 수 있고, 클아이언트는 서버에 대한 IP 주소 만 알고 있어도 TLS Handshake를 수행 할 수 있지만, 서버가 각각 고유한 TLS 인증서를 가진 여러 개의 독립 사이트를 동일한 IP 주소로 운영하는 문제를 해결하기 위해 SNI 확장이 TLS 프로토콜에 도입되었습니다.
+    * 두 TCP 피어 간 암호화된 TLS 터널을 설정할 수 있고, 클라이언트는 서버에 대한 IP 주소 만 알고 있어도 TLS Handshake를 수행 할 수 있지만, 서버가 각각 고유한 TLS 인증서를 가진 여러 개의 독립 사이트를 동일한 IP 주소로 운영하는 문제를 해결하기 위해 SNI 확장이 TLS 프로토콜에 도입되었습니다.
     * SNI는 여러 개의 독립 사이트 중에 하나의 사이트를 지정 하기 위해 필요한 필드입니다.
     * 하지만, TLS Handshake에서 암호화 통신을 하기 전인 `ClientHello` 과정에 적용됩니다.
 
@@ -330,7 +330,7 @@ end
             }
         },
 ```
-- 여기서 주목할 점이 있습니다, role-app을 사용할 수 있는 [Principal](https://docs.aws.amazon.com/ko_kr/IAM/latest/UserGuide/reference_policies_elements_principal.html)에 “Ref”: “AWS::AccountId” 등록을 통해서 가능하도록 설정되는 것을 알수 있습니다.
+- 여기서 주목할 점이 있습니다, role-app을 사용할 수 있는 [Principal](https://docs.aws.amazon.com/ko_kr/IAM/latest/UserGuide/reference_policies_elements_principal.html)에 “Ref”: “AWS::AccountId” 등록을 통해서 가능하도록 설정되는 것을 알 수 있습니다.
 
 ```json
         "AviatrixRoleApp": {
@@ -364,7 +364,7 @@ end
             }
         },
 ```
-- 여기서 주목할 점은 `arn:aws:iam::*:role/aviatrix-*` 설정에 있습니다. 해당 `*`설정 으로 role-ec2의 policy는 arn:aws:iam::`{{AccountId}}`:role/aviatrix-role-app의 policy를 할당 받아서 사용할 수 있게 됩니다.
+- 여기서 주목할 점은 `arn:aws:iam::*:role/aviatrix-*` 설정에 있습니다. 해당 `*`설정으로 role-ec2의 policy는 arn:aws:iam::`{{AccountId}}`:role/aviatrix-role-app의 policy를 할당 받아서 사용할 수 있게 됩니다.
 
 ```json
         "CreateAviatrixAssumeRolePolicy": {
@@ -398,7 +398,7 @@ end
             }
         },
 ```
-- role-app policy 의 경우에는 아래 추가된 이미지 처럼 많은 Action이 정의 되어있습니다.
+- role-app policy의 경우에는 아래 추가된 이미지처럼 많은 Action이 정의되어있습니다.
 
 ```json
         "CreateAviatrixAppPolicy": {
@@ -416,7 +416,7 @@ end
 ```
 ![4](/img/posts_aviatrix/role-check.png){: width="100%" height="100%"}
 
-CloudFormation Template으로 구성된 `AWS 인프라의 이미지`를 통해 정리할 경우, 아래와 같은 구성이 설정 됩니다.
+CloudFormation Template 으로 구성된 `AWS 인프라의 이미지`를 통해 정리할 경우, 아래와 같은 구성이 설정 됩니다.
 
 * Aviatrix Controller Instance 에 role-ec2 설정
 
@@ -437,7 +437,7 @@ CloudFormation Template으로 구성된 `AWS 인프라의 이미지`를 통해 �
         },
 ```
 
-* Aviatrix Controller 웹페이지의 `Onboarding 카테고리`에서 Cloud platform에 맞게 설정을 하게 되면, AWS의 경우 `role-ec2`가 `role-app`의 `policy`을 `위임` 받아서 사용할 수 있는 상태가 됩니다. role-ec2는 Aviatrix Controller Instance에 등록 되어있는 role 이기 때문에, Aviatrix Controller 웹페이지에서 role-app에 적용 되어있는 policy 에 대한 이용이 가능합니다. `멀티 Account`의 경우에는 `멀티 Account`에 설정 되어 있는 `role-app`에 대한 `AccountId Trust 등록`을 진행하여, `멀티 Account`의 `role-app`을 `Controller Account`의 `role-app`이 `공유` 받아 사용하는 방법으로 `동일` 합니다.
+* Aviatrix Controller 웹 페이지의 `Onboarding 카테고리`에서 Cloud platform에 맞게 설정을 하게 되면, AWS의 경우 `role-ec2`가 `role-app`의 `policy`을 `위임` 받아서 사용할 수 있는 상태가 됩니다. role-ec2는 Aviatrix Controller Instance에 등록 되어있는 role 이기 때문에, Aviatrix Controller 웹페이지에서 role-app에 적용 되어있는 policy 에 대한 이용이 가능합니다. `멀티 Account`의 경우에는 `멀티 Account`에 설정 되어 있는 `role-app`에 대한 `AccountId Trust 등록`을 진행하여, `멀티 Account`의 `role-app`을 `Controller Account`의 `role-app`이 `공유` 받아 사용하는 방법으로 `동일` 합니다.
 
 ![7](/img/posts_aviatrix/role-app-trust.png){: width="100%" height="100%"}
 
@@ -448,16 +448,16 @@ CloudFormation Template으로 구성된 `AWS 인프라의 이미지`를 통해 �
 ---
 
 ### 정리
-* 자세한 설명을 하기 위해 많은 이미지가 추가 되었지만, 실질적으로는 AWS 마켓플레이스에서 라이센스 구입 이후에 진행되는 절차가 간단하며 사용자가 직접 `수동`으로 작업해야하는 내용이 `거의 없습니다.`.
-* Aviatrix의 경우에는 기존의 Cisco 및 paloalto와는 다른 Cloud 환경에 맞게 개발이 되었다는 것을 쉽게 느낄 수 있었습니다. `Role`의 `활용` 및 위에서는 자세하게 다루지 않았지만, `"EXPORT TO TERRAFORM"` 카테고리 부분에서 리소스 형식에 맞는 *.tf 파일들을 다운로드 받아서 `IaC` 환경에 활용이 가능합니다.
-* 테스트 과정에서는 단일 Account를 활용 하였지만, 실질적으로 쏘카는 `Transit GW`를 이용한 `트래픽 중앙` 관리를 통해서 운영하고 있기 때문에 On-premise 적용 등 다양한 아키텍처 구성이 가능 합니다.
+* 자세한 설명을 하기 위해 많은 이미지가 추가 되었지만, 실질적으로는 AWS 마켓플레이스에서 라이선스 구입 이후에 진행되는 절차가 간단하며 사용자가 직접 `수동`으로 작업해야하는 내용이 `거의 없습니다.`.
+* Aviatrix의 경우에는 기존의 Cisco 및 paloalto 와는 다른 Cloud 환경에 맞게 개발이 되었다는 것을 쉽게 느낄 수 있었습니다. `Role`의 `활용` 및 위에서는 자세하게 다루지 않았지만, `"EXPORT TO TERRAFORM"` 카테고리 부분에서 리소스 형식에 맞는 *.tf 파일들을 다운로드 받아서 `IaC` 환경에 활용이 가능합니다.
+* 테스트 과정에서는 단일 Account를 활용하였지만, 쏘카에서는 `Transit GW`를 이용한 `트래픽 중앙` 관리를 통해서 운영하고 있기 때문에 On-premise 적용 등 다양한 아키텍처 구성이 가능합니다.
 * 매니저 Cloud Platform에서 모두 운영이 가능하기 때문에 이후 확장성 및 특정 Cloud Platform에 [`lock-in`](https://en.wikipedia.org/wiki/Vendor_lock-in) 되지 않는다는 장점이 있습니다.
-* 그 밖에 `사용한 만큼만 지불`하는 Cloud 방식에 맞는 `라이센스 정책`도 비용적인 부분에서는 많은 장점이 있다고 생각 했습니다.
+* 그 밖에 `사용한 만큼만 지급`하는 Cloud 방식에 맞는 `라이선스 정책`도 비용적인 부분에서는 많은 장점이 있다고 생각했습니다.
 * `많은 장점` 가운데 `지속가능성`에 대한 문제! TLS 1.3 최종안이 적용된 지 얼마 되지 않은 상황이지만, Gateway가 SNI 필드를 통해 FQDN Filter 과정이 이후 SNI `암호화` 이후 `FQDN Filter`를 `어떻게 진행`할 것인가에 대한 `문제점`이 있습니다.
 
 ---
 
-### 계획중인 Aviatrix를 이용한 다양한 환경 구축 테스트
+### 계획중인 Aviatrix를 이용한 다양한 환경 구축
 * Aviatrix 로깅, 분석(시각화/자동화)
 * DMZ 구축 (+VDI)
 * Remote Work의 다양한 설계 (+VPN, +VDI)
