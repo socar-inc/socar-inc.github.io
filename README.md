@@ -3,7 +3,7 @@
 
 ## **깔끔한 commit history 관리를 위해 `Squash Merge`를 사용해 주세요.**
 
----
+<br><br><br>
 
 
 ## 블로그의 목적
@@ -46,9 +46,7 @@
 	- Mac에선 [MacDown](https://macdown.uranusjr.com/), Window에선 [Typora](https://typora.io/)가 가볍게 사용하기 좋습니다. 도구일 뿐이니 편하신 도구가 있으면 해당 도구를 사용하시면 됩니다
 
 
-
----
-	
+<br><br><br>
 
 ## 글쓰기 방법
 #### 1. 로컬에 [Jekyll](https://jekyllrb.com/docs/)를 설치 하는 경우
@@ -117,11 +115,11 @@
         - head repository: socar-dorma/socar-dorma.github.io
             - compare: feature/dorma-readme
 
-  - PR 생성
+  - PR 생성시 default 리뷰어는 kyle, shua입니다. 추가적으로 팀에서 리뷰어를 지정해주세요 :)
   - **PR 생성 후 Merge 시에는 `Squash and merge`를 선택해서 Merge 합니다.**
 
 
----
+<br><br><br>
 
 ## 글 작성 팁
 #### 1. `subtitle` 설정 하기
