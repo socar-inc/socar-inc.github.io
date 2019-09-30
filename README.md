@@ -42,8 +42,10 @@
 	- 괜찮습니다. 처음부터 글을 잘 못쓰실 수 있고, 글을 점점 많이 작성하다보면 글쓰는 실력이 개선됩니다. 이런 걱정하시는 분들을 위해 글을 발행하기 전에 `모든 글을 리뷰할 예정`입니다
 		- 글 리뷰는 Github Pull Request를 활용할 예정이며, 주로 피드백은 해당 [Slideshare](https://www.slideshare.net/zzsza/ss-137831892#39)에서 나오는 내용들 위주로 드릴 예정입니다
 - 어떤 도구로 글을 써야하나요?
-	- 이 블로그는 Jekyll로 되어있고, Markdown으로 글을 작성합니다
-	- Mac에선 [MacDown](https://macdown.uranusjr.com/), Window에선 [Typora](https://typora.io/)가 가볍게 사용하기 좋습니다. 도구일 뿐이니 편하신 도구가 있으면 해당 도구를 사용하시면 됩니다
+	- 이 블로그는 Jekyll로 되어있고, Markdown 또는 HTML으로 글을 작성할 수 있습니다
+	- HTML 퍼블리싱이 가능하신 분들은 HTML로 작성하셔도 됩니다
+	- Markdown을 사용할 경우 Mac에선 [MacDown](https://macdown.uranusjr.com/), Window에선 [Typora](https://typora.io/)가 가볍게 사용하기 좋습니다. 도구일 뿐이니 편하신 도구가 있으면 해당 도구를 사용하시면 됩니다
+	- 참고로 제목은 `YEAR-MONTH-DAY-title.MARKUP`으로 저장하시면 됩니다. 참고 : [포스트 파일 생성하기](https://jekyllrb-ko.github.io/docs/posts/#포스트-파일-생성하기)
 
 
 <br><br><br>
@@ -149,8 +151,12 @@
         Start --> Stop
     </div>
     ```
+    
+#### 4. markdown 중간에 html을 섞어서 사용해도 됩니다
+- 위 mermaid.js 예시처럼 markdown 내부에 html을 사용해도 상관 없습니다
+- jekyll에서 html 태그는 변환하지 않고 그대로 그 위치에 출력해 줍니다
 
-#### 4. 글 구조
+#### 5. 글 구조
 - 글의 구조는 취향껏 작성하시면 되지만, 어려우신 분들은 아래의 흐름 정도를 가지셔도 좋을 것 같습니다
 		
 	```
