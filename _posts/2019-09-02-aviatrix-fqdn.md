@@ -31,20 +31,18 @@ Photo by <a href="https://unsplash.com/@andreoiide?utm_medium=referral&amp;utm_c
 - AWS - Security Groups 기준 Inbound or outbound rules per security group은 60개로 [제한](https://docs.aws.amazon.com/vpc/latest/userguide/amazon-vpc-limits.html) 됩니다. Inbound 관점에서 인터넷에서 고객 서비스는 특이사항이 아닐 수 있으나, Outbound 관점에서는 updates.ubuntu.com(IP 15), Github(IP 12) 등 타사의 업데이트 및 API를 생각하면 <u>60개의 IP 제한은 충분하지 않다</u>는 것을 알 수 있습니다.
 
 #### Cloud 환경에서 Outbound 트래픽에 대한 관리를 어떻게 할까?
-- Cloud Platform에서 <u>TCP/IP</u> Outbound에 대해서는 로그 및 관리를 다양한 Management Service로 지원하고 있지만, Outbound 트래픽 중에 [**FQDN**](https://en.wikipedia.org/wiki/Fully_qualified_domain_name)에 대한 지원은 Management Service 만으로 대처가 어렵다고 판단하여 쏘카에 맞는 요구사항을 아래와 같이 정리했습니다.
+- Cloud Platform에서 <u>TCP/IP</u> Outbound에 대해서는 로그 및 관리를 다양한 Management Service로 지원하고 있지만, Outbound 트래픽 중에 IP 주소가 아닌 [**FQDN**](https://en.wikipedia.org/wiki/Fully_qualified_domain_name)을 기준으로 한 Filtering에 대한 지원은 Management Service 만으로 대처가 어렵다고 판단하여 별도의 솔루션 도입을 계획하게 되었고, 다음과 같이 요구사항을 정리해 보았습니다.
 
 ```markdown
 * Outbound - FQDN filtering +@(TCP/IP)
 * HTTP/HTTPS +@((Wildcard)*.domain.com)
-* Multiple Accounts and Clouds
-* 확장성, 관리 (Infrastructure as code, Update)
+* Multiple Accounts and Cloud Platform Support
+* 확장성, 관리 편의성 (Infrastructure as code, Update)
 * 안정성 (다양한 레퍼런스, Monitoring, HA)
-* 편의성
-* 비용
+* 비용 (저렴한 구축/라이센스 비용)
 ```
 
-위와 같은 요구사항을 정리했습니다.  
-그 이후에는 오픈소스([Squid](https://aws.amazon.com/ko/blogs/security/how-to-add-dns-filtering-to-your-nat-instance-with-squid/)), 유료 솔루션([paloalto](https://aws.amazon.com/marketplace/pp/B00PJ2V04O?qid=1567422902264&sr=0-2&ref_=srh_res_product_title), [Cisco vMX](https://aws.amazon.com/marketplace/pp/B01N49IN0S?qid=1567422994913&sr=0-16&ref_=srh_res_product_title) 등)을 검토 하였고, 그 중 국내에서는 레퍼런스를 찾아보기 쉽지 않지만 [`Aviatrix`](https://aws.amazon.com/marketplace/pp/B079T2HGWG?qid=1567423038998&sr=0-1&ref_=srh_res_product_title) 유료 솔루션을 선정하였습니다. 선정 과정에서 확인해본 결과 <u>해외 레퍼런스</u>의 경우에는 NASA, Netflix, Hyatt 등이 있었으며, 요구 사항에서 필요로 하는 **Service(FQDN, TransitGW, VPN)에 대한** 비용 발생 및 [IaC](https://en.wikipedia.org/wiki/Infrastructure_as_code) 배포, 구성이 타 유료 솔루션보다 이점이 있다는 것을 감안하여 Aviatrix을 선정하게 되었습니다. 선정 과정에서 도움이 된 링크를 공유합니다.
+그 이후에는 오픈소스([Squid](https://aws.amazon.com/ko/blogs/security/how-to-add-dns-filtering-to-your-nat-instance-with-squid/)), 유료 솔루션([paloalto](https://aws.amazon.com/marketplace/pp/B00PJ2V04O?qid=1567422902264&sr=0-2&ref_=srh_res_product_title), [Cisco vMX](https://aws.amazon.com/marketplace/pp/B01N49IN0S?qid=1567422994913&sr=0-16&ref_=srh_res_product_title) 등)을 검토 하였고, 그 중 국내에서는 레퍼런스를 찾아보기 쉽지 않지만 [`Aviatrix`](https://aws.amazon.com/marketplace/pp/B079T2HGWG?qid=1567423038998&sr=0-1&ref_=srh_res_product_title) 유료 솔루션을 선정하였습니다. 선정 과정에서 확인해본 결과 <u>해외 레퍼런스</u>의 경우에는 NASA, Netflix, Hyatt 등이 있었으며, 요구 사항에서 필요로 하는 **Service(FQDN, TransitGW, VPN)에 대한** 비용 및 [IaC](https://en.wikipedia.org/wiki/Infrastructure_as_code) 배포, 구성이 타 유료 솔루션보다 이점이 있다는 것을 감안하여 Aviatrix을 선정하게 되었습니다. 선정 과정에서 참고로 한 자료는 다음과 같습니다.
 
 * [AWS 기반 Aviatrix FQDN Egress Filtering](https://aws.amazon.com/quickstart/architecture/aviatrix-fqdn-egress-filtering/?nc1=h_ls)
 * [Controlling Outbound VPC Traffic](https://www.aviatrix.com/solutions/egress-security.php)
@@ -54,14 +52,14 @@ Photo by <a href="https://unsplash.com/@andreoiide?utm_medium=referral&amp;utm_c
 
 #### Aviatrix 솔루션 구축을 통한 요구사항 검토 (AWS)
 
-Aviatrix 솔루션 테스트를 위해, AWS Marketplace에서 Aviatrix을 선택 후 **Free Trial** 이용이 가능한 Custom 유형을 선택하여 테스트 초기 환경을 구성합니다. **AWS 인프라(EC2 등) 사용 금액이 발생**하기 때문에 EC2 TYPE은 **최소 스펙**을 선택하여 테스트를 진행합니다.
+Aviatrix 솔루션 테스트를 위해, AWS Marketplace에서 Aviatrix을 선택 후 **Free Trial** 이용이 가능한 Custom 유형을 선택하여 테스트 초기 환경을 구성합니다. **AWS 인프라(EC2 등) 사용 금액이 발생**하기 때문에 EC2 Instanc Type은 **최소 스펙**을 선택하여 테스트를 진행합니다.
 - [AWS-Marketplace (Aviatrix Secure Networking Platform - Custom)](https://aws.amazon.com/marketplace/pp/B0155GB0MA?ref_=aws-mp-console-subscription-detail)
 
 설치 방법은 두가지를 제공합니다.
 ![1](/img/posts_aviatrix/cloudformation-image.png){: width="100%" height="100%"}
 
-1. Amazon Machine Image
-2. CloudFormation Template
+1. Amazon Machine Image (AMI)를 통한 직접 설치
+2. CloudFormation Template을 이용한 자동화된 설치
 
 원활한 테스트를 위해 CloudFormation Template을 선택하여 진행합니다. Amazon Machine Image를 통한 구성 시에는 Role, Network 구성 등의 추가 설정이 필요합니다. 상세 설치 과정은 Aviatrix에서 Guide를 제공하고 있습니다. `(CloudFormation Template 의 IAM Role, Policy 등은 아래에 별도 분석하겠습니다.)`
 - [Aviatrix CloudFormation Template Guide](https://docs.aviatrix.com/StartUpGuides/aviatrix-cloud-controller-startup-guide.html)
