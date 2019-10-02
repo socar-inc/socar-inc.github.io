@@ -463,7 +463,7 @@ CloudFormation Template 으로 구성된 `AWS 인프라의 이미지`를 통해 
 * 테스트 과정에서는 단일 Account를 활용하였지만, 쏘카에서는 `Transit GW를 이용한 트래픽 중앙 관리`를 통해서 운영하고 있기 때문에 On-premise 적용 등 다양한 아키텍처 구성이 가능합니다.
 * 매니저 Cloud Platform에서 모두 운영이 가능하기 때문에 이후 확장성 및 특정 Cloud Platform에 [Lock-in](https://en.wikipedia.org/wiki/Vendor_lock-in) 되지 않는다는 장점이 있습니다.
 * 그 밖에 사용한 만큼만 지급하는 Cloud 방식에 맞는 <u>라이선스 정책</u>도 비용적인 부분에서는 많은 장점이 있다고 생각했습니다.
-* `많은 장점` 가운데 지속가능성에 대한 문제는 있습니다, TLS 1.3 최종안이 적용된 지 얼마 되지 않은 상황이지만, Gateway가 SNI 필드를 통해 FQDN Filter 과정이 이후 `SNI 암호화 이후 FQDN Filter를 어떻게 진행할 것인가에 대한 문제점이 있습니다.`
+* `많은 장점` 가운데 지속가능성에 대한 문제는 있습니다, TLS 1.3 최종안이 적용된 지 얼마 되지 않은 상황이지만, Gateway가 SNI 필드를 통해 FQDN Filter 과정이 이후 **SNI 암호화 이후 FQDN Filter를 어떻게 진행할 것인가**에 대한 문제점이 있습니다.
 
 ---
 
