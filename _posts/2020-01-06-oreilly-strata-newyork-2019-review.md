@@ -2,7 +2,7 @@
 layout: post
 title: "Oreilly Strata Data Conference New York 2019 후기"
 subtitle: "Oreilly Strata Data Conference New York 2019 후기"
-date: 2019-11-20 20:00:00 +0900
+date: 2020-01-06 00:00:00 +0900
 category: data
 background: '/assets/images/andrea-enriquez-cousino-4hBCxfrlpoM-unsplash.jpg'
 author: kyle
