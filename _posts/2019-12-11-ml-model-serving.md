@@ -131,7 +131,7 @@ b. Rancher는 간단한 설정만으로 Node, Pod 상태를 모니터링 할 수
 ![](/img/posts_dl_serving/picture03.png){: width="100%" height="100%"}
 <center>그림 3. Rancher 모니터링 예시</center>
 
-현재 서빙 시스템의 로그는 Fluentd를 이용하여 별도의 버킷에 저장중에 있는데, 실시간 로그를 확인하여 Pod의 상태를 보고 싶은 경우에는 Rancher UI 상에서 쉽게 확인이 가능합니다. 아래 그림과 같이 stdout으로 기록되는 로그를 붙잡아서 볼 수 있으므로 서빙 시스템의 상태를 간단히 체크하거나, 버전이 업데이트 되어 배포되는 시점에 동작 상태를 실시간으로 확인하기에 좋습니다.<br>
+현재 서빙 시스템의 로그는 Fluentd를 이용하여 별도의 버킷에 저장하고 있는데, 실시간 로그를 확인하여 Pod의 상태를 보고 싶은 경우 Rancher UI 상에서 쉽게 확인 가능합니다. 아래 그림과 같이 stdout으로 기록되는 로그를 붙잡아서 볼 수 있으므로 서빙 시스템의 상태를 간단히 체크하거나, 버전이 업데이트 되어 배포되는 시점에 동작 상태를 실시간으로 확인하기에 좋습니다.<br>
 
 ![](/img/posts_dl_serving/picture04.png){: width="100%" height="100%"}
 <center>그림 4. Rancher UI에서 Pod 로그 확인</center>
