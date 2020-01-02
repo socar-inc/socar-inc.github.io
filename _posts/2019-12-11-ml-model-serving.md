@@ -30,7 +30,7 @@ Photo by <a href="https://unsplash.com/@fabmag?utm_source=unsplash&utm_medium=re
 이에 따라, 이미지를 확인하고 차량의 손상을 판정하는 과정에 대한 자동화 방안을 찾아보게 되었고, DL(Deep Learning)을 이용하여 차량 손상을 판정하는 모델을 개발하여 이를 운영하는 시스템을 구축하는 프로젝트가 시작되었습니다.<br>
 
 `
-여기서 잠깐, 차량 파손을 탐지하는 DL 모델 개발에 대한 내용이 궁금하신 분들은 "Semantic Segementation을 활용한 차량 파손 탐지 딥러닝 모델 개발기"를 참조하시기 바랍니다
+여기서 잠깐, 차량 파손을 탐지하는 DL 모델 개발에 대한 내용이 궁금하신 분들은 "Semantic Segmentation을 활용한 차량 파손 탐지 딥러닝 모델 개발기"를 참조하시기 바랍니다
 `
 
 <br>
