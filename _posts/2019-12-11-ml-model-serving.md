@@ -116,7 +116,7 @@ Agent는 주기적으로 SQS를 polling하고 메시지에 따라 이 후 작업
 일단 사용해 본 결과로는 조금 보완할 점도 있긴 하지만, 전반적으로 만족하며 사용하고 있습니다. Rancher와 함께 Git을 연동하면 다음과 같은 운영 상의 편리함이 있습니다.<br>
 
 ```
-a. Git에 소스를 push하면 docker image 빌드부터 Kubernetes 배포까지 한방에
+a. Git에 소스를 push하면 docker image 빌드부터 Kubernetes 배포까지 한방에!
 b. 복잡한 설정 없이 간편하게 Node와 Pod 상태 모니터링 및 로그 확인 가능
 ```
 
