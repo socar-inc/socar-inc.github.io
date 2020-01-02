@@ -125,7 +125,7 @@ Rancher에서는 설정된 Git 브랜치에 이벤트가 발생하면 빌드 pip
 stage에 배포된 서빙 모델이 별도의 테스트를 통해 정상적으로 동작하는 것으로 확인되면 release 브랜치를 master 브랜치에 머지합니다. 이 후, 새 버전에 해당하는 tag를 달게 되면 해당 tag로 Docker Image를 빌드하여 production에 배포하도록 설정하였습니다. 운영상의 실수로 master 브랜치에 의도하지 않게 소스가 머지될 수도 있으므로 명시적으로 tag를 작성하는 경우에만 production에 배포가 되도록 하였습니다.<br>
 결과적으로 Git 관련 작업만으로 서빙 모델이 보다 간편하게 배포될 수 있는 구성이 가능합니다. 한가지 유의하실 점은 tag가 변경되지 않으면 Rancher pipelinet에서 해당 Docker Image의 배포가 skip 되므로 Image의 tag는 수정이 되어야 합니다. 만약 latest 등의 tag를 사용하는 경우에는 Rancher UI 상에서 "Redeploy"를 클릭하면 수동으로 재배포할 수는 있습니다.<br>
 
-b. Rancher는 간단한 설정만으로 Node, Pod 상태를 모니터링 할 수 있는 기능을 제공합니다. 보다 상세한 상태를 파악하기 위해서는 프로메테우스, 그라파나등을 사용하여 모니터링 할 수도 있으나, 본 프로젝트에서는 Node가 Spot Instance로 동작하고 있어서 Node의 수가 가변적으로 운영되고 있고, 현재 동작중인 상태만 간단히 확인할 수 있는 정도면 되기때문에 Rancher가 제공하는 기본 모니터링 기능만을 사용하여 운영중입니다.<br>
+b. Rancher는 간단한 설정만으로 Node, Pod 상태를 모니터링 할 수 있는 기능을 제공합니다. 보다 상세한 상태를 파악하기 위해서는 Prometheus, Grafana 등을 사용하여 모니터링 할 수도 있으나, 본 프로젝트에서는 Node가 Spot Instance로 동작하고 있어서 Node의 수가 가변적으로 운영되고 있고, 현재 동작중인 상태만 간단히 확인할 수 있는 정도면 되기 때문에 Rancher가 제공하는 기본 모니터링 기능만을 사용하여 운영중입니다.<br>
 아래 그림에서와 같이 CPU, Memory, Storage, Network 사용량 등을 한눈에 확인할 수 있습니다.
 
 ![](/img/posts_dl_serving/picture03.png){: width="100%" height="100%"}
