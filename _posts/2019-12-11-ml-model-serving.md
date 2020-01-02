@@ -90,7 +90,7 @@ d. 모델 및 Agent의 상태를 확인하고 외부에 리포트
 ```
 Agent는 Python으로 작성하였고, Docker image로 빌드하였습니다. 차량 손상 모델은 PyTorch를 사용하여 개발되었고, Python 코드를 사용 시 다양한 Cloud 플랫폼의 API를 사용하는 것도 용이하므로 자연스럽게 Python을 선택하게 되었습니다.<br>
 
-a. Agent가 시작되면 S3에 저장된 모델의 weight 값들을 다운로드 하고, 모델의 내부 상태를 초기화 하게 됩니다. 차량 손상 판정 모델이 사용하는 내부의 Network Layer가 7개여서 각각의 학습된 weight들을 모아보면 크기가 상당히 큽니다. 해당 weight들을 Docker image에 함께 포함하면 image가 너무 커질 뿐만아니라 향후 weight 값이 재학습에 의해 수정되는 경우에 Docker image를 다시 빌드해야 하는 불편함이 있습니다. 이에 따라, weight 값들은 분리하여 저장하고, Agent가 시작되는 시점에 해당 weight들을 다운로드 받아 사용하도록 처리되어 있습니다.<br>
+a. Agent가 시작되면 S3에 저장된 모델의 weight 값들을 다운로드 하고, 모델의 내부 상태를 초기화 하게 됩니다. 차량 손상 판정 모델이 사용하는 내부의 Network Layer가 7개여서 각각의 학습된 weight들을 모아보면 크기가 상당히 큽니다. 해당 weight들을 Docker image에 포함하게 된다면 image가 너무 커질 뿐만 아니라, 향후 weight 값이 재학습으로 인하여 수정되는 경우 Docker image를 다시 빌드해야 하는 불편함이 있습니다. 이에 따라, weight 값들은 분리하여 저장하고 Agent가 시작되는 시점에 해당 weight들을 다운로드 받아 사용하도록 처리되어 있습니다.<br>
 
 b. 모델을 초기화 한 후, Agent는 SQS로부터 판정 대상 이미지의 정보가 저장되어 있는 메시지를 1개씩 pull 하여, 메시지를 파싱한 후, 모델에 이미지 정보(URL)를 전달합니다. <br>
 
