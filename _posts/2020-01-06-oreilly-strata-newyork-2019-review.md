@@ -14,7 +14,7 @@ tags:
 
 
 
-- O'Reilly Strata Data Conference New York 2019 다녀온 후 작성하는 후기입니다. 아래 내용을 다룹니다
+- O'Reilly Strata Data Conference New York 2019 다녀온 후 작성한 후기입니다. 아래 내용을 다룹니다
 	- 스트라타 데이터 컨퍼런스 소개
 	- 유익한 세션 소개
 	- 참고 자료
@@ -41,14 +41,14 @@ tags:
 - 저희가 이번에 참여한 컨퍼런스는 Data Conference로 데이터에 관한 포괄적인 세션들이 많았습니다
 - 이번 New York 행사장은 한국의 코엑스와 비슷한 장소였습니다
 
-![](/img/oreilly-strata-2019-review/4.png){: width="100%" height="100%"}
+![](/img/oreilly-strata-2019-review/4.png){: width="70%" height="70%"}
 
 <br />
 <br />
 
 - 행사장 입장시 안내 데스크에 사람이 있는 한국과 달리, 신청자가 직접 기기를 통해 이름표를 직접 인쇄합니다. 등록한 메일로 QR Code가 전달되는데, 기기에서 QR Code를 입력하면 됩니다
 
-![](/img/oreilly-strata-2019-review/3.png){: width="100%" height="100%"}
+![](/img/oreilly-strata-2019-review/3.png){: width="70%" height="70%"}
 
 <br />
 <br />
@@ -89,7 +89,6 @@ tags:
 
 <br />
 <br />
-<br />
 
 ### How machine Learning meets optimization
 - 최적화(Optimization)란 단어는 데이터 사이언스를 공부하다 보면 자주 접할 수 있는 단어입니다. 최적화는 다양한 방식으로 진행할 수 있는데, 산업 공학에선 Linear Programming(LP), Constraint Programming 등으로 문제를 풀 수 있습니다
@@ -112,6 +111,7 @@ tags:
 
 - 최적화와 머신러닝 모두 Input을 넣으면 Output이 나오는 점은 동일하나, 최적화는 입력 x에 대해 제약 조건과 objective value가 있어 optimal solution을 찾고 머신러닝은 레이블된 데이터가 존재하는 상태에서 Error를 최소화합니다
 
+<br />
 
 ---
 
@@ -144,6 +144,8 @@ tags:
 - 두번째 예시에선 모델의 예측 값을 Deterministic한(한 숫자로 나오는) 수요를 uncertainty range로 대체하는 내용이 나왔습니다.  Uncertainty Range를 표현하기 위해 Two quantile regression, 분포를 근사하기 위한 앙상블 활용, 모델의 Output을 분포로 표현(Bayesian structural time series)을 사용할 수 있습니다. Uncertainty Range를 구한 후 Robust Optimization를 사용해 최악의 상황을 피하는 방식으로 최적화합니다
 	- ![](/img/oreilly-strata-2019-review/18.png){: width="100%" height="100%"}
 
+<br />
+
 ---
 
 
@@ -158,6 +160,7 @@ tags:
 - 발표자가 속한 Ethical AI라는 조직에선 머신러닝 모델 개발의 각 단계에서 편향을 줄이고, 모델을 설명하기 위한 오픈소스를 개발하고 있습니다. 그 중 대표적으로 데이터 분석 단계에선 eXplainable AI(XAI)란 라이브러리를 소개하고, 모델 개발 및 평가 단계에선 [ALIBI](https://github.com/SeldonIO/alibi)란 라이브러리에 대해 소개했습니다
 	- ![](/img/oreilly-strata-2019-review/21.png){: width="100%" height="100%"}
 	- ![](/img/oreilly-strata-2019-review/22.png){: width="100%" height="100%"}
+	- ![](/img/oreilly-strata-2019-review/23.png){: width="100%" height="100%"}
 
 <br />
 	
@@ -170,30 +173,32 @@ tags:
 - [논문 보러가기](https://homes.cs.washington.edu/~marcotcr/aaai18.pdf)
     - ![](/img/oreilly-strata-2019-review/25.png){: width="100%" height="100%"}
 
+<br />
+
 ---
 
 ### Unified tooling for machine learning interpretability
 - 이 세션은 Microsoft에서 개발 중인 interpretML 오픈소스에 대한 세션입니다 
 - [공식 Github](https://github.com/interpretml/interpret)
-    - ![](/img/oreilly-strata-2019-review/26.png){: width="100%" height="100%"}
 
 <br />
 
 - interpretML의 첫번째 특징은 모델의 정확도와 설명력을 모두 갖추려 했다는 점입니다. 일반적으로 머신러닝 모델의 정확도가 높아질수록 설명하기는 어렵다는 문제가 있습니다. Microsoft 팀은 전통적인 GAM 모델에 Boosting 기법을 결합한 Explainable Boosting Machine (EBM) 이라는 알고리즘을 제안했습니다 
-    - ![](/img/oreilly-strata-2019-review/27.png){: width="100%" height="100%"}
-    - ![](/img/oreilly-strata-2019-review/28.png){: width="100%" height="100%"}
-    - ![](/img/oreilly-strata-2019-review/29.png){: width="100%" height="100%"}
+    - ![](/img/oreilly-strata-2019-review/26.png){: width="100%" height="100%"}
+
 
 <br />
 <br />
 
 - 두번째 특징은 모델을 설명하는 기능들을 갖추고 있다는 점입니다. 특정 피쳐가 모델 전체에 미치는 영향에 관점(Global)과 특정 instance에 대해 왜 그렇게 예측했는지에 대한 설명(Local) 으로 두 가지 측면에서 모델을 설명합니다
-  - ![](/img/oreilly-strata-2019-review/30.png){: width="100%" height="100%"}
-  - ![](/img/oreilly-strata-2019-review/31.png){: width="100%" height="100%"}
+  - ![](/img/oreilly-strata-2019-review/27.png){: width="100%" height="100%"}
+  - ![](/img/oreilly-strata-2019-review/28.png){: width="100%" height="100%"}
     
+<br />    
 
 ---
 
+<br />
 
 ### 참고 자료
 - 쏘카 데이터그룹의 타다데이터팀 카일과 윤이 다녀와서 사내 전파용으로 만든 발표 자료 : [SOCAR Speakerdeck]()에 업로드했습니다
