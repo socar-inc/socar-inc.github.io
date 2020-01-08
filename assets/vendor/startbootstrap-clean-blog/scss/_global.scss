@@ -27,6 +27,7 @@ h6 {
 a {
   color: $gray-900;
   @include transition-all;
+  text-decoration: underline black;
   &:focus,
   &:hover {
     color: $primary;
