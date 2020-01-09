@@ -21,7 +21,7 @@ O'Reilly Strata Data Conference New York 2019 다녀온 후 작성한 후기입�
 - 참고 자료
 
 
-사내 전파용으로 만든 행사 후기 슬라이드 자료를 [SOCAR Speakerdeck]()에 업로드했습니다! 참고하시면 좋을 것 같습니다 :)
+사내 전파용으로 만든 행사 후기 슬라이드 자료를 [SOCAR Speakerdeck](https://speakerdeck.com/socar/oreilly-strata-data-conference-new-york-2019-hugi)에 업로드했습니다! 이 글보다 더 자세한 발표 자료가 작성되어 있으니 관심있으신 분은 발표 자료를 참고하시면 좋을 것 같습니다 :)
 
 <br />
 
@@ -222,7 +222,7 @@ interpretML의 첫번째 특징은 모델의 정확도와 설명력을 모두 �
 ---
 
 ### 참고 자료
-- 쏘카 데이터그룹의 타다데이터팀 카일과 윤이 다녀와서 사내 전파용으로 만든 발표 자료 : [SOCAR Speakerdeck]()에 업로드했습니다
+- 쏘카 데이터그룹의 타다데이터팀 카일과 윤이 다녀와서 사내 전파용으로 만든 발표 자료 : [SOCAR Speakerdeck](https://speakerdeck.com/socar/oreilly-strata-data-conference-new-york-2019-hugi)에 업로드했습니다
 
 - O'reilly Strata Data Conference 영상을 다시 보는 방법
 	- [Oreailly Learing](https://learning.oreilly.com/)에 가입 후 시청 가능합니다. 첫 가입시 1달 무료고, 그 이후엔 구독 비용이 존재합니다
