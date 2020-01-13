@@ -313,7 +313,7 @@ Stratified split이란 데이터셋 분리 시 데이터 분포가 편향되지 
 
 학습을 마친 모델을 이용해, 실제로 모델의 예측값을 얻는 과정을 Inference라고 합니다. 해당 프로젝트에서 사용한 모델의 Inference 과정은 다음 그림과 같습니다.
 
-![](https://www.dropbox.com/s/u9nlihdmwyzaw9a/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202020-01-12%2015.18.43.png?dl=1)
+<img src="https://www.dropbox.com/s/u9nlihdmwyzaw9a/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202020-01-12%2015.18.43.png?dl=1" style="zoom:50%;" />
 
 - 차량 이미지를 입력으로, 학습이 완료된 Segmentation Network 내부 파라미터와의 연산을 통해 모델의 예측값이 출력됩니다.
   - 출력되는 예측값은 3장의 2차원 예측 마스크입니다.
