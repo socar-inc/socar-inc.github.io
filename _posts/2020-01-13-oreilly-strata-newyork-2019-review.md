@@ -2,7 +2,7 @@
 layout: post
 title: "O'reilly Strata Data Conference New York 2019 후기"
 subtitle: "O'reilly Strata Data Conference New York 2019 후기"
-date: 2020-01-06 00:00:00 +0900
+date: 2020-01-13 00:00:00 +0900
 category: data
 background: '/assets/images/andrea-enriquez-cousino-4hBCxfrlpoM-unsplash.jpg'
 author: kyle
@@ -21,7 +21,13 @@ O'Reilly Strata Data Conference New York 2019 다녀온 후 작성한 후기입�
 - 참고 자료
 
 
-사내 전파용으로 만든 행사 후기 슬라이드 자료를 [SOCAR Speakerdeck](https://speakerdeck.com/socar/oreilly-strata-data-conference-new-york-2019-hugi)에 업로드했습니다! 이 글보다 더 자세한 발표 자료가 작성되어 있으니 관심있으신 분은 발표 자료를 참고하시면 좋을 것 같습니다 :)
+사내 전파용으로 만든 행사 후기 슬라이드 자료를 [SOCAR Speakerdeck](https://speakerdeck.com/socar/oreilly-strata-data-conference-new-york-2019-hugi)에 업로드했습니다! 발표 자료엔 다음 내용이 있습니다. 관심있으신 분은 발표 자료를 참고하시면 좋을 것 같습니다 :)
+
+- 3개의 테마, 6개의 발표 정리
+	- Optimization
+	- Uber
+	- Explainable AI
+
 
 <br />
 
@@ -89,14 +95,18 @@ O'reilly 부스에선 컨퍼런스 참여자 전원에게 원하는 책 1권을 
 
 이런 부분을 통해 행사를 주최한 오라일리가 행사에 얼마나 신경쓰는지를 알 수 있었습니다.
 
+---
 
 ## Session 소개
 ![](/img/oreilly-strata-2019-review/10.png){: width="100%" height="100%"}
 
 
-다양한 발표들이 있었습니다. 그 중 저희가 들은 세션을 소개드리겠습니다.
+다양한 발표 중 저희가 들은 세션 중 블로그 글에 정리한 것은 총 4개입니다.
 
 <br />
+
+---
+
 
 ### How machine Learning meets optimization
 
