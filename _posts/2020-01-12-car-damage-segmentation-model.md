@@ -1,4 +1,4 @@
-```markdown
+```
 ---
 layout: post
 title: "Semantic Segementation을 활용한 차량 파손 탐지 딥러닝 모델 개발기"
@@ -230,7 +230,7 @@ Stratified split이란 데이터셋 분리 시 데이터 분포가 편향되지 
 
   U-Net의 구조는 알파벳 U의 왼쪽 절반에 해당하는 Contracting path와 오른쪽 절반에 해당하는 Expanding path의 2가지 Path로 분리할 수 있습니다.
 
-  ![](https://www.dropbox.com/s/8ou2z9pj1226bj3/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202020-01-12%2019.31.33.png?dl=1)
+  <img src="https://www.dropbox.com/s/8ou2z9pj1226bj3/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202020-01-12%2019.31.33.png?dl=1" style="zoom:50%;" />
 
   1. Contracting path
 
@@ -279,7 +279,7 @@ Stratified split이란 데이터셋 분리 시 데이터 분포가 편향되지 
 
 해당 프로젝트에서 사용한 모델의 학습 과정은 다음 그림과 같습니다.
 
-![](https://www.dropbox.com/s/e05uzgnu61wxv3n/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202020-01-12%2014.29.41.png?dl=1)
+<img src="https://www.dropbox.com/s/e05uzgnu61wxv3n/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202020-01-12%2014.29.41.png?dl=1" style="zoom:50%;" />
 
 - Feature는 차량 이미지, Target으로는 마스크(Binary mask image)가 사용됩니다.
   - 파손 영역별 좌표 형태(Polygon)로 주어진 입력 파일을 마스크 형식으로 가공합니다.
@@ -436,7 +436,7 @@ Stratified split이란 데이터셋 분리 시 데이터 분포가 편향되지 
 
 아래 이미지는 해당 모델을 통해 차량 파손 검수 결과를 제공하고 있는 실제 운영 페이지의 일부입니다.
 
-<img src="https://lh5.googleusercontent.com/yPF4Wmez67qn4yHWHJ3KdY7t9rIDBtD1buzRYdheZjxCusCfC8CIDnPN9sCFvPGs5GKG9BKhFNmzZuPoFEA2S5wDD0mL5WsKRZSCjMUCleO7Mqrmcefj8QtyVFZ6BxpCadBapeKfEA" alt="img" style="zoom:50%;" />
+<img src="https://www.dropbox.com/s/ynsvw6gx0kyroef/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202020-01-13%2010.39.46.png?dl=1" style="zoom:50%;" />
 
 위와 같이 해당 모델의 검수 결과를 직접 운영 페이지에 녹여냄으로써, 업로드되는 차량 이미지 데이터를 차량 유지, 보수 업무에 적극적으로 활용하게 되었고, 차량 이미지 검수에 투입되었던 인력과 시간비용을 절감할 수 있게 되었습니다.
 
