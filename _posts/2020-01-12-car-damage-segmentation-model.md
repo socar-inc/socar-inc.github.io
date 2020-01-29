@@ -1,18 +1,16 @@
-```
 ---
 layout: post
-title: "Semantic Segementation을 활용한 차량 파손 탐지 딥러닝 모델 개발기"
-subtitle: "Semantic Segementation을 활용한 차량 파손 탐지 딥러닝 모델 개발기"
+title: “Semantic Segementation을 활용한 차량 파손 탐지 딥러닝 모델 개발기”
+subtitle: “Semantic Segementation을 활용한 차량 파손 탐지 딥러닝 모델 개발기”
 date: 2020-01-12 20:00:00 +0900
 category: data
-background: '/assets/images/andrea-enriquez-cousino-4hBCxfrlpoM-unsplash.jpg'
+background: ‘/assets/images/andrea-enriquez-cousino-4hBCxfrlpoM-unsplash.jpg’
 author: serena
 comments: true
 tags:
     - deeplearning
 
 ---
-```
 
 ---
 
@@ -24,27 +22,27 @@ tags:
 
 ### 목차
 
-- [차량 파손 탐지 모델을 왜?](#차량-파손-탐지-모델을-왜?)
+- [차량 파손 탐지 모델을 왜?](#index1)
 
-- [어떻게 이러한 문제를 해결해야 할까?](#어떻게 이러한 문제를 해결해야 할까?)
+- [어떻게 이러한 문제를 해결해야 할까?](#index2)
 
-- [문제 접근 방식 정의 - Semantic Segmentation](#문제 접근 방식 정의 - Semantic Segmentation )
+- [문제 접근 방식 정의 - Semantic Segmentation](#index3)
 
-- [데이터 정의 및 준비 - 입력 데이터와 출력 데이터](#데이터 정의 및 준비 - 입력 데이터와 출력 데이터)
+- [데이터 정의 및 준비 - 입력 데이터와 출력 데이터](#index4)
 
-- [사용한 모델의 구조](#사용한 모델의 구조)
+- [사용한 모델의 구조](#index5)
 
-- [모델 학습 (Training) 과정](#모델 학습 (Training) 과정)
+- [모델 학습 (Training) 과정](#index6)
 
-- [모델 Inference 후처리](#모델 Inference 후처리)
+- [모델 Inference 후처리](#index7)
 
-- [그러나, 실제 데이터에 적용해보니..](#그러나, 실제 데이터에 적용해보니..)
+- [그러나, 실제 데이터에 적용해보니..](#index8)
 
-- [성능 평가](#성능 평가)
+- [성능 평가](#index9)
 
-- [실제 데이터에 적용 예시](#실제 데이터에 적용 예시)
+- [실제 데이터에 적용 예시](#index10)
 
-- [추후 발전 방향](#추후 발전 방향)
+- [추후 발전 방향](#index11)
 
 - [Reference](#Reference)
 
@@ -54,7 +52,7 @@ tags:
 
 
 
-<h3 id="차량-파손-탐지-모델을-왜?">차량 파손 탐지 모델을 왜?</h3>
+<h3 id="index1">차량 파손 탐지 모델을 왜?</h3>
 
 먼저, 사용자가 쏘카 앱을 통해 쏘카를 대여하고 운행하는 과정을 알아보겠습니다.
 
@@ -68,7 +66,7 @@ tags:
 >
 >    - 이 때 사용자는 인수 받은 차량의 당시 외관 사진을 앱 내에 업로드할 수 있습니다.
 >
->      <img src="https://www.dropbox.com/s/xk3iobds4p1s4zi/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202020-01-12%2020.13.23.png?dl=1" style="zoom:60%;" />
+>      <img src="https://github.com/socar-serena/socar-serena.github.io/blob/master/img/car-damage-segmentation-model/socar-app.png?raw=true" style="zoom:60%;" />
 >
 > 5. 문제가 없는 경우, 운행을 시작합니다.
 
@@ -96,7 +94,7 @@ tags:
 
 
 
-### 어떻게 이러한 문제를 해결해야 할까?
+<h3 id="index2">어떻게 이러한 문제를 해결해야 할까?</h3>
 
 위에서도 언급했듯이, 차량 외관 이미지 데이터를 파손 시점 추적 용도로만 주로 사용하기에는 아쉬운 점이 존재했습니다. 
 
@@ -124,7 +122,7 @@ tags:
 
 
 
-### 문제 접근 방식 정의 - Semantic Segmentation 
+<h3 id="index3"> 문제 접근 방식 정의 - Semantic Segmentation </h3>
 
 프로젝트 시작 전, 이 프로젝트가 어떤 태스크로 분류될 수 있는지에 대해 가장 먼저 정의해야 했습니다.
 
@@ -172,7 +170,7 @@ tags:
 
 
 
-### 데이터 정의 및 준비 - 입력 데이터와 출력 데이터
+<h3 id="index4">데이터 정의 및 준비 - 입력 데이터와 출력 데이터</h3>
 
 머신러닝/딥러닝 모델 학습에 필요한 데이터의 구조는 입력 데이터와 출력 데이터, 즉 Feature와 Label로 구분할 수 있습니다. 
 
@@ -231,7 +229,7 @@ Stratified split이란 데이터셋 분리 시 데이터 분포가 편향되지 
 
 
 
-### 사용한 모델의 구조
+<h3 id="index5">사용한 모델의 구조</h3>
 
 해당 프로젝트에서는 Semantic Segmentation 태스크 수행을 위하여 U-Net with EfficientNet 모델을 사용하였습니다.
 
@@ -319,7 +317,7 @@ Stratified split이란 데이터셋 분리 시 데이터 분포가 편향되지 
 
 
 
-### 모델 학습 (Training) 과정
+<h3 id="index6">모델 학습 (Training) 과정</h3>
 
 일반적인 머신러닝/딥러닝 모델 학습 과정은 다음 그림과 같습니다.
 
@@ -363,7 +361,7 @@ Stratified split이란 데이터셋 분리 시 데이터 분포가 편향되지 
 
 
 
-### 모델 Inference 후처리
+<h3 id="index7">모델 Inference 후처리</h3>
 
 학습을 마친 모델을 이용해, 실제로 모델의 예측값을 얻는 과정을 Inference라고 합니다. 해당 프로젝트에서 사용한 모델의 Inference 과정은 다음 그림과 같습니다.
 
@@ -394,7 +392,7 @@ Stratified split이란 데이터셋 분리 시 데이터 분포가 편향되지 
 
 
 
-### 그러나, 실제 데이터에 적용해보니..
+<h3 id="index8">그러나, 실제 데이터에 적용해보니..</h3>
 
 학습을 완료한 모델을 이용하여 쏘카 앱을 통해 업로드되는 이미지들을 검증한 결과, 몇가지 보완해야할 점들을 발견했습니다.
 
@@ -410,11 +408,11 @@ Stratified split이란 데이터셋 분리 시 데이터 분포가 편향되지 
 
      멀리서 찍어 차량이 아닌 주차선이 이미지의 대부분을 차지하거나, 차량 루프를 촬영하는 과정에서 뒤편에 주차된 차량들이 빼곡히 촬영되거나, 뒤편의 건물이 촬영된 이미지들이 적지 않게 있었습니다.
 
-     <img src="/Users/socar/Dropbox/스크린샷/스크린샷 2020-01-24 16.45.30.png" style="zoom:50%;" />
+     <img src="https://github.com/socar-serena/socar-serena.github.io/blob/master/img/car-damage-segmentation-model/problem1-without-guideline.png?raw=true" style="zoom:50%;" />
 
    - 두 번째 문제점은 어두운 곳에서 촬영된 차량 이미지에 취약점을 보인다는 점이였습니다.
 
-     <img src="https://www.dropbox.com/s/zqoqjl8fyln7nhj/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202020-01-29%2016.12.42.png?dl=1" style="zoom:50%;" />
+     <img src="https://github.com/socar-serena/socar-serena.github.io/blob/master/img/car-damage-segmentation-model/problem2-dark-images.png?raw=true" style="zoom:50%;" />
      
      
 
@@ -458,7 +456,7 @@ Stratified split이란 데이터셋 분리 시 데이터 분포가 편향되지 
 
 
 
-### 성능 평가 
+<h3 id="index9">성능 평가</h3>
 
 - 모델의 처리 속도
 
@@ -486,7 +484,7 @@ Stratified split이란 데이터셋 분리 시 데이터 분포가 편향되지 
 
 
 
-### 실제 데이터에 적용 예시
+<h3 id="index10">실제 데이터에 적용 예시</h3>
 
 다음 예시 이미지들은 실제 앱을 통해 업로드된 차량 이미지들을 입력으로 한 모델의 Inference 결과입니다.
 
@@ -512,7 +510,7 @@ Stratified split이란 데이터셋 분리 시 데이터 분포가 편향되지 
 
 
 
-### 추후 발전 방향
+<h3 id="index11">추후 발전 방향</h3>
 
 실제 차량 파손 검수를 진행하는 운영 프로세스 내에서 모델의 검수 결과와 검수 인력의 판단 결과가 다른 경우, 해당 피드백을 모델의 2차 학습에 반영시키는 것을 계획하고 있습니다.
 
@@ -523,7 +521,7 @@ Stratified split이란 데이터셋 분리 시 데이터 분포가 편향되지 
 
 
 
-### Reference 
+<h3 id="Reference">Reference</h3>
 
 * [U-Net](https://arxiv.org/pdf/1505.04597.pdf)
 
