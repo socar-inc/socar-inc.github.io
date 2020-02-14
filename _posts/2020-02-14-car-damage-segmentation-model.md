@@ -3,7 +3,7 @@ layout: post
 title: "Semantic Segementation을 활용한 차량 파손 탐지 딥러닝 모델 개발기"
 subtitle: "Developing Car Damage Detection Model using Semantic Segementation
 "
-date: 2020-02-14 10:00:00 +0900
+date: 2020-02-14 01:00:00 +0900
 category: data
 background: '/assets/images/andrea-enriquez-cousino-4hBCxfrlpoM-unsplash.jpg'
 author: serena
