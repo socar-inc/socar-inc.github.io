@@ -1,8 +1,7 @@
 ---
 layout: post
 title: "Semantic Segmentation을 활용한 차량 파손 탐지 딥러닝 모델 개발기"
-subtitle: "Developing Car Damage Detection Model using Semantic Segmentation
-"
+subtitle: "Developing Car Damage Detection Model using Semantic Segmentation"
 date: 2020-02-14 01:00:00 +0900
 category: data
 background: '/assets/images/andrea-enriquez-cousino-4hBCxfrlpoM-unsplash.jpg'
@@ -105,11 +104,11 @@ tags:
 
 ##### 1. Classification
 - 입력으로 주어진 이미지 안의 객체(Object)의 종류(Class)를 구분하는 Task입니다.
-- 예시) MNIST 데이터 세트의 경우, 0부터 9까지 총 10가지의 숫자들을 각각의 class로 구분.
+- 예시) MNIST 데이터 세트의 경우, 0부터 9까지 총 10가지의 숫자들을 각각의 Class로 구분.
 
 ##### 2. Localization
 - 입력으로 주어진 이미지 안의 객체가 이미지 안의 어느 위치에 존재하는지 위치 정보를 판단하는 Task입니다.
-- 위치 정보의 형태는 주로 Bounding box를 많이 사용합니다.
+- 위치 정보의 형태는 주로 Bounding Box를 많이 사용합니다.
 
 ##### 3. Object Detection
 - 일반적으로 Classification과 Localization을 동시에 수행합니다.
@@ -118,7 +117,7 @@ tags:
 ##### 4. Segmentation
 - Segmentation은 픽셀을 대상으로 한 Classification 문제로 접근할 수 있습니다.
 - 입력으로 주어진 이미지 내에서 각 픽셀이 어떤 클래스에 속하는지 분류합니다.
-- 각 픽셀의 분류된 클래스는 모델이 생성한 결과물인 예측 마스크 (mask)에 픽셀 단위로 기록됩니다. 만일 특정 픽셀이 어떤 클래스에도 해당하지 않는 경우, background 클래스로 규정해 0을 표기하는 방식을 사용합니다.
+- 각 픽셀의 분류된 클래스는 모델이 생성한 결과물인 예측 마스크 (mask)에 픽셀 단위로 기록됩니다. 만일 특정 픽셀이 어떤 클래스에도 해당하지 않는 경우, Background 클래스로 규정해 0을 표기하는 방식을 사용합니다.
 - 분할의 기본 단위를 무엇으로 설정하느냐에 따라, Segmentation의 세부 문제를 나눌 수 있습니다.
 - Instance Segmentation
   - 분할의 기본 단위를 **사물**로 설정한 분할 문제입니다.
@@ -196,7 +195,7 @@ tags:
 ### Dataset 분리
 이렇게 정의된 데이터를 이용 목적에 따라 분리했습니다. 전체 2,000개 데이터를 학습용 데이터(Training Set), 검증 및 모델 선택용 데이터(Validation Set), 실제 테스트용 데이터(Test Set)로 나누었고, 그 비율은 8:1:1로 설정했습니다.
 
-데이터 세트 분리 시, 특정 데이터 세트에 데이터가 편향되는 것을 막기 위해 Stratified split을 사용했습니다.
+데이터 세트 분리 시, 특정 데이터 세트에 데이터가 편향되는 것을 막기 위해 Stratified Split을 사용했습니다.
 
 **데이터가 편향되는 것은 찌그러진 파손에 해당하는 이미지 대부분이 Validation set에만 포함되어 있으면 학습시 해당 특징이 모델에 충분히 반영되지 못하는 경우**를 의미합니다.
 
@@ -280,18 +279,18 @@ tags:
 
 ![](/img/car-damage-segmentation-model/unet_train_flow.png){:width="100%" height="100%" style="display: block; margin: 0 auto"}
 
-- Feature는 차량 이미지, Target으로는 마스크(Binary mask image)가 사용됩니다.
+- Feature는 차량 이미지, Target으로는 마스크(Binary Mask Image)가 사용됩니다.
   - 파손 영역별 좌표 형태(Polygon)로 주어진 입력 파일을 마스크 형식으로 가공합니다.
   - 가공 방법은 다음과 같습니다.
     - 파손 영역별로 분리된 좌표 형태를 마스크 형식으로 변환합니다. 이 과정을 통해 각 파손 영역별로 한 장의 2차원 마스크가 생성됩니다. 
     - 동일한 파손 클래스를 가지는 마스크들을 모아 한 장의 2차원 마스크로 병합합니다. (Logical OR 연산)
       이 마스크는 0과 1로 이루어진 이진 마스크로, 1로 표시된 픽셀의 경우 해당 파손 클래스에 속하는 픽셀임을 뜻합니다.
     - 위의 과정을 거쳐 하나의 파손 클래스당 한 장, 총 3장의 2차원 이진 마스크를 가지게 됩니다. 
-- 주어진 차량 이미지를 입력으로, Segmentation network 내부 파라미터와의 연산을 통해 예측값이 출력됩니다.
+- 주어진 차량 이미지를 입력으로, Segmentation Network 내부 파라미터와의 연산을 통해 예측값이 출력됩니다.
   - 출력되는 값은 Target과 동일한 형태로 3장의 2차원 예측 마스크의 형태를 가집니다.
   - 출력되는 예측 마스크는 이진(Binary) 마스크가 아닌, 대응되는 입력 이미지의 픽셀별로 해당 파손 클래스에 속할 확률(Probability Score)을 나타내는 마스크입니다. 0 이상 1 이하의 확률값이 저장되게 됩니다.
 - 각 파손 클래스마다 해당 클래스의 Target 마스크와 예측 마스크 사이의 오차를 계산합니다. 
-  - 오차 계산을 위해 Binary Cross Entropy (BCE) 함수를 사용합니다. 
+  - 오차 계산을 위해 Binary Cross Entropy(BCE) 함수를 사용합니다. 
 - 이 오차를 최소화하는 방향으로 Segmentation Network의 내부 파라미터를 조정하며 최적화를 진행합니다.
 
 <br />
@@ -331,7 +330,7 @@ tags:
 
 - 1) **모델의 정확도에 대한 문제**
 	- 실제 사용자 데이터를 입력으로 모델의 파손 판별 정확도를 정성적으로 검증한 결과, 실제 업무에 투입하여 사용하기에는 정확도가 떨어진다는 문제점을 파악했습니다.
-	- 이는 학습 시 이용된 데이터(Training set)와 실제 사용되는 데이터 사이의 간극으로 인한 것으로 볼 수 있습니다. 모델의 학습을 위해 데이터를 수집하는 과정에서 "육안으로 파손 여부를 확실하게 판별할 수 있는" 차량 이미지 2,000장을 추려 사용했기 때문에, 다양한 환경에서 촬영된 이미지들의 특성이 모델에 충분히 반영되지 않았을 가능성이 높았습니다.
+	- 이는 학습 시 이용된 데이터(Training Set)와 실제 사용되는 데이터 사이의 간극으로 인한 것으로 볼 수 있습니다. 모델의 학습을 위해 데이터를 수집하는 과정에서 "육안으로 파손 여부를 확실하게 판별할 수 있는" 차량 이미지 2,000장을 추려 사용했기 때문에, 다양한 환경에서 촬영된 이미지들의 특성이 모델에 충분히 반영되지 않았을 가능성이 높았습니다.
 	- 1-1) 앱 내에서 차량 외관 촬영 시 가이드라인이 존재하지 않아 사용자들이 사진을 촬영하는 방식이 제각각이었습니다.
 	- 멀리서 찍어 차량이 아닌 주차선이 이미지의 대부분을 차지하거나, 차량 루프를 촬영하는 과정에서 뒤편에 주차된 차량들이 빼곡히 촬영되거나, 뒤편의 건물이 촬영된 이미지들이 종종 있었습니다.
 	
@@ -344,7 +343,7 @@ tags:
 	     
 
 - 2) **시간적인 제한에 대한 문제**
-	- Semantic segmentation을 수행하기 위하여, 모델은 픽셀 단위로 해당 픽셀이 각 클래스에 속할 확률을 예측해야 합니다.
+	- Semantic Segmentation을 수행하기 위하여, 모델은 픽셀 단위로 해당 픽셀이 각 클래스에 속할 확률을 예측해야 합니다.
 	- 이를 위해 모델의 구조가 굉장히 깊고 복잡해지는 것은 불가피한 일이며, 방대한 연산량으로 연산 속도 저하의 위험성이 있습니다. CPU 머신 위에서 실제 테스트 시, 차량 이미지 한장 당 약 15초의 처리 시간이 소요됩니다.
 	- 이는 하루 평균 7-8만장의 이미지를 처리해야 하는 업무 상황에 적절하지 못하다고 판단했습니다.
 	- 이러한 문제점들을 해결하기 위해, 데이터 측면에서 보완할 수 있는 점과 모델 측면에서 보완할 수 있는 점으로 구분해 전체적인 틀을 수정했습니다.
@@ -356,13 +355,13 @@ tags:
 #### 문제점 보완
 - 1) **데이터 측면에서의 보완 방법**
 	- Data Augmentation을 사용했습니다.
-	- 어두운 곳에서 촬영된 이미지에 취약점을 보이는 문제점을 해결하기 위하여, Training set에 무작위로 사진의 밝기와 대비를 변경하는 전처리를 가했습니다. (Random brightness & Contrast transformation)
+	- 어두운 곳에서 촬영된 이미지에 취약점을 보이는 문제점을 해결하기 위하여, Training Set에 무작위로 사진의 밝기와 대비를 변경하는 전처리를 가했습니다. (Random Brightness & Contrast Transformation)
 
 - 2) **모델 측면에서의 보완 방법**
-	- 먼저, 사용자들이 사진을 촬영하는 방식이 제각각이라는 점을 해결하기 위해 모델의 시작 부분에 Localization network를 추가했습니다. 즉, 이미지 전체에서 차량이 존재하는 영역만을 crop해 이후 모델의 입력으로 사용하겠다는 전략이었습니다. Localization network는 COCO 데이터 세트로 미리 학습된 YOLO v3 모델을 사용했습니다.
-   - 모델의 연산량으로 인한 처리 속도 저하 해결을 위해 Global Damage Classifier를 추가하는 방법을 택했습니다. 실제로 쏘카 앱을 통해 업로드되는 이미지 중 손상이 존재하는 이미지는 소수이기 때문에, 굳이 모든 이미지를 깊은 Segmentation network에 통과시킬 필요가 없다고 생각했습니다.
-	- Segmentation network 바로 앞단에 이미지 단위의 파손 존재 여부를 0과 1로 예측하는 비교적 얕은 Classification network를 추가했고, 이를 Global Damage Classifier라는 이름으로 칭하겠습니다.
-	- Global Damage Classifier의 예측 결과가 "이 이미지 내에는 파손이 없다. (=0, False)"로 정해진 이미지에 대해서는 더 이상의 Inference를 진행하지 않는 방법을 택했습니다. 이미지 내에 파손이 있다고 판단된 이미지에 대해서만 Segmentation network 내의 연산을 통해 파손 영역 및 클래스 예측을 수행하게 됩니다.
+	- 먼저, 사용자들이 사진을 촬영하는 방식이 제각각이라는 점을 해결하기 위해 모델의 시작 부분에 Localization Network를 추가했습니다. 즉, 이미지 전체에서 차량이 존재하는 영역만을 Crop해 이후 모델의 입력으로 사용하겠다는 전략이었습니다. Localization Network는 COCO 데이터 세트로 미리 학습된 YOLO v3 모델을 사용했습니다.
+   - 모델의 연산량으로 인한 처리 속도 저하 해결을 위해 Global Damage Classifier를 추가하는 방법을 택했습니다. 실제로 쏘카 앱을 통해 업로드되는 이미지 중 손상이 존재하는 이미지는 소수이기 때문에, 굳이 모든 이미지를 깊은 Segmentation Network에 통과시킬 필요가 없다고 생각했습니다.
+	- Segmentation Network 바로 앞단에 이미지 단위의 파손 존재 여부를 0과 1로 예측하는 비교적 얕은 Classification Network를 추가했고, 이를 Global Damage Classifier라는 이름으로 칭하겠습니다.
+	- Global Damage Classifier의 예측 결과가 "이 이미지 내에는 파손이 없다. (=0, False)"로 정해진 이미지에 대해서는 더 이상의 Inference를 진행하지 않는 방법을 택했습니다. 이미지 내에 파손이 있다고 판단된 이미지에 대해서만 Segmentation Network 내의 연산을 통해 파손 영역 및 클래스 예측을 수행하게 됩니다.
 	- 파손이 존재하는 이미지 입장에서 보았을 때는 통과해야 할 모델이 하나 더 늘어난 셈이니 시간이 더 오래 걸리는 게 아닐까? 하는 의문이 들 수 있지만, 사용자가 제공하는 전체 이미지의 규모와 그 중 파손이 존재하는 이미지의 비중을 고려했을 때 전체 연산에 소요되는 시간을 눈에 띄게 줄일 수 있을 것으로 기대했습니다.
 
 위의 수정 사항이 반영된 모델의 전체 구조 및 Inference 흐름도는 다음과 같습니다.
@@ -384,9 +383,9 @@ tags:
 - 모델의 처리 속도
 	- 이렇게 완성된 모델은 GPU 머신 위에서 초당 약 5장의 이미지를, CPU 머신 위에서 초당 약 0.7장의 이미지를 처리할 수 있습니다.
 - 모델의 정확도
-	- 성능 평가를 위해 분리해둔 200장의 Test set 대상으로 계산된 결과입니다.
-	- Global damage classifier의 분류 성능: 96%의 Accuracy, 96%의 F1-score를 기록했습니다.
-	- Segmentation network의 성능: Threshold 0.5 기준 96.7의 IoU를 기록했습니다.
+	- 성능 평가를 위해 분리해둔 200장의 Test Set 대상으로 계산된 결과입니다.
+	- Global Damage Classifier의 분류 성능: 96%의 Accuracy, 96%의 F1-score를 기록했습니다.
+	- Segmentation Network의 성능: Threshold 0.5 기준 96.7의 IoU를 기록했습니다.
 
 - IoU란?
 	- ![](/img/car-damage-segmentation-model/iou.png){:width="50%" height="50%" style="display: block; margin: 1 auto"}
