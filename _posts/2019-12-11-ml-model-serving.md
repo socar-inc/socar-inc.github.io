@@ -8,6 +8,8 @@ background: '/assets/images/fabrizio-magoni-boaDpmC-_Xo-unsplash.jpg'
 author: thomas
 comments: true
 tags:
+    - deeplearning
+    - serving
     - sqs
     - kubernetes
     - rancher
