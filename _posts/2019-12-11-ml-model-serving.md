@@ -21,7 +21,6 @@ Photo by <a href="https://unsplash.com/@fabmag?utm_source=unsplash&utm_medium=re
 
 
 
-## 여기 차량 사진 8만장이요!
 
 
 차량을 대여할 때 가장 먼저 하게되는 일이 무엇일까요?<br>
