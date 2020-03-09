@@ -82,6 +82,7 @@ Photo by <a href="https://unsplash.com/@fabmag?utm_source=unsplash&utm_medium=re
 
 <h3 id="index4">사내 시스템과 모델간의 인터페이스: AWS SQS</h3>
 사내 시스템과 차량 손상 판정 모델의 커플링을 최소화하기 위해 외부 시스템과 모델 간의 인터페이스는 AWS SQS로 결정했습니다. 인터페이스로 메세지큐를 사용하는 장점은 여러 가지가 있는데 이번 케이스에서는 다음과 같은 사항들이 고려되었습니다.
+
 - 1) 쉽고 빠른 인터페이스의 구축 및 사용
 - 2) 향후 검수 시스템의 변경 또는 차량 손상 판정 모델의 변경 시 상호간의 영향 최소화
 - 3) 이미지 처리량의 변화에 따른 유연한 Scaling 지원
@@ -102,6 +103,7 @@ Photo by <a href="https://unsplash.com/@fabmag?utm_source=unsplash&utm_medium=re
 
 <h3 id="index5">Model Serving : AWS S3 + Agent(Python application / Docker) + Kubernetes</h3>
 손상 판정 모델의 작업은 이미지를 Input으로 받고, 판정 결과가 표시된 이미지와 관련 정보들을 Output으로 리턴합니다. 모델이 판정 작업에 집중하는 동안, 사내 시스템과 여러 작업들을 수행하기 위한 서빙 시스템이 필요합니다. 본 프로젝트에서는, 이러한 서빙 시스템을 Agent로 지칭하도록 하겠습니다.
+
 Agent의 주요 담당 업무는 아래와 같습니다.
 
 - 1) 손상 판정 모델을 초기화
