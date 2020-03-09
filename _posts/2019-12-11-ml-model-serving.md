@@ -134,10 +134,9 @@ Agent는 주기적으로 SQS를 Polling하고 메시지에 따라 이 후 작업
 엔지니어의 욕심은 끝이 없는 법. Kubernetes가 엔지니어의 삶을 편안하게 도와주긴 하지만 배포도 좀 더 간단하면 어떨까 생각을 해봅니다. 배포 및 모니터링을 위한 다양한 툴들이 있는데, 데이터 엔지니어링팀에서는 요즘 꽤 핫한 [Rancher](https://rancher.com/)를 사용하는 것으로 결정하였습니다. 이미 개발본부에서 Rancher를 배포 및 모니터링에 적극 활용하고 있는 모습을 볼 수 있었기 때문에 팀에서도 별다른 고민 없이 채택할 수 있었습니다.<br>
 일단 사용해 본 결과로는 조금 보완할 점도 있긴 하지만, 전반적으로 만족하며 사용하고 있습니다. Rancher와 함께 Git을 연동하면 다음과 같은 운영상의 편리함이 있습니다.<br>
 
-```
-a. Git에 소스를 push하면 docker image 빌드부터 Kubernetes 배포까지 한방에!
-b. 복잡한 설정 없이 간편하게 Node와 Pod 상태 모니터링 및 로그 확인 가능
-```
+#### Rancher와 Git 연동시 생기는 장점
+- 1) Git에 소스를 push하면 docker image 빌드부터 Kubernetes 배포까지 한방에!
+- 2) 복잡한 설정 없이 간편하게 Node와 Pod 상태 모니터링 및 로그 확인 가능
 
 a. Git 브랜치는 master, release, develop로 구분하여 운영하고 있습니다. 각자의 기능 개발은 develop-xxxx 브랜치를 생성하여 작업하고 develop 브랜치에 리뷰 후 머지됩니다. 개발된 기능들이 모이게 되면 develop 브랜치의 내용이 release 브랜치로 Pull Request 요청에 의해 머지가 됩니다.<br>
 Rancher에서는 설정된 Git 브랜치에 이벤트가 발생하면 빌드 pipeline을 trigger 할 수 있는 기능이 있습니다. 위와 같이 release 브랜치에 새로운 소스가 머지되면 해당 브랜치의 소스를 다운하여 Docker Image를 빌드하고 지정된 위치에 업로드 할 수 있도록 설정이 가능합니다. 쏘카에서는 release 브랜치 머지의 결과를 stage에 배포하도록 설정되어 있습니다.<br>
