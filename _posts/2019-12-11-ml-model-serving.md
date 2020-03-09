@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "DL 모델 서빙 간단 구축기"
+title: "딥러닝 모델 Serving 간단 구축기"
 subtitle: " (feat. SQS + Python Application + Kubernetes + Git & Rancher)"
 date: 2019-12-11 13:00:00 +0900
 category: machine-learning
