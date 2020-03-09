@@ -19,7 +19,9 @@ tags:
 Photo by <a href="https://unsplash.com/@fabmag?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Fabrizio Magoni</a> on <a href="https://unsplash.com/s/photos/serving?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
 </div>
 
+쏘카에서 개발한 딥러닝 기반 차량 파손 탐지 모델을 시스템에 반영하는 과정에 대해 작성한 글입니다. 딥러닝 기반 차량 파손 탐지 모델에 대한 내용이 궁금하시면 [Semantic Segmentation을 활용한 차량 파손 탐지 딥러닝 모델 개발기](https://tech.socarcorp.kr/data/2020/02/13/car-damage-segmentation-model.html)을 참고하시면 좋을 것 같습니다.
 
+---
 
 
 
