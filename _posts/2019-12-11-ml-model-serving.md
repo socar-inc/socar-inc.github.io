@@ -94,7 +94,7 @@ Agent의 주요 담당 업무는 아래와 같습니다.
 - 2) AWS SQS로부터 메시지를 Pull하고, 모델에 이미지를 전달
 - 3) 모델의 판정결과를 사내 시스템에 전달
 - 4) 모델 및 Agent의 상태를 확인하고 로그 저장
-Agent는 Python으로 작성하였고, Docker image로 빌드하였습니다. 차량 손상 모델은 PyTorch를 사용하여 개발되었고, Python 코드를 사용 시 다양한 Cloud 플랫폼의 API를 사용하는 것도 용이하므로 자연스럽게 Python을 선택하게 되었습니다.<br>
+Agent는 Python으로 작성하였고, Docker Image로 빌드했습니다. 차량 손상 모델은 PyTorch를 사용하여 개발되었고, Python 코드를 사용 시 다양한 Cloud 플랫폼의 API를 사용하는 것도 쉬으므로 자연스럽게 Python을 선택했습니다.<br>
 
 a. Agent가 시작되면 S3에 저장된 모델의 weight 값들을 다운로드 하고, 모델의 내부 상태를 초기화 하게 됩니다. 차량 손상 판정 모델이 사용하는 내부의 Network Layer가 7개여서 각각의 학습된 weight들을 모아보면 크기가 상당히 큽니다. 해당 weight들을 Docker image에 포함하게 된다면 image가 너무 커질 뿐만 아니라, 향후 weight 값이 재학습으로 인하여 수정되는 경우 Docker image를 다시 빌드해야 하는 불편함이 있습니다. 이에 따라, weight 값들은 분리하여 저장하고 Agent가 시작되는 시점에 해당 weight들을 다운로드 받아 사용하도록 처리되어 있습니다.<br>
 
