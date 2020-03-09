@@ -121,7 +121,7 @@ Agent는 Python으로 작성하였고, Docker Image로 빌드했습니다. 차�
 현재 운영중인 설정에서는 작업이 없을 때 Node 1대에 Agent Pod이 2개가 배포되어 대기하고 있다가, SQS에 메시지가 쌓이기 시작하면 Node 5대에 Pod이 14개 배포될 때까지 Auto Scaling이 동작합니다. 이후, SQS 메시지를 모두 처리하게 되면 다시 처음의 상태로 Node와 Pod의 수가 조정됩니다.<br>
 
 ![](/img/posts_dl_serving/picture02.png){: width="100%" height="100%"}
-<center>그림 2. 처리량에 따른 auto scaling</center>
+<center>그림 2. 처리량에 따른 Auto Scaling</center>
 
 Kubernetes를 사용할 때의 또다른 잇점은 Pod의 상태를 확인하여 이상이 있는 경우, Pod을 재배포하여 복구시키는 방법이 간편하다는 점입니다.<br>
 서빙 Agent의 경우, 외부 시스템과 인터페이스 되는 부분이 다양하므로 오류가 발생할 가능성이 있으며, 특히 내부의 손상 판정 모델이 리소스를 상당히 소모하는 과정에서 예기치 못한 오류를 일으킬 가능성도 있습니다. 일반적인 오류는 예외처리를 통해 문제를 해결할 수 있으나 Agent가 좀비상태가 되어 떠 있는 경우도 있을 수 있어, Kubernetes의 livenessProbe를 이용하여 Agent의 비정상 상태를 탐지할 수 있도록 하였습니다.<br>
