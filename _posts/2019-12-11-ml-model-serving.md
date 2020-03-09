@@ -145,7 +145,7 @@ Agent는 주기적으로 SQS를 Polling하고 메시지에 따라 이 후 작업
 - Rancher에서는 설정된 Git 브랜치에 이벤트가 발생하면 빌드 Pipeline을 Trigger 할 수 있는 기능이 있습니다. 위와 같이 release 브랜치에 새로운 소스가 머지되면 해당 브랜치의 소스를 다운하여 Docker Image를 빌드하고 지정된 위치에 업로드 할 수 있도록 설정이 가능합니다. 쏘카에서는 release 브랜치 머지의 결과를 stage에 배포하도록 설정되어 있습니다.<br>
 - stage에 배포된 서빙 모델이 별도의 테스트를 통해 정상적으로 동작하는 것으로 확인되면 release 브랜치를 master 브랜치에 머지합니다. 
 - 이후, 새 버전에 해당하는 Tag를 달게 되면 해당 Tag로 Docker Image를 빌드하여 production에 배포하도록 설정했습니다. 운영상의 실수로 master 브랜치에 의도하지 않게 소스가 머지될 수도 있으므로 명시적으로 Tag를 작성하는 경우에만 production에 배포가 됩니다.<br>
-결과적으로 Git 관련 작업만으로 서빙 모델이 보다 간편하게 배포될 수 있는 구성이 가능합니다. 한가지 유의하실 점은, tag가 변경되지 않으면 Rancher pipeline에서 해당 Docker Image의 배포가 skip 되므로 Image의 tag는 수정이 되어야 합니다. 만약 latest 등의 tag를 사용하는 경우에는, Rancher UI 상에서 `Redeploy` 를 클릭하여 수동으로 재배포할 수 있습니다.<br>
+- 결과적으로 Git 관련 작업만으로 서빙 모델이 보다 간편하게 배포될 수 있는 구성이 가능합니다. 한가지 유의하실 점은, Tag가 변경되지 않으면 Rancher Pipeline에서 해당 Docker Image의 배포가 Skip 되므로 Image의 Tag는 수정이 되어야 합니다. 만약 latest 등의 Tag를 사용하는 경우에는, Rancher UI 상에서 `Redeploy` 를 클릭하여 수동으로 재배포할 수 있습니다.<br>
 
 #### 2) 복잡한 설정 없이 간편하게 Node와 Pod 상태 모니터링 및 로그 확인 가능
 - Rancher는 간단한 설정만으로 Node, Pod 상태를 모니터링 할 수 있는 기능을 제공합니다. 
