@@ -65,6 +65,7 @@ Photo by <a href="https://unsplash.com/@fabmag?utm_source=unsplash&utm_medium=re
 
 ![1](/img/posts_dl_serving/picture01.png){: width="100%" height="100%"}
 <center>그림 1. 전체 시스템 구성도 - AWS SQS + Kubernetes + Git + Rancher + S3, DB</center>
+
 그럼, 이어서 위 그림에 표현된 각각의 모듈 및 시스템 구축 방법에 대해 좀 더 자세히 설명하도록 하겠습니다.
 
 ---
@@ -79,7 +80,7 @@ Photo by <a href="https://unsplash.com/@fabmag?utm_source=unsplash&utm_medium=re
 
 ---
 
-### 사내 시스템과 모델간의 인터페이스: AWS SQS
+<h3 id="index4">사내 시스템과 모델간의 인터페이스: AWS SQS</h3>
 사내 시스템과 차량 손상 판정 모델의 커플링을 최소화하기 위해 외부 시스템과 모델 간의 인터페이스는 AWS SQS로 결정했습니다. 인터페이스로 메세지큐를 사용하는 장점은 여러 가지가 있는데 이번 케이스에서는 다음과 같은 사항들이 고려되었습니다.
 - 1) 쉽고 빠른 인터페이스의 구축 및 사용
 - 2) 향후 검수 시스템의 변경 또는 차량 손상 판정 모델의 변경 시 상호간의 영향 최소화
@@ -99,7 +100,7 @@ Photo by <a href="https://unsplash.com/@fabmag?utm_source=unsplash&utm_medium=re
 
 ---
 
-<h3 id="index4">Model Serving : AWS S3 + Agent(Python application / Docker) + Kubernetes</h3>
+<h3 id="index5">Model Serving : AWS S3 + Agent(Python application / Docker) + Kubernetes</h3>
 손상 판정 모델의 작업은 이미지를 Input으로 받고, 판정 결과가 표시된 이미지와 관련 정보들을 Output으로 리턴합니다. 모델이 판정 작업에 집중하는 동안, 사내 시스템과 여러 작업들을 수행하기 위한 서빙 시스템이 필요합니다. 본 프로젝트에서는, 이러한 서빙 시스템을 Agent로 지칭하도록 하겠습니다.
 Agent의 주요 담당 업무는 아래와 같습니다.
 
@@ -137,6 +138,7 @@ Agent는 Python으로 작성하였고, Docker Image로 빌드했습니다. 차�
 
 ![](/img/posts_dl_serving/picture02.png){: width="100%" height="100%"}
 <center>그림 2. 처리량에 따른 Auto Scaling</center>
+
 Kubernetes를 사용할 때의 또 다른 잇점은 Pod의 상태를 확인하여 이상이 있는 경우, Pod을 재배포하여 복구시키는 방법이 간편하다는 점입니다.
 
 서빙 Agent의 경우, 사내 시스템과 인터페이스 되는 부분이 다양하므로 오류가 발생할 가능성이 있으며, 특히 내부의 손상 판정 모델이 리소스를 상당히 소모하는 과정에서 예기치 못한 오류를 일으킬 가능성도 있습니다. 일반적인 오류는 예외처리를 통해 문제를 해결할 수 있으나 Agent가 좀비상태가 되어 떠 있는 경우도 있을 수 있어, Kubernetes의 livenessProbe를 이용하여 Agent의 비정상 상태를 탐지할 수 있도록 했습니다. Agent는 주기적으로 SQS를 Polling하고 메시지에 따라 이 후 작업을 진행하게 되는데 이 때 주기적으로 Heartbeat 파일을 생성하도록 구현했습니다. 그리고 Kubernetes는 이 Heartbeat 파일이 일정시간 이상 계속 업데이트가 되지 않는 상태이면, 해당 Agent를 제거하고 새로운 Agent(Pod)를 배포하도록 설정했습니다.
@@ -145,7 +147,7 @@ Kubernetes를 사용할 때의 또 다른 잇점은 Pod의 상태를 확인하�
 
 ---
 
-<h3 id="index5">서빙 관련 배포 및 모니터링: Git + Rancher</h3>
+<h3 id="index6">서빙 관련 배포 및 모니터링: Git + Rancher</h3>
 엔지니어의 욕심은 끝이 없는 법. Kubernetes가 엔지니어의 삶을 편안하게 도와주긴 하지만 배포도 좀 더 간단하면 어떨까 생각을 해봅니다. 배포 및 모니터링을 위한 다양한 툴들이 있는데, 데이터 엔지니어링팀에서는 요즘 꽤 핫한 [Rancher](https://rancher.com/)를 사용하는 것으로 결정하였습니다. 이미 개발본부에서 Rancher를 배포 및 모니터링에 적극 활용하고 있는 모습을 볼 수 있었기 때문에 팀에서도 별다른 고민 없이 채택할 수 있었습니다.
 일단 사용해 본 결과로는 조금 보완할 점도 있긴 하지만, 전반적으로 만족하며 사용하고 있습니다. Rancher와 함께 Git을 연동하면 다음과 같은 운영상의 편리함이 있습니다.
 
@@ -169,13 +171,15 @@ Kubernetes를 사용할 때의 또 다른 잇점은 Pod의 상태를 확인하�
 
 ![](/img/posts_dl_serving/picture03.png){: width="100%" height="100%"}
 <center>그림 3. Rancher 모니터링 예시</center>
+
 현재 서빙 시스템의 로그는 Fluentd를 이용하여 별도의 S3 버킷에 저장하고 있습니다. 실시간 로그를 확인하여 Pod의 상태를 보고 싶은 경우 Rancher UI 상에서 쉽게 확인 가능합니다. 아래 그림과 같이 stdout으로 기록되는 로그를 붙잡아서 볼 수 있으므로 서빙 시스템의 상태를 간단히 체크하거나, 버전이 업데이트 되어 배포되는 시점에 동작 상태를 실시간으로 확인하기에 좋습니다.
 
 ![](/img/posts_dl_serving/picture04.png){: width="100%" height="100%"}
 <center>그림 4. Rancher UI에서 Pod 로그 확인</center>
+
 ---
 
-<h3 id="index6">이제 큐가 비었습니다</h3>
+<h3 id="index7">이제 큐가 비었습니다</h3>
 DL 모델 서빙 시스템을 구축하기 위해 사용된 주요 서비스와 연동 방법들에 대해 간단히 정리해 보았습니다.
 본문 내용을 세 줄로 요약한다면 아래와 같습니다.
 
