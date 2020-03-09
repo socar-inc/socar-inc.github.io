@@ -56,7 +56,9 @@ Photo by <a href="https://unsplash.com/@fabmag?utm_source=unsplash&utm_medium=re
 그럼, 이어서 위 그림에 표현된 각각의 모듈 및 시스템 구축 방법에 대해 좀 더 자세히 설명하도록 하겠습니다.
 
 <br>
-## 세부 서빙 시스템 살펴보기
+---
+
+## Serving Architecture
 
 이 후 설명하는 내용은 Back Office 부분을 제외한 모델 서빙 시스템 관련 내용입니다. Back Office와 관련된 내용은 향후 기회가 있을 때 쏘카 개발본부에서 자세히 소개드리는 것으로 하겠습니다.
 
