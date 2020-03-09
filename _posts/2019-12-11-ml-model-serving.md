@@ -123,7 +123,7 @@ Agent는 Python으로 작성하였고, Docker Image로 빌드했습니다. 차�
 ![](/img/posts_dl_serving/picture02.png){: width="100%" height="100%"}
 <center>그림 2. 처리량에 따른 Auto Scaling</center>
 
-Kubernetes를 사용할 때의 또다른 잇점은 Pod의 상태를 확인하여 이상이 있는 경우, Pod을 재배포하여 복구시키는 방법이 간편하다는 점입니다.<br>
+Kubernetes를 사용할 때의 또 다른 잇점은 Pod의 상태를 확인하여 이상이 있는 경우, Pod을 재배포하여 복구시키는 방법이 간편하다는 점입니다.<br>
 서빙 Agent의 경우, 사내 시스템과 인터페이스 되는 부분이 다양하므로 오류가 발생할 가능성이 있으며, 특히 내부의 손상 판정 모델이 리소스를 상당히 소모하는 과정에서 예기치 못한 오류를 일으킬 가능성도 있습니다. 일반적인 오류는 예외처리를 통해 문제를 해결할 수 있으나 Agent가 좀비상태가 되어 떠 있는 경우도 있을 수 있어, Kubernetes의 livenessProbe를 이용하여 Agent의 비정상 상태를 탐지할 수 있도록 했습니다.<br>
 Agent는 주기적으로 SQS를 polling하고 메시지에 따라 이 후 작업을 진행하게 되는데 이 때 주기적으로 heartbeat 파일을 생성하도록 구현해 놓았습니다. 그리고 Kubernetes는 이 heartbeat 파일이 일정시간 이상 계속 업데이트가 되지 않는 상태이면, 해당 Agent를 제거하고 새로운 Agent(Pod)를 배포하도록 설정해 놓았습니다.<br>
 그리고 동작 중 발생하는 오류에 대해서는 슬랙 채널로 알림을 발송하도록 처리하였습니다.
