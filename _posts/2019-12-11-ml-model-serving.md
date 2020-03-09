@@ -52,7 +52,7 @@ Photo by <a href="https://unsplash.com/@fabmag?utm_source=unsplash&utm_medium=re
 그래서 저희 쏘카 데이터 엔지니어링팀에서는 딥러닝 모델을 안정적으로 서빙하는 것에 포커스를 두고, 빠른 시간에 설계 및 개발을 완료하여 사내 시스템과 통합하는 것이 목표입니다. 몇 번의 논의와 수정을 거쳐 최종적으로 결정된 시스템은 아래 그림과 같습니다.
 
 ![1](/img/posts_dl_serving/picture01.png){: width="100%" height="100%"}
-<center>그림 1. 전체 시스템 구성도 - SQS + Kubernetes + Git + Rancher + S3, DB</center>
+<center>그림 1. 전체 시스템 구성도 - AWS SQS + Kubernetes + Git + Rancher + S3, DB</center>
 그럼, 이어서 위 그림에 표현된 각각의 모듈 및 시스템 구축 방법에 대해 좀 더 자세히 설명하도록 하겠습니다.
 
 <br>
