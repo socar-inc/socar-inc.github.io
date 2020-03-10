@@ -28,7 +28,7 @@ Photo by <a href="https://unsplash.com/@fabmag?utm_source=unsplash&utm_medium=re
 - [Serving Architecture](#index2)
 	- [이미지 수집: S3](#index3)
 	- [사내 시스템과 모델간의 인터페이스: AWS SQS](#index4)
-	- [Model Serving : AWS S3 + Agent(Python application / Docker) + Kubernetes](#index5)
+	- [Model Serving : AWS S3 + Agent(Python Application / Docker) + Kubernetes](#index5)
 	- [서빙 관련 배포 및 모니터링: Git + Rancher](#index6)
 - [이제 큐가 비었습니다](#index7)
 
