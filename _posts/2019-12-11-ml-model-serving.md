@@ -163,7 +163,7 @@ Agent는 주기적으로 SQS를 Polling하고 메시지에 따라 이 후 작업
 #### 1) Git에 소스를 push하면 docker image 빌드부터 Kubernetes 배포까지 한방에!
 - Git 브랜치는 master, release, develop로 구분하여 운영하고 있습니다. 
     - 각자의 기능 개발은 develop-xxxx 브랜치를 생성하여 작업하고 develop 브랜치에 리뷰 후 머지됩니다. 
-- 개발된 기능들이 모이게 되면 develop 브랜치의 내용이 release 브랜치로 Pull Request 요청에 의해 머지가 됩니다.
+    - 개발된 기능들이 모이게 되면 develop 브랜치의 내용이 release 브랜치로 Pull Request 요청에 의해 머지가 됩니다.
 - Rancher에서는 설정된 Git 브랜치에 이벤트가 발생하면 빌드 Pipeline을 Trigger 할 수 있는 기능이 있습니다. 위와 같이 release 브랜치에 새로운 소스가 머지되면 해당 브랜치의 소스를 다운하여 Docker Image를 빌드하고 지정된 위치에 업로드 할 수 있도록 설정이 가능합니다. 쏘카에서는 release 브랜치 머지의 결과를 stage에 배포하도록 설정되어 있습니다.
 - stage에 배포된 서빙 모델이 별도의 테스트를 통해 정상적으로 동작하는 것으로 확인되면 release 브랜치를 master 브랜치에 머지합니다. 
 - 이후, 새 버전에 해당하는 Tag를 달게 되면 해당 Tag로 Docker Image를 빌드하여 production에 배포하도록 설정했습니다. 운영상의 실수로 master 브랜치에 의도하지 않게 소스가 머지될 수도 있으므로 명시적으로 Tag를 작성하는 경우에만 production에 배포가 됩니다.
