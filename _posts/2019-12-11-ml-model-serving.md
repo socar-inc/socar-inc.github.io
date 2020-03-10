@@ -159,7 +159,7 @@ Agent는 주기적으로 SQS를 Polling하고 메시지에 따라 이 후 작업
 #### Rancher와 Git 연동시 생기는 장점
 - 1) Git에 소스를 push하면 docker image 빌드부터 Kubernetes 배포까지 한방에!
 - 2) 복잡한 설정 없이 간편하게 Node와 Pod 상태 모니터링 및 로그 확인 가능
-
+<br />
 #### 1) Git에 소스를 push하면 docker image 빌드부터 Kubernetes 배포까지 한방에!
 - Git 브랜치는 master, release, develop로 구분하여 운영하고 있습니다. 
 - 각자의 기능 개발은 develop-xxxx 브랜치를 생성하여 작업하고 develop 브랜치에 리뷰 후 머지됩니다. 
