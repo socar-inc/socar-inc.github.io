@@ -73,7 +73,7 @@ Photo by <a href="https://unsplash.com/@fabmag?utm_source=unsplash&utm_medium=re
 <h2 id="index2">Serving Architecture</h2>
 이 후 설명하는 내용은 사내 시스템 부분을 제외한 모델 서빙 시스템 관련 내용입니다. 사내 시스템과 관련된 내용은 향후 기회가 있을 때 쏘카 개발본부에서 자세히 소개드리는 것으로 하겠습니다.
 
----
+<br />
 
 <h3 id="index3">이미지 수집: S3</h3>
 차량을 대여한 사용자가 스마트폰으로 찍어서 업로드하는 사진은 S3에 저장됩니다. 이렇게 저장된 사진들은 사내 시스템을 담당하고 있는 개발본부에서 관리합니다. 각각의 이미지는 인증을 통해 CloudFront로 접근 가능합니다.
