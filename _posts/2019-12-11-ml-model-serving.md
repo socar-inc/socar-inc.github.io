@@ -100,7 +100,7 @@ Photo by <a href="https://unsplash.com/@fabmag?utm_source=unsplash&utm_medium=re
 
 ---
 
-<h3 id="index5">Model Serving : AWS S3 + Agent(Python application / Docker) + Kubernetes</h3>
+<h3 id="index5">Model Serving : AWS S3 + Agent(Python Application / Docker) + Kubernetes</h3>
 손상 판정 모델의 작업은 이미지를 Input으로 받고, 판정 결과가 표시된 이미지와 관련 정보들을 Output으로 리턴합니다. 모델이 판정 작업에 집중하는 동안, 사내 시스템과 여러 작업들을 수행하기 위한 서빙 시스템이 필요합니다. 본 프로젝트에서는, 이러한 서빙 시스템을 Agent로 지칭하도록 하겠습니다.
 
 Agent의 주요 담당 업무는 아래와 같습니다.
