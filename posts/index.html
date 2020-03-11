@@ -5,9 +5,7 @@ background: '/assets/images/home-bg-main-1.png'
 ---
 
 {% for post in paginator.posts %}
-{% if site.description %}
-<span class="subheading">{{ site.description }}</span>
-{% endif %}
+
 <article class="post-preview">
   <a href="{{ post.url | prepend: site.baseurl | replace: '//', '/' }}">
     <h2 class="post-title">{{ post.title }}</h2>
