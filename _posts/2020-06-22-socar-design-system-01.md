@@ -4,7 +4,7 @@ title: "[SOCAR FRAME 만들기 # 1] 쏘카의 디자인 시스템 구축 과정 
 subtitle: "[SOCAR FRAME 만들기 # 1] 쏘카의 디자인 시스템 구축 과정 맛보기"
 date: 2020-06-16 00:00:00 +0900
 category: design
-background: '/assets/images/fabrizio-magoni-boaDpmC-_Xo-unsplash.jpg'
+background: '/assets/images/socar-design-system.png'
 author: gadi
 comments: true
 tags:
