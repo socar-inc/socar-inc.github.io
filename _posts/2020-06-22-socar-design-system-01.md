@@ -203,7 +203,7 @@ iOS 개발자 1명, 안드로이드 개발자 1명, 모바일웹 개발자 1명 
 - 언자(육아휴직 중) : 나는 출산의 고통, 너희는 디자인 시스템의 고통
 - 산체스 : 옆에서 자꾸 쓰래요.
 
-![](/img/socar-design-system-01/1_11.png){: width="100%" height="100%"}
+![](/img/socar-design-system-01/1_11.png){: width="100%" height="100%" style="display: block; margin: 0 auto"}
 
 
 위와 같은 다짐을 각자 되새기며,
