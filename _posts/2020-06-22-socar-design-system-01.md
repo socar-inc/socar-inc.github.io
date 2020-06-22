@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "[SOCAR FRAME 만들기 # 1] 쏘카의 디자인 시스템 맛보기"
-subtitle: "SOCAR FRAME 구축의 배경과 시작 과정을 공유합니다!"
+subtitle: "SOCAR FRAME 구축의 배경과 시작 과정을 공유합니다"
 date: 2020-06-16 00:00:00 +0900
 category: design
 background: '/assets/images/socar-design-system.png'
@@ -203,7 +203,7 @@ iOS 개발자 1명, 안드로이드 개발자 1명, 모바일웹 개발자 1명 
 - 언자(육아휴직 중) : 나는 출산의 고통, 너희는 디자인 시스템의 고통
 - 산체스 : 옆에서 자꾸 쓰래요.
 
-![](/img/socar-design-system-01/1_11.png){: width="80%" height="80%" style="display: block; margin: 0 auto"}
+![](/img/socar-design-system-01/1_11.png){: width="100%" height="100%" style="display: block; margin: 0 auto"}
 
 
 위와 같은 다짐을 각자 되새기며,
