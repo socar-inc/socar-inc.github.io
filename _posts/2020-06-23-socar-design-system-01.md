@@ -2,7 +2,7 @@
 layout: post
 title: "[SOCAR FRAME 만들기 # 1] 쏘카의 디자인 시스템 맛보기"
 subtitle: "SOCAR FRAME 구축의 배경과 시작 과정을 공유합니다"
-date: 2020-06-23 03:00:00 +0900
+date: 2020-06-23 10:00:00 +0900
 category: design
 background: '/assets/images/socar-design-system.png'
 author: gadi
