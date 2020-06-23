@@ -2,7 +2,7 @@
 layout: post
 title: "[SOCAR FRAME 만들기 # 1] 쏘카의 디자인 시스템 맛보기"
 subtitle: "SOCAR FRAME 구축의 배경과 시작 과정을 공유합니다"
-date: 2020-06-16 00:00:00 +0900
+date: 2020-06-23 00:00:00 +0900
 category: design
 background: '/assets/images/socar-design-system.png'
 author: gadi
@@ -19,7 +19,7 @@ tags:
 
 ![](/img/socar-design-system-01/1_01.png){: width="100%" height="100%"}
 
-[**👉 SOCAR FRAME 바로 가기**](https://zeroheight.com/8bb3aba4a/p/5857a5-socar-frame)
+[**👉 SOCAR FRAME 바로 가기**](https://socarframe.socar.kr/)
 
 앞으로 SOCAR FRAME 구축 과정을 글로 조금씩 풀어나가려고 하는데요,
 
@@ -66,7 +66,7 @@ tags:
 
 슬쩍 맛보기 주제들을 공유하자면  :  
 
-- **다크 모드과 다크 모드를 한꺼번에 진행하게된 과정**
+- **디자인 시스템과 다크 모드를 한꺼번에 진행하게된 과정**
 - **디자이너-개발자가 어떻게 협업하고 함께 주체성을 이끌어내며 시스템을 구축하고 있고**
 - **컴포넌트 개발 우선순위는 어떻게 정했으며**
 - **디자인 시스템이 우선순위에서 한없이 밀릴 때 어떻게 대처하고 있으며**
