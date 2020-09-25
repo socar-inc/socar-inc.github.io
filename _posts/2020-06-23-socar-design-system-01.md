@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "[SOCAR FRAME 만들기 # 1] 쏘카의 디자인 시스템 맛보기"
+title: "[SOCAR FRAME 만들기 #1] 쏘카의 디자인 시스템 맛보기"
 subtitle: "SOCAR FRAME 구축의 배경과 시작 과정을 공유합니다"
 date: 2020-06-23 10:00:00 +0900
 category: design
@@ -211,3 +211,14 @@ iOS 개발자 1명, 안드로이드 개발자 1명, 모바일웹 개발자 1명 
 앞으로 디자인 시스템을 구축하며 직접 겪으면서 성장한 과정을 생생하게 공유해보겠습니다.
 
 그럼 꾸준히 연재할 테니 기대해주세요! 🤩
+
+<br />
+
+### 쏘카 프로덕트 디자인팀의 영상 & 글 모음
+- 네이버 테크톡에서 진행한 [**"쏘카프레임 구축 배경과 과정"** 발표 영상](https://tv.naver.com/v/15842187)
+- [**[SOCAR FRAME 만들기 #1] 쏘카의 디자인 시스템 맛보기**](https://tech.socarcorp.kr/design/2020/06/23/socar-design-system-01.html)(현재 글)
+- [**[SOCAR FRAME 만들기 #2] 다크 모드 받고 디자인 시스템 더블로 가!** (1탄)](https://tech.socarcorp.kr/design/2020/07/10/dark-mode-01.html)
+- [**[SOCAR FRAME 만들기 #2] 다크 모드 받고 디자인 시스템 더블로 가!** (2탄)](https://tech.socarcorp.kr/design/2020/07/22/dark-mode-02.html)
+- [**[SOCAR FRAME 만들기 #3] 컴포넌트, 제대로 만들어 쉽게 쓰자!** (1탄)](https://tech.socarcorp.kr/design/2020/07/31/component-01.html)
+- [**[SOCAR FRAME 만들기 #3] 컴포넌트, 제대로 만들어 쉽게 쓰자!** (2탄)](https://tech.socarcorp.kr/design/2020/09/08/component-02.html)
+
