@@ -1,6 +1,7 @@
 # socar-inc.github.io
 - SOCAR Tech Blog
 
+
 ## **깔끔한 commit history 관리를 위해 `Squash Merge`를 사용해 주세요.**
 
 <br><br><br>
