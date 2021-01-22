@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>
+    [SOCAR FRAME 만들기 #1] 쏘카의 디자인 시스템 맛보기 - SOCAR Tech Blog
+    
+  </title>
+
+  <meta name="description" content="안녕하세요, 쏘카 프로덕트 디자인팀의 가디입니다.">
+  <meta property="og:title" content="[SOCAR FRAME 만들기 #1] 쏘카의 디자인 시스템 맛보기">
+
+  <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="/assets/vendor/bootstrap/css/bootstrap.min.css">
+
+  <link rel="stylesheet" href="/assets/vendor/fontawesome-free/css/all.min.css">
+
+  <link rel="stylesheet" href="/assets/main.css">
+  <link rel="canonical" href="http://localhost:4000/design/2020/06/23/socar-design-system-01.html">
+  <link rel="alternate" type="application/rss+xml" title="SOCAR Tech Blog" href="/feed.xml">
+  <link rel="icon" type="image/png" href="/assets/icon/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/icon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/assets/icon/favicon-96x96.png">
+</head>
+
+
+<body>
+
+  <!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+  <div class="container">
+    <a class="navbar-brand" href="/">SOCAR Tech Blog</a>
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      Menu
+      <i class="fa fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="/">Home</a>
+        </li>
+        <!-- <li class="nav-item">
+          <a class="nav-link" href="/about">About</a>
+        </li> -->
+        <li class="nav-item">
+          <a class="nav-link" href="/posts">Posts</a>
+        </li>
+        <!-- <li class="nav-item">
+          <a class="nav-link" href="/contact">Contact</a>
+        </li> -->
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+  <!-- Page Header -->
+
+<header class="masthead" style="background-image: url('/assets/images/socar-design-system.png')">
+  
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-10 col-md-10 mx-auto">
+          <div class="post-heading">
+            <h1>[SOCAR FRAME 만들기 #1] 쏘카의 디자인 시스템 맛보기</h1>
+            
+            <h2 class="subheading">SOCAR FRAME 구축의 배경과 시작 과정을 공유합니다</h2>
+            
+            <span class="meta">Posted by
+              <a href="#">gadi</a>
+              on June 23, 2020 &middot; <span class="reading-time" title="Estimated read time">
+  
+   8 mins  read </span>
+
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-10 col-md-10 mx-auto">
+
+        <p>안녕하세요, 쏘카 프로덕트 디자인팀의 가디입니다.</p>
+
+<p>먼저, <strong>쏘카 앱의 디자인 시스템</strong>인 <strong>SOCAR FRAME</strong> 사이트를 공개합니다!! 🎉</p>
+
+<p><img src="/img/socar-design-system-01/1_01.png" alt="" width="100%" height="100%" /></p>
+
+<p><a href="https://socarframe.socar.kr/"><strong>👉 SOCAR FRAME 바로 가기</strong></a></p>
+
+<p>앞으로 SOCAR FRAME 구축 과정을 글로 조금씩 풀어나가려고 하는데요,</p>
+
+<p>이 글에서는 맛보기로 다음과 같은 내용을 전달하려고 합니다.</p>
+
+<p><img src="/img/socar-design-system-01/1_02.png" alt="" width="100%" height="100%" /></p>
+
+<p>본문으로 들어가기 전, <strong>예상 독자는요 👩‍💻</strong></p>
+
+<p>이 글은 직접 쏘카에서 디자인 시스템을 도입하며 겪은 내용에 집중하기 때문에 디자인 시스템에 대한 기본 지식이 있는 상태에서 디자인 시스템 구축을 진행 중이거나 도입을 검토 중인 분들이 들으시면 가장 유익할 것 같아요.</p>
+
+<p>디자인 시스템 사전 지식을 쌓기 유용한 글들을 몇 개 공유해봅니다.</p>
+
+<ul>
+  <li>👉  <a href="https://story.pxd.co.kr/1434">디자인 시스템의 필요성 (PXD)</a></li>
+  <li>👉  <a href="https://brunch.co.kr/@thinkaboutlove/288">디자인 시스템 구축 준비 (디독)</a></li>
+  <li>👉  <a href="https://brunch.co.kr/@designforhuman/2">에어비앤비의 디자인 시스템 만들기</a></li>
+</ul>
+
+<p><br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="1-글을-쓰게-된-이유와-다루고-싶은-내용">1. 글을 쓰게 된 이유와 다루고 싶은 내용</h2>
+
+<p>쏘카 프로덕트 디자인팀은 작년 하반기부터 디자인 시스템 구축을 본격적으로 시작했습니다.</p>
+
+<p>상당히 치열하게 고민을 했고 과정 자체가 의미있다고 느꼈습니다.</p>
+
+<p>실제 겪으며 성장했던 이 성장의 과정들을 그냥 흘려보내기에는 아쉬웠어요.</p>
+
+<p>그래서 이러한 과정을 전파하는 동시에 멤버 개개인이 글을 쓰면서 내용을 체화하고 글쓰기 능력도 성장시키기 위해 글로 공유해보기로 결정했습니다.</p>
+
+<p><br /></p>
+
+<h3 id="그래서-우리가-얘기하고-싶은-내용은">그래서 우리가 얘기하고 싶은 내용은?</h3>
+
+<p>저희는 결과물 그 자체보다는 <strong>디자인 시스템을 만들면서 겪은 과정과 어려움, 극복하고 있는 과정</strong>을 꽤 상세하게 적어보려고 합니다.</p>
+
+<p>다른 기업에서 공유한 디자인 시스템의 아티클들을 살펴보니, 결과물에 대한 글은 많이 있지만, 그 구축 과정이 세세하게 글로 공유된 경우가 많지 않았어요. <strong>저희는 결과물에 대한 정리보다는 고민의 과정! 우리가 쌓아온 노하우! 돈 주고도 살 수 없는 비법!을 공유하고 싶어요.</strong></p>
+
+<p>(참고로 시스템 자체에 대한 정리는 쏘카 프레임 사이트에서 잘 볼 수 있습니다. 😉)</p>
+
+<p>슬쩍 맛보기 주제들을 공유하자면  :</p>
+
+<ul>
+  <li><strong>디자인 시스템과 다크 모드를 한꺼번에 진행하게된 과정</strong></li>
+  <li><strong>디자이너-개발자가 어떻게 협업하고 함께 주체성을 이끌어내며 시스템을 구축하고 있고</strong></li>
+  <li><strong>컴포넌트 개발 우선순위는 어떻게 정했으며</strong></li>
+  <li><strong>디자인 시스템이 우선순위에서 한없이 밀릴 때 어떻게 대처하고 있으며</strong></li>
+  <li><strong>제플린에 디자인 시스템을 담기 어려워서 어떤 꼼수를 썼는지?</strong></li>
+  <li>기타 등등</li>
+</ul>
+
+<p>이렇게 공식 사이트에 정리하기는 힘들지만 엄청 중요하고 유의미했던 직접 삽질을 하면서 터득한, 논 오피셜한 비법들을 얘기해보고자 합니다.</p>
+
+<p><br /></p>
+
+<h3 id="시스템-구축은-현재-진행형-">시스템 구축은 현재 진행형! 🚧</h3>
+
+<p>디자인 시스템을 진행하면서 처음의 원대한 꿈은 개발 구축 완료 후 배포를 하고 개발효율을 수치화하여 보여주는 동시에, 디자인 시스템 사이트와 공유 글을 함께 오픈하는 것이 목적이었는데요.</p>
+
+<p>시스템 개발 외의 다양한 업무들로 시스템 구축은 천천히 그러나 꾸준하게 할 수밖에 없다는 결론에 이르렀어요.</p>
+
+<p>그래서 그때그때 구축을 완료한 컴포넌트에 대해 차례로 공유하려고 합니다. 그만큼 더 생생하게 전달할 수 있을 것이라 기대합니다. (긍정긍정!)</p>
+
+<p><br />
+<br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="2-디자인-시스템-구축--시작부터-현재-진행-과정">2. 디자인 시스템 구축 : 시작부터 현재 진행 과정</h2>
+
+<p>그럼 이제 쏘카 디자인 시스템 구축의 시작과 진행해온 과정을 설명할게요.</p>
+
+<p>전체적 보면 아래와 같이 진행을 해왔습니다.</p>
+
+<p><img src="/img/socar-design-system-01/1_03.png" alt="" width="100%" height="100%" /></p>
+
+<p><br /></p>
+
+<h3 id="1-디자인-시스템-개발-전의-쏘카-디자인-현황">1) 디자인 시스템 개발 전의 쏘카 디자인 현황</h3>
+
+<p><img src="/img/socar-design-system-01/1_04.png" alt="" width="100%" height="100%" /></p>
+
+<p>쏘카는 작년(2019년) 5월에 앱을 대대적으로 개편하여 런칭했어요.</p>
+
+<p>개편을 진행하면서 새로운 디자인 라이브러리와 UI 규칙을 마련했습니다. 이는 디자이너들끼리 공유되고 있었고, 개발로는 구현되지 않은 상태였어요. (UI 컴포넌트들이 스케치(심볼)로 작업으로 작업해 제플린(컴포넌트)에 업로드되어있지만 코드로 정리되진 않은 상태였죠.)</p>
+
+<p>그리고 그 UI 규칙도 엄격하지 않았고 상당히 유연하게 작업하고 있었습니다. 물론 이렇게 작업하는 것 또한 디자이너들끼리의 규칙이기에 가능했어요.</p>
+
+<p><br /></p>
+
+<h3 id="2-디자인-시스템-구축의-설득과-시작">2) 디자인 시스템 구축의 설득과 시작</h3>
+
+<p><img src="/img/socar-design-system-01/1_05.png" alt="" width="100%" height="100%" /></p>
+
+<p>앱 개편 이후에 다양한 서비스 개선, 확장, 추가 등으로 화면은 계속 수정되고 추가되었으며 이를 개발하는 개발자들도 늘어나고 있었습니다. 이런 상황이 개발, 디자인 리소스 절감과 UI 통일성 유지를 위한 디자인 시스템을 도입하기에 적기라고 판단하여 프로덕트 디자인팀에서 디자인 시스템 구축을 추진하기로 마음먹게 되었습니다.</p>
+
+<p><br /></p>
+
+<h4 id="구축-전-물밑작업">구축 전 물밑작업</h4>
+
+<p>개발 본격 시작 전 2-3개월 정도 디자인 시스템 관련 아티클 등을 수시로 던지고, 개발하다가 “아, 이거 버튼 거기랑 똑같은 건데?? 다 따로 만드셨어요? 이럴 때 디자인 시스템이 있으면 좋겠네요.” 등의 얘기를 꺼내며 은은하게 지속적으로 밑밥을 깐 것 같아요. 그 결과 본부 내에 공감대가 어느 정도 형성되었고 설득은 비교적 수월했습니다.😏</p>
+
+<p><br /></p>
+
+<h4 id="디자인-시스템-구축과-다크-모드">디자인 시스템 구축과 다크 모드</h4>
+
+<p>디자인 시스템 구축 검토를 하는 와중에 iOS13이 출시되며 다크 모드를  대응한 앱들이 늘어나기 시작했어요. 쏘카도 이에 발맞춰 다크 모드 도입 검토를 하게 되었는데요, 조금 공부를 해보니 다크 모드 대응을 디자인 시스템 구축과 함께 진행하는 것이 효율적이라는 결론에 이르렀습니다. 그래서 라이트 모드와 다크 모드 디자인 시스템을 함께 구축하는 형식으로 두 가지를 동시에 진행하게 되었습니다. (이것이 바로 다음 아티클에서 다룰 주제입니다!)</p>
+
+<p><br /></p>
+
+<h3 id="3-tf-결성과-개발-본격-시작"><strong>3) TF 결성과 개발 본격 시작!</strong></h3>
+
+<p><img src="/img/socar-design-system-01/1_06.png" alt="" width="100%" height="100%" /></p>
+
+<p><img src="/img/socar-design-system-01/1_07.png" alt="" width="100%" height="100%" /></p>
+
+<p>디자인팀이 선행해서 정리한 내용을 바탕으로 디자인 시스템+다크 모드 설명회를 진행하고, 그 결과 디자인 시스템을 본부 내에서 진행하기로 결정, 각 플랫폼 개발자와 디자이너로 구성된 어벤져스 TF가 결성되었어요! 🎉💯</p>
+
+<p>iOS 개발자 1명, 안드로이드 개발자 1명, 모바일웹 개발자 1명 + 디자인팀 2명으로 구성되어 시작을 하였고 매주 정기 회의시간을 마련했습니다.</p>
+
+<p><br /></p>
+
+<h4 id="소수-정예-멤버로-시작해서-전체로-확장">소수 정예 멤버로 시작해서 전체로 확장!</h4>
+
+<p>디자인 시스템 TF 멤버들은 모두 기존의 업무를 진행하는 동시에 디자인 시스템 구축을 진행하고 있어요. 이런 환경에서 장기전인 디자인 시스템을 초기 멤버끼리만 지속해서 구축하는 것이 다소 어려웠습니다.</p>
+
+<p>그래서 초기에는 앞서 말한 TF 초기 멤버가 파운데이션을 구축하고 최초 컴포넌트를 개발하면서 디자인 시스템 구축의 토대를 닦았습니다. 그리고 그 내용을 각 개발팀에 잘 전파했습니다. 이후로는 각 OS 팀의 다른 멤버들이 돌아가며 들어와서 새로운 요소를 구축하고 있어요.</p>
+
+<p>디자인팀에서는 2명이 주축이 되어 시작했지만 초반부터 디자인팀 전원(4명)이 모두 깊은 이해도를 가지고 참여를 했어요. 이런 깊은 이해도를 바탕으로 점차 돌아가면서 1가지씩 요소를 도맡아서 진행하고 있습니다. (그래서 앞으로 팀원들이 돌아가며 글을 작성할 예정이에요.)</p>
+
+<p><img src="/img/socar-design-system-01/1_08.png" alt="" width="100%" height="100%" /></p>
+
+<p><br /></p>
+
+<h3 id="4-현재-진행-상황과-앞으로의-로드맵">4) 현재 진행 상황과 앞으로의 로드맵</h3>
+
+<p><img src="/img/socar-design-system-01/1_09.png" alt="" width="100%" height="100%" /></p>
+
+<p>그리하여 2019년 4분기에 본격적으로 개발을 시작해서 올해 1분기까지 컬러, 타이포, 아이콘 등 파운데이션 구축을 완료했습니다.</p>
+
+<p>올해 2분기부터 본격적으로 컴포넌트 구축을 시작했는데요, 현재 버튼과 태그 구축을 완료한 상태입니다.</p>
+
+<p>구축 과정에서 많은 유의미한 논의 포인트들이 있었고 앞으로의 글에서 이에 대해 차근차근 공유해보고자 합니다!</p>
+
+<p><img src="/img/socar-design-system-01/1_10.png" alt="" width="100%" height="100%" /></p>
+
+<p>하반기에도 컴포넌트 우선순위 워크샵에서 정한 순서를 기준으로 위와 같은 컴포넌트를 꾸준하게 구축할 예정이에요. 앞으로도 어떤 흥미진진한 논의가 생길지 기대가 됩니다.</p>
+
+<p><br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h3 id="쏘카-프로덕트-디자인팀의-다짐으로-마무리">쏘카 프로덕트 디자인팀의 다짐으로 마무리!</h3>
+
+<p>프로덕트 디자인팀 멤버 전원이 글을 돌아가며 쓰는 만큼, 개개인의 다짐으로 글을 마무리해보려 해요.</p>
+
+<ul>
+  <li>가디 : 이번 기회에 글쓰기 천재로 거듭나고 싶습니다!</li>
+  <li>푸린 : 제 입으로 말하면 자랑 같아서 글로 남겨요.</li>
+  <li>샌디 : 그동안의 피땀 눈물 아낌없이 공개합니다!</li>
+  <li>언자(육아휴직 중) : 나는 출산의 고통, 너희는 디자인 시스템의 고통</li>
+  <li>산체스 : 옆에서 자꾸 쓰래요.</li>
+</ul>
+
+<p><img src="/img/socar-design-system-01/1_11.png" alt="" width="100%" height="100%" style="display: block; margin: 0 auto" /></p>
+
+<p>위와 같은 다짐을 각자 되새기며,</p>
+
+<p>앞으로 디자인 시스템을 구축하며 직접 겪으면서 성장한 과정을 생생하게 공유해보겠습니다.</p>
+
+<p>그럼 꾸준히 연재할 테니 기대해주세요! 🤩</p>
+
+<p><br /></p>
+
+<h3 id="쏘카-프로덕트-디자인팀의-영상--글-모음">쏘카 프로덕트 디자인팀의 영상 &amp; 글 모음</h3>
+<ul>
+  <li>네이버 테크톡에서 진행한 <a href="https://tv.naver.com/v/15842187"><strong>“쏘카프레임 구축 배경과 과정”</strong> 발표 영상</a></li>
+  <li><a href="https://tech.socarcorp.kr/design/2020/06/23/socar-design-system-01.html"><strong>[SOCAR FRAME 만들기 #1] 쏘카의 디자인 시스템 맛보기</strong></a>(현재 글)</li>
+  <li><a href="https://tech.socarcorp.kr/design/2020/07/10/dark-mode-01.html"><strong>[SOCAR FRAME 만들기 #2] 다크 모드 받고 디자인 시스템 더블로 가!</strong> (1탄)</a></li>
+  <li><a href="https://tech.socarcorp.kr/design/2020/07/22/dark-mode-02.html"><strong>[SOCAR FRAME 만들기 #2] 다크 모드 받고 디자인 시스템 더블로 가!</strong> (2탄)</a></li>
+  <li><a href="https://tech.socarcorp.kr/design/2020/07/31/component-01.html"><strong>[SOCAR FRAME 만들기 #3] 컴포넌트, 제대로 만들어 쉽게 쓰자!</strong> (1탄)</a></li>
+  <li><a href="https://tech.socarcorp.kr/design/2020/09/08/component-02.html"><strong>[SOCAR FRAME 만들기 #3] 컴포넌트, 제대로 만들어 쉽게 쓰자!</strong> (2탄)</a></li>
+</ul>
+
+
+
+        <hr>
+
+        <div class="clearfix">
+
+          
+          <a class="btn btn-primary float-left" href="/data/2020/03/10/ml-model-serving.html" data-toggle="tooltip" data-placement="top" title="딥러닝 모델 Serving 간단 구축기">&larr; Previous<span class="d-none d-md-inline">
+              Post</span></a>
+          
+          
+          <a class="btn btn-primary float-right" href="/design/2020/07/10/dark-mode-01.html" data-toggle="tooltip" data-placement="top" title="[SOCAR FRAME 만들기 #2] 다크 모드 받고 디자인 시스템 더블로 가! (1탄)">Next<span class="d-none d-md-inline">
+              Post</span> &rarr;</a>
+          
+
+        </div>
+
+        <div>
+          <p class="recuit">쏘카는 언제나 쏘카 서비스를 함께 만들며 기술적인 문제를 함께 풀어나갈 능력있는 개발자/디자이너/기획자/데이터 사이언티스트 등을 모시고 있습니다. 자세한 내용은 <a href="https://bit.ly/SOCAR-RECRUIT">쏘카 채용공고 페이지</a>를 확인 부탁드립니다 :)</p>
+        </div>
+
+      </div>
+    </div>
+    <!-- disqus comments -->
+    
+      <div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://socar-tech.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    
+  </div>
+
+  <!-- Footer -->
+
+<hr>
+
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-md-10 mx-auto">
+        <ul class="list-inline text-center">
+          
+          
+          
+          <li class="list-inline-item">
+            <a href="https://www.facebook.com/socarsharing">
+              <span class="fa-stack fa-lg">
+                <i class="fas fa-circle fa-stack-2x"></i>
+                <i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i>
+              </span>
+            </a>
+          </li>
+          
+          
+          
+        </ul>
+        <p class="copyright text-muted">Copyright &copy; SOCAR 2021</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+  <script src="/assets/vendor/jquery/jquery.min.js"></script>
+<script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/assets/vendor/startbootstrap-clean-blog/js/clean-blog.min.js"></script>
+
+<script src="/assets/scripts.js"></script>
+<script src="/assets/mermaid-8.2.3.js"></script>
+
+
+
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-30551922-27"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-30551922-27');
+</script>
+
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-MZ79TFM');</script>
+<!-- End Google Tag Manager -->
+
+
+</body>
+
+</html>

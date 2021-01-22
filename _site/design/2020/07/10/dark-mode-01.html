@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>
+    [SOCAR FRAME 만들기 #2] 다크 모드 받고 디자인 시스템 더블로 가! (1탄) - SOCAR Tech Blog
+    
+  </title>
+
+  <meta name="description" content="안녕하세요! 프로덕트 디자인팀 가디, 푸린입니다.">
+  <meta property="og:title" content="[SOCAR FRAME 만들기 #2] 다크 모드 받고 디자인 시스템 더블로 가! (1탄)">
+
+  <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="/assets/vendor/bootstrap/css/bootstrap.min.css">
+
+  <link rel="stylesheet" href="/assets/vendor/fontawesome-free/css/all.min.css">
+
+  <link rel="stylesheet" href="/assets/main.css">
+  <link rel="canonical" href="http://localhost:4000/design/2020/07/10/dark-mode-01.html">
+  <link rel="alternate" type="application/rss+xml" title="SOCAR Tech Blog" href="/feed.xml">
+  <link rel="icon" type="image/png" href="/assets/icon/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/icon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/assets/icon/favicon-96x96.png">
+</head>
+
+
+<body>
+
+  <!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+  <div class="container">
+    <a class="navbar-brand" href="/">SOCAR Tech Blog</a>
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      Menu
+      <i class="fa fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="/">Home</a>
+        </li>
+        <!-- <li class="nav-item">
+          <a class="nav-link" href="/about">About</a>
+        </li> -->
+        <li class="nav-item">
+          <a class="nav-link" href="/posts">Posts</a>
+        </li>
+        <!-- <li class="nav-item">
+          <a class="nav-link" href="/contact">Contact</a>
+        </li> -->
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+  <!-- Page Header -->
+
+<header class="masthead" style="background-image: url('/assets/images/dark-mode-01.png')">
+  
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-10 col-md-10 mx-auto">
+          <div class="post-heading">
+            <h1>[SOCAR FRAME 만들기 #2] 다크 모드 받고 디자인 시스템 더블로 가! (1탄)</h1>
+            
+            <h2 class="subheading">쏘카에서 다크 모드 도입을 위해 공부한 내용을 공유합니다</h2>
+            
+            <span class="meta">Posted by
+              <a href="#">gadi, purin</a>
+              on July 10, 2020 &middot; <span class="reading-time" title="Estimated read time">
+  
+   13 mins  read </span>
+
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-10 col-md-10 mx-auto">
+
+        <p>안녕하세요! 프로덕트 디자인팀 가디, 푸린입니다.</p>
+
+<p>두 번째 글, 많이 기다리셨죠~?</p>
+
+<p>이번 글에서는 <strong>다크 모드 도입을 검토하게 된 이유와 공부한 내용,</strong></p>
+
+<p>그리고 <strong>다크 모드와 디자인시스템을 같이 작업하게 된 과정</strong>을 얘기해보려고 합니다.</p>
+
+<p><img src="/img/dark-mode-01/2_01.png" alt="" width="100%" height="100%" /></p>
+
+<p>본문으로 들어가기 전 예상 독자는요,</p>
+
+<p>다크 모드와 디자인 시스템에 대한 기본적인 이해도가 있는 분이 읽으시면 가장 유익할 것 같습니다.</p>
+
+<ul>
+  <li><a href="https://brunch.co.kr/@outlines/39">다크 모드 파헤치기</a></li>
+  <li><a href="https://story.pxd.co.kr/1434">디자인 시스템이란</a></li>
+</ul>
+
+<p><br />
+<br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="1-다크-모드-검토의-시작과-이유">1. 다크 모드 검토의 시작과 이유</h2>
+
+<p>작년 6월, 애플이 WWDC발표에서 iOS13의 다크 모드에 대해 공식 발표를 하였고 9월에 정식 버전이 런칭되었습니다. 그 후 다크 모드를 적용한 앱 서비스들이 빠르게 등장하기 시작했습니다.</p>
+
+<p>( 안드로이드에는 2018년에 런칭된 P버전에 이미 야간 모드가 있었고, 작년에 런칭한 10(Q)버전에 다크 테마를 한층 강화했습니다. 그러나 본격적으로 다크 모드가 화두가 된 것은 단연 iOS13 출시 이후라고 볼 수 있습니다.)</p>
+
+<p><img src="/img/dark-mode-01/2_02.jpg" alt="" width="100%" height="100%" /></p>
+
+<p><a href="https://news.appstory.co.kr/plan12652">참고 : 안드로이드와 iOS의 다크 모드 비교</a></p>
+
+<p>다크 모드를 적용해야 하는 이유는 다음과 같이 다양합니다.</p>
+
+<ul>
+  <li>저시력자를 위한 접근성 향상</li>
+  <li>어두운 환경에 적합 (취침 전 휴대폰 탐색 등)</li>
+  <li>취향 (Private, Premium 감성)</li>
+  <li>배터리 절감 (OLED + 검정배경일 때)</li>
+  <li>컨텐츠 집중 (넷플릭스 등)</li>
+</ul>
+
+<p>사실 쏘카에서는 이런 모든 이유를 차치하고서라도 결국에는 다 대응할텐데 우리만 안 할 순 없다는 이유로 시작한 것이 컸습니다. → 나중에 <strong>우리만 안하면 아주 색다른 사용자 경험을 줄 수 있어 지금부터 준비해야 한다라는 결론에 이르렀어요.</strong></p>
+
+<p><img src="/img/dark-mode-01/2_03.jpg" alt="" width="50%" height="50%" style="display: block; margin: 0 auto" /></p>
+
+<p>👆 훗날 쏘카만 다크 모드를 대응하지 않았을 경우, 예상되는 쏘카 앱을 켰을 때 사용자 경험</p>
+
+<p><br />
+<br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="2-다크-모드-공부-시작">2. 다크 모드 공부 시작!</h2>
+
+<p>먼저, 다크 모드에 대해 공부하며 정리한 내용을 공유해보려고 합니다.</p>
+
+<ol>
+  <li><strong>다크 모드를 잘 설명한 가이드라인</strong>과 2. <strong>다크 모드를 적용한 앱</strong>들을 공부하고 분석하기 시작했어요.</li>
+</ol>
+
+<p>먼저 가이드라인부터 살펴볼게요!</p>
+
+<p><br /></p>
+
+<h3 id="다크-모드-가이드라인의-비교와-분석">다크 모드 가이드라인의 비교와 분석</h3>
+
+<p>여러 가지 가이드라인의 다크 모드를 공부했지만, 가장 많이 참고한 (디자이너들이 가장 믿고 보는 두 가이드라인인) <strong>구글의 Material Design</strong>과 <strong>애플의 Human Interface Guideline</strong>를 공부한 내용을 공유해보려 합니다.</p>
+
+<p>두 가지 가이드라인을 비교 분석한 뒤 동일하게 가져가고 있는 부분은 믿고 따라가고, 다르게 반영한 부분은 쏘카 앱에 적절한 방법이 어떤 것인지 추가로 고민하고 테스트해보며 더 맞는 방향으로 가져왔습니다.</p>
+
+<p>*가이드라인 참고</p>
+
+<p><strong>Material Deisgn :</strong> <a href="https://material.io/design/color/dark-theme.html">다크 테마의 컬러</a></p>
+
+<p><strong>Human Interface Guideline :</strong> <a href="https://developer.apple.com/design/human-interface-guidelines/ios/visual-design/dark-mode/](https://developer.apple.com/design/human-interface-guidelines/ios/visual-design/dark-mode/)">다크 모드에 대한 부분</a> / <a href="https://developer.apple.com/design/human-interface-guidelines/ios/visual-design/color/](https://developer.apple.com/design/human-interface-guidelines/ios/visual-design/color/)">컬러 전반에 대한 부분</a></p>
+
+<p>참고로, 애플의 HIG에 사이트에 정리된 내용은 Material만큼 자세하지 않습니다.
+iOS13 다크 모드와 그 가이드라인에 대해 공부를 더 하시려면 WWDC2019의 발표영상을 보고, 추가로 라이브러리 스케치파일을 받아서 컬러 가이드 페이지를 열어보는 것을 추천합니다.
+<a href="https://developer.apple.com/videos/play/wwdc2019/808/">WWDC 2019 다크 모드 설명 영상</a>
+<a href="https://developer.apple.com/design/resources/">iOS 라이브러리 다운받기</a></p>
+
+<p><br /></p>
+
+<h3 id="material과-hig-다크-모드-가이드라인-같은-점과-다른-점">Material과 HIG 다크 모드 가이드라인, 같은 점과 다른 점</h3>
+
+<p>두 가지 가이드 라인에서 다크 모드에서 컬러를 선정할 때 고려해야 할 가장 중요한 요소들을 뽑아서 비교, 대조해보았습니다.</p>
+
+<p><img src="/img/dark-mode-01/2_04.png" alt="" width="100%" height="100%" /></p>
+
+<p>그럼 위의 사항들에 대해 하나하나 자세히 살펴보도록 할게요.</p>
+
+<p><br /></p>
+
+<h3 id="1-컬러명과-체계--의미론적-컬러-시스템을-사용-일치">1) 컬러명과 체계 : 의미론적 컬러 시스템을 사용 (일치)</h3>
+
+<p><img src="/img/dark-mode-01/2_05.png" alt="" width="100%" height="100%" /></p>
+
+<p>의미론적 컬러를 한마디로 설명해보면 <strong>“컬러를 Hex값이 아닌 컬러가 사용되는 목적과 적용되는 UI에 따라 네이밍하고 시스템화하는 것을 의미”</strong>합니다.</p>
+
+<p>예를 들어 라이트모드 <strong>배경색에 적용되는 #FFFFFF값의 컬러 이름을 White 컬러가 아닌, Background 컬러라고 정의</strong>하는 것입니다.</p>
+
+<p>이를 iOS에서는 Semantic 컬러라고 정확히 명명하는 반면 머테리얼에서는 정확한 용어 없이 가이드라인에 녹여서 설명하고 있지만, 분명한 것은 두 가지 가이드라인 모두 의미론적으로 컬러 시스템을 사용하고 있다는 점입니다.</p>
+
+<p>*의미론적 컬러 시스템에 대한 부분은 다크 모드가 디자인시스템과 함께 갈 수밖에 없는 가장 중요한 이유이며 이번에 쏘카 프레임 컬러 시스템을 구축하면서 가장 신경 쓴 부분이기도 합니다. 그래서 “3. 그래서 왜 디자인 시스템이랑 같이 가야 한다고?” 항목에서 더 자세하게 설명할 예정입니다.</p>
+
+<p><br /></p>
+
+<h3 id="2-상단의-레이어일수록-밝은색-적용-일치">2) 상단의 레이어일수록 밝은색 적용 (일치)</h3>
+
+<p><img src="/img/dark-mode-01/2_06.png" alt="" width="100%" height="100%" /></p>
+
+<p>다크 모드에서 컬러 선정 시 중요한 부분은 두 가지 레이어가 중첩되어 표현될 때 하단과 상단의 레이어를 어떻게 구분하느냐 하는 것입니다. 라이트 모드에서는 보통 이를 그림자로 표현하는데요, 다크 모드에서는 그림자의 표현이 두드러질 수 없기 때문에 다른 방법으로 두 가지 레이어를 구분해야 할 필요가 있습니다.</p>
+
+<p>그래서 <strong>iOS와 Material은 모두 하단 기초 배경색보다 한 단계 밝은 색을 그 위의 레이어에 적용하는 방법을 사용</strong>하고 있습니다.</p>
+
+<p>단, 다른 점은 Material은 레이어가 올라가면 올라갈수록 더 밝은 색을 적용(화이트 오버레이를 깔고 그 투명도를 변형하는 방식을 선택하고 있네요)하는 반면에 HIG는 기본 배경(base)과 그 위의 한단계 높은 배경색(elevated)이 있을 뿐 그보다 더 상단 레이어에서 더 밝아지지는 않습니다.</p>
+
+<p><br /></p>
+
+<h3 id="3-배경색-불일치">3) 배경색 (불일치)</h3>
+
+<p><img src="/img/dark-mode-01/2_07.png" alt="" width="100%" height="100%" /></p>
+
+<p>다크 모드의 배경색을 두 가지 가이드라인에서 다르게 정의합니다.</p>
+
+<p><strong>머터리얼에서는 눈의 피로를 덜고 그림자의 표현을 위해 블랙보다는 짙은 회색 사용</strong>을 사용합니다.</p>
+
+<p>반면에, <strong>HIG에서는 순수 블랙(#000)을 사용했는데, 그 이유는 배경 위에 올라가는 컴포넌트 들과의 명확한 대비를 주고, 추가로 베젤과의 경계를 없애 확장된 UI경험을 주기 위함</strong>이고 설명하고 있어요.</p>
+
+<p>(iOS에서는 강력한 대비를 통한 가독성을 더 중시하였고, Material에서는 가독성 보다는 눈의 편안함을 강조하고 있다고 볼 수도 있겠네요.)</p>
+
+<p><strong>→ 그럼 쏘카의 선택은?</strong> 
+여러 가지 디바이스에 넣어 테스트해본 결과 쏘카의 컴포넌트 및 UI요소들이 모두 브랜드 컬러가 조금씩 반영된 쿨그레이 컬러여서 완전한 중립 컬러인 순수블랙보다는 쿨그레이컬러가 어울렸습니다. 그리고 다양한 디바이스에서 순수블랙보다는 그레이 컬러가 조금 더 눈에 편안하게 들어왔습니다. 그래서 쏘카의 기본 배경색은 <strong><code class="highlighter-rouge">#171B1C</code>의 진한 쿨그레이 색상</strong>으로 정하게 되었습니다.</p>
+
+<p><img src="/img/dark-mode-01/2_08.png" alt="" width="100%" height="100%" /></p>
+
+<p>하단에 보이는 것처럼 다양한 디바이스에서 배경색을 여러 가지로 넣어서 테스트해보고 기초 배경색을 선정하였습니다.</p>
+
+<p><img src="/img/dark-mode-01/2_09.jpeg" alt="" width="100%" height="100%" /></p>
+
+<p><br /></p>
+
+<h3 id="4-상단의-레이어에-그림자-적용-불일치">4) 상단의 레이어에 그림자 적용 (불일치)</h3>
+
+<p><img src="/img/dark-mode-01/2_10.png" alt="" width="100%" height="100%" /></p>
+
+<p><strong>머터리얼은 다크 모드에서도 라이트 모드와 동일하게 레이어가 상단에 올라올 때 쉐도우를 적용</strong>하였지만, <strong>HIG는 다크 모드에서는 쉐도우를 사용하지 않았어요</strong>. HIG의 설명을 보면 다크 모드에서는 쉐도우가 잘 보이지 않기 때문에 레이어의 색(앞서 얘기한 Elevated 개념)만으로 상단과 하단 레이어를 구분한다고 설명하고 있습니다.</p>
+
+<p><strong>→ 쏘카의 선택은?</strong>
+저희도 직접 폰에 넣어서 실험을 해봤는데요, 다크에서 쉐도우가 있다고 해도 크게 눈에 띄지 않았어요. 눈에 띄지 않는데 공수를 들여 그림자를 구현할 필요는 없다고 판단하여 다크 모드에서는 <strong>쉐도우 없이 가기로 했습니다</strong>.</p>
+
+<p><img src="/img/dark-mode-01/2_11.png" alt="" width="100%" height="100%" /></p>
+
+<p>여기까지 Material과 HIG의 다크 모드 가이드라인을 정리한 내용을 공유해보았는데요,</p>
+
+<p>각각의 가이드 라인에서 쏘카가 선택하여 가져 온 부분을 다시 한번 정리봅니다!</p>
+
+<p><img src="/img/dark-mode-01/2_12.png" alt="" width="100%" height="100%" /></p>
+
+<p>추가로, 두 가지 가이드라인 외에, 다크 모드가 비교적 잘 설명되어 있어 많이 참고했던 가이드라인의 링크를 첨부합니다.</p>
+
+<ul>
+  <li><a href="https://www.carbondesignsystem.com/guidelines/color/overview">IBM의 Carbon Design System</a></li>
+  <li><a href="https://spectrum.adobe.com/page/color/#Semantic-colors">Adobe의 Spectrum</a></li>
+</ul>
+
+<p><br />
+<br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="다크-모드가-적용된-앱들-탐구">다크 모드가 적용된 앱들 탐구</h2>
+
+<p>가이드라인 외에도 다크 모드가 적용된 앱들을 캡쳐해서 분석해보았습니다.</p>
+
+<p>다크 모드를 출시한 <strong>카카오페이, 익스피디아, 슬랙, 토스</strong> 등의 앱과 기본 테마가 다크 모드인 <strong>넷플릭스, 유투브 뮤직, 테드</strong> 등의 앱도 캡쳐해서 색을 스포이드로 집어보고 라이트와 다크 모드를 비교하면서 조사를 하였습니다.</p>
+
+<p><br /></p>
+
+<h3 id="1-배경색-탐구--기본-배경색과-elevated-배경색을-위주로-">1) 배경색 탐구 ( 기본 배경색과 Elevated 배경색을 위주로 )</h3>
+
+<p>먼저, 각 앱의 색 자체를 스포이드로 찍어보며 기본 배경색을 순수 블랙으로 했는지,</p>
+
+<p>최하단 배경색과 Elevated(상단) 배경색을 어느 정도의 차이로 구분했는지 등을 살펴보았습니다.</p>
+
+<p><img src="/img/dark-mode-01/2_13.png" alt="" width="100%" height="100%" /></p>
+
+<p>여러 가지 앱들을 나열하고 분석해 보니 (당연하게도) 배경색과 시스템이 모두 다 달랐습니다.</p>
+
+<p><strong>배경의 명도와 채도</strong> : 유투브 뮤직처럼 배경색을 완전한 블랙으로 한 경우도 있었고 Notion처럼 굉장히 밝은 회색을 적용한 경우도 있었어요. 또한, 순수 그레이색을 사용한 앱들과 쿨그레이를 사용한 앱의 비율도 반반 정도였습니다.</p>
+
+<p><strong>배경 레이어 색 구분</strong> : 대부분 레이어의 색상으로 상하단 레이어의 위치를 표현하고 있었는데요, 오히려 트위터는 (위에서 살펴본 대표적 가이드라인들과 다르게) elevated된  레이어에 더 어두운색을 적용한 것을 볼 수 있었습니다.</p>
+
+<p><br /></p>
+
+<h3 id="2-라이트--다크-모드의-컬러-비교">2) 라이트 : 다크 모드의 컬러 비교</h3>
+
+<p>한가지 앱에서 라이트 모드와 다크 모드의 컬러를 어떻게 대칭되게 구현했는지도 눈여겨보았어요. (뒤에서  더 자세히 설명드리겠지만, 다크 모드를 구현하기 위해서는 라이트 : 다크 모드의 컬러가 1:1로 대응되는 것이 원칙인데, 이를 어떻게 구현했는지 살펴보았습니다.)</p>
+
+<p><img src="/img/dark-mode-01/2_14.png" alt="" width="100%" height="100%" /></p>
+
+<p>각 서비스의 다크 모드 컬러를 어떻게 선정했는지 그리고 어떻게 라이트 모드 : 다크 모드 컬러를 1:1 매칭시켰는지 그 정확한 내용은 알 수 없었기에 정말 짐작만 하며 조사하였습니다.</p>
+
+<p>예상했던 결과지만, 공통으로 보이는 절대적 규칙은 없었고 각자의 앱에 맞는 방법을 채택한 것으로 짐작하였습니다. <strong>당연한 얘기지만, 우리도 쏘카앱에 맞는 우리만의 컬러 시스템을 구축하면 된다는 결론에 이르렀어요.</strong> (사실, 이게 제일 어렵죠 😂)</p>
+
+<p><br />
+<br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="3-그래서-다크-모드와-디자인-시스템-왜-같이-가야-한다고">3. 그래서 다크 모드와 디자인 시스템, 왜 같이 가야 한다고?</h2>
+
+<p>앞서 슬쩍슬쩍 언급하였지만, <strong>다크 모드를 실제 개발로 구현하기 위해서는 다크 컬러 시스템과 라이트 컬러 시스템이 1:1 대응</strong>이 되어야 합니다.</p>
+
+<p>즉 <strong>라이트 모드에서 A라고 명명한 컬러가 다크 모드의 A컬러로 대치</strong>되어야 합니다.</p>
+
+<p>이러한 1:1 대응을 위해서는 꼭 시멘틱(의미론적) 컬러 시스템이 필요한데요,</p>
+
+<p>그 이유를 설명하기 위해서 역으로 <strong>시멘틱 컬러가 없던, 쏘카프레임 구축 전의 쏘카 컬러 시스템을 반전하여 다크 모드 화면을 구현</strong>하면 어떻게 되는지 보여드리겠습니다.</p>
+
+<p><br /></p>
+
+<h3 id="기존-쏘카의-컬러-시스템">기존 쏘카의 컬러 시스템</h3>
+
+<p>쏘카프레임 구축 전, 쏘카의 컬러 시스템은 시멘틱하지 않았고</p>
+
+<p>grey01 / grey02 / grey03 / grey04 등 명도별로 나열된 이름의 컬러들이 UI에 각각 적용되어 있었습니다.</p>
+
+<p><img src="/img/dark-mode-01/2_15.png" alt="" width="100%" height="100%" /></p>
+
+<p>그럼 단순하게 생각해서, 다크 모드를 적용하기 위해서 이를 정확히 반전하여 그대로 다크 모드 적용하면 되지 않을까 하는 생각이 들 수 있을 겁니다. 그래서 제가 한번 그렇게 해보았습니다!</p>
+
+<p>먼저 쏘카의 기존 컬러 스케일을 상황과 이를 1:1 반전하면 아래와 같이 됩니다.</p>
+
+<p><img src="/img/dark-mode-01/2_16.png" alt="" width="100%" height="100%" /></p>
+
+<p>이를 그대로 1:1 반전하여 화면에 적용해보았습니다.</p>
+
+<p><img src="/img/dark-mode-01/2_17.png" alt="" width="100%" height="100%" /></p>
+
+<p>그 결과 위와 같이 무서운 화면이 만들어집니다! (다크 모드 화면을 보세요.)</p>
+
+<p>태그 안에 글자는 보이지 않게 되고, 변경하기 등의 중요 텍스트도 마치 비활성 상태처럼 보이게 됩니다.</p>
+
+<p><br /></p>
+
+<h3 id="그렇다면-어떻게-해야-할까">그렇다면 어떻게 해야 할까?</h3>
+
+<p>그래서 라이트모드와 다크 모드 1:1 대응을 하기 위해서는 Hex값이나 명도로 네이밍 된 컬러가 아닌,</p>
+
+<p>각각의 요소들과 목적에 맞는 시멘틱한 이름의 컬러 체계를 다시 구축해야 합니다.</p>
+
+<p>즉, grey01 ↔  grey01 컬러가 아닌,</p>
+
+<p>background ↔  background 컬러와 매칭해야 하는 것이죠.</p>
+
+<p>그 결과, 1:1 반전 시 아래와 같이 예쁜 다크 모드 화면을 볼 수 있습니다.</p>
+
+<p><img src="/img/dark-mode-01/2_18.png" alt="" width="100%" height="100%" /></p>
+
+<p><strong>다크 모드 화면이 훨씬 정리되어 보이죠? (체감이 잘 안 되신다면, 올라가서 이전 이미지와 비교해보시길 추천드립니다)</strong></p>
+
+<p><br /></p>
+
+<h3 id="다크-모드를-위해-시멘틱-컬러-시스템은-선택이-아닌-필수">다크 모드를 위해 시멘틱 컬러 시스템은 선택이 아닌 필수!</h3>
+
+<p>물론 시멘틱한 컬러 시스템은 다크 모드를 위해서 뿐만 아니라, 컬러의 관리와 유지보수를 쉽게 하기 위해서 필요한 체계이기도 합니다. <strong>하지만 이런 시멘틱 컬러 시스템이 다크 모드 도입을 위해서는 선택이 아닌 필수가 되는 것이죠.</strong></p>
+
+<p>즉, 쏘카에서는 다크 모드를 위해서라도 기존에 시멘틱하지 않았던 쏘카의 컬러 시스템 자체를 재구축 해야한다는 결론을 얻었습니다.</p>
+
+<p>마침 저희는 디자인 시스템 구축을 검토하고 있었고. 그러면 <strong>디자인 시스템 구축을 하면서 첫걸음으로 컬러 시스템을 재정비해 다크 모드를 위한 발판을 마련하자는 결론</strong>을 내렸습니다.</p>
+
+<p>나아가, 파운데이션 이후 구축할 컴포넌트에서도 다크 모드 컬러 시스템을 적용한 다크 모드 컴포넌트를 라이트 모드의 컴포넌트와 한 쌍으로 만드는 토대가 되었습니다.</p>
+
+<p><img src="/img/dark-mode-01/2_19.png" alt="" width="100%" height="100%" /></p>
+
+<p><strong>다크 모드 tf 채널 안녕</strong> 👋</p>
+
+<p><br />
+<br /></p>
+
+<hr />
+
+<p><br /></p>
+
+<h2 id="여기까지-따라오시느라-고생하셨습니다-">여기까지 따라오시느라 고생하셨습니다! 👏</h2>
+
+<p>정리/요약하면서 이번 글을 마무리해 볼게요.</p>
+
+<p>쏘카에서는 iOS13 런칭에 발맞추어 다크 모드 공부를 시작했습니다.</p>
+
+<p>각종 가이드라인과 다크 모드가 적용된 앱들을 분석해서 쏘카에 어떤 가이드라인을 구축하면 좋을지 탐구하였는데요, 이렇게 다크 모드 공부를 진행하면서 다크 모드 구현을 위해서는 기존 컬러 시스템을 뒤엎고 시멘틱한 컬러 시스템으로 재구축해야 한다는 사실을 깨달았습니다.</p>
+
+<p>그래서 디자인 시스템의 첫 걸음으로 다크 모드를 고려한 시멘틱 컬러 시스템을 구축하게 되었습니다!</p>
+
+<p><strong>그래서 도대체 이렇게 공부한 내용을 쏘카의 컬러 시스템에 어떻게 녹인지 궁금하시죠?</strong></p>
+
+<p><strong>다음 글에서는 다크 모드에 대해 공부하고 탐구해본 내용을 바탕으로 실제로 어떻게 쏘카앱의 컬러 시스템을 정리하고 개발하였는지 자세히 살펴보도록 할게요.</strong></p>
+
+<p>단합이 잘되던 다크 모드 선행 연구 멤버의 모습을 첨부하며 마무리해봅니닷 😃</p>
+
+<p><img src="/img/dark-mode-01/2_20.png" alt="" width="50%" height="50%" style="display: block; margin: 0 auto" /></p>
+
+<p><br /></p>
+
+<h3 id="쏘카-프로덕트-디자인팀의-영상--글-모음">쏘카 프로덕트 디자인팀의 영상 &amp; 글 모음</h3>
+<ul>
+  <li>네이버 테크톡에서 진행한 <a href="https://tv.naver.com/v/15842187"><strong>“쏘카프레임 구축 배경과 과정”</strong> 발표 영상</a></li>
+  <li><a href="https://tech.socarcorp.kr/design/2020/06/23/socar-design-system-01.html"><strong>[SOCAR FRAME 만들기 #1] 쏘카의 디자인 시스템 맛보기</strong></a></li>
+  <li><a href="https://tech.socarcorp.kr/design/2020/07/10/dark-mode-01.html"><strong>[SOCAR FRAME 만들기 #2] 다크 모드 받고 디자인 시스템 더블로 가!</strong> (1탄)</a>(현재 글)</li>
+  <li><a href="https://tech.socarcorp.kr/design/2020/07/22/dark-mode-02.html"><strong>[SOCAR FRAME 만들기 #2] 다크 모드 받고 디자인 시스템 더블로 가!</strong> (2탄)</a></li>
+  <li><a href="https://tech.socarcorp.kr/design/2020/07/31/component-01.html"><strong>[SOCAR FRAME 만들기 #3] 컴포넌트, 제대로 만들어 쉽게 쓰자!</strong> (1탄)</a></li>
+  <li><a href="https://tech.socarcorp.kr/design/2020/09/08/component-02.html"><strong>[SOCAR FRAME 만들기 #3] 컴포넌트, 제대로 만들어 쉽게 쓰자!</strong> (2탄)</a></li>
+</ul>
+
+
+        <hr>
+
+        <div class="clearfix">
+
+          
+          <a class="btn btn-primary float-left" href="/design/2020/06/23/socar-design-system-01.html" data-toggle="tooltip" data-placement="top" title="[SOCAR FRAME 만들기 #1] 쏘카의 디자인 시스템 맛보기">&larr; Previous<span class="d-none d-md-inline">
+              Post</span></a>
+          
+          
+          <a class="btn btn-primary float-right" href="/design/2020/07/22/dark-mode-02.html" data-toggle="tooltip" data-placement="top" title="[SOCAR FRAME 만들기 #2] 다크 모드 받고 디자인 시스템 더블로 가! (2탄)">Next<span class="d-none d-md-inline">
+              Post</span> &rarr;</a>
+          
+
+        </div>
+
+        <div>
+          <p class="recuit">쏘카는 언제나 쏘카 서비스를 함께 만들며 기술적인 문제를 함께 풀어나갈 능력있는 개발자/디자이너/기획자/데이터 사이언티스트 등을 모시고 있습니다. 자세한 내용은 <a href="https://bit.ly/SOCAR-RECRUIT">쏘카 채용공고 페이지</a>를 확인 부탁드립니다 :)</p>
+        </div>
+
+      </div>
+    </div>
+    <!-- disqus comments -->
+    
+      <div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://socar-tech.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    
+  </div>
+
+  <!-- Footer -->
+
+<hr>
+
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-md-10 mx-auto">
+        <ul class="list-inline text-center">
+          
+          
+          
+          <li class="list-inline-item">
+            <a href="https://www.facebook.com/socarsharing">
+              <span class="fa-stack fa-lg">
+                <i class="fas fa-circle fa-stack-2x"></i>
+                <i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i>
+              </span>
+            </a>
+          </li>
+          
+          
+          
+        </ul>
+        <p class="copyright text-muted">Copyright &copy; SOCAR 2021</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+  <script src="/assets/vendor/jquery/jquery.min.js"></script>
+<script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/assets/vendor/startbootstrap-clean-blog/js/clean-blog.min.js"></script>
+
+<script src="/assets/scripts.js"></script>
+<script src="/assets/mermaid-8.2.3.js"></script>
+
+
+
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-30551922-27"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-30551922-27');
+</script>
+
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-MZ79TFM');</script>
+<!-- End Google Tag Manager -->
+
+
+</body>
+
+</html>
