@@ -64,7 +64,7 @@ tags:
 
 ### 자유로운 통합 데이터 분석 환경 만들기
 
-![](/img/what-socar-data-engineering-team-does/datalake-pipeline.png))
+![](/img/what-socar-data-engineering-team-does/datalake-pipeline.png){: width="100%"}
 
 데이터 엔지니어링팀의 첫 번째 고민은 어떻게 하면 자유로운 통합 데이터 분석 환경을 만들 수 있을 것인가에 대한 것입니다.  
 보통 IT 서비스 회사들은 서비스를 먼저 배포, 운영한 후에 사업적 고도화를 위해 데이터 분석을 시도해보려고 합니다.  
@@ -106,17 +106,17 @@ tags:
 
 필요한 데이터를 가져오는게 너무 복잡하거나 데이터가 외부에 있어 크롤링이 필요한 경우 관련 코드를 직접 작성하기도 합니다. 이 경우 처리 속도, 메모리 사용량 등의 컴퓨팅 리소스와 코드의 가독성, 재사용성 등의 지속 가능한 개발을 고려하며 모듈을 개발합니다. 이러한 모듈은 팀 내 리뷰를 거쳐 메인 코드 저장소(Github)에서 관리되고 있습니다.
 
-![](/img/what-socar-data-engineering-team-does/datalake-diagram.001.jpeg)
+![](/img/what-socar-data-engineering-team-does/datalake-diagram.001.jpeg){: width="100%"}
 
 데이터 파이프라인은 Apache Airflow 의 DAG 코드(파이썬 코드)를 작성함으로써 만들 수 있습니다. Airflow 에서는 기본적으로 데이터 파이프라인 작성을 위한 [여러 클래스와 함수들(Operator)](https://airflow.apache.org/docs/apache-airflow/1.10.14/_api/airflow/operators/index.html)을 제공해줍니다. 이 클래스와 함수들을 적절히 이용하거나 직접 필요한 모듈을 작성하여 파이프라인을 구성합니다.
 
-![](/img/what-socar-data-engineering-team-does/airflow.jpg)
+![](/img/what-socar-data-engineering-team-does/airflow.jpg){: width="100%"}
 
 단순히 데이터를 한 군데로 모으는 것을 넘어서, 사내에서 자주 사용되는 **데이터를 별도로 정제 및 집계하여 일종의 데이터 마트로 만들기도 합니다.** 쏘카의 "SODA Store" 가 바로 그 대표적인 예입니다. SODA Store 는 SOCAR Data Store 의 약자로 쏘팸(쏘카 직원)들이 내부의 복잡한 데이터를 쉽고 편하게 조회할 수 있도록 만든 데이터 마트입니다.
 
 SODA Store 가 등장 하기 전에는 원하는 차량 예약 관련 데이터를 보려면 쿼리가 500줄이 넘곤 했습니다. 누군가가 이 데이터를 보려면 이 500줄 짜리 쿼리를 직접 짜거나 다른 팀원에게 전달받아야만 했죠. 이에 전사적으로 구성원들이 자주 조회하는 결과 테이블을 미리 만들어두게 되었고, 이 결과로 SODA Store 가 등장하게 되었습니다. 500줄 짜리가 아닌 1줄 짜리 쿼리로도 이제는 필요한 데이터를 빠르게 조회할 수 있습니다. 또한 쏘카 서비스 내의 필요한 데이터를 찾기 위해 힘들게 모든 테이블을 살펴보지 않고, 이 SODA Store 에서 우선적으로 필요한 데이터를 찾아볼 수 있습니다. 데이터 탐색 시간은 줄어들고, 사용법도 편해졌습니다. 쏘카 직원이라면 누구나 쉽게 이 데이터 마트를 통해, 필요한 데이터를 볼 수 있습니다. 
 
-![](/img/what-socar-data-engineering-team-does/datamart.png)
+![](/img/what-socar-data-engineering-team-does/datamart.png){: width="100%"}
 
 정리하면, 데이터 엔지니어링 팀은 **서비스 내 이곳저곳 에서 생기는 데이터를 , 정해진 시간에 한 군데로 모아두는 작업**을 담당합니다. 또한 더 쉽게 데이터를 조회할 수 있도록 데이터 마트를 만들어둡니다. 쉽고 부담없이 데이터를 조회하고 분석, 개발할 수 있는 환경을 지속적으로 만들어 나가는 것이 데이터 엔지니어링팀의 미션입니다.
 
@@ -126,7 +126,7 @@ SODA Store 가 등장 하기 전에는 원하는 차량 예약 관련 데이터�
 
 ### 데이터 지표와 보고서 만들기
 
-![](/img/what-socar-data-engineering-team-does/data-report-pipeline.png)
+![](/img/what-socar-data-engineering-team-does/data-report-pipeline.png){: width="100%"}
 
 데이터 엔지니어링 팀의 두 번째 업무는 **분석 환경 구축을 넘어 실제 비즈니스 목적을 가진 분석 지표와 보고서를 만드는 일**입니다. 이 보고서들은 실제 도메인 담당자들이 의사결정을 하는데 사용됩니다. "이전 달 손익 지표 보고서", "최근 일주일 간 사전 가동률 보고서" 등이 대표적인 예입니다.  
 
@@ -157,7 +157,7 @@ SODA Store 가 등장 하기 전에는 원하는 차량 예약 관련 데이터�
 
 ### 데이터 기반의 백엔드 서비스 개발 및 운영
 
-![](/img/what-socar-data-engineering-team-does/backend.png)
+![](/img/what-socar-data-engineering-team-does/backend.png){: width="100%"}
 
 데이터 그룹 내에서 발생한 **분석 및 모델링 결과를 빠르게 서비스에 반영하기 위해 실제 서비스와 연결되는 백엔드 서비스 역시 데이터 엔지니어링 팀이 담당하고 있습니다.** 쏘카의 "대여 가격 시스템", "면책 요금 시스템", "차량 파손 탐지 시스템" 이 그 대표적인 예입니다. 이 시스템들은 MSA 형태로, 쏘카 서비스의 필요한 모든 것을 구현하는 것이 아니라, 데이터 기반 의사결정이 필요한 도메인 로직만 분리/담당하여 처리합니다.
 
@@ -187,7 +187,7 @@ SODA Store 가 등장 하기 전에는 원하는 차량 예약 관련 데이터�
 
 ### 데이터 그룹의 인프라/리소스 관리
 
-![](/img/what-socar-data-engineering-team-does/infra.png)
+![](/img/what-socar-data-engineering-team-does/infra.png){: width="100%"}
 
 쏘카 데이터그룹은 빅쿼리를 통한 분석 작업이 많다보니 자연스럽게 Google Cloud Platform 의 managed service 를 다양하게 사용하고 있습니다 (PubSub, Cloud Function, Dataproc, Dataflow, Data Studio 등). GCP와 관련된 인프라 구축은 쏘카 인프라팀의 도움을 받지만, 실 서비스 운영 및 관리는 데이터 엔지니어링팀이 주로 담당하고 있습니다.
 
@@ -210,7 +210,7 @@ SODA Store 가 등장 하기 전에는 원하는 차량 예약 관련 데이터�
 
 ## 정리
 
-![](/img/what-socar-data-engineering-team-does/all-in-one-diagram.png)
+![](/img/what-socar-data-engineering-team-does/all-in-one-diagram.png){: width="100%"}
 
 데이터 엔지니어링팀의 업무를 정리하면 다음과 같습니다.
 
