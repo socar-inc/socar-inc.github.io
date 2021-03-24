@@ -2,7 +2,7 @@
 layout: post
 title: "쏘카 데이터 그룹 - 데이터 엔지니어링 팀이 하는 일"
 subtitle: "데이터 엔지니어는 무슨 일을 할까?"
-date: 2021-03-25 14:00:00 +0900
+date: 2021-03-24 18:00:00 +0900
 category: data
 background: '/assets/images/juri-noga-Nt-lInxgFaw-unsplash.jpg'
 author: hardy
