@@ -1,7 +1,7 @@
 ---
 layout: post
-title: "쏘카 데이터 그룹 - 데이터 엔지니어는 무슨 일을 할까?"
-subtitle: "쏘카 데이터 엔지니어링 팀이 하는 일"
+title: "쏘카 데이터 그룹 - 데이터 엔지니어링 팀이 하는 일"
+subtitle: "데이터 엔지니어는 무슨 일을 할까?"
 date: 2021-03-25 14:00:00 +0900
 category: data
 background: '/assets/images/juri-noga-Nt-lInxgFaw-unsplash.jpg'
@@ -36,6 +36,8 @@ tags:
 - 앞으로 목표와 할 일들
 
 <br>
+
+---
 
 ## 데이터 그룹과 데이터 엔지니어링 팀
 
@@ -235,8 +237,6 @@ SODA Store가 등장하기 전에는 원하는 차량 예약 관련 데이터를
 <br>
 
 ## 앞으로 목표와 할 일들
-
-<br>
 
 ### GKE 환경과 Airflow on GKE
 
