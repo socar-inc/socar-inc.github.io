@@ -261,4 +261,4 @@ SODA Store가 등장하기 전에는 원하는 차량 예약 관련 데이터를
 
 ---
 쏘카 데이터 엔지니어링 팀은 채용 중입니다.  
-[쏘카(SOCAR) - 데이터 엔지니어](https://www.notion.so/socarcorp/49ab9563632a4fa9a24b091abaeecda1)
+[쏘카(SOCAR) - 데이터 엔지니어](http://bit.ly/socar-data-engineer-recruitement)
