@@ -2,29 +2,37 @@
 @import "../assets/vendor/startbootstrap-clean-blog/scss/clean-blog.scss";
 
 .mermaid {
-    border: 1px solid;
-    border-radius: 10px;
-    padding: 20px;
-    margin-top: 10px;
-    margin-bottom: 10px;
+  border: 1px solid;
+  border-radius: 10px;
+  padding: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 hr {
-    margin-top: 20px;
-    margin-bottom: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 .photo-copyright {
-    font-size: 14px;
-    text-align: right;
-     margin-bottom: 50px;
-     > a {
-         font-weight: bold;
-     }
+  font-size: 14px;
+  text-align: right;
+  margin-bottom: 50px;
+  > a {
+    font-weight: bold;
+  }
 }
 
 .recuit {
-    font-size: 17px;
-    font-weight: bold;
-    color: gray;
+  font-size: 17px;
+  font-weight: bold;
+  color: gray;
+}
+
+blockquote {
+  font-style: normal;
+  background-color: #fafafa;
+  padding: 10px 40px;
+  font-size: 0.9em;
+  border-left: 4px solid #e6e6e6;
 }
