@@ -12,14 +12,20 @@ layout: default
     <div class="container">
       <div class="row">
         <div class="col-lg-10 col-md-10 mx-auto">
+          <div>
+            {{ page.date | date: '%Y년 %m월 %d일' }}
+          </div>
           <div class="post-heading">
             <h1>{{ page.title }}</h1>
+            {% if site.description %}
+            <span class="subheading">{{ site.description }}</span>
+            {% endif %}
             {% if page.subtitle %}
             <h2 class="subheading">{{ page.subtitle }}</h2>
             {% endif %}
-            <span class="meta">Posted by
+            <span class="meta">
               <a href="#">{% if page.author %}{{ page.author }}{% else %}{{ site.author }}{% endif %}</a>
-              on {{ page.date | date: '%B %d, %Y' }} &middot; {% include read_time.html
+               &middot; {% include read_time.html
               content=page.content %}
             </span>
           </div>

@@ -7,6 +7,9 @@ background: '/assets/images/home-bg-main-1.png'
 {% for post in paginator.posts %}
 
 <article class="post-preview">
+  <div>
+    {{ post.date | date: '%Y년 %m월 %d일' }}
+  </div>
   <a href="{{ post.url | prepend: site.baseurl | replace: '//', '/' }}">
     <h2 class="post-title">{{ post.title }}</h2>
     {% if post.subtitle %}
@@ -15,13 +18,13 @@ background: '/assets/images/home-bg-main-1.png'
     <h3 class="post-subtitle">{{ post.excerpt | strip_html | truncatewords: 15 }}</h3>
     {% endif %}
   </a>
-  <p class="post-meta">Posted by
+  <p class="post-meta">
     {% if post.author %}
     {{ post.author }}
     {% else %}
     {{ site.author }}
     {% endif %}
-    on {{ post.date | date: '%B %d, %Y' }} &middot; {% include read_time.html content=post.content %}
+     &middot; {% include read_time.html content=post.content %}
   </p>
 </article>
 
