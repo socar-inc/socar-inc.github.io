@@ -1,7 +1,8 @@
 ---
 layout: page
-title: Tags
+title: Tags 🏷
 permalink: /tags/
+background: '/assets/images/home-bg-main-1.png'
 ---
 
 {% if site.posts.size == 0 %}
@@ -9,17 +10,21 @@ permalink: /tags/
 {% endif %}
 
 <div class="tags">
-  <ul class="label">
+  <h1>태그 목록</h1>
+  <div class="label">
     {% for tag in site.tags %}
-    <li>
+    <div class="tag-anchor">
       <a href="#{{ tag[0] }}">
         <span>{{ tag[0] }}</span>
-        <span class="count">{{ tag[1] | size }}</span>
       </a>
-    </li>
+    </div>
     {% endfor %}
-  </ul>
+  </div>
 
+  <hr>
+
+  <h1>글 목록</h1>
+  <div class="tagged-posts">
   {% for tag in site.tags %}
     <h2 id="{{ tag[0] }}">
       {{ tag[0] }}
@@ -41,4 +46,5 @@ permalink: /tags/
       {% endfor %}
     </ul>
   {% endfor %}
+</div>
 </div>

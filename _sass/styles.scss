@@ -36,3 +36,24 @@ blockquote {
   font-size: 0.9em;
   border-left: 4px solid #e6e6e6;
 }
+
+.tags {
+  .label {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 2rem 0;
+
+    .tag-anchor {
+      display: flex;
+      padding: 0 1rem;
+      margin: 0.5rem 0;
+      margin-right: 0.5rem;
+      background-color: lightgrey;
+      border-radius: 0.5rem;
+      font-weight: bold;
+    }
+  }
+  .tagged-posts {
+    padding: 2rem 0;
+  }
+}
