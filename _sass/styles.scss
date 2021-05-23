@@ -36,3 +36,33 @@ blockquote {
   font-size: 0.9em;
   border-left: 4px solid #e6e6e6;
 }
+
+.post-preview {
+  .post-preview-date {
+    font-size: 0.9rem;
+  }
+
+  .post-title {
+    margin-top: 0.5rem !important;
+  }
+}
+
+.clearfix {
+  a {
+    border-radius: 0.5rem;
+    border-color: unset;
+    background-color: #00b8ff;
+  }
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  img {
+    margin-right: 0.5rem;
+  }
+
+  font-size: 2rem;
+}
