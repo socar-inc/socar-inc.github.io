@@ -63,6 +63,7 @@ tags:
 ### 실제 사용 예시
 * 개발자간 공유를 위한 insert 쿼리
   * notion 문서에 올려 두고 공통코드를 변경한 개발자가 직적 해당 sql을 수정 후 팀내에 코드가 변경된 사실을 공유 하는 방식으로 관리.
+
 ```sql
 # 코드그룹 생성
 INSERT INTO `code_group` (`name`, `prefix`, `description`)
@@ -74,8 +75,10 @@ VALUES
     ('SETTLEMENT_TYPE', 'STLTP_AUTO', '자동', '', 0),
     ('SETTLEMENT_TYPE', 'STLTP_MANUAL', '수동', '', 1);
 ```
+
 * 생성된 kotlin enum 코드
   * 공통코드를 변경한 개발자가 generator를 돌려서 kotlin 코드를 생성 후 git에 commit.
+
 ```kotlin
 object Codes {
     // ... other codes ...
@@ -91,7 +94,9 @@ object Codes {
     // ... other codes ...
 }
 ```
+
 * vue.js에서 사용
+
 ```js
 // 공통코드 가져오기
 const codes = await CodeApi.getByGroups(['SETTLEMENT_TYPE']]);
@@ -135,6 +140,7 @@ getCodeLabel = (codes, value) => {
 * kotlin 코드를 `reflection`해서 필요한 코드를 추출해서 기존 DB에서 조회해서 반환하던 response와 동일한 값을 내려줍니다.
   * `실제 사용예시`에 있는 `object Codes {}`에 확장함수(`getCodes`)를 하나 붙여줍니다.
   * 대/소문자나 camelCase / snake_case 변환이 필요한 부분은 [google guava](https://github.com/google/guava)의 `CaseFormat`를 활용했습니다.
+
 ```kotlin
 data class Code(
     val id: Int,
@@ -184,6 +190,7 @@ fun Codes.getCodes(groups: List<String>): Any {
 
 ### kotlin 코드를 파싱해서 javascript에서 사용할 공통코드 생성하는 gradle plugin을 만듭니다.
 * reflection은 이미 class가 로딩된 이후에 [kotlin의 KClass](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-class/)나 [java의 Class](https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html)를 사용하지만 Kotlin PSI의 경우는 전혀 다른 클래스들을 활용하고 별도의 dependency도 필요합니다.
+
 ```groovy
 implementation "org.jetbrains.kotlin:kotlin-compiler:1.5.0"
 implementation "org.jetbrains.kotlin:kotlin-compiler-embeddable:1.5.0"
@@ -254,6 +261,7 @@ try {
 ### 만들어진 gradle plugin 이렇게 동작합니다.
 * gradle plugin을 적용하고 아래 설정을 추가하면 gradle task(`generate<설정 이름(아래 설정기준management)>Code` 유형의 이름으로 생성됨)가 자동으로 추가됩니다.
   * 각 프로젝트의 공통코드 파일(위의 `생성된 kotlin enum 코드` ~~하지만 이제 공통코드 변경시 직접 수정되고 있는~~)의 절대경로와 javascript 파일을 생성할 절대경로를 전달합니다.
+
 ```groovy
 codeJavascriptGenerator {
     management {
@@ -266,6 +274,7 @@ codeJavascriptGenerator {
 * 공통코드가 수정되면 `./gradlew :<project>:generateManagementCode`를 실행해 주면 javascript에서 사용 할 공통코드 파일이 생성(갱신)됩니다.
 
 ### 생성된 `typescript` 코드
+
 ```ts
 export interface Code {
   id: number | string,
@@ -314,6 +323,7 @@ export default {
 
 ### javascript(typescript)에서 생성된 공통코드파일 사용은 이렇게 하고있습니다.
 * vue.js에서 사용
+
 ```js
 // 공통코드 가져오기
 import Codes from `/codes`;
