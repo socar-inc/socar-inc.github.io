@@ -22,6 +22,7 @@ tags:
 ```
 
 신규 프로젝트 설계 과정에서 공통코드를 관리를 위해 어떤 시도를 했고 지금까지 어떻게 보완해 왔는지 정리해 볼까합니다.
+<br>
 
 ## 들어가기 앞서...
 사실 공통코드 관리를 어떻게 하면 되느냐?에 대한 결론부터 말씀드리면 `정답은 없다`라고 생각합니다.
@@ -81,7 +82,6 @@ VALUES
     ('SETTLEMENT_TYPE', 'STLTP_AUTO', '자동', '', 0),
     ('SETTLEMENT_TYPE', 'STLTP_MANUAL', '수동', '', 1);
 ```
-<br>
 
 * 생성된 kotlin enum 코드
   * 공통코드를 변경한 개발자가 generator를 돌려서 kotlin 코드를 생성 후 git에 commit.
@@ -101,7 +101,6 @@ object Codes {
     // ... other codes ...
 }
 ```
-<br>
 
 * vue.js에서 사용
 
@@ -119,7 +118,6 @@ getCodeLabel = (codes, value) => {
   return code.label;
 };
 ```
-<br>
 
 ### 이런게 불편해요.
 1. 공통코드 변경시마다 신경써야 할 것들이 너무 많습니다.
@@ -128,7 +126,7 @@ getCodeLabel = (codes, value) => {
    * kotlin 코드를 git에 commit
    * 코드 변경된 사항을 팀원에게 공유.
    * 다른 팀원들은 로컬 DB에 추가된 코드 추가 & git pull
-2. `1.` 절차가 너무 복잡해서 에러를 만나는 경우가 많습니다.
+2. `1.`의 절차가 너무 복잡해서 에러를 만나는 경우가 많습니다.
    * kotlin enum 코드와 DB의 값이 서로 달라서 에러 발생.
      * A개발자가 공통코드 변경이 필요한 개발건을 진행하고 그 코드가 머지된 이후 다른 pull을 받은 후 이어서 다른 개발을 진행하려고 할때 로컬 DB에는 아직 신규 코드가 추가 되지 않아 매번 에러를 확인 후 notion에 있는 변경된 insert 쿼리를 로컬 DB에 실행 하게됩니다.
 3. `javascript 공통코드 값 비교` 할때 문자열로 쓰는게 맘에 안듭니다.
@@ -199,6 +197,7 @@ fun Codes.getCodes(groups: List<String>): Any {
 
 ## (3차) javascript에서 쓸 코드도 생성해 봅시다.
 * **덧. 글이 너무 길어질거 같아 `gradle plugin 만드는 방법 및 사용방법`은 생략된 부분이 많습니다. 대략적인 작업 흐름을 알 수 있는 정도로 작성하였습니다.**
+
 <br>
 
 ### DB가 사라졌으니 kotlin 코드를 분석해서 javascript 코드를 생성해 봅시다.
@@ -215,7 +214,7 @@ fun Codes.getCodes(groups: List<String>): Any {
 implementation "org.jetbrains.kotlin:kotlin-compiler:1.5.0"
 implementation "org.jetbrains.kotlin:kotlin-compiler-embeddable:1.5.0"
 ```
-* 위에 있는 `생성된 kotlin enum 코드`에 있는 kotlin code를 파싱하는 코드의 대략적인 구조입니다. (실제 실행되는 코드에서 일부를 발췌한 코드라 실행은 안됩니다.)
+* 위에 있는 `생성된 kotlin enum 코드`에 있는 kotlin code를 파싱하는 코드의 대략적인 구조입니다. (**실제 실행되는 코드에서 일부를 발췌한 코드라 바로 실행은 안됩니다.**)
   * javascript / typescript 코드 생성은 문법에 맞게 문자열을 생성 후 파일로 저장했습니다.
 
 ```kotlin
@@ -270,14 +269,13 @@ try {
     }
 
     codes?.let {
-        // write javascript(or typescript) file
+        // TODO: write javascript(or typescript) file
     } ?: throw IllegalStateException("please check Codes.kt file.")
 } catch (e: Exception) {
     e.printStackTrace()
 } finally {
     disposable.dispose()
 ```
-<br>
 
 ### 만들어진 gradle plugin 이렇게 동작합니다.
 * gradle plugin을 적용하고 아래 설정을 추가하면 gradle task(`generate<설정 이름(아래 설정기준management)>Code` 유형의 이름으로 생성됨)가 자동으로 추가됩니다.
@@ -293,9 +291,9 @@ codeJavascriptGenerator {
 ```
 
 * 공통코드가 수정되면 `./gradlew :<project>:generateManagementCode`를 실행해 주면 javascript에서 사용 할 공통코드 파일이 생성(갱신)됩니다.
-<br>
 
 ### 생성된 `typescript` 코드
+* kotlin에서 `Codes object`를 사용하는것과 최대한 동일하게 사용 할 수 있도록 코드를 생성했습니다.
 
 ```ts
 export interface Code {
@@ -342,10 +340,8 @@ export default {
     // other codes...
 }
 ```
-<br>
 
 ### javascript(typescript)에서 생성된 공통코드파일 사용은 이렇게 하고있습니다.
-* vue.js에서 사용
 
 ```js
 // 공통코드 가져오기
@@ -363,7 +359,7 @@ const label = find(Codes.settlementType.values, { name: value }).label;
 ---
 
 ## 마무리하며...
-* 서두에 밝혔듯이 `공통코드 관리방법에 정답은 없습니다.` 저희팀도 아직 
+* 서두에 밝혔듯이 `공통코드 관리방법에 정답은 없습니다.` ~~저희팀도 (4차)수정을 감행 할 수도있습니다.~~
 * 저희팀은 이런 과정을 거쳐서 이렇게 사용하고 있다라는 경험을 공유드리는 것뿐 당연히 이 방법도 정답은 아닙니다.
 * **`DB - 서버 - 프론트엔드`에 걸쳐서 공통코드를 어떤식으로 관리할지 고민하시는 분들에게 조금의 참고가 되었으면 좋겠습니다.**
 * `gradle plugin 만드는 과정`은 이 글 주제에서는 중요도가 낮은거 같아 대략적인 내용만 적었습니다.
