@@ -4,7 +4,7 @@ title: "팀내 공통코드 관리 변천사"
 subtitle: "공통코드를 어떻게 관리 및 사용 할 것인가? (feat. gradle plugin & kotlin psi)"
 date: 2021-05-27 09:25:00 +0900
 category: data
-background: '/assets/images/juri-noga-Nt-lInxgFaw-unsplash.jpg'
+background: '/assets/images/yan-ots-FF14FKgecyM-unsplash.jpg'
 author: dorma
 comments: true
 tags:
