@@ -92,7 +92,7 @@ object Codes {
 }
 ```
 * vue.js에서 사용
-```javascript
+```js
 // 공통코드 가져오기
 const codes = await CodeApi.getByGroups(['SETTLEMENT_TYPE']]);
 
@@ -262,10 +262,11 @@ codeJavascriptGenerator {
     }
 }
 ```
+
 * 공통코드가 수정되면 `./gradlew :<project>:generateManagementCode`를 실행해 주면 javascript에서 사용 할 공통코드 파일이 생성(갱신)됩니다.
 
 ### 생성된 `typescript` 코드
-```typescript
+```ts
 export interface Code {
   id: number | string,
   group: string,
@@ -313,7 +314,7 @@ export default {
 
 ### javascript(typescript)에서 생성된 공통코드파일 사용은 이렇게 하고있습니다.
 * vue.js에서 사용
-```javascript
+```js
 // 공통코드 가져오기
 import Codes from `/codes`;
 
