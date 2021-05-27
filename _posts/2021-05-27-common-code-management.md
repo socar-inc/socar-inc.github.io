@@ -28,8 +28,13 @@ tags:
 
 비슷한 고민을 하시는 분들에게 저희팀의 시행착오가 참고가 될 수 있을까 해서 저희팀이 공통코드 처리를 위해 어떤 고민을 하고 어떤 방법으로 불편한 점을 해소했는지에 대한 기록을 적어볼까 합니다.
 
+<br>
 ---
+<br>
+
 ## (1차) 일단 구조를 결정하고 만들어봤습니다.
+
+<br>
 
 ### 팀에서 처음 결정한 내용들
 1. 코드를 어떻게 분류 할 것인가?
@@ -49,7 +54,9 @@ tags:
    * `부모코드`는 이름과 함께 `5자리의 PREFIX`를 부여
    * `자식코드`는 `PREFIX_XXX` 형태의 이름을 사용
    * 대문자 사용.
-  
+
+<br>
+
 ### 결정의 배경
 1. [MySQL의 enum 단점](https://velog.io/@leejh3224/%EB%B2%88%EC%97%AD-MySQL%EC%9D%98-ENUM-%ED%83%80%EC%9E%85%EC%9D%84-%EC%82%AC%EC%9A%A9%ED%95%98%EC%A7%80-%EB%A7%90%EC%95%84%EC%95%BC-%ED%95%A0-8%EA%B0%80%EC%A7%80-%EC%9D%B4%EC%9C%A0)이 많으니 사용하지 말고 `문자열`로 씁시다.
    * enum의 순서 변경이 있을 경우 테이블이 잠기고 시간이 데이터의 양에 따라 기하급수적으로 늘어날 수 있습니다.
@@ -59,6 +66,8 @@ tags:
    * `javascript` 쪽은 서버에서 코드 조회를 위한 API를 만들어 두고 조회해서 사용하기로 했습니다. 하지만 실제 코드 값을 바로 사용할 때는 값을 바로 문자열로 사용 하기로 했습니다. 
      * `javascript`에서도 kotlin의 enum처럼 상수로 선언해 두고 사용하고 싶었으나 신규 프로젝트를 진행하는 과정에서 이루어진 결정이라 javascript에서 사용성은 일부 포기하였습니다.
 3. 공통코드 목록을 구글시트에 정리해 두는 방법도 고민하였으나 개발 초기에 공통코드가 공유 되어야 하는 대상이 개발자뿐이라 그냥 insert 문을 notion에 붙여두고 관리하기로 했습니다.
+
+<br>
 
 ### 실제 사용 예시
 * 개발자간 공유를 위한 insert 쿼리
@@ -75,6 +84,8 @@ VALUES
     ('SETTLEMENT_TYPE', 'STLTP_AUTO', '자동', '', 0),
     ('SETTLEMENT_TYPE', 'STLTP_MANUAL', '수동', '', 1);
 ```
+
+<br>
 
 * 생성된 kotlin enum 코드
   * 공통코드를 변경한 개발자가 generator를 돌려서 kotlin 코드를 생성 후 git에 commit.
@@ -95,6 +106,8 @@ object Codes {
 }
 ```
 
+<br>
+
 * vue.js에서 사용
 
 ```js
@@ -112,6 +125,9 @@ getCodeLabel = (codes, value) => {
 };
 ```
 
+<br>
+<br>
+
 ### 이런게 불편해요.
 1. 공통코드 변경시마다 신경써야 할 것들이 너무 많습니다.
    * 추가할 코드를 insert 문으로 작성 해 DB에 입력 및 notion 문서 갱신
@@ -128,13 +144,19 @@ getCodeLabel = (codes, value) => {
 4. javascript에서 필요할때마다 코드를 API로 가져오는데 너무 자주 필요합니다.. (코드 조회를 위한 API 요청이 너무 많습니다.)
    * 서버 / 프론트엔드 둘다 팀내에서 개발하는데 굳이 이렇게 해야하나요?
 
+<br>
 ---
+<br>
 ## (2차) 불편함을 없애 봅시다.(DB를 빼버리자!)
+
+<br>
 
 ### 공통코드 변경시마다 DB와 코드를 sync 시키는 작업을 없애봅시다.
 * DB에서 직접 데이터를 확인할때 공통코드 테이블을 join해서 `공통코드 -> 라벨`로 변경해서 쿼리 하는 경우가 생각보다 없었습니다.
 * 위 케이스를 제외하면 DB를 사용하는 것은 프론트엔드를 위해 서버에서 API로 코드를 내려줄때 DB를 조회해서 내리는 곳 밖에 없었습니다.
 * 그렇다면! DB에서 코드 테이블을 삭제해버리고 `codeGenerator로 DB에서 생성한 kotlin code`를 메인 데이터로 사용하는 방법을 시도해 볼 수 있을거 같았습니다.
+
+<br>
 
 ### 코드 조회 API를 DB없이 어떻게 만들면 될까요?
 * kotlin 코드를 `reflection`해서 필요한 코드를 추출해서 기존 DB에서 조회해서 반환하던 response와 동일한 값을 내려줍니다.
@@ -173,20 +195,29 @@ fun Codes.getCodes(groups: List<String>): Any {
 }
 ```
 
+<br>
+
 ### 어떤 문제가 해소되었나요?
 * 이제 공통코드를 DB에 넣지 않아도 되고, notion에 insert 쿼리를 관리하지 않아도 됩니다.
 * 공통코드를 변경한 사실을 팀내에 따로 전파하지 않아도 git pull만 받으면 됩니다.
 * 단, 개발자들은 좋지만... `DB에서 직접 데이터를 보는 분(DBA라거나..) 입장에선 반갑지 않을 수 있습니다.`(;;;)
 
+<br>
 ---
+<br>
+
 ## (3차) javascript에서 쓸 코드도 생성해 봅시다.
 * **덧. 글이 너무 길어질거 같아 `gradle plugin 만드는 방법 및 사용방법`은 생략된 부분이 많습니다. 대략적인 작업 흐름을 알 수 있는 정도로 작성하였습니다.**
+
+<br>
 
 ### DB가 사라졌으니 kotlin 코드를 분석해서 javascript 코드를 생성해 봅시다.
 * 그런데 팀내에 프로젝트가 한개가 아니니 여러 프로젝트에서 공통으로 쓸 수 있었으면 합니다.
 * gradle plugin 형태로 만들어서 각 프로젝트에서 사용 하고자 합니다.
 * gradle plugin에서 프로젝트에 있는 kotlin 파일을 접근하려니 reflection으로 접근 하기가 애매합니다.
 * gradle plugin이 실행되는 시점에 프로젝트 코드를 `import` 하거나 할 수는 없으니 gradle plugin 입장에선 공통코드가 선언된 파일의 경로을 입력받고 파일을 열어서 kotlin 코드를 파싱해서 쓸 수 밖에 없습니다.
+
+<br>
 
 ### kotlin 코드를 파싱해서 javascript에서 사용할 공통코드 생성하는 gradle plugin을 만듭니다.
 * reflection은 이미 class가 로딩된 이후에 [kotlin의 KClass](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-class/)나 [java의 Class](https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html)를 사용하지만 Kotlin PSI의 경우는 전혀 다른 클래스들을 활용하고 별도의 dependency도 필요합니다.
@@ -258,6 +289,8 @@ try {
     disposable.dispose()
 ```
 
+<br>
+
 ### 만들어진 gradle plugin 이렇게 동작합니다.
 * gradle plugin을 적용하고 아래 설정을 추가하면 gradle task(`generate<설정 이름(아래 설정기준management)>Code` 유형의 이름으로 생성됨)가 자동으로 추가됩니다.
   * 각 프로젝트의 공통코드 파일(위의 `생성된 kotlin enum 코드` ~~하지만 이제 공통코드 변경시 직접 수정되고 있는~~)의 절대경로와 javascript 파일을 생성할 절대경로를 전달합니다.
@@ -272,6 +305,8 @@ codeJavascriptGenerator {
 ```
 
 * 공통코드가 수정되면 `./gradlew :<project>:generateManagementCode`를 실행해 주면 javascript에서 사용 할 공통코드 파일이 생성(갱신)됩니다.
+
+<br>
 
 ### 생성된 `typescript` 코드
 
@@ -321,6 +356,8 @@ export default {
 }
 ```
 
+<br>
+
 ### javascript(typescript)에서 생성된 공통코드파일 사용은 이렇게 하고있습니다.
 * vue.js에서 사용
 
@@ -336,7 +373,10 @@ const value = 'STLTP_AUTO';
 const label = find(Codes.settlementType.values, { name: value }).label;
 ```
 
+<br>
 ---
+<br>
+
 ## 마무리하며...
 * 서두에 밝혔듯이 `공통코드 관리방법에 정답은 없습니다.` 저희팀도 아직 
 * 저희팀은 이런 과정을 거쳐서 이렇게 사용하고 있다라는 경험을 공유드리는 것뿐 당연히 이 방법도 정답은 아닙니다.
