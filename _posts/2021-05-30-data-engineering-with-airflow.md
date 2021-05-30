@@ -34,7 +34,24 @@ tags:
 
 ## 목차
 
-[TOC]
+- 기존 환경 - Rundeck
+- 태동기 - Google Cloud Composer
+- 초창기 - Google Compute Engine + Docker Compose
+    - 고려 사항
+    - 의사 결정
+    - 배포 형태
+    - 운영 형태
+    - 문제점
+- 성장기 - Airflow on Kubernetes
+    - 고려 사항
+    - 해결 방법
+    - 배포 형태
+    - 배포 방법
+    - 운영 형태
+    - 기타 추가 작업
+- 성숙기를 향하여
+- 마무리 하며
+- 참고한 자료
 
 
 
