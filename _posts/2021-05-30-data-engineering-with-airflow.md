@@ -383,7 +383,7 @@ DAG 작성 및 테스트 후에는 `main` 브랜치로 Pull Request를 보냅니
     - 클러스터와 통신할 수 있는 Bastion Host에 ssh 접속합니다.
     - Bastion Host에서 ArgoCD Client를 통해 클러스터에 배포되어있는 ArgoCD Server에 로그인합니다.
     - ArgoCD Client로 현재 HEAD branch 와 연동된 Airflow 앱을 배포합니다.
-- Branch 삭제시, 같은 방법으로 위에서 생성된 Airflow 앱을 삭제합니다.
+- Branch 삭제 시, 같은 방법으로 위에서 생성된 Airflow 앱을 삭제합니다.
 
 CI/CD 파이프라인 동작 모니터링은 Slack 채널을 통해 알람을 받습니다.
 
