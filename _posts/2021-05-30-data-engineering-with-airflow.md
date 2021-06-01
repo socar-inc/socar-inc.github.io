@@ -247,7 +247,7 @@ Kubernetes 환경을 도입하면 여러 장점이 많아지지만, 운영의 �
 ![01](/img/data-engineering-with-airflow/01.png){: width="100%"}
 
 - GKE(Google Kuberentes Engine)에 별도의 네임스페이스 위에 Airflow가 배포됩니다.
-- 스케쥴러는 Kubernetes Executor를 사용합니다.
+- Scheduler는 Kubernetes Executor를 사용합니다.
     - Airflow 컴포넌트는 Webserver, Scheduler, Database, Worker만 필요하게 됩니다.
     - 각 컴포넌트는 Pod 단위로 배포됩니다.
     - Worker Pod는 DAG 내 Task 단위로 동적으로 생성되었다가 내려갑니다.
