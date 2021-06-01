@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "쏘카 데이터 그룹 - Airflow와 함께한 데이터 환경 구축기"
+title: "쏘카 데이터 그룹 - Airflow와 함께한 데이터 환경 구축기(feat. Airflow on Kubernetes)"
 subtitle: "지난 3년간 Airflow 구축 및 운영기록"
 date: 2021-05-30 18:00:00 +0900
 category: data
