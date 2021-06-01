@@ -111,7 +111,7 @@ Cloud Composer는 정말 간단하게 사용할 수 있습니다. Airflow의 DAG
 
 ### 의사 결정
 
-고민 끝에 선택한 배포 방법은 Google Compute Engine 위에 Docker Compose로 Airflow의 각 컴포넌트(웹 서버, 스케쥴러 등)를 직접 도커 컨테이너로 띄우는 방법입니다. Github에 있는 [puckel/docker-airflow](puckel/docker-airflow) 이미지를 이용하면 이를 쉽게 구현할 수 있었습니다.  
+고민 끝에 선택한 배포 방법은 Google Compute Engine 위에 Docker Compose로 Airflow의 각 컴포넌트(Webserver, Scheduler 등)를 직접 도커 컨테이너로 띄우는 방법입니다. Github에 있는 [puckel/docker-airflow](puckel/docker-airflow) 이미지를 이용하면 이를 쉽게 구현할 수 있었습니다.  
 또한 분석 팀원들에게 익숙한 Jupyter Notebook을 동일 환경에서 배포하고, Jupyter Notebook을 통해 Airflow DAG을 수정할 수 있도록 했습니다.
 
 <br>
