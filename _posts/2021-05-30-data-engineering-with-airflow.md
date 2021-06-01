@@ -118,7 +118,7 @@ Cloud Composer는 Airflow의 DAG 파일을 Cloud Storage에 업로드해서 사�
 
 ### 배포 형태
 
-![image-20210323133054666](/img/airflow-on-kubernetes/image-20210323133054666.png){: width="100%"}
+![00](/img/data-engineering-with-airflow/00.png){: width="100%"}
 
 - Google Cloud Platform의 Google Compute Engine 인스턴스를 호스팅 서버로 사용합니다.
 - Airflow의 각 컴포넌트들인 WebServer, Scheduler, Database, Worker, Redis를 Docker Compose를 통해 각각 컨테이너로 실행합니다.
@@ -244,7 +244,7 @@ Kubernetes 환경을 도입하면 여러 장점이 많아지지만, 운영의 �
 먼저 운영(Prod) 환경은 개발(Dev) 환경과 다른 별도의 Google Cloud Plaform 프로젝트 에서 구성됩니다.  
 형태는 다음과 같습니다.
 
-![image-20210323152353144](/img/airflow-on-kubernetes/image-20210323152353144.png){: width="100%"}
+![01](/img/data-engineering-with-airflow/01.png){: width="100%"}
 
 - GKE(Google Kuberentes Engine)에 별도의 네임스페이스 위에 Airflow가 배포됩니다.
 - 스케쥴러는 Kubernetes Executor를 사용합니다.
@@ -258,7 +258,7 @@ Kubernetes 환경을 도입하면 여러 장점이 많아지지만, 운영의 �
 
 #### 1) External Database(Cloud SQL) 사용
 
-![image-20210323153112845](/img/airflow-on-kubernetes/image-20210323153112845.png){: width="100%"}
+![02](/img/data-engineering-with-airflow/02.png){: width="100%"}
 
 Airflow 컴포넌트 중 하나인 Database는 Stateful 하므로, Kubernetes 내부에서 관리하는 것보다 Kubernetes 외부에서 운영하는 것이 더 적합하다고 생각했습니다. 다양한 Database 중 Google Cloud Platform Cloud SQL가 Google Cloud Platform에 있기에 활용하기 수월할 것으로 판단했습니다. GKE 내부에서는 Cloud SQL과 통신하기 위해 Cloud SQL Proxy를 Daemonset 형태로 배포합니다. Airflow는 이 Proxy를 거쳐 Kubernetes 외부 Database와 통신하게 됩니다.  
 
@@ -268,7 +268,7 @@ Airflow 컴포넌트 중 하나인 Database는 Stateful 하므로, Kubernetes �
 
 #### 2) DAG을 담는 Github Repo 생성 및 Git-sync
 
-![image-20210323153832010](/img/airflow-on-kubernetes/image-20210323153832010.png){: width="100%"}
+![03](/img/data-engineering-with-airflow/03.png){: width="100%"}
 
 Github 리포지터리에 DAG들을 저장합니다. 운영 환경에 반영되는 DAG들은 `main` 브랜치에 담습니다.  
 
@@ -278,7 +278,7 @@ Webserver, Scheduler Pod 내부에 Git-sync는 주기적으로 이 Github Reposi
 
 #### 3) Remote Logging(Cloud Storage) 사용
 
-![image-20210323154732016](/img/airflow-on-kubernetes/image-20210323154732016.png){: width="100%"}
+![04](/img/data-engineering-with-airflow/04.png){: width="100%"}
 
 각 Airflow 컴포넌트가 Pod 단위로 배포되므로, Pod간 공유할 수 있는 별도의 로그 저장소가 필요합니다.  
 
@@ -290,7 +290,7 @@ Webserver, Scheduler Pod 내부에 Git-sync는 주기적으로 이 Github Reposi
 
 #### 4) Kubernetes Executor 사용
 
-![image-20210323155040109](/img/airflow-on-kubernetes/image-20210323155040109.png){: width="100%"}
+![05](/img/data-engineering-with-airflow/05.png){: width="100%"}
 
 Kubernetes Executor를 사용하면 Worker를 Pod 형태로 동적으로 생성하게 됩니다. DAG이 실행될 때 Task 하나당 하나의 Worker Pod가 배포 및 실행된 후 삭제됩니다. 실행할 DAG이 없는 경우 Kubernetes 위에 Worker Pod이 존재하지 않습니다. 
 
@@ -302,7 +302,7 @@ Kubernetes Executor를 사용하면 Worker를 Pod 형태로 동적으로 생성�
 
 개발 환경은 운영 환경과 별도의 Google Cloud Platform 프로젝트에 구성됩니다.  
 
-![image-20210323160518620](/img/airflow-on-kubernetes/image-20210323160518620.png){: width="100%"}
+![06](/img/data-engineering-with-airflow/06.png){: width="100%"}
 
 전반적으로 운영 환경의 배포와 동일합니다. 다만 DB가 Kubernets 외부 Database가 아닌 Kubernetes 내부 Database입니다.  
 
@@ -317,11 +317,11 @@ Kubernets 클러스터에 App 배포는 [ArgoCD](https://argoproj.github.io/argo
 쿠버네티스에 배포할 Helm 차트를 별도의 Github Repository에 보관합니다.  
 (차트는 [커뮤니티 버전의 Airflow 차트 7.7.0 버전](https://github.com/helm/charts/tree/master/stable/airflow)을 기반으로 커스터마이징했습니다.)
 
-![image-20210325162545630](/img/airflow-on-kubernetes/image-20210325162545630.png){: width="100%"}
+![07](/img/data-engineering-with-airflow/07.png){: width="100%"}
 
 이후 ArgoCD 웹서버에서 이 Github Repository와 연결을 맺도록 설정합니다. 그리고 App을 배포합니다. (ArgoCD로 App을 배포하는 방법은 [커피고래님 블로그 글](https://coffeewhale.com/kubernetes/gitops/argocd/2020/02/10/gitops-argocd/)을 참고하시면 좋습니다)
 
-![image-20210325162455581](/img/airflow-on-kubernetes/image-20210325162455581.png){: width="100%"}
+![08](/img/data-engineering-with-airflow/08.png){: width="100%"}
 
 <br>
 
@@ -356,7 +356,7 @@ DAG 작성 및 테스트 후에는 `main` 브랜치로 Pull Request를 보냅니
     - 여러 팀원들에게 리뷰를 받은 후 최종적으로 Squash & Merge합니다.
     - Branch가 삭제되면 할당받은 Airflow도 삭제됩니다.
 
-![image-20210323162247055](/img/airflow-on-kubernetes/image-20210323162247055.png){: width="100%"}
+![09](/img/data-engineering-with-airflow/09.png){: width="100%"}
 
 <br>
 
@@ -367,7 +367,7 @@ DAG 작성 및 테스트 후에는 `main` 브랜치로 Pull Request를 보냅니
 > 이 때문에 DAG의 기본 형태를 규칙적으로 만들어주는 별도의 CLI 도구를 만들었습니다.  
 > 다음처럼 이 도구를 사용할 수 있습니다. (실행 결과로 DAG 파일을 만들어줍니다.)
 >
-> ![image-20210323175842093](/img/airflow-on-kubernetes/image-20210323175842093.png){: width="100%"}
+> ![10](/img/data-engineering-with-airflow/10.png){: width="100%"}
 
 <br>
 
@@ -375,7 +375,7 @@ DAG 작성 및 테스트 후에는 `main` 브랜치로 Pull Request를 보냅니
 
 위와 같이 DAG 작성자의 `feature/*` 브랜치에 기반한 Airflow를 할당하기 위한 CI/CD 파이프라인은 다음과 같습니다.
 
-![image-20210323162546775](/img/airflow-on-kubernetes/image-20210323162546775.png){: width="100%"}
+![11](/img/data-engineering-with-airflow/11.png){: width="100%"}
 
 - Github Repository Webhook에서 Branch 생성 및 삭제하는 경우, CI/CD 파이프라인이 동작하는 트리거를 생성합니다.
 - 쏘카에선 쉽게 CI/CD 파이프라인을 구축할 수 있는 [BuddyWorks](https://app.buddy.works/)를 사용하고 있습니다.
@@ -387,7 +387,7 @@ DAG 작성 및 테스트 후에는 `main` 브랜치로 Pull Request를 보냅니
 
 CI/CD 파이프라인 동작 모니터링은 Slack 채널을 통해 알람을 받습니다.
 
-![image-20210325115107953](/img/airflow-on-kubernetes/image-20210325115107953.png){: width="100%"}
+![12](/img/data-engineering-with-airflow/12.png){: width="100%"}
 
 <br>
 
@@ -396,9 +396,9 @@ CI/CD 파이프라인 동작 모니터링은 Slack 채널을 통해 알람을 �
 Kubernetes에서 동적으로 Airflow를 운영하다보니, 리소스 모니터링이 또한 중요하게 되었습니다.  
 아직 모니터링을 고도화하지는 않았지만 KubeLens와 Grafana로 모니터링하고 있습니다.
 
-![kubelens](/img/airflow-on-kubernetes/kubelens.png){: width="100%"}
+![13](/img/data-engineering-with-airflow/13.png){: width="100%"}
 
-![image-20210323164836014](/img/airflow-on-kubernetes/image-20210323164836014.png){: width="100%"}
+![14](/img/data-engineering-with-airflow/14.png){: width="100%"}
 
 <br>
 
@@ -573,7 +573,7 @@ Airflow를 Kubernetes로 옮기며, 그 환경에 알맞게 사용하는 큰 흐
 
 - [Line engineering 블로그 - Kubernetes를 이용한 효율적인 데이터 엔지니어링(Airflow on Kubernetes VS Airflow Kubernetes Executor) 시리즈](https://engineering.linecorp.com/ko/blog/data-engineering-with-airflow-k8s-1/)
 - [커피 고래님 블로그 - GitOps와 ArgoCD](https://coffeewhale.com/kubernetes/gitops/argocd/2020/02/10/gitops-argocd/)
-- [Swalloow님 블로그 - Airflow On Kubernetes 시리즈](https://swalloow.github.io/airflow-on-kubernetes-1/)
+- [Swalloow님 블로그 - Airflow On Kubernetes 시리즈](https://swalloow.github.io/data-engineering-with-airflow-1/)
 - [Subicura님 발표자료 - 쿠버네티스를 이용한 기능 브랜치별 테스트 서버 만들기 (GitOps CI/CD)](https://www.slideshare.net/subicura/gitops-cicd-156402754)
 
 <br>
