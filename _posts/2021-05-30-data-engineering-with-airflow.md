@@ -284,7 +284,7 @@ Webserver, Scheduler Pod 내부에 Git-sync는 주기적으로 이 Github Reposi
 
 이를 위해 Airflow의 `AIRFLOW__CORE__REMOTE_LOGGING` 값을 `True` 로 두어 Remote Logging 기능을 사용합니다.  
 
-워커 Pod에서 발생하는 로그 파일들은 모두 Cloud Storage에 저장되고, Airflow에서도 이 파일을 읽어서 웹서버에서 출력합니다.
+Worker Pod에서 발생하는 로그 파일들은 모두 Cloud Storage에 저장되고, Airflow에서도 이 파일을 읽어서 웹서버에서 출력합니다.
 
 <br>
 
