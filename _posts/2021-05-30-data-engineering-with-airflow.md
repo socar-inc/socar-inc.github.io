@@ -85,7 +85,7 @@ Cloud Composer는 구글 클라우드에서 제공하는 Managed Airflow입니�
 
 ![Composer Architecture](https://cloud.google.com/composer/docs/images/public-ip-architecture.png){: width="100%"}
 
-Cloud Composer는 Airflow의 DAG 파일을 Cloud Storage에 업로드해서 사용합니다. Cloud Storage에 Airflow DAG 파일을 업로드하면 Cloud Composer에서 해당 파일을 읽어 작업을 실행합니다. 사용자 입장에서 Airflow 구성 요소에 대해 크게  신경쓸 필요가 없이 DAG 파일만 잘 만들면 됩니다.
+Cloud Composer는 정말 간단하게 사용할 수 있습니다. Airflow의 DAG 파일을 Cloud Storage에 업로드해서 사용합니다. Cloud Storage에 Airflow DAG 파일을 업로드하면 Cloud Composer에서 해당 파일을 읽어 작업을 실행합니다. 사용자 입장에서 Airflow 구성 요소에 대해 크게 신경 쓸 필요가 없이 DAG 파일만 잘 만들면 됩니다.
 
 **그러나 Composer는 종종 알 수 없는 에러를 발생했습니다.** 당시 Airflow의 버전은 1.10.3로 오픈소스 자체에도 버그가 존재했습니다. 1.10.3 버전의 가장 큰 문제는 오류가 생겼을 때 로그를 직접 제대로 볼 수 없었다는 점입니다. Composer의 안정성 문제와 로그와 관련된 이슈는 주요 사항으로 떠올랐고, Composer를 계속 사용해야하는가에 대한 고민으로 이어졌습니다.
 
