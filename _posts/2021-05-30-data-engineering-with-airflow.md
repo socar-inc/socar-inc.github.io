@@ -282,7 +282,7 @@ Webserver, Scheduler Pod 내부에 Git-sync는 주기적으로 이 Github Reposi
 
 각 Airflow 컴포넌트가 Pod 단위로 배포되므로, Pod간 공유할 수 있는 별도의 로그 저장소가 필요합니다.  
 
-이를 위해 Airflow의 `AIRFLOW__CORE__REMOTE_LOGGING` 값을 `True` 로 두어 Remote Logging 기능을 사용합니다.  
+이를 위해 Airflow의 `AIRFLOW__CORE__REMOTE_LOGGING` 값을 `True`로 두어 Remote Logging 기능을 사용합니다.  
 
 Worker Pod에서 발생하는 로그 파일들은 모두 Cloud Storage에 저장되고, Airflow에서도 이 파일을 읽어서 웹서버에서 출력합니다.
 
@@ -294,7 +294,7 @@ Worker Pod에서 발생하는 로그 파일들은 모두 Cloud Storage에 저장
 
 Kubernetes Executor를 사용하면 Worker를 Pod 형태로 동적으로 생성하게 됩니다. DAG이 실행될 때 Task 하나당 하나의 Worker Pod가 배포 및 실행된 후 삭제됩니다. 실행할 DAG이 없는 경우 Kubernetes 위에 Worker Pod이 존재하지 않습니다. 
 
-즉, 실행할 Task가 없을 때는 리소스 사용이 줄었다가, 실행할 Task가 생기면 필요한만큼 리소스를 할당하고 사용합니다. 결과적으로 리소스를 더 유연하고 효율적으로 사용합니다.
+즉, 실행할 Task가 없을 때는 리소스 사용이 줄었다가, 실행할 Task가 생기면 필요한 만큼 리소스를 할당하고 사용합니다. 결과적으로 리소스를 더 유연하고 효율적으로 사용합니다.
 
 <br>
 
@@ -333,14 +333,14 @@ Kubenetes에 배포할 Helm 차트를 별도의 Github Repository에 보관합�
 
 각자 개인의 컴퓨터(로컬)의 IDE와 Git branch를 통해 DAG을 작성하고 Github Repository에 Push합니다. 위에서 설명한 것처럼 Repository에 Push하면 자동으로 브랜치별로 Airflow가 생성되어 DAG을 확인할 수 있습니다.  
 
-DAG을 작성할 때, 엔지니어링팀에서 만든 CLI를 사용합니다. 이 CLI는 보일러플레이트를 생성할 수 있는 도구입니다. CLI에서 DAG 파일 이름이나  `dag_id` 를 생성 규칙이 담겨있습니다. 이런 방식을 사용해서 DAG의 기본 모양새를 일관성 있게 관리할 수 있고 DAG 작성자 관점에서도 고민없이 쉽게 DAG을 생성할 수 있습니다.
+DAG을 작성할 때, 엔지니어링팀에서 만든 CLI를 사용합니다. 이 CLI는 Boilerplate를 생성할 수 있는 도구입니다. CLI에서 DAG 파일 이름이나  `dag_id`  생성 규칙이 담겨있습니다. 이런 방식을 사용해서 DAG의 기본 모양새를 일관성 있게 관리할 수 있고 DAG 작성자 관점에서도 고민없이 쉽게 DAG을 생성할 수 있습니다.
 
 DAG 작성 및 테스트 후에는 `main` 브랜치로 Pull Request를 보냅니다. 데이터 그룹의 다른 팀원들의 리뷰를 받은 후 본격적으로 공용 브랜치인 `main` 에 자신이 만든 DAG이 합류하게 됩니다.
 
 좀 더 구체적인 프로세스를 설명드리면 다음과 같습니다.
 
 - DAG 작성자는 먼저 DAG을 저장하고 있는 Github Repository를 Clone 받습니다.
-- 본인이 작업할 브랜치 (`feature/*`)를 만들고 DAG 보일러플레이트 CLI로 DAG을 작성합니다.
+- 본인이 작업할 브랜치 (`feature/*`)를 만들고 DAG Boilerplate CLI로 DAG을 작성합니다.
     - 예를 들면 브랜치 이름을 `feature/hardy`으로 설정합니다.
 - Github remote origin으로 push 합니다.
   
@@ -360,9 +360,9 @@ DAG 작성 및 테스트 후에는 `main` 브랜치로 Pull Request를 보냅니
 
 <br>
 
-> *** DAG 보일러플레이트 CLI 도구**
+> *** DAG Boilerplate CLI 도구**
 >
-> DAG 작성자가 처음에 DAG 작성을 어떻게 할지 모르거나 당장 뼈대가 되는 코드가 필요한 경우, 비슷한 다른 DAG 코드를 복사해 사용하는 경우가 많았습니다. 그러나 다른 비슷한 DAG을 찾는 것도 번거롭고, 무엇보다 다른 DAG 코드의 형태에 의존하다보니 DAG의 기본 형태가 일관되지 않았습니다.
+> DAG 작성자가 처음에 DAG 작성을 어떻게 할지 모르거나 당장 뼈대가 되는 코드가 필요한 경우, 비슷한 다른 DAG 코드를 복사해 사용하는 경우가 많았습니다. 그러나 다른 비슷한 DAG을 찾는 것도 번거롭고, 무엇보다 다른 DAG 코드의 형태에 의존하다 보니 DAG의 기본 형태가 일관되지 않았습니다.
 >
 > 이 때문에 DAG의 기본 형태를 규칙적으로 만들어주는 별도의 CLI 도구를 만들었습니다.  
 > 다음처럼 이 도구를 사용할 수 있습니다. (실행 결과로 DAG 파일을 만들어줍니다.)
@@ -379,7 +379,7 @@ DAG 작성 및 테스트 후에는 `main` 브랜치로 Pull Request를 보냅니
 
 - Github Repository Webhook에서 Branch 생성 및 삭제하는 경우, CI/CD 파이프라인이 동작하는 트리거를 생성합니다.
 - 쏘카에선 쉽게 CI/CD 파이프라인을 구축할 수 있는 [BuddyWorks](https://app.buddy.works/)를 사용하고 있습니다.
-- Branch 생성시 BuddyWorks 내 파이프라인에서는 다음과 같이 실행됩니다.
+- Branch 생성 시 BuddyWorks 내 파이프라인에서는 다음과 같이 실행됩니다.
     - 클러스터와 통신할 수 있는 Bastion Host에 ssh 접속합니다.
     - Bastion Host에서 ArgoCD Client를 통해 클러스터에 배포되어있는 ArgoCD Server에 로그인합니다.
     - ArgoCD Client로 현재 HEAD branch와 연동된 Airflow 앱을 배포합니다.
