@@ -314,7 +314,7 @@ Kubernetes Executor를 사용하면 Worker를 Pod 형태로 동적으로 생성�
 
 Kubernets 클러스터에 App 배포는 [ArgoCD](https://argoproj.github.io/argo-cd/)를 사용하고 있습니다. ArgoCD는 Git-ops 형태로 Kubernets에 App을 배포할 수 있는 CD 도구입니다.  
 
-쿠버네티스에 배포할 Helm 차트를 별도의 Github Repository에 보관합니다.  
+Kubenetes에 배포할 Helm 차트를 별도의 Github Repository에 보관합니다.  
 (차트는 [커뮤니티 버전의 Airflow 차트 7.7.0 버전](https://github.com/helm/charts/tree/master/stable/airflow)을 기반으로 커스터마이징했습니다.)
 
 ![07](/img/data-engineering-with-airflow/07.png){: width="100%"}
