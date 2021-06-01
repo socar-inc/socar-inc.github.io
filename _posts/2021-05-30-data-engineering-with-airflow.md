@@ -159,7 +159,7 @@ Google Compute Engine에 배포 후, 다음과 같은 방법으로 Airflow를 �
 
 #### 2) 규칙 없이 제각각으로 작성된 DAG 코드
 
-- 여러 사람들이 모두 제각각의 스타일로 작성한 DAG을 작성하였습니다. 예를 들어 어떤 DAG에는 `on_failure_callback` 값이 있는 반면, 어떤 DAG들은 이 값들이 보이지 않았습니다. 
+- 여러 사람이 모두 제각각의 스타일로 작성한 DAG을 작성하였습니다. 예를 들어 어떤 DAG에는 `on_failure_callback` 값이 있는 반면, 어떤 DAG들은 이 값들이 보이지 않았습니다. 
 - Jupyter Notebook 환경에서 코드를 작성하다 보니 PEP8과 같은 스타일 컨벤션을 잘 지키긴 어려웠습니다. 
 - 가장 큰 문제는 DAG 코드가 담긴 모듈 이름에 규칙이 없어서, Airflow 웹에서 문제가 생긴 DAG이 실제로 어떤 파일인지 찾기 쉽지 않았습니다. 
 - DAG 파일을 언제 생성했고 수정했는지에 대한 히스토리가 없어서 문제가 생겼을 때 원인을 찾기가 어려웠습니다.  
@@ -194,7 +194,7 @@ Airflow, 라이브러리, 파이썬 버전 등 점점 복잡해지는 의존성�
 
 ### 고려 사항
 
-위에서 생긴 문제들을 해결할 수 있는 방안을 생각해야 했습니다. 구체적으로는 다음 관점으로 Airflow 고도화에 대해 생각했습니다.
+위에서 생긴 문제들을 해결할 방안을 생각해야 했습니다. 구체적으로는 다음 관점으로 Airflow 고도화에 대해 생각했습니다.
 
 - DAG이 늘어나도 실행 시간의 늘어나거나 지연이 없도록 **리소스를 유연하게 확보 및 할당할 수 있어야 합니다**
 - **깔끔하고 일관된 DAG 코드**와 파라미터값을 표준화해야 합니다
@@ -210,7 +210,7 @@ Airflow, 라이브러리, 파이썬 버전 등 점점 복잡해지는 의존성�
 - 단일 컴퓨팅이 아닌 **Kubernetes를 도입**합니다.
     - Node Auto Scaling을 적용해 필요에 따라 리소스를 유연하게 확보하고 할당할 수 있습니다.
     - 사용할 노드 풀을 직접 관리하기 때문에 CPU, GPU 사용량이 높은 파이프라인을 돌리기에 좋습니다.
-    - Airflow 외에도 데이터 그룹에 필요한 다른 서비스들도 이 클러스터에서 한번에 관리할 수 있습니다.
+    - Airflow 외에도 데이터 그룹에 필요한 다른 서비스들도 이 클러스터에서 관리할 수 있습니다.
 - Airflow를 1.10.14 버전으로 업데이트하고, **Kubernetes Executor를 사용**합니다.
     - Task 단위로 Pod을 생성하기 때문에 동시에 여러 Task를 빠르게 실행할 수 있습니다.
     - Node Auto Scaling이 적용되어 있어 DAG이 늘어나도 리소스로 인한 실행 속도에 문제가 없습니다.
@@ -220,12 +220,12 @@ Airflow, 라이브러리, 파이썬 버전 등 점점 복잡해지는 의존성�
 - DAG **코드 작성에 규칙을 생성**합니다.
     - DAG 템플릿을 추상화해서 몇 개만 입력하면 DAG 코드를 생성할 수 있는 CLI를 생성했습니다. 이 CLI를 사용해 규격화된 DAG 파일을 생성합니다.
     - Code Formatter로 [Black](https://github.com/psf/black)을 사용하고, CI 과정에서 포매팅을 검사합니다.
-- DAG 코드를 **git과 github로 버전관리** 합니다.
+- DAG 코드를 **Git과 Github로 버전 관리** 합니다.
     - 누가 언제 어떤 코드를 추가, 변경했는지 관리할 수 있습니다.
     - 코드 리뷰를 통해 보다 나은 DAG 코드를 유지합니다.
 - 개발용 Google Cloud Platform 프로젝트에 **격리된 테스트용 Airflow 환경**을 만듭니다.
     - DAG 코드가 담긴 Github 리포지터리의 브랜치에 따라 동적으로 테스트용 Airflow를 배포합니다.
-        - 예를 들면 `feature/hardy` 라는 브랜치를 만들면 `hardy` 용 Airflow가 배포가 됩니다.
+        - 예를 들면 `feature/hardy` 라는 브랜치를 만들면 `hardy` 용 Airflow가 배포됩니다.
         - 이런 방식으로 자신의 DAG을 테스트할 Airflow를 할당받을 수 있습니다.
         - 격리된 환경이기 때문에 다른 사람의 작업 내용에 영향받지 않고 작업할 수 있습니다.
     - 개발 환경에서는 운영 BigQuery에 READ만 가능하도록 합니다.
@@ -272,7 +272,7 @@ Airflow 컴포넌트 중 하나인 Database는 Stateful 하므로, Kubernetes �
 
 Github 리포지터리에 DAG들을 저장합니다. 운영 환경에 반영되는 DAG들은 `main` 브랜치에 담습니다.  
 
-Webserver, Scheduler Pod 내부에 Git-sync는 주기적으로 이 Github Repository를 Pull합니다. Worker의 경우 처음에만 (Initial container) Clone합니다. Git-sync가 Pull 혹은 Clone한 리포지토리는 Airlfow DAG 폴더에 마운트되어 있습니다. 따라서 Git-sync 작동에 따라 Airflow DAG 폴더가 주기적으로 업데이트 됩니다.
+Webserver, Scheduler Pod 내부에 Git-sync는 주기적으로 이 Github Repository를 Pull합니다. Worker의 경우 처음에만 (Initial container) Clone합니다. Git-sync가 Pull 혹은 Clone한 리포지토리는 Airlfow DAG 폴더에 마운트되어 있습니다. 따라서 Git-sync 작동에 따라 Airflow DAG 폴더가 주기적으로 업데이트됩니다.
 
 <br>
 
