@@ -121,7 +121,7 @@ Cloud Composer는 정말 간단하게 사용할 수 있습니다. Airflow의 DAG
 ![00](/img/data-engineering-with-airflow/00.png){: width="100%"}
 
 - Google Cloud Platform의 Google Compute Engine 인스턴스를 호스팅 서버로 사용합니다.
-- Airflow의 각 컴포넌트들인 WebServer, Scheduler, Database, Worker, Redis를 Docker Compose를 통해 각각 컨테이너로 실행합니다.
+- Airflow의 각 컴포넌트인 WebServer, Scheduler, Database, Worker, Redis를 Docker Compose를 통해 각각 컨테이너로 실행합니다.
 - Airflow Scheduler는 Celery Executor를 사용합니다.
 - Jupyter Notobook을 도커 컨테이너로 띄운 뒤 Airflow DAG 폴더에 Volume Mount합니다.
 
