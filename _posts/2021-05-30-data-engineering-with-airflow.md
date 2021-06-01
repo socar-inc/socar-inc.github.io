@@ -522,7 +522,7 @@ Airflow를 Kubernetes로 옮기며, 그 환경에 알맞게 사용하는 큰 흐
 
 2020년 말 [Airflow 2.0.0이 발표](https://airflow.apache.org/blog/airflow-two-point-oh-is-here/)되었습니다. 메이저 버전이 바뀐만큼 기존에 있던 기능이 수정되기도 하고, 새로운 기능이 추가되기도 했습니다. 그 중 특히 눈에 띄는 것은 [Scheduler의 로직의 퍼포먼스 향상](https://airflow.apache.org/blog/airflow-two-point-oh-is-here/#massive-scheduler-performance-improvements)과 [HA(High Availity) 지원](https://airflow.apache.org/blog/airflow-two-point-oh-is-here/#massive-scheduler-performance-improvements)입니다. 
 
-앞으로 더 늘어날 DAG을 고려하면 2.x 버전으로 버전을 올리는게 매우 좋을 것으로 예상됩니다. 다만 아직은 Kubernetes에 Airflow를 배포한지 얼마 안 된 운영 초기이고 기존의 Airflow에 저장되어 있는 DAG들을 하나씩 리팩토링하며 옮기고 있기 때문에, 당장 버전을 올리지는 않을 계획입니다.  
+앞으로 더 늘어날 DAG을 고려하면 2.x 버전으로 버전을 올리는게 매우 좋을 것으로 예상됩니다. 다만 아직은 Kubernetes에 Airflow를 운영한 초창기고 기존의 Airflow에 저장되어 있는 DAG들을 하나씩 리팩토링하며 옮기고 있기 때문에, 당장 버전을 올리지는 않을 계획입니다.  
 
 기존 DAG을 옮기는 작업을 마치고, 운영에 노하우가 좀 더 생기면 Airflow 버전을 올리는 작업을 진행할 예정입니다. 만약 Airflow의 공식 Helm Chart가 공개되면 개발 환경에서 테스트한 뒤 도입할 계획입니다. 
 
