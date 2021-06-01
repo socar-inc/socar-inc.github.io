@@ -80,7 +80,7 @@ tags:
 데이터 그룹이 생긴 태동기에는 데이터 엔지니어가 없었습니다. 데이터 분석가들이 직접 데이터 파이프라인을 만들어야 했습니다.  
 기술적인 이슈보다 당장 분석에 필요한 파이프라인을 만드는 것이 가장 높은 우선순위였습니다. 따라서 직접 구축 및 관리가 필요 없는 Google Cloud의 [Cloud Composer](https://cloud.google.com/composer/docs)를 사용하게 되었습니다.  
 
-Cloud Composer는 구글 클라우드에서 제공하는 Managed Airflow입니다. 참고로 현재 AWS에도 Managed Airflow(MWAA)가 존재하지만, 그 당시엔 구글 클라우드의 Cloud Composer가 유일했습니다. 또한 쏘카에선 데이터 웨어하우스를 구글 클라우드의 빅쿼리로 사용했기 때문에 같은 구글 클라우드 서비스가 꽤 괜찮은 이점을 줄거라 생각했습니다.
+Cloud Composer는 구글 클라우드에서 제공하는 Managed Airflow입니다. 참고로 현재 AWS에도 [Managed Airflow(MWAA)](https://aws.amazon.com/managed-workflows-for-apache-airflow/)가 존재하지만, 그 당시엔 구글 클라우드의 Cloud Composer가 유일했습니다. 또한 쏘카에선 데이터 웨어하우스를 구글 클라우드의 BigQuery로 사용했기 때문에 같은 구글 클라우드 서비스가 꽤 괜찮은 이점을 줄 거라 생각했습니다.
 
 
 ![Composer Architecture](https://cloud.google.com/composer/docs/images/public-ip-architecture.png){: width="100%"}
