@@ -1,9 +1,9 @@
 ---
 layout: post
 title: "팀내 공통코드 관리 변천사"
-subtitle: "공통코드를 어떻게 관리 및 사용 할 것인가? (feat. gradle plugin & kotlin psi)"
+subtitle: "공통코드 관리 설계, 공통코드 테이블 꼭 필요 한가요? (feat. gradle plugin & kotlin psi)"
 date: 2021-05-27 09:25:00 +0900
-category: data
+category: dev
 background: '/assets/images/yan-ots-FF14FKgecyM-unsplash.jpg'
 author: dorma
 comments: true
@@ -13,7 +13,9 @@ tags:
 
 # 공통코드를 어떻게 관리 및 사용 할 것인가?
 
-저희팀의 기술 스택은 다음과 같습니다.
+<br>
+저희팀은 쏘카 R&D 본부에서 다양한 백오피스 개발을 담당하고 있습니다. 백오피스 개발에 사용되는 기술 스택은 다음과 같습니다.
+
 ```markdown
 - Database: MySQL
 - Server Framework: SpringBoot
@@ -21,7 +23,12 @@ tags:
 - Language: kotlin / javascript(일부는 typescript)
 ```
 
-신규 프로젝트 설계 과정에서 공통코드를 관리를 위해 어떤 시도를 했고 지금까지 어떻게 보완해 왔는지 정리해 볼까합니다.
+개발을 하다보면 상태를 표현하는 값이나 변경 빈도가 낮은 분류(Category)등을 공통코드로 관리하게 됩니다.
+프론트엔드(vue.js)에서 일반적으로 `select`나 `raido`를 표시할때 데이터로 사용하고 서버(kotlin)에서는 비지니스 로직을 작성할때 사용하게 되고 DB에도 저장되게 됩니다.
+공통코드는 변경 빈도가 높지는 않지만 `DB - 서버 - 프론트엔드`에 걸쳐 넓은 범위에서 다양하게 사용되므로 변경이 일어나면 프로젝트를 구성하는 거의 모든 계층이 영향을 받으므로 적절하게 관리하고 사용되어야 합니다.
+
+이글에서는 저희팀에서 신규 프로젝트 설계 과정에서 공통코드를 관리를 위해 어떤 시도를 했고 지금까지 어떻게 보완해 왔는지 정리해 보려고 합니다.
+
 <br>
 
 ## 들어가기 앞서...
@@ -56,6 +63,7 @@ tags:
    * 대문자 사용.
 <br>
 
+
 ### 결정의 배경
 1. [MySQL의 enum 단점](https://velog.io/@leejh3224/%EB%B2%88%EC%97%AD-MySQL%EC%9D%98-ENUM-%ED%83%80%EC%9E%85%EC%9D%84-%EC%82%AC%EC%9A%A9%ED%95%98%EC%A7%80-%EB%A7%90%EC%95%84%EC%95%BC-%ED%95%A0-8%EA%B0%80%EC%A7%80-%EC%9D%B4%EC%9C%A0)이 많으니 사용하지 말고 `문자열`로 씁시다.
    * enum의 순서 변경이 있을 경우 테이블이 잠기고 시간이 데이터의 양에 따라 기하급수적으로 늘어날 수 있습니다.
@@ -66,6 +74,7 @@ tags:
      * `javascript`에서도 kotlin의 enum처럼 상수로 선언해 두고 사용하고 싶었으나 신규 프로젝트를 진행하는 과정에서 이루어진 결정이라 javascript에서 사용성은 일부 포기하였습니다.
 3. 공통코드 목록을 구글시트에 정리해 두는 방법도 고민하였으나 개발 초기에 공통코드가 공유 되어야 하는 대상이 개발자뿐이라 그냥 insert 문을 notion에 붙여두고 관리하기로 했습니다.
 <br>
+
 
 ### 실제 사용 예시
 * 개발자간 공유를 위한 insert 쿼리
@@ -83,7 +92,7 @@ VALUES
     ('SETTLEMENT_TYPE', 'STLTP_MANUAL', '수동', '', 1);
 ```
 
-* 생성된 kotlin enum 코드
+* 생성된 kotlin enum 코드 <a name="generated_kotlin_code"></a>
   * 공통코드를 변경한 개발자가 generator를 돌려서 kotlin 코드를 생성 후 git에 commit.
 
 ```kotlin
@@ -152,38 +161,8 @@ getCodeLabel = (codes, value) => {
 * kotlin 코드를 `reflection`해서 필요한 코드를 추출해서 기존 DB에서 조회해서 반환하던 response와 동일한 값을 내려줍니다.
   * `실제 사용예시`에 있는 `object Codes {}`에 확장함수(`getCodes`)를 하나 붙여줍니다.
   * 대/소문자나 camelCase / snake_case 변환이 필요한 부분은 [google guava](https://github.com/google/guava)의 `CaseFormat`를 활용했습니다.
+* 코드 예시(`GitHub Gist`): [reflection을 이용한 공통코드 조회](https://gist.github.com/socar-dorma/161c58fda3b848184c62ae287ca59e4b)
 
-```kotlin
-data class Code(
-    val id: Int,
-    val group: String,
-    val name: String,
-    val label: String
-)
-
-fun Codes.getCodes(groups: List<String>): Any {
-    val codeNames = groups.map { CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, it) }
-    val data = mutableMapOf<String, List<Code>>()
-    this::class.nestedClasses.filter { codeNames.contains(it.simpleName) }
-        .forEach { codes ->
-            val groupUpperCamel = codeNames.first { it == codes.simpleName }
-            val groupUpperUnderscore = CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, groupUpperCamel)
-            val groupLowerCamel = CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, groupUpperCamel)
-            val children = codes.java.getDeclaredMethod("values").invoke(null) as Array<*>
-            val list = children.mapIndexedNotNull { index, child ->
-                if (child != null) {
-                    val label = child::class.declaredMemberProperties.find { it.name == "label" }?.getter?.call(child) as String
-                    val value = child::class.declaredMemberProperties.find { it.name == "value" }?.getter?.call(child) as String
-                    Code(index, groupUpperUnderscore, value, label)
-                } else {
-                    null
-                }
-            }
-            data[groupLowerCamel] = list
-        }
-    return data
-}
-```
 <br>
 
 ### 어떤 문제가 해소되었나요?
@@ -214,72 +193,13 @@ fun Codes.getCodes(groups: List<String>): Any {
 implementation "org.jetbrains.kotlin:kotlin-compiler:1.5.0"
 implementation "org.jetbrains.kotlin:kotlin-compiler-embeddable:1.5.0"
 ```
-* 위에 있는 `생성된 kotlin enum 코드`에 있는 kotlin code를 파싱하는 코드의 대략적인 구조입니다. (**실제 실행되는 코드에서 일부를 발췌한 코드라 바로 실행은 안됩니다.**)
+* [(이제 직접 수정하고 있는) 생성된 kotlin enum 코드](#generated_kotlin_code)에 있는 kotlin code를 파싱하는 코드의 대략적인 구조입니다. (**실제 실행되는 코드에서 일부를 발췌한 코드라 바로 실행은 안됩니다.**)
   * javascript / typescript 코드 생성은 문법에 맞게 문자열을 생성 후 파일로 저장했습니다.
-
-```kotlin
-val disposable = Disposer.newDisposable()
-try {
-    val script = "<kotlin 소스 파일에서 읽어들인 내용>";
-    val configuration = CompilerConfiguration()
-
-    val groupingCollector = GroupingMessageCollector(CodeMessageCollector(), false)
-    val severityCollector = GroupingMessageCollector(groupingCollector, false)
-    configuration.put(CLIConfigurationKeys.MESSAGE_COLLECTOR_KEY, severityCollector)
-    val env = KotlinCoreEnvironment.createForProduction(disposable, configuration, EnvironmentConfigFiles.JVM_CONFIG_FILES)
-    val lvFile = LightVirtualFile("Codes.kt", KotlinFileType.INSTANCE, script)
-    val ktFile = PsiManager.getInstance(env.project).findFile(lvFile) as KtFile
-    val codesObject = ktFile.findChildByClass(KtObjectDeclaration::class.java)
-    var codes: List<Pair<String, List<Pair<String, Map<String, String>>>>>? = null
-    if (codesObject is KtObjectDeclaration) {
-        val codeBody = codesObject.children.find { it is KtClassBody }
-        if (codeBody is KtClassBody) {
-            codes = codeBody.children.mapNotNull { enumClass ->
-                if (enumClass is KtClass) {
-                    val parameterMap = mutableMapOf<Int, String>()
-                    enumClass.getPrimaryConstructorParameterList()?.children?.forEachIndexed { index, param ->
-                        if (param is KtParameter) {
-                            parameterMap[index] = param.name!!
-                        }
-                    }
-                    val name = enumClass.name!!.decapitalize()
-                    val entries = enumClass.declarations.mapIndexedNotNull { index, item ->
-                        if (item is KtEnumEntry) {
-                            var value = ""
-                            var label = ""
-                            item.initializerList?.firstChild?.children?.forEach { params ->
-                                params?.children?.forEachIndexed { i, param ->
-                                    if (param is KtValueArgument) {
-                                        // println("param.name - ${param.getArgumentName()}, param.text - ${param.text}")
-                                        when (parameterMap[i]) {
-                                            "label" -> label = param.text.trimQuotes()
-                                            "value" -> value = param.text.trimQuotes()
-                                            else -> throw IllegalStateException("unknown name - $name")
-                                        }
-                                    }
-                                }
-                            }
-                            item.name!! to mapOf("value" to value, "label" to label)
-                        } else null
-                    }
-                    name to entries
-                } else null
-            }
-        }
-    }
-
-    codes?.let {
-        // TODO: write javascript(or typescript) file
-    } ?: throw IllegalStateException("please check Codes.kt file.")
-} catch (e: Exception) {
-    e.printStackTrace()
-} finally {
-    disposable.dispose()
-```
+  * 코드 예시(`GitHub Gist`): [kotlin psi으로 공통코드 파싱하기](https://gist.github.com/socar-dorma/306453fafc0383869f62adf31cfaba0c)
 
 ### 만들어진 gradle plugin 이렇게 동작합니다.
 * gradle plugin을 적용하고 아래 설정을 추가하면 gradle task(`generate<설정 이름(아래 설정기준management)>Code` 유형의 이름으로 생성됨)가 자동으로 추가됩니다.
-  * 각 프로젝트의 공통코드 파일(위의 `생성된 kotlin enum 코드` ~~하지만 이제 공통코드 변경시 직접 수정되고 있는~~)의 절대경로와 javascript 파일을 생성할 절대경로를 전달합니다.
+  * 각 프로젝트의 [(이제 직접 수정하고 있는) 생성된 kotlin enum 코드](#generated_kotlin_code)의 절대경로와 javascript 파일을 생성할 절대경로를 전달합니다.
 
 ```groovy
 codeJavascriptGenerator {
@@ -294,52 +214,7 @@ codeJavascriptGenerator {
 
 ### 생성된 `typescript` 코드
 * kotlin에서 `Codes object`를 사용하는것과 최대한 동일하게 사용 할 수 있도록 코드를 생성했습니다.
-
-```ts
-export interface Code {
-  id: number | string,
-  group: string,
-  name: string,
-  label: string,
-  message?: string,
-  deleted?: boolean,
-}
-
-export class EnumEntry {
-  values: Array<Code> = [];
-}
-
-// other codes...
-
-class SettlementType extends EnumEntry {
-  AUTO: Code = {
-    id: 0,
-    group: 'SETTLEMENT_TYPE',
-    name: 'STLTP_AUTO',
-    label: '자동',
-  }
-
-  MANUAL: Code = {
-    id: 1,
-    group: 'SETTLEMENT_TYPE',
-    name: 'STLTP_MANUAL',
-    label: '수동',
-  }
-
-  values: Array<Code> = [
-    this.AUTO,
-    this.MANUAL,
-  ];
-}
-
-// other codes...
-
-export default {
-    // other codes...
-    settlementType: new SettlementType(),
-    // other codes...
-}
-```
+* 코드 예시(`GitHub Gist`): [생성된 codes.ts 파일](https://gist.github.com/socar-dorma/a0f2c79be7ffc2cff556c02be80500f0)
 
 ### javascript(typescript)에서 생성된 공통코드파일 사용은 이렇게 하고있습니다.
 
@@ -359,8 +234,9 @@ const label = find(Codes.settlementType.values, { name: value }).label;
 ---
 
 ## 마무리하며...
-* 서두에 밝혔듯이 `공통코드 관리방법에 정답은 없습니다.` ~~저희팀도 (4차)수정을 감행 할 수도있습니다.~~
+* 공통코드는 `DB - 서버 - 프론트엔드` 모든 계층에서 폭 넓게 사용되며 추가나 수정이 필요한 경우도 많기때문에 적절하게 관리하고 사용하지 않으면 유지보수나 기능을 추가할때 큰 문제가 되기도 합니다. 그러므로 공통코드는 각 계층에서 사용하는 프로그래밍 언어 각각에서 상수로 정의해서 사용해야 하고 각 계층간에 동기화도 쉬워야 한다고 생각합니다.
+* 서두에 적었듯이 `공통코드 관리방법에 정답없다`고 생각합니다.(저희팀도 (4차)수정을 감행 할 수도있습니다.)
 * 저희팀은 이런 과정을 거쳐서 이렇게 사용하고 있다라는 경험을 공유드리는 것뿐 당연히 이 방법도 정답은 아닙니다.
 * **`DB - 서버 - 프론트엔드`에 걸쳐서 공통코드를 어떤식으로 관리할지 고민하시는 분들에게 조금의 참고가 되었으면 좋겠습니다.**
-* `gradle plugin 만드는 과정`은 이 글 주제에서는 중요도가 낮은거 같아 대략적인 내용만 적었습니다.
-* `kotlin PSI 사용법`도 생략이 많이 되었는데 사실 이건 저도 딱 구현에 필요한 정도만 찾아가며 사용한 정도라 상세한 설명은 남길 수가 없었습니다.
+* `gradle plugin 만드는 과정`은 이 글 주제에서는 중요도가 낮다고 생각되어서 대략적인 내용만 적었습니다.
+* `kotlin PSI 사용법`도 생략이 많이 되었는데 사실 이건 저도 딱 구현에 필요한 것만 찾아가며 사용한 정도라 설명이 부족한 부분이 많은 점 양해 바랍니다.
