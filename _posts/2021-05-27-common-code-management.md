@@ -64,7 +64,7 @@ tags:
    * `자식코드`는 `PREFIX_XXX` 형태의 이름을 사용
    * 대문자 사용.
 <br>
-
+<br>
 
 ### 결정의 배경
 1. [MySQL의 enum 단점](https://velog.io/@leejh3224/%EB%B2%88%EC%97%AD-MySQL%EC%9D%98-ENUM-%ED%83%80%EC%9E%85%EC%9D%84-%EC%82%AC%EC%9A%A9%ED%95%98%EC%A7%80-%EB%A7%90%EC%95%84%EC%95%BC-%ED%95%A0-8%EA%B0%80%EC%A7%80-%EC%9D%B4%EC%9C%A0)이 많으니 사용하지 말고 `문자열`로 씁시다.
@@ -76,7 +76,7 @@ tags:
      * `javascript`에서도 kotlin의 enum처럼 상수로 선언해 두고 사용하고 싶었으나 신규 프로젝트를 진행하는 과정에서 이루어진 결정이라 javascript에서 사용성은 일부 포기하였습니다.
 3. 공통코드 목록을 구글시트에 정리해 두는 방법도 고민하였으나 개발 초기에 공통코드가 공유 되어야 하는 대상이 개발자뿐이라 그냥 insert 문을 notion에 붙여두고 관리하기로 했습니다.
 <br>
-
+<br>
 
 ### 실제 사용 예시
 * 개발자간 공유를 위한 insert 쿼리
@@ -129,6 +129,9 @@ getCodeLabel = (codes, value) => {
   return code.label;
 };
 ```
+<br>
+
+
 
 ### 이런게 불편해요.
 1. 공통코드 변경시마다 신경써야 할 것들이 너무 많습니다.
@@ -158,20 +161,21 @@ getCodeLabel = (codes, value) => {
 * 위 케이스를 제외하면 DB를 사용하는 것은 프론트엔드를 위해 서버에서 API로 코드를 내려줄때 DB를 조회해서 내리는 곳 밖에 없었습니다.
 * 그렇다면! DB에서 코드 테이블을 삭제해버리고 `codeGenerator로 DB에서 생성한 kotlin code`를 메인 데이터로 사용하는 방법을 시도해 볼 수 있을거 같았습니다.
 <br>
+<br>
 
 ### 코드 조회 API를 DB없이 어떻게 만들면 될까요?
 * kotlin 코드를 `reflection`해서 필요한 코드를 추출해서 기존 DB에서 조회해서 반환하던 response와 동일한 값을 내려줍니다.
   * `실제 사용예시`에 있는 `object Codes {}`에 확장함수(`getCodes`)를 하나 붙여줍니다.
   * 대/소문자나 camelCase / snake_case 변환이 필요한 부분은 [google guava](https://github.com/google/guava)의 `CaseFormat`를 활용했습니다.
 * 코드 예시(`GitHub Gist`): [reflection을 이용한 공통코드 조회](https://gist.github.com/socar-dorma/161c58fda3b848184c62ae287ca59e4b)
-
+<br>
 <br>
 
 ### 어떤 문제가 해소되었나요?
 * 이제 공통코드를 DB에 넣지 않아도 되고, notion에 insert 쿼리를 관리하지 않아도 됩니다.
 * 공통코드를 변경한 사실을 팀내에 따로 전파하지 않아도 git pull만 받으면 됩니다.
 * 단, 개발자들은 좋지만... `DB에서 직접 데이터를 보는 분(DBA라거나..) 입장에선 반갑지 않을 수 있습니다.`(;;;)
-
+<br>
 <br>
 
 ---
@@ -187,6 +191,7 @@ getCodeLabel = (codes, value) => {
 * gradle plugin에서 프로젝트에 있는 kotlin 파일을 접근하려니 reflection으로 접근 하기가 애매합니다.
 * gradle plugin이 실행되는 시점에 프로젝트 코드를 `import` 하거나 할 수는 없으니 gradle plugin 입장에선 공통코드가 선언된 파일의 경로을 입력받고 파일을 열어서 kotlin 코드를 파싱해서 쓸 수 밖에 없습니다.
 <br>
+<br>
 
 ### kotlin 코드를 파싱해서 javascript에서 사용할 공통코드 생성하는 gradle plugin을 만듭니다.
 * reflection은 이미 class가 로딩된 이후에 [kotlin의 KClass](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-class/)나 [java의 Class](https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html)를 사용하지만 Kotlin PSI의 경우는 전혀 다른 클래스들을 활용하고 별도의 dependency도 필요합니다.
@@ -198,6 +203,8 @@ implementation "org.jetbrains.kotlin:kotlin-compiler-embeddable:1.5.0"
 * [(이제 직접 수정하고 있는) 생성된 kotlin enum 코드](#generated_kotlin_code)에 있는 kotlin code를 파싱하는 코드의 대략적인 구조입니다. (**실제 실행되는 코드에서 일부를 발췌한 코드라 바로 실행은 안됩니다.**)
   * javascript / typescript 코드 생성은 문법에 맞게 문자열을 생성 후 파일로 저장했습니다.
   * 코드 예시(`GitHub Gist`): [kotlin psi으로 공통코드 파싱하기](https://gist.github.com/socar-dorma/306453fafc0383869f62adf31cfaba0c)
+<br>
+<br>
 
 ### 만들어진 gradle plugin 이렇게 동작합니다.
 * gradle plugin을 적용하고 아래 설정을 추가하면 gradle task(`generate<설정 이름(아래 설정기준management)>Code` 유형의 이름으로 생성됨)가 자동으로 추가됩니다.
@@ -213,10 +220,14 @@ codeJavascriptGenerator {
 ```
 
 * 공통코드가 수정되면 `./gradlew :<project>:generateManagementCode`를 실행해 주면 javascript에서 사용 할 공통코드 파일이 생성(갱신)됩니다.
+<br>
+<br>
 
 ### 생성된 `typescript` 코드
 * kotlin에서 `Codes object`를 사용하는것과 최대한 동일하게 사용 할 수 있도록 코드를 생성했습니다.
 * 코드 예시(`GitHub Gist`): [생성된 codes.ts 파일](https://gist.github.com/socar-dorma/a0f2c79be7ffc2cff556c02be80500f0)
+<br>
+<br>
 
 ### javascript(typescript)에서 생성된 공통코드파일 사용은 이렇게 하고있습니다.
 
