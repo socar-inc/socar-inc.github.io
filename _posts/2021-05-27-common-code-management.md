@@ -45,7 +45,7 @@ tags:
 <br>
 
 ### 팀에서 처음한 내용들
-![팀에서 결정한 내용들](../assets/images/common-code.png)
+![팀에서 결정한 내용들](/assets/images/common-code.png)
 1. 코드를 어떻게 분류 할 것인가?
    * `부모코드-자식코드`로 분류
 2. 코드를 어떻게 저장할 것인가?
