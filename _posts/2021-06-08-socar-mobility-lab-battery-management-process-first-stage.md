@@ -48,8 +48,8 @@
 		  
 			- DB 조회를 통해 배터리 관련 총 신고 건수, 배터리 관련 긴급출동 데이터, 정비 비용, 관리 중 발생하는 이동거리에 기반한 물류비를 모두 반영한 기준을 수립
 			- 위의 Figure 3 기준을 따라 배터리 신고가 들어오는 비율을 2D Contour로 나타냄 (Figure 4) <br>
-			
-			![](/img/socar-mobility-lab-battery-management-process-first-stage/Figure2.png){: width="90%" height="90%" style="display: block; margin: 0 auto"} <p align="center"> Figure 4 </p>
+			![](/img/socar-mobility-lab-battery-management-process-first-stage/Figure2.png){: width="90%" height="90%" style="display: block; margin: 0 auto"}
+			<p align="center"> Figure 4 </p>
 	
 			- 서울 경인과 그 외 지역의 관리 비용 차이로 인해 Contour가 조금 달라질 수 있어서 아래와 같이 분리해서 추출했고, 정상 배터리 전압영역 (12.4V) 이하를 이상영역으로 명확히 보면 아래와 같음. 위의 Contour와 다르게 아래는 확률 분포가 무시된 Binary Contour임 (Figure 5, 6)<br>
 			
