@@ -16,7 +16,7 @@
 - 방전과 관련된 문제는 월 100건 이상 접수됩니다.  어떤 경로로 접수되어 수리를 받는가에 따라다르지만 준중형차량(대표적으로 아반떼)  기준 수리비가  25만원까지 청구되기도 합니다.  방전문제는 회사의 관리 손실을 일으키는 중요 요소입니다.
 - 개인이 관리하는 일반적인 차량의 경우 3년간 600~800회의 시동 시도가 기록되고 배터리 제조사의 보증 시동 횟수도 600~800회 정도 입니다. 그러나 쏘카가 운영하는 차량은 년간 2200~2800회 정도의 시동 시도가 발생합니다. 특히 2200회를 넘어가는 시점에서는 배터리 관련 고장으로 인해 공업사에 차량이 입고될 확률이 급격히 높아집니다. 그러므로 이 시기가 도래하기 전에 적절한 관리를 통해 배터리의 수명을 관리해주어야 합니다.
 
-![](/img/socar-mobility-lab-battery-management-process-first-stage/Figure-1.png){: width="70%" height="70%" style="display: block; margin: 0 auto"}
+![](/img/socar-mobility-lab-battery-management-process-first-stage/Figure-1.png){: width="90%" height="90%" style="display: block; margin: 0 auto"}
 <p align="center"> Figure 1 </p>
 
 - 일부 고객의 배터리 사용 패턴에 따라 정상적 컨디션의 배터리가 방전되는 경우도 다수 존재합니다. 통계적으로 실제 방전 신고의 60%는 현 고객 혹은 직전 고객의 과실로 인한 문제였습니다.
@@ -43,15 +43,13 @@
 			- 예약 점유시간동안 배터리 관련 신고가 있는 예약 리스트 추출
 			- 위의 두 리스트의 배터리 전압과, 신호가 들어오지 않는 시간 간격을 추출 <br>
 			
-			![](/img/socar-mobility-lab-battery-management-process-first-stage/Figure1_KOR.png){: width="70%" height="70%" style="display: block; margin: 0 auto"}
+			![](/img/socar-mobility-lab-battery-management-process-first-stage/Figure1_KOR.png){: width="90%" height="90%" style="display: block; margin: 0 auto"}
 			<p align="center"> Figure 3 <br> </p>
 		  
 			- DB 조회를 통해 배터리 관련 총 신고 건수, 배터리 관련 긴급출동 데이터, 정비 비용, 관리 중 발생하는 이동거리에 기반한 물류비를 모두 반영한 기준을 수립
 			- 위의 Figure 3 기준을 따라 배터리 신고가 들어오는 비율을 2D Contour로 나타냄 (Figure 4) <br>
 			
-			![](/img/socar-mobility-lab-battery-management-process-first-stage/Figure2.png){: width="70%" height="70%" style="display: block; margin: 0 auto"}
-			
-		  	<p align="center"> Figure 4 </p>
+			![](/img/socar-mobility-lab-battery-management-process-first-stage/Figure2.png){: width="90%" height="90%" style="display: block; margin: 0 auto"} <p align="center"> Figure 4 </p>
 	
 			- 서울 경인과 그 외 지역의 관리 비용 차이로 인해 Contour가 조금 달라질 수 있어서 아래와 같이 분리해서 추출했고, 정상 배터리 전압영역 (12.4V) 이하를 이상영역으로 명확히 보면 아래와 같음. 위의 Contour와 다르게 아래는 확률 분포가 무시된 Binary Contour임 (Figure 5, 6)<br>
 			
