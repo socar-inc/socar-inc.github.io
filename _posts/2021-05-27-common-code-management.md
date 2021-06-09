@@ -170,7 +170,7 @@ getCodeLabel = (codes, value) => {
 * kotlin 코드를 `reflection`해서 필요한 코드를 추출해서 기존 DB에서 조회해서 반환하던 response와 동일한 값을 내려줍니다.
   * `실제 사용예시`에 있는 `object Codes {}`에 확장함수(`getCodes`)를 하나 붙여줍니다.
   * 대/소문자나 camelCase / snake_case 변환이 필요한 부분은 [google guava](https://github.com/google/guava)의 `CaseFormat`를 활용했습니다.
-* 코드 예시(`GitHub Gist`): [`reflection을 이용한 공통코드 조회`](https://gist.github.com/socar-dorma/161c58fda3b848184c62ae287ca59e4b)
+* 코드 예시(`GitHub Gist`): __[reflection을 이용한 공통코드 조회](https://gist.github.com/socar-dorma/161c58fda3b848184c62ae287ca59e4b)__
 <br>
 <br>
 
@@ -207,7 +207,7 @@ implementation "org.jetbrains.kotlin:kotlin-compiler-embeddable:1.5.0"
 ```
 * [(이제 직접 수정하고 있는) 생성된 kotlin enum 코드](#generated_kotlin_code)에 있는 kotlin code를 파싱하는 코드의 대략적인 구조입니다. (**실제 실행되는 코드에서 일부를 발췌한 코드라 바로 실행은 안됩니다.**)
   * javascript / typescript 코드 생성은 문법에 맞게 문자열을 생성 후 파일로 저장했습니다.
-  * 코드 예시(`GitHub Gist`): [`kotlin psi으로 공통코드 파싱하기`](https://gist.github.com/socar-dorma/306453fafc0383869f62adf31cfaba0c)
+  * 코드 예시(`GitHub Gist`): __[kotlin psi으로 공통코드 파싱하기](https://gist.github.com/socar-dorma/306453fafc0383869f62adf31cfaba0c)__
 <br>
 <br>
 
@@ -230,7 +230,7 @@ codeJavascriptGenerator {
 
 ### 생성된 `typescript` 코드
 * kotlin에서 `Codes object`를 사용하는것과 최대한 동일하게 사용 할 수 있도록 코드를 생성했습니다.
-* 코드 예시(`GitHub Gist`): [`생성된 codes.ts 파일`](https://gist.github.com/socar-dorma/a0f2c79be7ffc2cff556c02be80500f0)
+* 코드 예시(`GitHub Gist`): __[생성된 codes.ts 파일](https://gist.github.com/socar-dorma/a0f2c79be7ffc2cff556c02be80500f0)__
 <br>
 <br>
 
