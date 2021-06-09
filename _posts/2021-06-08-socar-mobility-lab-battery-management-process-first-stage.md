@@ -47,27 +47,32 @@
 			<p align="center"> Figure 3 <br> </p>
 		  
 			- DB 조회를 통해 배터리 관련 총 신고 건수, 배터리 관련 긴급출동 데이터, 정비 비용, 관리 중 발생하는 이동거리에 기반한 물류비를 모두 반영한 기준을 수립
-			- 위의 Figure 3 기준을 따라 배터리 신고가 들어오는 비율을 2D Contour로 나타냄 (Figure 4)<br>
+			- 위의 Figure 3 기준을 따라 배터리 신고가 들어오는 비율을 2D Contour로 나타냄 (Figure 4) <br>
 			
 			![](/img/socar-mobility-lab-battery-management-process-first-stage/Figure2.png){: width="70%" height="70%" style="display: block; margin: 0 auto"}
+			
 		  	<p align="center"> Figure 4 </p>
 	
 			- 서울 경인과 그 외 지역의 관리 비용 차이로 인해 Contour가 조금 달라질 수 있어서 아래와 같이 분리해서 추출했고, 정상 배터리 전압영역 (12.4V) 이하를 이상영역으로 명확히 보면 아래와 같음. 위의 Contour와 다르게 아래는 확률 분포가 무시된 Binary Contour임 (Figure 5, 6)<br>
 			
 			![](/img/socar-mobility-lab-battery-management-process-first-stage/Figure3.png){: width="70%" height="70%" style="display: block; margin: 0 auto"}
+			
 		  	<p align="center"> Figure 5 </p>
 			
 			![](/img/socar-mobility-lab-battery-management-process-first-stage/Figure4.png){: width="70%" height="70%" style="display: block; margin: 0 auto"}
+			
 		  	<p align="center"> Figure 6 </p>
 		  
 			- Binary Contour는 아래의 수식(Figure 7)을 기초로 하며, 운영 데이터를 통해 구해진 합리적 수치보다 Precision이 큰 영역을 Highlight 하여 만들어짐<br>
 			
 			![](/img/socar-mobility-lab-battery-management-process-first-stage/Figure5.png){: width="70%" height="70%" style="display: block; margin: 0 auto"}
+			
 		  	<p align="center"> Figure 7 </p>
 
 			- 샘플로 추출된 특정 기간동안 데이터를 바탕으로 Confusion Matrix를 계산하면 아래와 같음. 단, 113대 중 일부는 과잉정비가 아닐 수 있고 그 값을 정확히 알 수 없어 alpha 로 두었음. <br>
 	
 			![](/img/socar-mobility-lab-battery-management-process-first-stage/Figure6_KOR.png){: width="70%" height="70%" style="display: block; margin: 0 auto"}
+			
 		  	<p align="center"> Figure 8 </p>
 		  	
 			- Contour를 바탕으로 실시간으로 차량 상태를 조회하여 전압과 dt가 Contour에 올라온다면 방전으로 판단하고 적절한 조치를 취함
