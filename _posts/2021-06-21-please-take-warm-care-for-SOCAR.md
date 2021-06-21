@@ -25,7 +25,7 @@
 
 차에 대한 정비 지식이나 기계적 지식이 많지는 않지만 운전은 할 수 있고 일이 필요해서 쏘카 패스를 구독하는 친구에게 방전의 경험이 있냐고 물어보기도 했습니다. 있다고 하더군요. 어떤 상황인지 물어보니 더운 날씨에 주차 중에 에어컨이 나오겠지 하고 가시동 상태로 송풍기를 열심히 돌리면서 노래도 들었다고 합니다. 그리고 한 시간이 지났고 다시 움직이려고 하는데 시동이 걸리지 않았다고 하네요. 이런… 쏘카에서 이야기하는 전형적인 ‘차박’ 방전이었습니다. 친구는 가시동 상태에서 송풍기를 돌리고 차량 스피커로 음악을 들으면 차량 배터리 소모가 되는 사실조차 몰랐더라고요.
 
-![](/img/socar-mobility-lab-battery-management-process-second/figure1.jpg){: width="90%" height="90%" style="display: block; margin: 0 auto"}
+![](/img/socar-mobility-lab-battery-management-process-second-stage/figure1.jpg){: width="90%" height="90%" style="display: block; margin: 0 auto"}
 <p align="center"> 필자가 운전면허를 따던 시절에는 운전면허 따는 과정이 정말 고통스러웠습니다. 필기시험에 자동차 상식 물어보던 것은 덤... </p>
 
 이 외에도 고객께서 전혀 의도하지 않았지만 분명 차량의 전원관리에 악 영향을 미칠 수 있는 차량 운용으로 인해 방전이 생기는 경우는 다양했습니다.
@@ -72,7 +72,7 @@
 
 또한, 실행 프로세스의 순서도는 다음 도식도와 같이 나왔습니다.
 
-![](/img/socar-mobility-lab-battery-management-process-second/figure2.png){: width="90%" height="90%" style="display: block; margin: 0 auto"}
+![](/img/socar-mobility-lab-battery-management-process-second-stage/figure2.png){: width="90%" height="90%" style="display: block; margin: 0 auto"}
 <p align="center"> 순서도 </p>
 
 위의 기준으로 본 서비스는 2월부터 투입이 되었습니다. 대략적 성과를 말씀드리면, 동기 대비 이용건수가 8% 증가에 (2021년 n월 기준) 긴급출동 건수 35% 감소를 이루었으며 방전비율도 절반정도 감소(2021년 n월 기준) 했음을 확인했습니다 (회사 영업 기밀이기에 자세한 기준을 공개하기 어려운 점 양해 부탁드리겠습니다.)
