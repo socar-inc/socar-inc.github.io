@@ -2,7 +2,7 @@
 layout: post
 title: "쏘카 모빌리티Lab - 자동차 시동 배터리를 잘 관리하기 위한 여정"
 subtitle: "배터리 종합관리 프로젝트"
-date: 2021-06-01
+date: 2021-07-08
 category: mechanical engineering, chemical engineering
 author: charlie
 comments: true
