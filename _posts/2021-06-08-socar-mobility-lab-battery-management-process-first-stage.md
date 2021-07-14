@@ -4,6 +4,7 @@ title: "쏘카 모빌리티Lab - 자동차 시동 배터리를 잘 관리하기 
 subtitle: "배터리 종합관리 프로젝트"
 date: 2021-07-14
 category: mechanical engineering, chemical engineering
+background: '/assets/images/tyler-clemmensen-c5e6HmUTZDk-unsplash.jpg'
 author: charlie
 comments: true
 tags:
@@ -50,7 +51,7 @@ tags:
 
 ### 1. 배경
 
-- 방전과 관련된 문제는 월 100건 이상 접수됩니다.  어떤 경로로 접수되어 수리를 받는가에 따라 다르지만 준중형차량(대표적으로 아반떼)  기준 수리비가  25만원까지 청구되기도 합니다.  방전문제는 회사의 관리 손실을 일으키는 중요 요소입니다.
+- 방전과 관련된 문제는 월 100건 이상 접수됩니다. 어떤 경로로 접수되어 수리를 받는가에 따라 다르지만 준중형차량(대표적으로 아반떼) 기준 수리비가 25만원까지 청구되기도 합니다. **방전문제는 회사의 관리 손실을 일으키는 중요 요소입니다.**
 - 개인이 관리하는 일반적인 차량의 경우 3년간 600~800회의 시동 시도가 기록되고 배터리 제조사의 보증 시동 횟수도 600~800회 정도입니다. 그러나 쏘카가 운영하는 차량은 년간 2,200~2,800회 정도의 시동 시도가 발생합니다. 특히 2,200회를 넘어가는 시점에서는 배터리 관련 고장으로 인해 공업사에 차량이 입고될 확률이 급격히 높아집니다. 그러므로 **이 시기가 도래하기 전에 적절한 관리를 통해 배터리의 수명을 관리해주어야 합니다.**
 
 ![](/img/socar-mobility-lab-battery-management-process-first-stage/Figure-1.png){: width="90%" height="90%" style="display: block; margin: 0 auto"}
