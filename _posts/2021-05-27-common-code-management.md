@@ -48,50 +48,51 @@ tags:
 
 ---
 
-## (1차) 일단 구조를 결정하고 만들어봤습니다.
+## (1차) 공통 코드 구조 설계 및 초기 구현
 <br>
 
 ![공통코드-1차](/assets/images/common-code1.png)
 
-### 팀에서 처음한 내용들
-1. 코드를 어떻게 분류 할 것인가?
-   * `부모코드-자식코드`로 분류
+### 팀에서 결정한 내용
+
+1. 코드를 어떻게 분류할 것인가?
+   * `부모 코드-자식 코드`로 분류
 2. 코드를 어떻게 저장할 것인가?
-   * `DB`에 `부모코드(code_group) / 자식코드(code) 2개의 테이블`을 만들어서 저장.
+   * `DB`에 `부모 코드(code_group) / 자식 코드(code) 2개의 테이블`을 만들어서 저장
 3. 코드를 어떻게 사용할 것인가?
-   * `DB`에 저장시에는 `문자열`로 저장
-   * `kotlin`에서 사용할때는 `enum`을 정의해 두고 사용
-   * `javascript`에서 사용할때는 서버에서 API로 필요한 코드를 조회해서 사용.
-3. 각 사용처의 코드를 어떻게 sync 할것인가?
+   * `DB`에 저장할 경우 `문자열`로 저장
+   * `Kotlin`에서 사용할 때는 `ENUM`을 정의해 두고 사용
+   * `JavaScript`에서 사용할 때는 서버에서 API로 필요한 코드를 조회해서 사용
+3. 각 사용처의 코드를 어떻게 Sync 할 것인가?
    * `DB` - 기준 데이터
-   * `서버(kotlin)` - DB에 입력된 값을 기준으로 kotlin에 enum을 생성하는 유틸(`codeGenerator`)을 만들어 사용
-   * `frontend(javascript)` - 서버에서 필요한 코드를 (DB에서) 조회할 수 있는 API를 만들고 필요시 요청해서 사용.
-   * `각 개발자` - DB에 입력하기 위한 Insert 문을 팀 공통 문서(notion)에 관리함.
+   * `서버(Kotlin)` - DB에 입력된 값을 기준으로 ENUM을 생성하는 유틸(`codeGenerator`)을 만들어 사용
+   * `프론트엔드(JavaScript)` - 서버에서 필요한 코드를 DB에서 조회할 수 있는 API를 만들고 필요시 요청해서 사용
+   * `개발자` - DB에 입력하기 위한 Insert 문을 팀 공통 문서(Notion)에 관리
 5. 코드의 이름 규칙은 어떻게 할 것인가?
-   * `부모코드`는 이름과 함께 `5자리의 PREFIX`를 부여
-   * `자식코드`는 `PREFIX_XXX` 형태의 이름을 사용
-   * 대문자 사용.
+   * `부모 코드`는 이름과 함께 `5자리의 PREFIX`를 부여
+   * `자식 코드`는 `PREFIX_XXX` 형태의 이름을 사용
+   * 대문자 사용
 <br>
 <br>
 
 ### 결정의 배경
-1. [MySQL의 enum 단점](https://velog.io/@leejh3224/%EB%B2%88%EC%97%AD-MySQL%EC%9D%98-ENUM-%ED%83%80%EC%9E%85%EC%9D%84-%EC%82%AC%EC%9A%A9%ED%95%98%EC%A7%80-%EB%A7%90%EC%95%84%EC%95%BC-%ED%95%A0-8%EA%B0%80%EC%A7%80-%EC%9D%B4%EC%9C%A0)이 많으니 사용하지 말고 `문자열`로 씁시다.
-   * enum의 순서 변경이 있을 경우 테이블이 잠기고 시간이 데이터의 양에 따라 기하급수적으로 늘어날 수 있습니다.
-   * 숫자로 할 경우 DB에서 직접 조회시 코드의 의미를 추측 할 수 없습니다.
-2. 코딩시 공통코드를 문자열로 쓰진 않았으면 했습니다.
-   * `kotlin` 쪽은 DB에 있는 공통코드를 읽어서 [kotlinpoet](https://square.github.io/kotlinpoet/)을 활용해서 enum 클래스들을 생성하기로 했습니다. (`codeGenerator`)
-   * `javascript` 쪽은 서버에서 코드 조회를 위한 API를 만들어 두고 조회해서 사용하기로 했습니다. 하지만 실제 코드 값을 바로 사용할 때는 값을 바로 문자열로 사용 하기로 했습니다. 
-     * `javascript`에서도 kotlin의 enum처럼 상수로 선언해 두고 사용하고 싶었으나 신규 프로젝트를 진행하는 과정에서 이루어진 결정이라 javascript에서 사용성은 일부 포기하였습니다.
-3. 공통코드 목록을 구글시트에 정리해 두는 방법도 고민하였으나 개발 초기에 공통코드가 공유 되어야 하는 대상이 개발자뿐이라 그냥 insert 문을 notion에 붙여두고 관리하기로 했습니다.
+1. [MySQL의 ENUM 단점](https://velog.io/@leejh3224/%EB%B2%88%EC%97%AD-MySQL%EC%9D%98-ENUM-%ED%83%80%EC%9E%85%EC%9D%84-%EC%82%AC%EC%9A%A9%ED%95%98%EC%A7%80-%EB%A7%90%EC%95%84%EC%95%BC-%ED%95%A0-8%EA%B0%80%EC%A7%80-%EC%9D%B4%EC%9C%A0)이 많으니 사용하지 말고 `문자열`로 사용합니다.
+   * ENUM의 순서 변경이 있을 경우 테이블이 잠기고, 시간이 데이터의 양에 따라 기하급수적으로 늘어날 수 있습니다.
+   * 숫자로 할 경우 DB에서 직접 조회 시 코드의 의미를 추측할 수 없습니다.
+2. 코딩 시 공통 코드를 문자열로 쓰진 않았으면 했습니다.
+   * `Kotlin` 쪽은 DB에 있는 공통 코드를 읽어서 [kotlinpoet](https://square.github.io/kotlinpoet/)을 활용해서 ENUM 클래스들을 생성하기로 했습니다. (`codeGenerator`)
+   * `javascript` 쪽은 서버에서 코드 조회를 위한 API를 만들어 두고 조회해서 사용합기로 했습니다. 하지만 실제 코드 값을 바로 사용할 때는 값을 바로 문자열로 사용하기로 했습니다. 
+     * `Javascript`에서도 Kotlin의 ENUM처럼 상수로 선언해 두고 사용하고 싶었으나 신규 프로젝트를 진행하는 과정에서 이루어진 결정이라 Javascript에서 사용성은 일부 포기하였습니다.
+3. 공통 코드 목록을 구글 시트에 정리해 두는 방법도 고민하였으나 개발 초기에 공통코드가 공유되어야 하는 대상이 개발자뿐이라 그냥 insert 문을 Notion에 붙여두고 관리하기로 했습니다.
 <br>
 <br>
 
 ### 실제 사용 예시
-* 개발자간 공유를 위한 insert 쿼리
-  * notion 문서에 올려 두고 공통코드를 변경한 개발자가 직적 해당 sql을 수정 후 팀내에 코드가 변경된 사실을 공유 하는 방식으로 관리.
+* 개발자 간 공유를 위한 Insert 쿼리
+  * Notion 문서에 공통 코드를 작성하고, 공통 코드를 변경한 개발자가 직접 해당 SQL을 수정한 후, 팀 내에 코드가 변경된 사실을 공유하는 방식으로 관리합니다
 
 ```sql
-# 코드그룹 생성
+# 코드 그룹 생성
 INSERT INTO `code_group` (`name`, `prefix`, `description`)
 VALUES
     ('SETTLEMENT_TYPE', 'STLTP_', '비용 발생 유형');
@@ -102,8 +103,8 @@ VALUES
     ('SETTLEMENT_TYPE', 'STLTP_MANUAL', '수동', '', 1);
 ```
 
-* 생성된 kotlin enum 코드 <a name="generated_kotlin_code"></a>
-  * 공통코드를 변경한 개발자가 generator를 돌려서 kotlin 코드를 생성 후 git에 commit.
+* 생성된 Kotlin ENUM 코드 <a name="generated_kotlin_code"></a>
+  * 공통 코드를 변경한 개발자가 generator를 돌려서 kotlin 코드를 생성 후 GIT에 Commit합니다.
 
 ```kotlin
 object Codes {
@@ -121,16 +122,16 @@ object Codes {
 }
 ```
 
-* vue.js에서 사용
+* Vue.js에서 사용할 경우
 
 ```js
-// 공통코드 가져오기
+// 공통 코드 가져오기
 const codes = await CodeApi.getByGroups(['SETTLEMENT_TYPE']]);
 
-// 공통코드 값 비교
+// 공통 코드 값 비교
 this.type === 'STLTP_AUTO';
 
-// 공통코드 => 라벨 변환
+// 공통 코드 => 라벨 변환
 getCodeLabel = (codes, value) => {
   const code = find(codes, { name: value }) || find(codes, { id: value });
   if (!code) return null;
@@ -141,21 +142,21 @@ getCodeLabel = (codes, value) => {
 
 
 
-### 이런게 불편해요.
-1. 공통코드 변경시마다 신경써야 할 것들이 너무 많습니다.
-   * 추가할 코드를 insert 문으로 작성 해 DB에 입력 및 notion 문서 갱신
-   * `codeGenerator`를 돌려서 kotlin 코드 생성
-   * kotlin 코드를 git에 commit
-   * 코드 변경된 사항을 팀원에게 공유.
-   * 다른 팀원들은 로컬 DB에 추가된 코드 추가 & git pull
+### 사용 후 발견한 불편한 점
+1. 공통 코드를 변경할 때마다 신경써야 할 것들이 너무 많습니다.
+   * 추가할 코드를 Insert 문으로 작성해 DB에 입력 및 Notion 문서 갱신
+   * `codeGenerator`를 돌려서 Kotlin 코드 생성
+   * Kotlin 코드를 Git에 commit
+   * 코드 변경된 사항을 팀원에게 공유
+   * 다른 팀원들은 로컬 DB에 추가된 코드 추가 & Git pull
 2. `1.`의 절차가 너무 복잡해서 에러를 만나는 경우가 많습니다.
-   * kotlin enum 코드와 로컬 DB의 값이 서로 달라서 에러 발생.
-     * A개발자가 공통코드 변경이 필요한 개발건을 진행하고 그 코드가 머지된 이후 다른 B개발자가 pull을 받은 후 이어서 다른 개발을 진행하려고 할 때, 로컬 DB에는 아직 신규 코드가 추가 되지 않아 매번 에러를 확인하게 됩니다. 이 때 B개발자는 notion에 있는 변경된 insert 쿼리를 로컬 DB에 실행해야 하는데, 이 과정이 번거롭게 느껴졌습니다.
-3. `javascript 공통코드 값 비교` 할때 문자열로 쓰는게 맘에 안듭니다.
-   * 코드 컨벤션을 깔끔하게 유지하고 싶어하는 팀원들이 많기도하고, 코딩시에 해당 코드의 실제값을 DB나 kotlin 코드에서 찾아 복사해서 써야 하는 것이 불편합니다.
+   * Kotlin ENUM 코드와 로컬 DB의 값이 서로 달라서 에러 발생.
+     * A 개발자가 공통 코드 변경이 필요한 개발 건을 진행하고 그 코드가 머지된 이후 다른 B 개발자가 pull을 받은 후, 이어서 다른 개발을 진행하려고 할 때 로컬 DB에는 아직 신규 코드가 추가 되지 않아 매번 에러를 경험하게 됩니다. 이 때 B 개발자는 Notion에 있는 변경된 Insert 쿼리를 로컬 DB에 실행해야 하는데, 이 과정이 번거롭게 느껴졌습니다.
+3. `JavaScript 공통코드 값 비교` 할 때 문자열로 사용하는 것이 꺼림칙합니다.
+   * 코드 컨벤션을 깔끔하게 유지하고 싶어 하는 팀원들이 많기도 하고, 코딩할 때 해당 코드의 실제 값을 DB나 Kotlin 코드에서 찾아 복사해야 하는 것이 불편합니다.
    * 또한 복사하지 않고 직접 타이핑시 오타로 인한 버그도 발생할 수 있었습니다.
-4. javascript에서 필요할때마다 코드를 API로 가져오는데 너무 자주 필요합니다.. (코드 조회를 위한 API 요청이 너무 많습니다.)
-   * 서버 / 프론트엔드 둘다 팀내에서 개발하는데 굳이 이렇게 해야하나요?
+4. JavaScript에서 필요할 때마다 코드를 API로 가져오는데, 너무 자주 필요합니다(코드 조회를 위한 API 요청이 너무 많습니다)
+   * 백오피스 서버 / 프론트엔드를 모두 팀에서 개발하는데 나눠서 해야 하나요?
 
 <br>
 
