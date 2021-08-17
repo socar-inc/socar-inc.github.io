@@ -162,30 +162,29 @@ getCodeLabel = (codes, value) => {
 
 ---
 
-## (2차) 불편함을 없애 봅시다.(DB를 빼버리자!)
+## (2차) 불편함 개선 작업(DB를 빼버리자!)
 <br>
 
 ![공통코드-2차](/assets/images/common-code2.png)
 
-### 공통코드 변경시마다 DB와 코드를 sync 시키는 작업을 없애봅시다.
-* DB에서 직접 데이터를 확인할때 공통코드 테이블을 join해서 `공통코드 -> 라벨`로 변경해서 쿼리 하는 경우가 생각보다 없었습니다.
-* 위 케이스를 제외하면 DB를 사용하는 것은 프론트엔드를 위해 서버에서 API로 코드를 내려줄때 DB를 조회해서 내리는 곳 밖에 없었습니다.
-* 그렇다면! DB에서 코드 테이블을 삭제해버리고 `codeGenerator로 DB에서 생성한 kotlin code`를 메인 데이터로 사용하는 방법을 시도해 볼 수 있을거 같았습니다.
+### 공통 코드를 변경할 때마다 DB와 코드를 Sync 시키는 작업을 없애봅시다
+* DB에서 직접 데이터를 확인할 때 공통 코드 테이블을 join해서 `공통 코드 -> 라벨`로 변경해서 쿼리하는 경우가 생각보다 없었습니다.
+* 위 케이스를 제외하면 DB를 사용하는 것은 프론트엔드를 위해 서버에서 API로 코드를 내려줄 때 DB를 조회해서 내리는 곳밖에 없었습니다.
+* 그렇다면! DB에서 코드 테이블을 삭제해버리고 `codeGenerator로 DB에서 생성한 Kotlin code`를 메인 데이터로 사용하는 방법을 시도해 볼 수 있을 거 같았습니다.
 <br>
 <br>
 
-### 코드 조회 API를 DB없이 어떻게 만들면 될까요?
-* kotlin 코드를 `reflection`해서 필요한 코드를 추출해서 기존 DB에서 조회해서 반환하던 response와 동일한 값을 내려줍니다.
-  * `실제 사용예시`에 있는 `object Codes {}`에 확장함수(`getCodes`)를 하나 붙여줍니다.
-  * 대/소문자나 camelCase / snake_case 변환이 필요한 부분은 [google guava](https://github.com/google/guava)의 `CaseFormat`를 활용했습니다.
-* 코드 예시(`GitHub Gist`): **[<u>reflection을 이용한 공통코드 조회</u>](https://gist.github.com/socar-dorma/161c58fda3b848184c62ae287ca59e4b)**
+### 코드 조회 API를 DB 없이 어떻게 만들면 될까요?
+* Kotlin 코드를 `reflection` 해서 필요한 코드를 추출해서 기존 DB에서 조회해서 반환하던 response와 동일한 값을 내려줍니다.
+  * `실제 사용 예시`에 있는 `object Codes {}`에 확장함수(`getCodes`)를 하나 붙여줍니다.
+  * 대/소문자나 camelCase / snake_case 변환이 필요한 부분은 [google guava](https://github.com/google/guava)의 `CaseFormat`을 활용했습니다.
+* 코드 예시(`GitHub Gist`): **[<u>reflection을 이용한 공통 코드 조회</u>](https://gist.github.com/socar-dorma/161c58fda3b848184c62ae287ca59e4b)**
 <br>
 <br>
 
-### 어떤 문제가 해소되었나요?
-* 이제 공통코드를 DB에 넣지 않아도 되고, notion에 insert 쿼리를 관리하지 않아도 됩니다.
-* 공통코드를 변경한 사실을 팀내에 따로 전파하지 않아도 git pull만 받으면 됩니다.
-* 단, 개발자들은 좋지만... `DB에서 직접 데이터를 보는 분(DBA라거나..) 입장에선 반갑지 않을 수 있습니다.`(;;;)
+### 해소된 문제
+* 이제 공통 코드를 DB에 넣지 않아도 되고, Notion에 Insert 쿼리를 관리하지 않아도 됩니다.
+* 공통 코드를 변경한 사실을 팀 내에 따로 전파하지 않아도 Git pull만 받으면 됩니다.
 <br>
 <br>
 
