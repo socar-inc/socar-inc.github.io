@@ -205,7 +205,7 @@ getCodeLabel = (codes, value) => {
 <br>
 <br>
 
-### kotlin 코드를 파싱해서 javascript에서 사용할 공통코드 생성하는 gradle plugin을 만듭니다.
+### Kotlin 코드를 파싱해서 JavaScript에서 사용할 공통코드 생성하는 Gradle Plugin을 만듭니다.
 * reflection은 이미 class가 로딩된 이후에 [Kotlin의 KClass](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-class/)나 [Java의 Class](https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html)를 사용하지만 Kotlin PSI의 경우는 전혀 다른 클래스들을 활용하고 별도의 dependency도 필요합니다.
 
 ```groovy
