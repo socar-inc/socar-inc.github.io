@@ -165,10 +165,10 @@ return if (num > 75) { // num <= 100
 
 ```kotlin
 val m: NavigableMap<Int, String> = TreeMap()
-m.put(100, "봄")
-m.put(75, "여름")
-m.put(50, "가을")
-m.put(25, "겨울")
+m[100] = "봄"
+m[75]  = "여름"
+m[50]  = "가을"
+m[25]  = "겨울"
 
 return = m.ceilingEntry(num).getValue()
 ```
@@ -213,9 +213,9 @@ api 문서를 보면 이 경우 `null`을 반환한다고 명시했습니다.
 // 10  9   8   7   6   5   4   3   2   1  (0)
 
 val map: NavigableMap<Int, String> = TreeMap()
-map.put(10, "빨강")
-map.put(5, "파랑")
-map.put(2, "초록")
+map[10] = "빨강"
+map[5]  = "파랑"
+map[2]  = "초록"
 ```
 
 그리고 `Random`을 써서 이 맵을 탐색합니다.
