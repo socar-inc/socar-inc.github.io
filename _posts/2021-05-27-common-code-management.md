@@ -1,7 +1,7 @@
 ---
 layout: post
-title: "팀내 공통코드 관리 변천사"
-subtitle: "공통코드 관리 설계, 공통코드 테이블 꼭 필요 한가요? (feat. gradle plugin & kotlin psi)"
+title: "쏘카 백오피스 팀 내 공통 코드(Common Code) 관리 변천사"
+subtitle: "공통 코드 관리 설계, 공통 코드 테이블 꼭 필요한가요? (Feat. Gradle Plugin & Kotlin PSI)"
 date: 2021-05-27 09:25:00 +0900
 category: dev
 background: '/assets/images/yan-ots-FF14FKgecyM-unsplash.jpg'
@@ -11,20 +11,20 @@ tags:
     - 공통코드관리
 ---
 
-# 공통코드를 어떻게 관리 및 사용 할 것인가?
 
 <br>
-저희팀은 쏘카 R&D 본부에서 다양한 백오피스 개발을 담당하고 있습니다. 백오피스 개발에 사용되는 기술 스택은 다음과 같습니다.
+저희 팀은 쏘카 R&D 본부에서 다양한 백오피스 개발을 담당하고 있습니다. 백오피스 개발에 사용되는 기술 스택은 다음과 같습니다.
 
 ```markdown
 - Database: MySQL
 - Server Framework: SpringBoot
-- Frontend Framework: vue.js
-- Language: kotlin / javascript(일부는 typescript)
+- Frontend Framework: Vue.js
+- Language: Kotlin / JavaScript(일부는 TypeScript)
 ```
+## 공통 코드(Common Code)를 어떻게 관리하고 사용할 것인가?
 
-개발을 하다보면 상태를 표현하는 값이나 변경 빈도가 낮은 분류(Category)등을 공통코드로 관리하게 됩니다.
-프론트엔드(vue.js)에서 일반적으로 `select`나 `raido`를 표시할때 데이터로 사용하고 서버(kotlin)에서는 비지니스 로직을 작성할때 사용하게 되고 DB에도 저장되게 됩니다.
+개발을 하다 보면 상태를 표현하는 값이나 변경 빈도가 낮은 분류(Category) 등을 공통 코드로 관리하게 됩니다.
+프론트엔드(Vue.js)에서 일반적으로 `select`나 `raido`를 표시할 때 데이터로 사용하고 서버(Kotlin)에서는 비즈니스 로직을 작성할 때 사용하게 되고 DB에도 저장되게 됩니다.
 
 실제 저희팀에서는 이런 것들을 공통코드로 정의해서 사용하고 있습니다.
 ```markdown
@@ -39,10 +39,10 @@ tags:
 
 <br>
 
-## 들어가기 앞서...
-사실 공통코드 관리를 어떻게 하면 되느냐?에 대한 결론부터 말씀드리면 `정답은 없다`라고 생각합니다.
+## 들어가기 전에
+공통 코드 관리를 어떻게 하면 되느냐? 에 대한 결론부터 말씀드리면 `정답은 없다`고 생각합니다.
 
-비슷한 고민을 하시는 분들에게 저희팀의 시행착오가 참고가 될 수 있을까 해서 저희팀이 공통코드 처리를 위해 어떤 고민을 하고 어떤 방법으로 불편한 점을 해소했는지에 대한 기록을 적어볼까 합니다.
+비슷한 고민을 하시는 분들에게 저희 팀의 시행착오가 참고될 수 있을까 해서 저희 팀이 공통 코드 처리를 위해 어떤 고민을 하고 어떤 방법으로 불편한 점을 해소했는지를 작성했습니다.
 
 <br>
 
