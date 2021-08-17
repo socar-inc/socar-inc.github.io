@@ -2,7 +2,7 @@
 layout: post
 title: "쏘카 백오피스 팀 내 공통 코드(Common Code) 관리 변천사"
 subtitle: "공통 코드 관리 설계, 공통 코드 테이블 꼭 필요한가요? (Feat. Gradle Plugin & Kotlin PSI)"
-date: 2021-05-27 09:25:00 +0900
+date: 2021-08-17 15:10:00 +0900
 category: dev
 background: '/assets/images/yan-ots-FF14FKgecyM-unsplash.jpg'
 author: dorma
