@@ -190,18 +190,18 @@ getCodeLabel = (codes, value) => {
 
 ---
 
-## (3차) javascript에서 쓸 코드도 생성해 봅시다.
-* **덧. 글이 너무 길어질거 같아 `gradle plugin 만드는 방법 및 사용방법`은 생략된 부분이 많습니다. 대략적인 작업 흐름을 알 수 있는 정도로 작성하였습니다.**
+## (3차) JavaScript에서 사용할 코드 생성
+* **덧. 글이 너무 길어질 것 같아 `Gradle Plugin 만드는 방법 및 사용 방법`은 생략된 부분이 많습니다. 대략적인 작업 흐름을 알 수 있는 정도로 작성하였습니다.**
 
 <br>
 
 ![공통코드-3차](/assets/images/common-code3.png)
 
-### DB가 사라졌으니 kotlin 코드를 분석해서 javascript 코드를 생성해 봅시다.
-* 그런데 팀내에 프로젝트가 한개가 아니니 여러 프로젝트에서 공통으로 쓸 수 있었으면 합니다.
-* gradle plugin 형태로 만들어서 각 프로젝트에서 사용 하고자 합니다.
-* gradle plugin에서 프로젝트에 있는 kotlin 파일을 접근하려니 reflection으로 접근 하기가 애매합니다.
-* gradle plugin이 실행되는 시점에 프로젝트 코드를 `import` 하거나 할 수는 없으니 gradle plugin 입장에선 공통코드가 선언된 파일의 경로을 입력받고 파일을 열어서 kotlin 코드를 파싱해서 쓸 수 밖에 없습니다.
+### DB가 사라졌으니 Kotlin 코드를 분석해서 JavaScript 코드를 생성해 봅시다.
+* 팀 내에 프로젝트가 한 개가 아니니 여러 프로젝트에서 공통으로 쓸 수 있었으면 합니다.
+* Gradle Plugin 형태로 만들어서 각 프로젝트에서 사용하고자 합니다.
+* Gradle Plugin에서 프로젝트에 있는 Kotlin 파일에 접근하려니 reflection으로 접근하기가 애매합니다.
+* Gradle Plugin이 실행되는 시점에 프로젝트 코드를 `import` 하거나 할 수는 없으니 Gradle Plugin 입장에선 공통코드가 선언된 파일의 경로를 입력받고 파일을 열어서 Kotlin 코드를 파싱해서 쓸 수밖에 없습니다.
 <br>
 <br>
 
