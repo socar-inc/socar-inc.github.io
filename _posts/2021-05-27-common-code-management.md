@@ -212,15 +212,15 @@ getCodeLabel = (codes, value) => {
 implementation "org.jetbrains.kotlin:kotlin-compiler:1.5.0"
 implementation "org.jetbrains.kotlin:kotlin-compiler-embeddable:1.5.0"
 ```
-* [(이제 직접 수정하고 있는) 생성된 kotlin enum 코드](#generated_kotlin_code)에 있는 kotlin code를 파싱하는 코드의 대략적인 구조입니다. (**실제 실행되는 코드에서 일부를 발췌한 코드라 바로 실행은 안됩니다.**)
-  * javascript / typescript 코드 생성은 문법에 맞게 문자열을 생성 후 파일로 저장했습니다.
-  * 코드 예시(`GitHub Gist`): **[<u>kotlin psi으로 공통코드 파싱하기</u>](https://gist.github.com/socar-dorma/306453fafc0383869f62adf31cfaba0c)**
+* [(이제 직접 수정하고 있는) 생성된 Kotlin ENUM 코드](#generated_kotlin_code)에 있는 Kotlin Code를 파싱하는 코드의 대략적인 구조입니다. (**실제 실행되는 코드에서 일부를 발췌한 코드라 바로 실행은 안 됩니다**)
+  * JavaScript / TypeScript 코드 생성은 문법에 맞게 문자열을 생성 후 파일로 저장했습니다.
+  * 코드 예시(`GitHub Gist`): **[<u>Kotlin PSI로 공통코드 파싱하기</u>](https://gist.github.com/socar-dorma/306453fafc0383869f62adf31cfaba0c)**
 <br>
 <br>
 
-### 만들어진 gradle plugin 이렇게 동작합니다.
-* gradle plugin을 적용하고 아래 설정을 추가하면 gradle task(`generate<설정 이름(아래 설정기준management)>Code` 유형의 이름으로 생성됨)가 자동으로 추가됩니다.
-  * 각 프로젝트의 [(이제 직접 수정하고 있는) 생성된 kotlin enum 코드](#generated_kotlin_code)의 절대경로와 javascript 파일을 생성할 절대경로를 전달합니다.
+### 만들어진 Gradle Plugin의 동작 방식
+* Gradle Plugin을 적용하고 아래 설정을 추가하면 Gradle Task(`generate<설정 이름(아래 설정 기준 management)>Code` 유형의 이름으로 생성됨)가 자동으로 추가됩니다.
+  * 각 프로젝트의 [(이제 직접 수정하고 있는) 생성된 Kotlin Enum 코드](#generated_kotlin_code)의 절대 경로와 JavaScript 파일을 생성할 절대 경로를 전달합니다.
 
 ```groovy
 codeJavascriptGenerator {
