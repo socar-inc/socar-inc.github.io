@@ -1,17 +1,16 @@
-
 ---
 layout: post
 title: "쏘카 안드로이드 팀 신입 개발자 미뇽의 입사기"
 subtitle: "쏘카의 입사 전부터 후까지"
 date: 2021-08-19 12:00:00 +0900
 category: dev
-background: '/assets/images/join-in-socar-android.png'
+background: "/assets/images/join-in-socar-android.jpg"
 author: mignon
 comments: true
 tags:
-	- android
-
+    - android
 ---
+
 
 안녕하세요. 소프트웨어 학과를 졸업하고 올해 3월에 입사하여 쏘카 안드로이드 팀에서 일하고 있는 신입 개발자 미뇽(최민정)입니다.
 
@@ -105,7 +104,7 @@ tags:
 
 안드로이드 팀은 좋은 방향으로 성장하기 위해 항상 노력하고 있습니다. 물론 안드로이드 팀뿐만 아니라 쏘카의 모든 팀이 한 발짝 더 나아가기 위해 노력하고 있습니다. 항상 노력하고자 하는 모습도 좋지만, 쏘카에 와서 가장 만족한 것은 좋은 사람들입니다. 지금은 코로나 4단계로 전사 재택근무 중이라 어렵지만, 이전에 회사에 출근해서 얘기하고, 함께 식사하는 시간이 너무나도 즐거웠습니다. 아래의 사진처럼 벚꽃이 이쁘게 핀 날 피크닉 가듯이 식사를 하기도 했습니다.
 
-![](/img/join-in-socar-android/lunch-with-company.png){: width="100%"}
+![](/img/join-in-socar-android/lunch-with-company.jpg){: width="100%"}
 
 <br />
 
@@ -124,3 +123,4 @@ tags:
 <br />
 
 현재 쏘카 안드로이드 팀은 **주니어, 시니어에 무관하게 채용 중**입니다. 안드로이드 팀 외에도 쏘카의 채용은 모두 열려있습니다. 카쉐어링 분야와 쏘카에 관심 있고, 수평적 문화 속에서 좋은 사람들과 즐겁게 일할 분을 기다리고 있습니다.
+
