@@ -64,29 +64,25 @@ java api doc(v9)를 보면 `Map`의 서브 인터페이스는 11개 씩이나 �
 
 # 오늘의 주제: NavigableMap
 
-지금은 어떤지 모르겠습니다만 작년 중순 무렵 까지는 `NavigableMap`으로 검색해 보아도 단순히 api doc을 연결해 놓은 글 정도가 대부분이었습니다.
-지금도 여전히 이 자료 구조를 언제 어디에 쓰면 좋은지를 쓸모 있는 예를 보여주는 국내 자료는 없는 듯 합니다.
-특별히 이런 자료 구조를 써야 할 일이 별로 없었으니 그랬으리라 생각합니다.
-
-우선 `NavigableMap`을 설명하는 내용부터 약간 살펴 보겠습니다.
+`NavigableMap`을 설명하는 내용부터 약간 살펴 보겠습니다.
 ([https://docs.oracle.com/javase/9/docs/api/java/util/NavigableMap.html](https://docs.oracle.com/javase/9/docs/api/java/util/NavigableMap.html))
 
 문서를 보면, 첫 줄에
 
 > A `SortedMap` extended with navigation methods returning the closest matches for given search targets.
 
- 이라고 했습니다.
- 사실 이 내용이 `NavigableMap`의 특징을 설명하는 전부입니다.
- 이어서 다음 문장을 읽어 보겠습니다.
+이라고 했습니다.
+이 문장이 `NavigableMap`의 특징을 설명하는 전부입니다.
+이어서 다음 문장을 읽어 보겠습니다.
 
 > Methods `lowerEntry(K)`, `floorEntry(K)`, `ceilingEntry(K)`, and `higherEntry(K)` return `Map.Entry` objects associated with keys respectively less than, less than or equal, greater than or equal, and greater than a given key, returning null if there is no such key.
 
 이 문장에서 어떻게 사용을 하는지 잘 설명하고 있습니다.
 그런데 이 내용만 가지고 당장 어디에 써야겠다고 생각이 떠오르기는 쉽지 않습니다.
 사실 저도 그러했습니다.
-`NavigableMap`이 무엇인지는 옛날에 읽어보긴 했지만 특별히 쓸 만한 곳은 없었습니다.
+`NavigableMap`이 무엇인지는 오래 전에 공부했지만 특별히 쓸 만한 곳은 없었습니다.
 그러다가 최근 어떤 문제를 해결하려고 고민하던 중 문득 이 자료구조가 떠올랐고, 테스트 코드를 몇 줄 구현해 보면서 다행히 생각대로 잘 풀렸습니다.
-공부한지는 한참 되었지만 쏘카에서 처음으로 실제 필요한 곳에 사용을 해 보았습니다.
+공부한지 한참 지난 후 이제서야 쏘카에서 처음으로 실제 필요한 곳에 사용할 기회가 생긴 셈이지요.
 
 조금 더 API 문서를 훑어 보겠습니다.
 
@@ -224,10 +220,14 @@ map[2]  = "초록"
 val color = map.ceilEntry(Random.nextInt(1, 10)).getValue()
 ```
 
-매우 직관적이면서도 간결한 구현입니다.
-앞선 예제처럼 if - else를 써도 비슷하게 구현할 수 있는데 `NavigableMap`을 사용했을 때 보다는 깔끔하지 않습니다.
+* 1, 2 가 나온다면: "파랑",
+* 3, 4, 5 라면: "초록",
+* 6, 7, 8, 9, 10 은: "빨강"
 
-게다가 잘 활용하면 동적으로 조건을 처리할 수 있도록 구현하기도 비교적 쉬운 편입니다.
+을 반환하겠지요?
+문제에서 요구한 5:3:2 가중치로 항목을 선택합니다.
+
+매우 직관적이면서도 간결한 구현입니다.
 
 ## NavigableMap 전제 조건: SortedMap
 
