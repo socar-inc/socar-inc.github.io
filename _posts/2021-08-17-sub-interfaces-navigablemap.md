@@ -220,6 +220,10 @@ map[2]  = "초록"
 val color = map.ceilEntry(Random.nextInt(1, 10)).getValue()
 ```
 
+이 문제 같은 경우에는 간격이 중요합니다.
+간격만큼 랜덤으로 선택한 값이 걸릴 확률, 즉 가중치를 결정합니다.
+선택한 값에 따라 경계값으로 설정한 키를 찾아가는 구조입니다.
+
 * 1, 2 가 나온다면: "파랑",
 * 3, 4, 5 라면: "초록",
 * 6, 7, 8, 9, 10 은: "빨강"
@@ -231,7 +235,7 @@ val color = map.ceilEntry(Random.nextInt(1, 10)).getValue()
 
 ## NavigableMap 전제 조건: SortedMap
 
-그렇다면 `NavigableMap`을 구현하려면 어떤 전제 조건이 필요할까요?
+만약 `NavigableMap`을 구현한다고 가정한다면 키 항목 구성은 어떤 전제 조건이 필요할까요?
 `NavigableMap`에서 제시하는 키를 찾는 방법을 다시 살펴보면, 어떤 값을 주고 이 값 보다 크거나 작은 방향으로 가장 가까이 위치한 키를 찾습니다.
 즉, 키 요소를 어떤 기준에 따라 정렬해 놓지 않으면 안 됩니다.
 그래서 `NavigableMap`의 상위 인터페이스로서 `SortedMap`은 매우 자연스런 모습입니다.
