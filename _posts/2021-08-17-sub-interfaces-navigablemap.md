@@ -67,6 +67,9 @@ java api doc(v9)를 보면 `Map`의 서브 인터페이스는 11개 씩이나 �
 
 7가지 뿐만 아니라 11가지 인터페이스 모두를 다루었으면 좋겠지만 이 글에서는 이 중에서 `NavigableMap`이 무엇인지, `NavigableMap`의 구현체는 무엇인지를 이야기합니다.
 
+---
+
+<br/>
 # 오늘의 주제: NavigableMap
 
 `NavigableMap`을 설명하는 내용부터 약간 살펴 보겠습니다.
