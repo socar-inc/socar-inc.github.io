@@ -135,7 +135,7 @@ NavigableMap m = new LinkedHashMap();
 `HashMap`, `LinkedHashMap`은 `NavigableMap` 인터페이스를 상속하지 않은 구현체입니다.
 
 `Map`의 메서드는 25개나 되지만 사실상 `get(key)`, `put(key, value)` 말고는 사용하는 일이 거의 없습니다.
-비슷하게 NavigableMap의 21개 메서드 중 4가지 메서드의 특징만 살펴보면 NavigableMap을 충분히 사용할 수 있으리라고 생각합니다[^3].
+비슷하게 `NavigableMap`의 21개 메서드 중 4가지 메서드의 특징만 살펴보면 `NavigableMap`을 충분히 사용할 수 있으리라고 생각합니다[^3].
 
 ## 간단한 사용 예제 1: 숫자 범위에 따른 값 할당
 
