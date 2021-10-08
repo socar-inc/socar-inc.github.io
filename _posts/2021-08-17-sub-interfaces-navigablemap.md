@@ -8,9 +8,7 @@ background: ''
 author: ray
 comments: true
 tags:
-  - java collections
-  - kotlin collections
-  - standard api
+  - server
 ---
 
 어떤 항목 중에서 임의의 선택을 하되 가중치를 두어야 한다면 어떻게 구현할 수 있을까요?
