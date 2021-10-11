@@ -63,7 +63,7 @@ Map map = new HashMap();
 ## Map 기능을 확장한 몇 가지 서브 인터페이스
 
 [java api doc](https://docs.oracle.com/javase/9/docs/api/java/util/Map.html)(v9)을 보면 `Map`의 서브 인터페이스는 11개 씩이나 됩니다.
-이 중에서 “map” 하고 관계 있어 보이는 대상은 7개입니다: `ConcurrentMap`, `ConcurrentNavigableMap`, `NavigableMap`, `ObservableMap`, `ObservableMapValue`, `SortedMap`, `WritableMapValue`
+이 중에서 "map” 하고 관계 있어 보이는 대상은 7개입니다: `ConcurrentMap`, `ConcurrentNavigableMap`, `NavigableMap`, `ObservableMap`, `ObservableMapValue`, `SortedMap`, `WritableMapValue`
 
 7가지 뿐만 아니라 11가지 인터페이스 모두를 다루었으면 좋겠지만 이 글에서는 이 중에서 `NavigableMap`이 무엇인지, `NavigableMap`의 구현체는 무엇인지를 이야기합니다.
 
@@ -94,7 +94,7 @@ Map map = new HashMap();
 
 조금 더 API 문서를 훑어 보겠습니다.
 
-이 “인터페이스"는 `SortedMap` 인터페이스를 상속했습니다.
+이 "인터페이스"는 `SortedMap` 인터페이스를 상속했습니다.
 
 ```java
 public interface NavigableMap<K,V> extends SortedMap<K,V>
@@ -103,7 +103,7 @@ public interface NavigableMap<K,V> extends SortedMap<K,V>
 `SortedMap`은 `Map`을 상속했습니다.
 그렇다면 `NavigableMap` 이전에 `SortedMap`을 설명해야 할 수도 있겠지만, `NavigableMap`을 설명하면서 자연스럽게 이야기를 하게 되지 않을까 생각합니다.
 
-“인터페이스"를 강조했습니다.
+"인터페이스"를 강조했습니다.
 구현체가 아닌 인터페이스입니다.
 
 인터페이스니까 어떤 동작을 제공하는지 계속해서 API문서를 살펴 보겠습니다.
@@ -123,7 +123,7 @@ Map m1 = new TreeMap();
 NavigableMap m2 = new TreeMap();
 ```
 
-약간 혼란을 느끼는 분이 있을 수도 있는데, 그래서 앞에 “인터페이스"를 강조했습니다.
+약간 혼란을 느끼는 분이 있을 수도 있는데, 그래서 앞에 "인터페이스"를 강조했습니다.
 같은 `TreeMap` 구현체를 어떤 인터페이스로 사용하느냐에 따라 관점이 달라집니다.
 어쩌면 이 이야기가 더욱 중요합니다.
 우리의 관심사가 단순히 (키가 정렬된) `Map`인지, 제시한 요소와 방향에 가장 가까운 키를 찾으려는지에 따라 같은 `TreeMap` 구현체라 해도 사용하는 API가 다릅니다.
