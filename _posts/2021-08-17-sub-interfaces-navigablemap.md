@@ -62,7 +62,7 @@ Map map = new HashMap();
 
 ## Map 기능을 확장한 몇 가지 서브 인터페이스
 
-java api doc(v9)를 보면 `Map`의 서브 인터페이스는 11개 씩이나 됩니다.
+[java api doc](https://docs.oracle.com/javase/9/docs/api/java/util/Map.html)(v9)을 보면 `Map`의 서브 인터페이스는 11개 씩이나 됩니다.
 이 중에서 “map” 하고 관계 있어 보이는 대상은 7개입니다: `ConcurrentMap`, `ConcurrentNavigableMap`, `NavigableMap`, `ObservableMap`, `ObservableMapValue`, `SortedMap`, `WritableMapValue`
 
 7가지 뿐만 아니라 11가지 인터페이스 모두를 다루었으면 좋겠지만 이 글에서는 이 중에서 `NavigableMap`이 무엇인지, `NavigableMap`의 구현체는 무엇인지를 이야기합니다.
