@@ -9,6 +9,7 @@ author: ray
 comments: true
 tags:
   - server
+  - java
 ---
 
 문제 하나로 글을 시작합니다.
