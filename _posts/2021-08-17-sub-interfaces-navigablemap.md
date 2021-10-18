@@ -4,7 +4,7 @@ title: "Java Map의 확장 인터페이스 NavigableMap 이야기"
 subtitle: " Java NavigableMap 이야기"
 date: 2021-10-19 09:00:00 +0900
 category: dev
-background: ''
+background: '/assets/images/photo-1623282033815-40b05d96c903.jpeg'
 author: ray
 comments: true
 tags:
