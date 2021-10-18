@@ -244,7 +244,7 @@ val color = map.ceilEntry(Random.nextInt(1, 10)).getValue()
 `NavigableMap`에서 제시하는 키를 찾는 방법을 다시 살펴보면, 어떤 값을 주고 이 값 보다 크거나 작은 방향으로 가장 가까이 위치한 키를 찾습니다.
 즉, 키 요소를 어떤 기준에 따라 정렬해 놓지 않으면 안 됩니다.
 그래서 `NavigableMap`의 상위 인터페이스로서 `SortedMap`은 매우 자연스런 모습입니다.
-java에서는 `SortedMap`이나 `NavigableMap` 구현체가 따로 존재하지 않고 `TreeMap` 하나로 이 두 가지 인터페이스를 모두 만족하도록 구현해 놓았습니다.
+JAVA에서는 `SortedMap`이나 `NavigableMap` 구현체가 따로 존재하지 않고 `TreeMap` 하나로 이 두 가지 인터페이스를 모두 만족하도록 구현해 놓았습니다.
 
 `NavigableMap`은 `Map`, `SortedMap`을 확장(상속)한 인터페이스라서 `Map`과 `SortedMap`에서 제공하는 api(메서드)를 모두 사용할 수 있겠지요.
 `SortedMap`으로 선언하든 `NavigableMap`으로 선언하든 어차피 `TreeMap`을 할당해야 할 테니 구현체 차이는 없겠지만 그래도 사용 목적에 따라 적절한 인터페이스를 사용해야 합니다.
