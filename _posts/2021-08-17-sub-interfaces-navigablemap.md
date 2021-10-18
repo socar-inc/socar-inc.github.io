@@ -3,7 +3,7 @@ layout: post
 title: "Map의 확장 인터페이스 이야기"
 subtitle: " JAVA NavigableMap 이야기"
 date: 2021-08-17 09:00:00 +0900
-category: api
+category: dev
 background: ''
 author: ray
 comments: true
