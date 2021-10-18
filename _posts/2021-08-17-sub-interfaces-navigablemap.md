@@ -264,7 +264,7 @@ java에서는 `SortedMap`이나 `NavigableMap` 구현체가 따로 존재하지 
 
 # 정리하며
 
-map은 상당히 많이 사용하는 자료 구조입니다.
+Map은 상당히 많이 사용하는 자료 구조입니다.
 대부분 `HashMap` 정도면 충분하지만 때로는 키 정렬 순서 때문에 `LinkedHashMap`, `TreeMap`을 사용하는 경우가 종종 있습니다.
 비슷한 `HashMap` 계열에서도 동시성 문제 때문에 `ConcurrentHashMap`을 사용하는 경우도 있고 메모리 문제 때문에 `WeakHashMap`을 사용하는 경우도 있지만 상황에 따라 구현체를 바꾸었을 뿐 `Map` 인터페이스 범주를 벗어나지 않는 선에서 사용하는 경우가 대부분입니다.
 
