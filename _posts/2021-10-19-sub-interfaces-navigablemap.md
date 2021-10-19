@@ -303,8 +303,7 @@ Map은 상당히 많이 사용하는 자료 구조입니다.
 
 [^2]: 제네릭은 이 글에서 다루는 주제가 아니기도 하고 다룰 필요도 없어서 과감히 생략합니다.
 
-[^3]: `NavigableMap`이 `SortedMap`을 상속하고 `SortedMap`이 `Map`을 상속하니 `NavigableMap` 이전에 `SortedMap` 특징을 설명하면 더욱 좋겠지만 주제를 벗어난다고 판단하여 생략합니다.
-다만 `NavigableMap`을 설명하다 보면 매우 간략하기는 해도 자연스럽게 `SortedMap` 특성도 언급하기는 합니다.
+[^3]: `NavigableMap`이 `SortedMap`을 상속하고 `SortedMap`이 `Map`을 상속하니 `NavigableMap` 이전에 `SortedMap` 특징을 설명하면 더욱 좋겠지만 주제를 벗어난다고 판단하여 생략합니다.  다만 `NavigableMap`을 설명하다 보면 매우 간략하기는 해도 자연스럽게 `SortedMap` 특성도 언급하기는 합니다.
 
 [^4]: `SortedMap` 까지 생각하면 조금 차이는 있으나 넘어가겠습니다
 
