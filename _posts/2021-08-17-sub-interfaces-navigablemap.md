@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Java Map의 확장 인터페이스 NavigableMap 이야기"
-subtitle: " Java NavigableMap 이야기"
+subtitle: "Java NavigableMap 이야기"
 date: 2021-10-19 09:00:00 +0900
 category: dev
 background: '/assets/images/sub-interfaces-navigablemap.jpeg'
