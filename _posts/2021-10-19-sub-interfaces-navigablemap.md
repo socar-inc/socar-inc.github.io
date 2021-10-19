@@ -12,9 +12,13 @@ tags:
   - java
 ---
 
+안녕하세요. 모빌리티 플랫폼 그룹 모비딕팀의 레이입니다.
+
+
 문제 하나로 글을 시작합니다.
+
 - 어떤 항목 중에서 임의의 선택을 하되 가중치를 두어야 한다면 어떻게 구현할 수 있을까요?
-예를 들어 빨강, 파랑, 초록 중 하나를 임의대로 추출하되 각각 5,3,2 만큼 가중치를 두고 싶습니다.
+- 예를 들어 빨강, 파랑, 초록 중 하나를 임의대로 추출하되 각각 5,3,2 만큼 가중치를 두고 싶습니다.
 
 뜬금없이 가중치 문제로 시작했는데, 이 글에서 제시하는 답은 아래에 있습니다.
 일단 각자 아는 방법대로 구현해 보고 제 방법과 비교해 보시기 바랍니다.
@@ -61,6 +65,8 @@ Map map = new HashMap();
 보통은 이렇게 키의 정렬 순서를 특정하는 목적으로 세 가지 구현체를 상황에 맞게 사용하는 경우가 대부분입니다.
 그리고 많은 사람들이 관심있는 동시성 처리와 관련한 `ConcurrentHashMap` 같은 특수한 환경 아래 동작하는 구현체 이야기는 쉽게 찾아 볼 수 있는데, 이 글에서는 조금 다른 이야기를 해 보려고 합니다.
 
+<br />
+
 ## Map 기능을 확장한 몇 가지 서브 인터페이스
 
 [Java API Doc](https://docs.oracle.com/javase/9/docs/api/java/util/Map.html)(v9)을 보면 `Map`의 서브 인터페이스는 11개 씩이나 됩니다.
@@ -69,6 +75,9 @@ Map map = new HashMap();
 7가지 뿐만 아니라 11가지 인터페이스 모두를 다루었으면 좋겠지만 이 글에서는 이 중에서 `NavigableMap`이 무엇인지, `NavigableMap`의 구현체는 무엇인지를 이야기합니다.
 
 ---
+
+<br />
+
 
 # 오늘의 주제: NavigableMap
 
@@ -107,6 +116,9 @@ public interface NavigableMap<K,V> extends SortedMap<K,V>
 
 jdk 버전 9 기준 `NavigableMap` 고유 메서드는 21개 이지만 이 중에서도 개인적으로 `NavigableMap`의 특징을 잘 드러낸다고 생각하는 `floorEntry()`, `ceilingEntry()`, `lowerEntry()`, `higherEntry()` 네 가지를 설명하겠습니다.
 
+<br />
+
+
 ## NavigableMap 인터페이스 구현체
 
 앞에도 강조했지만 `NavigableMap`은 [인터페이스](https://ko.wikipedia.org/wiki/%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4_(%EC%9E%90%EB%B0%94))입니다.
@@ -138,6 +150,9 @@ NavigableMap m = new LinkedHashMap();
 
 `Map`의 메서드는 25개나 되지만 사실상 `get(key)`, `put(key, value)` 말고는 사용하는 일이 거의 없습니다.
 비슷하게 `NavigableMap`의 21개 메서드 중 4가지 메서드의 특징만 살펴보면 `NavigableMap`을 충분히 사용할 수 있으리라고 생각합니다[^5].
+
+<br />
+
 
 ## 간단한 사용 예제 1: 숫자 범위에 따른 값 할당
 
@@ -199,6 +214,9 @@ API 문서를 보면 이 경우 `null`을 반환한다고 명시했습니다.
 
 조금 더 쓸모있는 예제를 살펴볼까요?
 
+<br />
+
+
 ## 간단한 사용 예제 2: 가중치 문제 풀이
 
 글 처음에 보여드린 문제 풀이입니다.
@@ -238,6 +256,9 @@ val color = map.ceilEntry(Random.nextInt(1, 10)).getValue()
 
 매우 직관적이면서도 간결한 구현입니다.
 
+<br />
+
+
 ## NavigableMap 전제 조건: SortedMap
 
 만약 `NavigableMap`을 구현한다고 가정한다면 키 항목 구성은 어떤 전제 조건이 필요할까요?
@@ -262,6 +283,9 @@ Java에서는 `SortedMap`이나 `NavigableMap` 구현체가 따로 존재하지 
 저는 아직 `SortedMap`을 써야 할 만한 문제를 겪지는 않았습니다.
 언젠가는 이를 써서 해결해야 할 문제를 마주하게 될 날도 오겠지요.
 
+<br />
+
+
 # 정리하며
 
 Map은 상당히 많이 사용하는 자료 구조입니다.
@@ -271,6 +295,9 @@ Map은 상당히 많이 사용하는 자료 구조입니다.
 내부 구현의 차이가 있지만 단순한 키 - 값 대응만 사용하는 `Map` 을 넘어서 `Map`의 확장 인터페이스인  `NavigableMap` 관점으로 `TreeMap` 구현체를 어떻게 사용할 수 있는지 간략히 살펴 보았습니다.
 
 다음에는 `NavigableMap`으로 조금 더 깊이 있는 활용 사례를 선보이는 시간을 갖도록 하겠습니다.
+
+<br />
+
 
 [^1]: 엄밀히 이야기하면 `Hashtable`은 추상 클래스인 `Dictionary`를 상속한 구현체입니다. 자바 설계 당시 인터페이스 개념은 추상 클래스보다 늦게 도입한 개념입니다.
 
