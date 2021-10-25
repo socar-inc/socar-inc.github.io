@@ -3,7 +3,7 @@ layout: post
 title: "수요일엔 수요미식회, 금요일은 개발밋업회"
 subtitle: "커져가는 개발 조직을 한 몸으로 유지하기 위한 작은 노력"
 date: 2021-09-14 20:00:00 +0900
-category: culture
+category: dev
 background: '/assets/images/spock-jeju.jpg'
 author: spock
 comments: true
