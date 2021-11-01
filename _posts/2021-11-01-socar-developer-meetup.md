@@ -9,8 +9,7 @@ author: spock
 comments: true
 tags:
     - culture
-    - developer
-    - meetup
+
 ---
 
 <div class="photo-copyright">
