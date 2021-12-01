@@ -1,0 +1,27 @@
+---
+layout: page
+title: Categories
+permalink: /categories/
+background: '/assets/images/home-bg-main-1.png'
+---
+
+{% if site.posts.size == 0 %}
+  <h2>No post found</h2>
+{% endif %}
+
+<div class="categories">
+  <h1>카테고리 목록</h1>
+  <div class="label">
+    {% for category in site.categories %}
+    <div class="category-anchor">
+      <a href="#{{ category }}">
+        <span>{{ category  }}</span>
+      </a>
+    </div>
+    {% endfor %}
+  </div>
+
+  <hr>
+
+</div>
+</div>
