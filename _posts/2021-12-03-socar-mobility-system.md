@@ -39,7 +39,7 @@ tags:
 쏘카에는 40여 종에 달하는, 다양한 차종들이 있습니다. 차량의 위치는 어디에 있는지, 반납시 차량 시동은 잘 꺼져있는지, 주유량이나 전기차 충전량은 충분한지, 문은 제대로 잘 잠기고 열리는지, 원격에서 실시간으로 확인이 되어야 비대면 카셰어링 서비스가 가능합니다.
 고객의 소중한 개인정보, 위치 정보 뿐만 아니라 차량의 데이터 또한 당연 보안의 대상입니다.정보보호 및 개인정보보호 관리체계인증 (ISMS-P)에 따라, 아무나 접근이 불가능 하도록, 보안을 철저히하여 숨겨져 있으며, 권한을 가진 일부 직원들만 해당 정보를 조회할 수 있습니다.
 
-![img](/img/socar-mobility-system-sts/sts-2-data.jpg)
+![img](/img/socar-mobility-system-sts/sts-2-data.jpg){: width="90%" height="90%" style="display: block; margin: 0 auto"}
 
 뿐만 아니라 차량의 데이터를 사용한, 다양한 연구들이 진행 중입니다. 그 중 하나의 예시로는 건전성예측 및 관리기술(PHM, Prognostics and Health Management) 연구가 있습니다. PHM이란, 운용 중인 시스템이나 장치에 대하여, 결함상태를 지속관찰하고, 이상 징후를 진단하여, 언제 치명적 수준에 도달할지 예지(prognosis)함으로써, 건전성을 관리하는 기술입니다. 효율적인 비대면 운영을 위해, 차량의 다양한 센서, ECU(Electronic Control Unit)로부터 수집되는 신호들을 통해 건전성예측 및 관리기술(PHM, Prognostics and Health Management) 연구가 활발하게 진행 중입니다. 
 
@@ -51,7 +51,7 @@ tags:
 일반적인 차량에서는 스마트키를 통해 차량의 문을 열고 잠글 수 있으며 스마트키를 차량 실내에 두어야만 차량의 시동을 걸 수 있습니다.
 쏘카에서는, 스마트폰만으로도 차를 열고 잠글 수 있는 기술이 들어가 있습니다.  또한 고객 분들이 차량의 위치를 보다 편하게 찾을 수 있도록, 스마트폰으로도 비상등을 켜거나 경적(horn)을 울릴 수 있습니다.
 
-![img](/img/socar-mobility-system-sts/sts-3-app.png)
+![img](/img/socar-mobility-system-sts/sts-3-app.png){: width="90%" height="90%" style="display: block; margin: 0 auto"}
 
 
 
@@ -68,16 +68,16 @@ tags:
 
 실내와는 달리, 쏘카의 차량은 자연환경에 노출되어 있습니다. 운전 중 일때의 수 많은 진동, 여름에는 90도 겨울에는 -20도 까지 변하는 온도, 비오는 날에는 엄청난 습기까지.. 일반적인 전자장비는 곧바로 고장이 날 수 밖에 없는 극한의 조건입니다. 
 
-악조건에서도 정상적인 운용이 가능할 수 있도록 쏘카 차량내 기기들은 AEC-Q100이나 000같은 인증을 득하거나, 인증 규격 이상의 성능을 가져야만 합니다.
+악조건에서도 정상적인 운용이 가능할 수 있도록 쏘카 차량내 기기들은 AEC-Q100 같은 인증을 득하거나, 인증 규격 이상의 성능을 가져야만 합니다.
 환경시험(Environmental Test, 저/고온, 열 충격시험 등), 기구시험(Mechanical Test, 진동 낙하 충격 시험 등), 전기적 성능시험(Electrical Test, 작동 전압, 전원 순단 및 전압 변동시험)을 통해 기기의 성능을 평가하게 됩니다.
 
  220V 콘센트가 아니라 차량의 배터리를 사용할 수 밖에 없는 차량 내 전자장치들은 전기를 공급 받는 것 조차도 엄청나게 힘든 일일 수 밖에 없습니다. 모든 전자장비는 회로에서 전자기 노이즈가 발생하며, 이 정도가 심한 경우 다른 전자기기가 영향을 받아 오작동을 하거나 고장날 수도 있습니다. 차량에 설치되는 장치들인 만큼, 장착된 장비들이 전자파 노이즈(EMI/EMC)로 인한 영향을 방지하기위해, 표준 인증(KN41)을 득하거나 표준 규격보다도 더 낮은 양의 전자기 노이즈만 발생시키도록 해야합니다. 
 
 이러한 악조건 속에서도 서비스가 가능할 수 있도록, 장치의 개발, 제조, 납품, 장착, AS 전반에 걸쳐 다양한 노하우와 기술이 포함되어 있습니다.
 
-![img](/img/socar-mobility-system-sts/sts-4-env.png)
+![img](/img/socar-mobility-system-sts/sts-4-env.png){: width="90%" height="90%" style="display: block; margin: 0 auto"}
 
-![img](/img/socar-mobility-system-sts/sts-5-soldering.png)
+![img](/img/socar-mobility-system-sts/sts-5-soldering.png){: width="90%" height="90%" style="display: block; margin: 0 auto"}
 
 
 
