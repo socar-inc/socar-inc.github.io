@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "카셰어링 서비스를 가능하게 하는 기술 "
+title: "카셰어링 서비스를 가능하게 하는 IoT 기술 "
 subtitle: "쏘카의 관제 장치"
 date: 2021-12-03 09:00:00 +0900
 category: mobility
