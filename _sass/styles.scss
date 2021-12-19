@@ -36,3 +36,12 @@ blockquote {
   font-size: 0.9em;
   border-left: 4px solid #e6e6e6;
 }
+
+table {
+  width: 100%
+}
+
+table, th, td {
+  border: 1px solid #ccc;
+  padding: 5px
+}
