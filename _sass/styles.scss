@@ -37,6 +37,31 @@ blockquote {
   border-left: 4px solid #e6e6e6;
 }
 
+img {
+  display: block; 
+  margin: 0 auto;
+  width: 80%;
+}
+
+img + em {
+  display: block;
+  margin: 0 auto;
+  width: 80%;
+  text-align: center;
+  font-size: 0.8em;
+  margin-top: 5px;
+  color: #21252980;
+}
+
+table {
+  width: 100%
+}
+
+table, th, td {
+  border: 1px solid #ccc;
+  padding: 5px
+}
+
 .tags {
   .label {
     display: flex;
