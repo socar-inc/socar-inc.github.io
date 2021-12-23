@@ -1,17 +1,52 @@
 // Import Core Clean Blog SCSS
 @import "../assets/vendor/startbootstrap-clean-blog/scss/clean-blog.scss";
 
+
+hr {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+blockquote {
+  font-style: normal;
+  background-color: #fafafa;
+  padding: 10px 40px;
+  font-size: 0.9em;
+  border-left: 4px solid #e6e6e6;
+}
+
+img {
+  display: block; 
+  margin: 0 auto;
+  width: 80%;
+}
+
+img + em {
+  display: block;
+  margin: 0 auto;
+  width: 80%;
+  text-align: center;
+  font-size: 0.8em;
+  margin-top: 5px;
+  color: #21252980;
+}
+
+table {
+  width: 100%
+}
+
+table, th, td {
+  border: 1px solid #ccc;
+  padding: 5px
+}
+
+
 .mermaid {
   border: 1px solid;
   border-radius: 10px;
   padding: 20px;
   margin-top: 10px;
   margin-bottom: 10px;
-}
-
-hr {
-  margin-top: 20px;
-  margin-bottom: 20px;
 }
 
 .photo-copyright {
@@ -27,14 +62,6 @@ hr {
   font-size: 17px;
   font-weight: bold;
   color: gray;
-}
-
-blockquote {
-  font-style: normal;
-  background-color: #fafafa;
-  padding: 10px 40px;
-  font-size: 0.9em;
-  border-left: 4px solid #e6e6e6;
 }
 
 .tags {
