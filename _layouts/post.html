@@ -11,7 +11,7 @@ layout: default
     <div class="overlay"></div>
     <div class="container">
       <div class="row">
-        <div class="col-lg-10 col-md-10 mx-auto">
+        <div class="col-lg-9 col-md-9 mx-auto">
           <div class="post-heading">
             <h1>{{ page.title }}</h1>
             {% if page.subtitle %}
@@ -29,9 +29,11 @@ layout: default
   </header>
 
   <div class="container">
+    <div class="toc toc-hidden" id="toc">
+    </div>
     <div class="row">
-      <div class="col-lg-10 col-md-10 mx-auto">
-        <div class="post-content">
+      <div class="col-lg-9 col-md-9 mx-auto">
+        <div class="post-content"">
         {{ content }}
         </div>
         <hr>
@@ -55,3 +57,32 @@ layout: default
       {% include comments.html %}
     {% endif %}
   </div>
+
+<script>
+  // ref https://tscanlin.github.io/tocbot/
+  tocbot.init({
+    tocSelector: '#toc',
+    contentSelector: '.post-content',
+    headingSelector: 'h1, h2, h3',
+    hasInnerContainers: true,
+    collapseDepth: 6,
+    linkClass: 'toc-link'
+  });
+
+
+  $(window).on('scroll', function() {
+      let scrollTop = $(window).scrollTop()
+      let scrollBottom =  scrollTop + $(window).height()
+      let contentOffsetTop = $(".post-content").offset().top
+      let contentOffsetBottom = contentOffsetTop + $(".post-content").height()
+      let elementHeight = $(".post-content").height(); 
+
+      if ((scrollTop < contentOffsetTop) || (scrollBottom >= contentOffsetBottom)) {
+        // $('.toc').css('visibility', 'hidden')
+        $('.toc').addClass("toc-hidden")
+      }
+      else if (scrollTop >= contentOffsetTop) {
+        $(".toc").removeClass("toc-hidden")
+      }
+  });
+</script>

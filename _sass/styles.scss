@@ -85,3 +85,40 @@ table, th, td {
     padding: 2rem 0;
   }
 }
+
+.toc {
+  width: 15%;
+  max-width: 280px;
+  left: 0;
+  position: fixed;
+  top: 50vh;
+  transform: translate(0, -50%);
+  padding: 20px;
+  line-height: 100%;
+  color: #00000090;
+  font-weight: 300;
+  visibility: visible;
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.4, 0.95);
+}
+
+.toc-hidden {
+  transform: translate(-100%, -50%);
+  visibility: hidden;
+}
+
+.toc-link {
+  font-size: 12px;
+  padding: 0;
+}
+
+.toc-link::before {
+  background-color: inherit;
+}
+
+
+// 992px은 bootstrap grid large 기준
+@media only screen and (max-width: 992px) {
+  .toc {
+    visibility: hidden;
+  }
+}
