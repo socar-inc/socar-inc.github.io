@@ -17,20 +17,32 @@ tags:
 Photo by <a href="https://unsplash.com/@andreoiide?utm_medium=referral&amp;utm_campaign=photographer-credit&amp;utm_content=creditBadge">Andrea Enríquez Cousiño</a>
 </div>
 
-### AWS VPC에서 FQDN Outbound Control
+**On-premise** 환경에서 현재 회사의 성장세를 따라가기 어렵다고 판단하고, 1년 전부터 Cloud 환경으로 마이그레이션을 진행하고 있습니다. 현재는 중요 서비스의 90% 이상이 Cloud 환경으로 마이그레이션 되었으며, 그 과정에서 인프라를 구성하는 많은 구성 요소가 변경, 대체 되었습니다. 또한, 여러 보안 요구사항을 만족시키기 위해서 추가적인 시스템 도입에 대해서 고민하였고, 그 과정을 공유하고자 합니다.
 
-**On-premise** 환경에서 현재 회사의 성장세를 따라가기 어렵다고 판단하고, 1년 전부터 Cloud 환경으로 마이그레이션을 진행하고 있습니다. 현재는 중요 서비스의 `90%` 이상이 Cloud 환경으로 마이그레이션 되었으며, 그 과정에서 인프라를 구성하는 많은 구성 요소가 변경, 대체 되었습니다. 또한, 여러 `보안 요구사항`을 만족시키기 위해서 추가적인 시스템 도입에 대해서 고민하였고, 그 과정을 공유하고자 합니다.
+## 목차
+
+- Outbound FQDN filtering을 하려는 이유
+- Cloud 환경에서 Outbound 트래픽에 대한 관리를 어떻게 할까?
+- Aviatrix 솔루션 구축을 통한 요구사항 검토 (AWS)
+- AWS Account with Aviatrix Gateway Architecture
+- Aviatrix 자세히 들여다보기
+- Multiple AWS Accounts with Role Switchin Aviatrix Architecture
+- 정리
+- 계획중인 Aviatrix을 이용한 다양한 환경 구축
+
 
 ---
 
-#### Outbound FQDN filtering을 하려는 이유
+## Outbound FQDN filtering을 하려는 이유
 - `멀웨어 2차 확산 방지`
     - 멀웨어에 감염된 경우 Outbound FQDN Filtering을 통해 멀웨어 [C&C](https://ko.wikipedia.org/wiki/C%26C_(%EC%95%85%EC%84%B1_%EC%86%8C%ED%94%84%ED%8A%B8%EC%9B%A8%EC%96%B4)) 서버에 연결하지 못하게 하고, <u>악성 코드</u>가 컴퓨터의 데이터를 외부로 전송하려고 하면 대상에 연결하지 못하게 할 수 있습니다.
 - Outbound 트래픽에 대한 무단 활동 감지
 - google.com 등 **IP Range**가 넓고, [CDN](https://en.wikipedia.org/wiki/Content_delivery_network) 서비스 같은 지속 해서 변하는 IP 대응
 - AWS - Security Groups 기준 Inbound or outbound rules per security group은 60개로 [제한](https://docs.aws.amazon.com/vpc/latest/userguide/amazon-vpc-limits.html) 됩니다. Inbound 관점에서 인터넷에서 고객 서비스는 특이사항이 아닐 수 있으나, Outbound 관점에서는 updates.ubuntu.com(IP 15), Github(IP 12) 등 타사의 업데이트 및 API를 생각하면 <u>60개의 IP 제한은 충분하지 않다</u>는 것을 알 수 있습니다.
 
-#### Cloud 환경에서 Outbound 트래픽에 대한 관리를 어떻게 할까?
+---
+
+## Cloud 환경에서 Outbound 트래픽에 대한 관리를 어떻게 할까?
 - Cloud Platform에서 <u>TCP/IP</u> Outbound에 대해서는 로그 및 관리를 다양한 Management Service로 지원하고 있지만, Outbound 트래픽 중에 IP 주소가 아닌 [**FQDN**](https://en.wikipedia.org/wiki/Fully_qualified_domain_name)을 기준으로 한 Filtering에 대한 지원은 Management Service 만으로 대처가 어렵다고 판단하여 별도의 솔루션 도입을 계획하게 되었고, 다음과 같이 요구사항을 정리해 보았습니다.
 
 ```markdown
@@ -50,7 +62,7 @@ Photo by <a href="https://unsplash.com/@andreoiide?utm_medium=referral&amp;utm_c
 
 ---
 
-#### Aviatrix 솔루션 구축을 통한 요구사항 검토 (AWS)
+## Aviatrix 솔루션 구축을 통한 요구사항 검토 (AWS)
 
 Aviatrix 솔루션 테스트를 위해, AWS Marketplace에서 Aviatrix을 선택 후 **Free Trial** 이용이 가능한 Custom 유형을 선택하여 테스트 초기 환경을 구성합니다. **AWS 인프라(EC2 등) 사용 금액이 발생**하기 때문에 EC2 Instanc Type은 **최소 스펙**을 선택하여 테스트를 진행합니다.
 - [AWS-Marketplace (Aviatrix Secure Networking Platform - Custom)](https://aws.amazon.com/marketplace/pp/B0155GB0MA?ref_=aws-mp-console-subscription-detail)
@@ -115,7 +127,9 @@ curl -L -k -s -o /dev/null -w "%{http_code}\n" https://docs.google.com
 
 위 내용에서 google.com FQDN에 대해서 [호스트 명](https://en.wikipedia.org/wiki/Fully_qualified_domain_name)을 지정하지 않을 때에는 `"*"`로 적용됩니다. (*.google.com = google.com)
 
-#### **`AWS Account with Aviatrix Gateway Architecture`**
+---
+
+## AWS Account with Aviatrix Gateway Architecture
 
 ![13](/img/posts_aviatrix/fqdn-architecture.png){: width="100%" height="100%"}
 
@@ -141,12 +155,10 @@ graph LR;
 7. Aviatrix Gateway 장애 발생시 Gateway_HA의 <u>ENI</u>로 Private Subnet의 `Route table` `"0.0.0.0/0"` 업데이트
 
 ---
-<br>
 
-#### `Aviatrix 자세히 들여다보기`
-<br>
+## Aviatrix 자세히 들여다보기
 
-##### **1. [HA(High Availability)](https://en.wikipedia.org/wiki/High_availability)**
+### 1. [HA(High Availability)](https://en.wikipedia.org/wiki/High_availability)
 HA 구성은 모든 인프라의 **기본**으로 Aviatrix을 사용할 경우 아래와 같은 간단한 작업으로 적용이 가능합니다.
 
 Gateway > Edit > Gateway Single AZ HA "Enable"  
@@ -215,9 +227,7 @@ end
     * 문제 되는 Gateway로 설정되어 있던 Route Table 업데이트
     * 예) Private-Subnet > Route Table > `"0.0.0.0/0"` Target `Gateway_HA` ENI로 업데이트
 
-<br>
-
-##### **2. [Egress FQDN Discovery](https://docs.aviatrix.com/HowTos/fqdn_discovery.html)**
+### 2. [Egress FQDN Discovery](https://docs.aviatrix.com/HowTos/fqdn_discovery.html)
 
 해당 기능은 **실 서버**에 적용하기에 앞서 실 서버에서 FQDN outbound의 <u>사용 리스트</u>를 정리하는데 유용한 기능입니다.
 
@@ -237,9 +247,7 @@ curl -L -k -s -o /dev/null -w "%{http_code}\n" https://tech.socarcorp.kr
 
 테스트 결과: FQDN Discovery 기능을 통해 **실 서버** FQDN Outbound를 모두 사전에 확인하고, 필요 유무에 따라서 FQDN Filter 정책을 정의하는 데 유용합니다.
 
-<br>
-
-##### **3. HTTPS/TLS 통신을 Gateway가 가로채서 어디로 가는지 확인할 수 있는 이유**
+### 3. HTTPS/TLS 통신을 Gateway가 가로채서 어디로 가는지 확인할 수 있는 이유
 2번 내용을 보면 HTTPS/TLS 통신을 **Gateway가 어떻게?** 가로 채지 라는 의문점이 있습니다, 해당 내용은 SNI에 대한 이해가 필요해서 SNI 내용을 정리해 드립니다.
 
 `SNI(Server Name Indication)`
@@ -285,9 +293,8 @@ end
 * 사용자 입장에서는 SNI는 접속하려는 사이트 주소가 암호화되지 않은 평문으로 전송되기 때문에, `타인`이 중간에 트래픽을 가로채서 <u>사용자가 조회하는 사이트</u>를 확인 할 수 있습니다.  
 * TLS 1.3 최종안이 조율되는 시기에는 `Encrypted SNI`로 인해서 Gateway가 SNI 필드를 확인하는 방법이 불가능 할 수도 있었지만, `TLS 1.3 최종안` 에서는 `필수`가 아닌, `확장` 기능으로써 추가되었습니다.  
     * [Encrypted SNI](https://ko.wikipedia.org/wiki/%EC%84%9C%EB%B2%84_%EB%84%A4%EC%9E%84_%EC%9D%B8%EB%94%94%EC%BC%80%EC%9D%B4%EC%85%98)
-<br>
 
-##### **4. Aviatrix-CloudFormation Template의 role, policy 이해하기**
+### 4. Aviatrix-CloudFormation Template의 role, policy 이해하기
 
 * CloudFormation Template은 어떤 내용을 가지고 있을까?
 * 왜 Gateway 서버가 자동으로 설치 되었을까?
@@ -447,17 +454,15 @@ CloudFormation Template 으로 구성된 `AWS 인프라의 이미지`를 통해 
 
 ![7](/img/posts_aviatrix/role-app-trust.png){: width="100%" height="100%"}
 
-<br>
+---
 
-#### **`Multiple AWS Accounts with Role Switchin Aviatrix Architecture`**
+## Multiple AWS Accounts with Role Switchin Aviatrix Architecture
 
 ![8](/img/posts_aviatrix/role-ec2-app-muac.png){: width="100%" height="100%"}
 
 ---
 
-<br>
-
-### 정리
+## 정리
 * 자세한 설명을 하기 위해 많은 이미지가 추가 되었지만, 실질적으로는 AWS 마켓플레이스에서 라이선스 구입 이후에 진행되는 절차가 간단하며 사용자가 직접 <u>수동</u>으로 작업해야하는 내용이 `거의없습니다.`
 * Aviatrix의 경우에는 기존의 Cisco 및 paloalto 와는 다른 Cloud 환경에 맞게 개발이 되었다는 것을 쉽게 느낄 수 있었습니다. `Role의 활용` 및 위에서는 자세하게 다루지 않았지만, <u>"EXPORT TO TERRAFORM"</u> 카테고리 부분에서 리소스 형식에 맞는 *.tf 파일들을 다운로드 받아서 IaC 환경에 활용이 가능합니다.
 * 테스트 과정에서는 단일 Account를 활용하였지만, 쏘카에서는 `Transit GW를 이용한 트래픽 중앙 관리`를 통해서 운영하고 있기 때문에 On-premise 적용 등 다양한 아키텍처 구성이 가능합니다.
@@ -467,9 +472,7 @@ CloudFormation Template 으로 구성된 `AWS 인프라의 이미지`를 통해 
 
 ---
 
-<br>
-
-### 계획중인 Aviatrix을 이용한 다양한 환경 구축
+## 계획중인 Aviatrix을 이용한 다양한 환경 구축
 * Aviatrix 로그, 분석 (+시각화/자동화)
 * DMZ 구축 (+VDI)
 * Remote Work의 다양한 설계 (+VPN, +VDI)
