@@ -8,33 +8,30 @@ background: '/assets/images/andrea-enriquez-cousino-4hBCxfrlpoM-unsplash.jpg'
 author: kyle
 comments: true
 tags:
-    - machine-learning
-    
+    - machine-learning    
 ---
 
 
+O'Reilly Strata Data Conference New York 2019 다녀온 후 작성한 후기입니다.
 
-O'Reilly Strata Data Conference New York 2019 다녀온 후 작성한 후기입니다. 아래 내용을 다룹니다.
+## 목차
 
-- 스트라타 데이터 컨퍼런스 소개
-- 유익한 세션 소개
-- 참고 자료
+- O'Reilly Strata Conference 소개
+- 신기한 광경
+- Session 소개
 
+> 사내 전파용으로 만든 행사 후기 슬라이드 자료를 [SOCAR Speakerdeck](https://speakerdeck.com/socar/oreilly-strata-data-conference-new-york-2019-hugi)에 업로드했습니다! 발표 자료엔 다음 내용이 있습니다. 관심있으신 분은 발표 자료를 참고하시면 좋을 것 같습니다 :)
+> - 3개의 테마, 6개의 발표 정리
+> - Optimization
+> - Uber
+> - Explainable AI
 
-사내 전파용으로 만든 행사 후기 슬라이드 자료를 [SOCAR Speakerdeck](https://speakerdeck.com/socar/oreilly-strata-data-conference-new-york-2019-hugi)에 업로드했습니다! 발표 자료엔 다음 내용이 있습니다. 관심있으신 분은 발표 자료를 참고하시면 좋을 것 같습니다 :)
-
-- 3개의 테마, 6개의 발표 정리
-	- Optimization
-	- Uber
-	- Explainable AI
-
-
-<br />
 
 ---
 
 
-### O'Reilly Strata Conference 소개
+## O'Reilly Strata Conference 소개
+
 O'reilly는 개발 관련된 책을 많이 만들고 있는 출판사로, 아마 개발 관련 책을 보셨다면 O'Reilly 마크를 보셨을 겁니다.
 
 ![](/img/oreilly-strata-2019-review/1.png){: width="100%" height="100%"}
@@ -66,13 +63,9 @@ O'reilly 부스에선 컨퍼런스 참여자 전원에게 원하는 책 1권을 
 
 ![](/img/oreilly-strata-2019-review/6.png){: width="100%" height="100%"}
 
-<br />
-
 ---
 
-<br />
-
-### 신기한 광경
+## 신기한 광경
 1) DJing
 ![](/img/oreilly-strata-2019-review/7.png){: width="100%" height="100%"}
 
@@ -98,14 +91,11 @@ O'reilly 부스에선 컨퍼런스 참여자 전원에게 원하는 책 1권을 
 ---
 
 ## Session 소개
+
 ![](/img/oreilly-strata-2019-review/10.png){: width="100%" height="100%"}
 
 
 다양한 발표 중 저희가 들은 세션 중 블로그 글에 정리한 것은 총 4개입니다.
-
-<br />
-
----
 
 
 ### How machine Learning meets optimization
@@ -116,7 +106,7 @@ O'reilly 부스에선 컨퍼런스 참여자 전원에게 원하는 책 1권을 
 
 ![](/img/oreilly-strata-2019-review/11.png){: width="100%" height="100%"}
 
-<br />
+
 
 최적화와 머신러닝을 활용하는 방법은 다음과 같습니다. 예측 모델링 후, 그 값을 토대로 최적화를 돌리고 시나리오를 선택합니다.
 
@@ -124,9 +114,6 @@ O'reilly 부스에선 컨퍼런스 참여자 전원에게 원하는 책 1권을 
 
 최적화와 머신러닝 모두 Input을 넣으면 Output이 나오는 점은 동일하나, 최적화는 입력 x에 대해 제약 조건과 objective value가 있어 optimal solution을 찾고 머신러닝은 레이블된 데이터가 존재하는 상태에서 Error를 최소화합니다.
 
-<br />
-
----
 
 ### ML is not enough: Decision automation in the real world
 
@@ -166,10 +153,6 @@ Uncertainty Range를 구한 후 Robust Optimization를 사용해 최악의 상�
 
 ![](/img/oreilly-strata-2019-review/18.png){: width="100%" height="100%"}
 
-<br />
-
----
-
 
 ### A Practical guide to algorithmic bias and explainability in machine learning
 이 세션은 MLOps 관련 Github Repository 중 유명한 [Awesome production machine learning](https://github.com/EthicalML/awesome-production-machine-learning) 소속이신 분이 발표했습니다.
@@ -206,10 +189,6 @@ Anchors를 찾아낼 때는 Brute-Force 방식이 아닌 Beam search 와 MAB 방
 
 ![](/img/oreilly-strata-2019-review/25.png){: width="100%" height="100%"}
 
-<br />
-
----
-
 ### Unified tooling for machine learning interpretability
 이 세션은 Microsoft에서 개발 중인 interpretML 오픈소스에 대한 세션입니다. [공식 Github](https://github.com/interpretml/interpret)
 
@@ -227,11 +206,11 @@ interpretML의 첫번째 특징은 모델의 정확도와 설명력을 모두 �
 
 ![](/img/oreilly-strata-2019-review/28.png){: width="100%" height="100%"}
     
-<br />    
+    
 
 ---
 
-### 참고 자료
+## 참고 자료
 - 쏘카 데이터그룹의 타다데이터팀 카일과 윤이 다녀와서 사내 전파용으로 만든 발표 자료 : [SOCAR Speakerdeck](https://speakerdeck.com/socar/oreilly-strata-data-conference-new-york-2019-hugi)에 업로드했습니다
 
 - O'reilly Strata Data Conference 영상을 다시 보는 방법
