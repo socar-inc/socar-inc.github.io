@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "신입 데이터 엔지니어 디니의 4개월 회고"
+title:  "쏘카 신입 데이터 엔지니어 디니의 4개월 회고"
 subtitle: 입사 지원부터 팀 온보딩, 실무 투입까지.
 background : "/assets/images/onboarding-bg.jpg"
 ---
