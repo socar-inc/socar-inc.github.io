@@ -1,13 +1,6 @@
 // Import Core Clean Blog SCSS
 @import "../assets/vendor/startbootstrap-clean-blog/scss/clean-blog.scss";
 
-
-.post-content hr {
-  border: 3px solid black;
-  width: 10%;
-  margin: 20px 0 20px 0;
-}
-
 blockquote {
   font-style: normal;
   background-color: #fafafa;
@@ -39,6 +32,34 @@ table {
 table, th, td {
   border: 1px solid #ccc;
   padding: 5px
+}
+
+
+.post-content hr {
+  margin-top: 30px;
+  border: 3px solid black;
+  width: 10%;
+  margin: 80px 0 20px 0;
+}
+
+.post-content h2 {
+  margin: 60px 0 20px 0;
+}
+
+.post-content hr + h2 {
+  margin: 0;
+}
+
+.post-content h3 {
+  margin: 60px 0 20px 0;
+}
+
+.post-content h4 {
+  margin: 40px 0 20px 0;
+}
+
+.post-content h5 {
+  margin: 40px 0 10px 0;
 }
 
 .mermaid {
