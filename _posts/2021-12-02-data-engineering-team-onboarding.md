@@ -146,9 +146,9 @@ background : "/assets/images/onboarding-bg.jpg"
 
 #### 3) Airflow - 간단한 DAG 만들어서 실행하기
 
-이 과제는 `PythonOperator` 를 이용한 간단한 Airflow DAG을 만들고. 팀의 CI/CD 환경에 배포 및 실행해보는 내용이었습니다. 특정 기능을 구현하기 보다는 팀 업무 환경에 익숙해지기 위한 과제였는데요. 다른 과제보다는 수월하게 진행할 수 있었습니다. 
+이 과제는 `PythonOperator` 를 이용한 간단한 Airflow DAG을 만들고. 팀의 CI/CD 환경에 배포 및 실행해보는 내용이었습니다. 특정 기능을 구현하기 보다는 팀 업무 환경에 익숙해지기 위한 과제였는데요. 다른 과제보다는 수월하게 진행할 수 있었습니다. 또한 저희팀 git repository 에 다양한 샘플 DAG 코드가 업로드되어 있어서, DAG의 기본 구조를 이해하는데 도움이 되었습니다.
 
-DAG 안의 task의 내용 자체는 매우 단순했지만 (print 문 등), 대신 task 하나를 실행하거나 여러 task를 병렬 처리하는 DAG를 생성해봤습니다.
+이 과제에서 생성한 DAG 안의 task의 내용 자체는 매우 단순했지만 (print 문 등), 대신 task 하나를 실행하거나 여러 task를 병렬 처리하는 DAG를 생성해봤습니다.
 
 <br>
 
@@ -193,7 +193,7 @@ Helm chart를 직접 만들고 `values.yaml` 을 작성하는 방법, GKE 환경
 <br>
 
 #### 1) 각종 온보딩 세션
-전사 단위로는 PX(People Experience)팀에서 하루 정도 시간을 잡고 쏘카 회사의 히스토리와 문화에 대해서 알려주는 온보딩 과정이 있었습니다. 데이터 그룹 단위에서는 팀장인 토마스가 3번에 걸쳐 1:1로 한시간씩 쏘카 데이터 그룹의 인프라와 히스토리에 대해 설명해주는 시간이 있었습니다.
+전사 단위로는 PX(People Experience)팀에서 하루 정도 시간을 잡고 쏘카 회사의 히스토리와 문화에 대해서 알려주는 온보딩 과정이 있었습니다. 또한 PX팀과 따로 1:1 티타임을 하고, 온보딩 과정에 대한 만족도 조사를 하는 등 신규 입사자를 세심하게 신경써주는 느낌을 받았습니다.  데이터 그룹 단위에서는 팀장인 토마스가 3번에 걸쳐 1:1로 한시간씩 쏘카 데이터 그룹의 인프라와 히스토리에 대해 설명해주는 시간이 있었습니다.
 
 <br>
 
@@ -361,7 +361,9 @@ Helm chart를 직접 만들고 `values.yaml` 을 작성하는 방법, GKE 환경
 #### 1) 가고싶은 회사가 어떤 환경인지 보고 공부하자.
 
 가고 싶은 회사의 채용공고를 꼼꼼히 읽고, 어떤 툴과 프레임워크를 쓰는지 보시면서 그 프레임워크에 대한 공부를 하시면 좋을 것 같아요.  
-저희가 알고 있는 IT 기업들은 AWS, GCP, Hadoop 이 선에서 크게 달라지지 않는다고 생각합니다. 온라인 강의 사이트에서 이런 프레임워크를 타겟으로 한 강의도 많아서, 참고하시면 좋을 것 같습니다.
+저희가 알고 있는 IT 기업들은 AWS, GCP, Hadoop 이 선에서 크게 달라지지 않는다고 생각합니다. 온라인 강의 사이트에서 이런 프레임워크를 타겟으로 한 강의도 많아서, 참고하시면 좋을 것 같습니다. 
+
+쏘카 데이터그룹은 기본적으로 GCP 를 이용하고 있기 때문에, 저는 개인적으로 [Qwiklabs](https://www.qwiklabs.com/) 플랫폼의 GCP 관련 실습 강의(ex.[Engineer Data in Google Cloud](https://www.qwiklabs.com/quests/132?catalog_rank=%7B%22rank%22%3A2%2C%22num_filters%22%3A0%2C%22has_search%22%3Atrue%7D&search_id=14949926))가 많은 도움이 되었습니다. Hadoop의 경우 조금 오래된 강의기는 하지만 [Udemy](https://www.udemy.com/) 플랫폼의 [The Ultimate Hands-On Hadoop](https://www.udemy.com/course/the-ultimate-hands-on-hadoop-tame-your-big-data/) 강의를 통해 기본 개념을 익힐 수 있었던 기억이 납니다. 이 외에도 [Udacity](https://www.udacity.com/), [O'Reilly](https://www.oreilly.com/) 등의 강의 플랫폼에서 유용한 강의들을 찾으실 수 있습니다. 
 
 <br>
 
