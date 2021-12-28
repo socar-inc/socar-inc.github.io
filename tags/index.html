@@ -1,0 +1,50 @@
+---
+layout: page
+title: Tags 🏷
+permalink: /tags/
+background: '/assets/images/home-bg-main-1.png'
+---
+
+{% if site.posts.size == 0 %}
+  <h2>No post found</h2>
+{% endif %}
+
+<div class="tags">
+  <h1>태그 목록</h1>
+  <div class="label">
+    {% for tag in site.tags %}
+    <div class="tag-anchor">
+      <a href="#{{ tag[0] }}">
+        <span>{{ tag[0] }}</span>
+      </a>
+    </div>
+    {% endfor %}
+  </div>
+
+  <hr>
+
+  <h1>글 목록</h1>
+  <div class="tagged-posts">
+  {% for tag in site.tags %}
+    <h2 id="{{ tag[0] }}">
+      {{ tag[0] }}
+    </h2>
+    <ul class="tag">
+      {% for post in tag[1] %}
+        {% if post.title != null %}
+          <li>
+            {% if post.link %}
+              <a href="{{ post.link }}">
+            {% else %}
+              <a href="{{ site.baseurl }}{{ post.url }}">
+            {% endif %}
+                {{ post.title }}
+              </a>
+              <time>{{ post.date | date: "%Y-%m-%d" }}</time>
+          </li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+  {% endfor %}
+</div>
+</div>
