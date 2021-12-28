@@ -186,7 +186,7 @@ Helm Chart를 직접 만들고 `values.yaml` 을 작성하는 방법, GKE 환경
 
 이렇게 2주 동안 과제를 수행한 뒤, 온보딩 과제를 회고하는 발표를 하게 되었습니다. 주로 온보딩 과제와 트러블 슈팅 내용들, 제가 느꼈던 감정(..)들 위주였습니다. 발표 후, 이런 식으로 온보딩 과정을 발전 및 정착시켰으면 좋겠다는 논의도 나왔습니다. 앞으로 더 개선된 온보딩 과정이 기대됩니다.
 
-![온보딩 발표 중 Airflow](/img/data-engineering-onboarding/onboarding-pitch-Airflow.png)
+![온보딩 발표 중 Airflow](/img/data-engineering-onboarding/onboarding-pitch-airflow.png)
 *트러블슈팅 과정 설명*
 
 <br>
@@ -274,7 +274,7 @@ Helm Chart를 직접 만들고 `values.yaml` 을 작성하는 방법, GKE 환경
 - 또한 dbt를 적용하는 대부분의 과정을 자동화하는 CLI를 만드는 과정에 참여하고 있습니다.
 
 ![샤머니즘 엔지니어링](/img/data-engineering-onboarding/shamanism-engineering.png)
-*생생한 비대면 페어 코딩의 현장*
+*코드가 돌아가길 기도하고 있는 모습*
 
 
 
