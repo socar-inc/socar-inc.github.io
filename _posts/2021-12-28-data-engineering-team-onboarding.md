@@ -14,7 +14,7 @@ tags:
 
 안녕하세요! 쏘카 데이터 엔지니어링 팀의 디니입니다.
 
-저는 2021년 8월에 쏘카 데이터 엔지니어링 팀에 신입 데이터 엔지니어로 입사했습니다. 지난 4개월간 데이터 엔지니어링 팀에서 경험하며 느낀 점을 공유하려 합니다. 그 중 데이터 엔지니어링 팀의 온보딩과 실무를 겪으며 느낀 내용을 주로 다루었습니다. 혹시 데이터 분석가나 데이터 사이언티스트의 내용이 궁금하신 분은 [쏘카 데이터 그룹 - 데이터 사이언티스트 인턴 9개월 후기](https://tech.socarcorp.kr/data/2020/08/19/socar-data-group-intern-review.html)를 보시면 도움이 될 것 같습니다.
+저는 2021년 8월에 쏘카 데이터 엔지니어링 팀에 신입 데이터 엔지니어로 입사했습니다. 지난 4개월간 데이터 엔지니어링 팀에서 경험하며 느낀 점을 공유하려 합니다. 그 중 데이터 엔지니어링 팀의 온보딩과 실무를 겪으며 느낀 내용을 주로 다루었습니다. 혹시 데이터 분석가나 데이터 사이언티스트의 내용이 궁금하신 분은 [쏘카 데이터 그룹 - 데이터 사이언티스트 인턴 9개월 후기](https://tech.socarcorp.kr/data/2020/08/19/socar-data-group-intern-review.html){:target="_blank"}를 보시면 도움이 될 것 같습니다.
 
 다음과 같은 분들이 읽으시면 도움이 될 것 같습니다.
 
@@ -29,7 +29,7 @@ tags:
 
 목차는 다음과 같습니다. 각 제목을 클릭하시면 해당 부분으로 이동하실 수 있습니다.
 
-1. [입사 과정 및 백그라운드](#join-process-and-background)
+1. [입사 지원 배경과 과정](#join-process-and-background)
    - 지원 배경
    - 입사 과정
 2. [입사 후 온보딩 과정](#onboarding-process)
@@ -77,7 +77,7 @@ tags:
 
 #### 1. 서류 제출
 
-원티드를 통해 서류를 제출했습니다. 따로 자기소개서 양식은 없었고, 과거 프로젝트 경험이 담긴 이력서와 함께 [개인 블로그](https://diana-lab.tistory.com/)와 [Github](https://github.com/yoonhyejin)를 첨부했습니다.
+원티드를 통해 서류를 제출했습니다. 따로 자기소개서 양식은 없었고, 과거 프로젝트 경험이 담긴 이력서와 함께 [개인 블로그](https://diana-lab.tistory.com/){:target="_blank"}와 [Github](https://github.com/yoonhyejin){:target="_blank"}를 첨부했습니다.
 
 <br>
 
@@ -112,7 +112,7 @@ tags:
 
 약 한 달 정도의 채용 프로세스 끝에 드디어 쏘카 데이터 엔지니어링 팀에 입사하게 되었습니다.
 
-쏘카 데이터 엔지니어링 팀은 총 8명으로 쏘카 데이터 엔지니어링 팀이 하는 일은 데이터 엔지니어링 팀의 하디가 작성한 [데이터 엔지니어링 팀이 하는 일](https://tech.socarcorp.kr/data/2021/03/24/what-socar-data-engineering-team-does.html)과 [쏘카 데이터 엔지니어 채용공고](https://www.notion.so/socarcorp/d458b6b77a2243fb873d1ac800c321f7?p=1e895c6f8d6c49d0962d9c3af3e37f81)에 잘 설명되어 있습니다.
+쏘카 데이터 엔지니어링 팀은 총 8명으로 쏘카 데이터 엔지니어링 팀이 하는 일은 데이터 엔지니어링 팀의 하디가 작성한 [데이터 엔지니어링 팀이 하는 일](https://tech.socarcorp.kr/data/2021/03/24/what-socar-data-engineering-team-does.html){:target="_blank"}과 [쏘카 데이터 엔지니어 채용공고](https://www.notion.so/socarcorp/d458b6b77a2243fb873d1ac800c321f7?p=1e895c6f8d6c49d0962d9c3af3e37f81){:target="_blank"}에 잘 설명되어 있습니다.
 
 며칠 뒤, 2주 동안 4개의 온보딩 과제를 진행하게 되었습니다.
 
@@ -154,7 +154,7 @@ tags:
 
 #### 3) Airflow - 간단한 DAG 만들어서 실행하기
 
-이 과제는 `PythonOperator`를 이용한 간단한 Airflow DAG을 만들고. 팀의 CI/CD 환경에 배포 및 실행해보는 내용이었습니다. 특정 기능을 구현하는 것보다 팀 업무 환경에 익숙해지기 위한 과제였습니다. 다른 과제보다 수월하게 진행할 수 있었습니다. 또한 저희팀 Git Repository에 다양한 샘플 DAG 코드가 업로드되어 있어서, DAG의 기본 구조 이해에 도움이 되었습니다.
+이 과제는 `PythonOperator`를 이용한 간단한 Airflow DAG을 만들고, 팀의 CI/CD 환경에 배포 및 실행해보는 내용이었습니다. 특정 기능을 구현하는 것보다 팀 업무 환경에 익숙해지기 위한 과제였습니다. 다른 과제보다 수월하게 진행할 수 있었습니다. 또한 저희팀 Git Repository에 다양한 샘플 DAG 코드가 업로드되어 있어서, DAG의 기본 구조 이해에 도움이 되었습니다.
 
 이 과제에서 생성한 DAG 안의 Task의 내용 자체는 매우 단순했지만 (print 문 등), 대신 Task 하나를 실행하거나 여러 Task를 병렬 처리하는 DAG를 생성해봤습니다.
 
@@ -176,9 +176,9 @@ Helm Chart를 직접 만들고 `values.yaml` 을 작성하는 방법, GKE 환경
 
 모든 회사에서 이런 기회가 주어지지 않는다는 것을 알기에 더욱 소중한 시간이었습니다.
 
-가장 큰 장점은 **"업무 적응에 대한 심적 부담이 크게 줄었다!"**입니다. 사실 데이터 엔지니어링 팀에 필요한 도메인이 매우 넒은데, 관련 경험이 거의 없어서 처음에 막연한 두려움이 있었습니다. 그런데 Task 자체는 매우 단순화한 상태에서 프레임워크를 사용해보고 플로우를 익혀보니, 좀 더 복잡한 업무도 "아, 일단 이건 해봤으니까 여기서 발전해나가면 되겠구나!" 하는 자신감이 생겼습니다.
+가장 큰 장점은 **"업무 적응에 대한 심적 부담이 크게 줄었다!"**입니다. 사실 데이터 엔지니어링 팀에 필요한 도메인이 매우 넓은데, 관련 경험이 거의 없어서 처음에 막연한 두려움이 있었습니다. 그런데 Task 자체는 매우 단순화한 상태에서 프레임워크를 사용해보고 플로우를 익혀보니, 좀 더 복잡한 업무도 "아, 일단 이건 해봤으니까 여기서 발전해나가면 되겠구나!" 하는 자신감이 생겼습니다.
 
-첫 환경 세팅이나 배포의 난관을 온보딩 과제를 통해 극복할 수 있던 것도 큰 의미가 있었습니다. 프레임워크뿐만 아니라 [Lens](https://k8slens.dev/) 등 팀에서 활용하고 있는 모니터링 도구도 이때 빨리 접할 수 있었습니다. 팀 문서나 코드도 점점 눈에 들어오기 시작했습니다. 그리고 트러블슈팅 과정을 기록한 것들을 공유하며, 제가 어떤 부분에서 부족한지 팀원들의 피드백을 받아볼 수 있어서 좋았습니다.
+첫 환경 세팅이나 배포의 난관을 온보딩 과제를 통해 극복할 수 있던 것도 큰 의미가 있었습니다. 프레임워크뿐만 아니라 [Lens](https://k8slens.dev/){:target="_blank"} 등 팀에서 활용하고 있는 모니터링 도구도 이때 빨리 접할 수 있었습니다. 팀 문서나 코드도 점점 눈에 들어오기 시작했습니다. 그리고 트러블슈팅 과정을 기록한 것들을 공유하며, 제가 어떤 부분에서 부족한지 팀원들의 피드백을 받아볼 수 있어서 좋았습니다.
 
 <br>
 
@@ -217,7 +217,7 @@ Helm Chart를 직접 만들고 `values.yaml` 을 작성하는 방법, GKE 환경
 
 #### 3) 해피아워
 
-데이터 그룹은 한 달에 한 금요일 오후에 해피아워를 진행합니다. 해피아워는 다양한 데이터 그룹의 사람들이 서로 친해지며 휴식하는 시간입니다. 코로나가 심하지 않을 때는 영화를 보거나 맥주를 마시러 가기도 했다고 합니다. 코로나 시국에는 비대면으로 마피아게임, 캐치마인드, 몸으로 말해요 등 여러 액티비티를 경험했습니다.
+데이터 그룹은 한 달에 한 번 금요일 오후에 해피아워를 진행합니다. 해피아워는 다양한 데이터 그룹의 사람들이 서로 친해지며 휴식하는 시간입니다. 코로나가 심하지 않을 때는 영화를 보거나 맥주를 마시러 가기도 했다고 합니다. 코로나 시국에는 비대면으로 마피아게임, 캐치마인드, 몸으로 말해요 등 여러 액티비티를 경험했습니다.
 
 ![해피아워 공지](/img/data-engineering-onboarding/happy-hour.png)
 *지금은 제가 해피아워 공지를 올립니다.*
@@ -228,7 +228,7 @@ Helm Chart를 직접 만들고 `values.yaml` 을 작성하는 방법, GKE 환경
 
 ## 3. 실무 투입 과정 <a name="after-onboarding"></a>
 
-이렇게 온보딩 과제를 마무리한 후에도 조금씩 업무에 투입되었습니다. 이 기간에 팀원 그랩이 추천해준 ["Kubernetes in Action"](http://www.yes24.com/Product/Goods/89607047)이라는 책을 읽으며 정리했습니다.
+이렇게 온보딩 과제를 마무리한 후에도 조금씩 업무에 투입되었습니다. 이 기간에 팀원 그랩이 추천해준 ["Kubernetes in Action"](http://www.yes24.com/Product/Goods/89607047){:target="_blank"}이라는 책을 읽으며 정리했습니다.
 
 <br>
 
@@ -236,7 +236,7 @@ Helm Chart를 직접 만들고 `values.yaml` 을 작성하는 방법, GKE 환경
 
 입사 후 처음 맡게 된 프로젝트입니다. 쏘카에선 개발 직군, 비개발 직군 상관없이 많은 분들이 데이터를 적극적으로 이용하고 있습니다. 점점 더 데이터가 복잡해지고 이용자가 늘어나는 상황에서 "어떤 데이터가 어디에 있는지", "특정 테이블 혹은 칼럼은 어떤 정보를 담고 있는지", 즉 메타데이터를 쉽게 파악하는 일이 중요해졌습니다.  
 
-이런 메타데이터의 효율적 관리를 위한 "전사적 메타데이터 플랫폼"을 도입하는 과정에 카일과 함께 참여하게 되었습니다. 현재는 [Datahub](https://github.com/linkedin/datahub)라는 프레임워크를 선택하여 GKE에서 테스트 과정 중에 있으며, 추후 전사 플랫폼으로 도입할 예정입니다. 기획 단계부터 리서치, 테스트와 배포와 커스텀 기능 개발까지 경험할 수 있어서 정말 재밌게 하고 있습니다.  
+이런 메타데이터의 효율적 관리를 위한 "전사적 메타데이터 플랫폼"을 도입하는 과정에 카일과 함께 참여하게 되었습니다. 현재는 [Datahub](https://github.com/linkedin/datahub){:target="_blank"}라는 프레임워크를 선택하여 GKE에서 테스트 과정 중에 있으며, 추후 전사 플랫폼으로 도입할 예정입니다. 기획 단계부터 리서치, 테스트와 배포와 커스텀 기능 개발까지 경험할 수 있어서 정말 재밌게 하고 있습니다.  
 
 구체적으로는 다음과 같은 일들을 해볼 수 있었습니다.
 
@@ -244,7 +244,7 @@ Helm Chart를 직접 만들고 `values.yaml` 을 작성하는 방법, GKE 환경
 - Ingestion을 수행하는 계정 권한을 최소화하기 위해 자체 메타데이터 추출 로직 개발하기
 - Helm Chart, ArgoCD를 이용하여 GKE에 배포하기
 
-아래는 Datahub 공식 사이트에서 제공하는 [데모 사이트](https://demo.datahubproject.io/)의 스크린샷입니다. 이 플랫폼이 완성되면 또 다른 글로 찾아오겠습니다 :)
+아래는 Datahub 공식 사이트에서 제공하는 [데모 사이트](https://demo.datahubproject.io/){:target="_blank"}의 스크린샷입니다. 이 플랫폼이 완성되면 또 다른 글로 찾아오겠습니다 :)
 
 ![Datahub 데모 메인 스크린샷](/img/data-engineering-onboarding/datahub-demo-main.png)
 *Datahub - 데모 메인 페이지.*
@@ -269,8 +269,8 @@ Helm Chart를 직접 만들고 `values.yaml` 을 작성하는 방법, GKE 환경
 
 **소다 스토어 파티** - 쏘카의 데이터를 깔끔하고 편리하게
 
-- 소다 스토어는 쏘카의 데이터를 한눈에 볼 수 있는 데이터 마트입니다. 자세한 설명은 [쏘카 데이터 그룹 - 데이터 엔지니어링 팀이 하는 일](https://tech.socarcorp.kr/data/2021/03/24/what-socar-data-engineering-team-does.html)에서 볼 수 있습니다.
-- 이 파티에서 쿼리의 확장성과 모듈화를 위해 [dbt](https://www.getdbt.com/)라는 도구를 소다 스토어와 관련된 쿼리에 적용하는 작업을 하고 있습니다.
+- 소다 스토어는 쏘카의 데이터를 한눈에 볼 수 있는 데이터 마트입니다. 자세한 설명은 [쏘카 데이터 그룹 - 데이터 엔지니어링 팀이 하는 일](https://tech.socarcorp.kr/data/2021/03/24/what-socar-data-engineering-team-does.html){:target="_blank"}에서 볼 수 있습니다.
+- 이 파티에서 쿼리의 확장성과 모듈화를 위해 [dbt](https://www.getdbt.com/){:target="_blank"}라는 도구를 소다 스토어와 관련된 쿼리에 적용하는 작업을 하고 있습니다.
 - 또한 dbt를 적용하는 대부분의 과정을 자동화하는 CLI를 만드는 과정에 참여하고 있습니다.
 
 ![샤머니즘 엔지니어링](/img/data-engineering-onboarding/shamanism-engineering.png)
@@ -350,7 +350,7 @@ Helm Chart를 직접 만들고 `values.yaml` 을 작성하는 방법, GKE 환경
 
 저도 이 점에 대해서 걱정했는데, 저희 팀에는 오히려 비전공자가 더 많고 중요한 건 아무도 과(와 학교)에 신경을 쓰지 않습니다. 그런 백그라운드보다 요구하는 일을 할 수 있는 실력이 더 중요하다고 느꼈습니다.
 
-그리고 커뮤니케이션 능력은 어디서 무슨 일을 하든 무조건 플러스라고 생각합니다. 회사에 와서 보니 의사결정, 우선순위 산정 등 다른 게 더 중요할 수도 있다는 생각이 들었습니다. [배달의 민족 CEO 인터뷰](https://eoeoeo.net/2021/08/12/%EB%B0%B0%EB%8B%AC%EC%9D%98%EB%AF%BC%EC%A1%B1-ceo%EA%B0%80-%EB%A7%90%ED%95%98%EB%8A%94-%ED%95%A8%EA%BB%98-%EC%9D%BC%ED%95%98%EA%B3%A0-%EC%8B%B6%EC%9D%80-%EA%B0%9C%EB%B0%9C%EC%9E%90%EC%9D%98-%EA%B8%B0/)에서 "개발자는 비즈니스 문제를 해결하는 사람"으로 정의하길 바란다는 말씀을 합니다. 이와 같이 코딩 뿐만 아니라 문제 해결에 지치지 않고 재밌어한다면 개발자가 잘 맞을 것 같습니다.
+그리고 커뮤니케이션 능력은 어디서 무슨 일을 하든 무조건 플러스라고 생각합니다. 회사에 와서 보니 의사결정, 우선순위 산정 등 다른 게 더 중요할 수도 있다는 생각이 들었습니다. [배달의 민족 CEO 인터뷰](https://eoeoeo.net/2021/08/12/%EB%B0%B0%EB%8B%AC%EC%9D%98%EB%AF%BC%EC%A1%B1-ceo%EA%B0%80-%EB%A7%90%ED%95%98%EB%8A%94-%ED%95%A8%EA%BB%98-%EC%9D%BC%ED%95%98%EA%B3%A0-%EC%8B%B6%EC%9D%80-%EA%B0%9C%EB%B0%9C%EC%9E%90%EC%9D%98-%EA%B8%B0/){:target="_blank"}에서 "개발자는 비즈니스 문제를 해결하는 사람"으로 정의하길 바란다는 말씀을 합니다. 이와 같이 코딩 뿐만 아니라 문제 해결에 지치지 않고 재밌어한다면 개발자가 잘 맞을 것 같습니다.
 
 <br>
 
@@ -366,7 +366,7 @@ Helm Chart를 직접 만들고 `values.yaml` 을 작성하는 방법, GKE 환경
 
 저희가 알고 있는 IT 기업들은 AWS, GCP, Hadoop 이 선에서 크게 달라지지 않는다고 생각합니다. 온라인 강의 사이트에서 이런 프레임워크를 타겟으로 한 강의를 참고하시면 좋을 것 같습니다. 
 
-쏘카 데이터 그룹은 기본적으로 GCP(Google Cloud Platform)를 이용하고 있기 때문에, 개인적으로 [Qwiklabs](https://www.qwiklabs.com/) 플랫폼의 GCP 관련 실습 강의(ex.[Engineer Data in Google Cloud](https://www.qwiklabs.com/quests/132))가 많은 도움되었습니다. Hadoop의 경우 조금 오래된 강의지만 [Udemy](https://www.udemy.com/) 플랫폼의 [The Ultimate Hands-On Hadoop](https://www.udemy.com/course/the-ultimate-hands-on-hadoop-tame-your-big-data/) 강의를 통해 기본 개념을 익힐 수 있었던 기억이 납니다. 이 외에도 [Udacity](https://www.udacity.com/), [O'Reilly](https://www.oreilly.com/) 등의 강의 플랫폼에서 유용한 강의들을 찾으실 수 있습니다. 
+쏘카 데이터 그룹은 기본적으로 GCP(Google Cloud Platform)를 이용하고 있기 때문에, 개인적으로 [Qwiklabs](https://www.qwiklabs.com/){:target="_blank"} 플랫폼의 GCP 관련 실습 강의(ex.[Engineer Data in Google Cloud](https://www.qwiklabs.com/quests/132){:target="_blank"})가 많은 도움되었습니다. Hadoop의 경우 조금 오래된 강의지만 [Udemy](https://www.udemy.com/){:target="_blank"} 플랫폼의 [The Ultimate Hands-On Hadoop](https://www.udemy.com/course/the-ultimate-hands-on-hadoop-tame-your-big-data/){:target="_blank"} 강의를 통해 기본 개념을 익힐 수 있었던 기억이 납니다. 이 외에도 [Udacity](https://www.udacity.com/){:target="_blank"}, [O'Reilly](https://www.oreilly.com/){:target="_blank"} 등의 강의 플랫폼에서 유용한 강의들을 찾으실 수 있습니다. 
 
 <br>
 
