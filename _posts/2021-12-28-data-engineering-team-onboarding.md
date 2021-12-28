@@ -2,7 +2,7 @@
 layout: post
 title:  "쏘카 신입 데이터 엔지니어 디니의 4개월 회고"
 subtitle: 입사 지원부터 팀 온보딩, 실무 투입까지
-date: 2021-12-29 15:10:00 +0900
+date: 2021-12-28 17:00:00 +0900
 category: data
 background : "/assets/images/onboarding-bg.jpg"
 author: dini
