@@ -274,7 +274,7 @@ Helm Chart를 직접 만들고 `values.yaml` 을 작성하는 방법, GKE 환경
 - 또한 dbt를 적용하는 대부분의 과정을 자동화하는 CLI를 만드는 과정에 참여하고 있습니다.
 
 ![샤머니즘 엔지니어링](/img/data-engineering-onboarding/shamanism-engineering.png)
-*페어코딩 중 코드가 돌아가길 기도하아고 있는 모습*
+*페어코딩 중 코드가 돌아가길 기도하고 있는 모습*
 
 
 
