@@ -240,7 +240,7 @@ Helm Chart를 직접 만들고 `values.yaml` 을 작성하는 방법, GKE 환경
 
 구체적으로는 다음과 같은 일들을 해볼 수 있었습니다.
 
-- Data Ingsetion 과정을 Docker 이미지로 만들고 Airflow DAG에 연동하여 스케줄링하기
+- Data Ingestion 과정을 Docker 이미지로 만들고 Airflow DAG에 연동하여 스케줄링하기
 - Ingestion을 수행하는 계정 권한을 최소화하기 위해 자체 메타데이터 추출 로직 개발하기
 - Helm Chart, ArgoCD를 이용하여 GKE에 배포하기
 
