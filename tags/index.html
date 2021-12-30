@@ -13,7 +13,7 @@ background: '/assets/images/home-bg-main-1.png'
   <h1>태그 목록</h1>
   <div class="label">
     {% for tag in site.tags %}
-    <div class="tag-anchor">
+    <div class="anchor">
       <a href="#{{ tag[0] }}">
         <span>{{ tag[0] }}</span>
       </a>
@@ -21,15 +21,13 @@ background: '/assets/images/home-bg-main-1.png'
     {% endfor %}
   </div>
 
-  <hr>
-
   <h1>글 목록</h1>
-  <div class="tagged-posts">
+  <div class="posts">
   {% for tag in site.tags %}
     <h2 id="{{ tag[0] }}">
       {{ tag[0] }}
     </h2>
-    <ul class="tag">
+    <ul class="post">
       {% for post in tag[1] %}
         {% if post.title != null %}
           <li>
@@ -38,7 +36,7 @@ background: '/assets/images/home-bg-main-1.png'
             {% else %}
               <a href="{{ site.baseurl }}{{ post.url }}">
             {% endif %}
-                {{ post.title }}
+                {{ post.title }} 
               </a>
               <time>{{ post.date | date: "%Y-%m-%d" }}</time>
           </li>
