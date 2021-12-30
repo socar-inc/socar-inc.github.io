@@ -129,9 +129,11 @@ SW. ACC2 + 실내등2개 (문 앞뒤열림) + 송풍기 4단계 + Light 3단 + �
 
 앞서 쏘카 차량에는 관제 단말기가 부착되어 있고, 이 단말기로부터 차량 주행과 관련된 데이터를 주기적으로 수집하고 있다고 말씀 드렸습니다. 수집하는 데이터 중에는 시동/가시동/정지 여부, 전조등 켜짐/꺼짐 여부, 전압 정보 등등 고객님의 차량 운용 패턴과 관련된 데이터가 모두 담겨있습니다. 따라서 **과거의 방전 관련 CS 콜이 들어온 시간을 전/후로 주행 데이터를 살펴보면 문제 발생을 일으키는 주요한 운용 패턴을 발견할 수 있습니다.**
 
-예를 들면, 여름철에 가장 많이 들어온 방전 관련 CS 콜을 살펴보면 위의 시나리오 중 S6이 가장 많습니다. 주행은 하고 있지만 엔진이 작동하기에 추가적인 기름 소모는 아쉽고, 차에서 좀 쉬고싶기는 해서 송풍기에서 나오는 바람을 좀 쐬고있다보니 발생하는 일입니다. 그 외에도 희귀하지만 인상깊었던 상황을 공유드리자면, 자주 방전이 일어나 발전기까지 체크했는데도 방전 문제가 개선되지 않았던 차량에 대한 신고를 받고 데이터를 살펴보니, 퓨즈단의 배선이 잘못되어 시동이 꺼진 후에도 암전류가 지속적으로 일어났던 상황이었습니다. 다음의 그림은 같은 잔존수명을 가진 배터리가 암전류의 유무에 따라 시간당 전압 변화율이 어떻게 달라지는지 보여주는 예시입니다.
+예를 들면, 여름철에 가장 많이 들어온 방전 관련 CS 콜을 살펴보면 위의 시나리오 중 S6이 가장 많습니다. 주행은 하고 있지만 엔진이 작동하기에 추가적인 기름 소모는 아쉽고, 차에서 좀 쉬고싶기는 해서 송풍기에서 나오는 바람을 좀 쐬고있다보니 발생하는 일입니다. 그 외에도 희귀하지만 인상깊었던 상황을 공유드리자면, 자주 방전이 일어나 발전기까지 체크했는데도 방전 문제가 개선되지 않았던 차량에 대한 신고를 받고 데이터를 살펴보니, 퓨즈단의 배선이 잘못되어 시동이 꺼진 후에도 암전류가 지속적으로 일어났던 상황이었습니다. 다음의 그림은 각각 "블루투스 계측기를 이용한 전류 측정 사진"과 "같은 잔존수명을 가진 배터리가 암전류의 유무에 따라 시간당 전압 변화율이 어떻게 달라지는지 보여주는 예시 차트" 입니다.
 
-![](/img/socar-mobility-lab-battery-management-process-second-stage/Figure-2.png){: width="90%" height="90%" style="display: block; margin: 0 auto"}
+![](/img/socar-mobility-lab-battery-management-process-second-stage/Figure-2.jpg){: width="90%" height="90%" style="display: block; margin: 0 auto"}
+*블루투스 계측기를 이용한 전류 측정*
+![](/img/socar-mobility-lab-battery-management-process-second-stage/Figure-3.png){: width="90%" height="90%" style="display: block; margin: 0 auto"}
 *같은 잔존수명을 가진 배터리가 암전류의 유무에 따라 시간당 전압 변화율이 어떻게 달라지는지 보여주는 예시*
 
 ```
@@ -152,7 +154,7 @@ SW. ACC2 + 실내등2개 (문 앞뒤열림) + 송풍기 4단계 + Light 3단 + �
 
 데이터 수집은 위에서 정한대로 10분마다 이루어지며 1~3은 모두 OR 조건으로 엮입니다. 따라서 어느 한 조건이라도 충족이 되면 그 차량은 알림의 대상이 됩니다. 
 
-![](/img/socar-mobility-lab-battery-management-process-second-stage/Figure-3.png){: width="90%" height="90%" style="display: block; margin: 0 auto"}
+![](/img/socar-mobility-lab-battery-management-process-second-stage/Figure-4.png){: width="90%" height="90%" style="display: block; margin: 0 auto"}
 *실행 프로세서의 순서도. 실제 시스템 구축은 모비딕팀 스팍께서 해주셨습니다.*
 
 <br>
