@@ -41,7 +41,6 @@ table, th, td {
   padding: 5px
 }
 
-
 .mermaid {
   border: 1px solid;
   border-radius: 10px;
@@ -86,11 +85,39 @@ table, th, td {
   }
 }
 
-table {
-  width: 100%
+.toc {
+  width: 15%;
+  max-width: 280px;
+  left: 0;
+  position: fixed;
+  top: 50vh;
+  transform: translate(0, -50%);
+  padding: 20px;
+  line-height: 100%;
+  color: #00000090;
+  font-weight: 300;
+  visibility: visible;
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.4, 0.95);
 }
 
-table, th, td {
-  border: 1px solid #ccc;
-  padding: 5px
+.toc-hidden {
+  transform: translate(-100%, -50%);
+  visibility: hidden;
+}
+
+.toc-link {
+  font-size: 12px;
+  padding: 0;
+}
+
+.toc-link::before {
+  background-color: inherit;
+}
+
+
+// 992px은 bootstrap grid large 기준
+@media only screen and (max-width: 992px) {
+  .toc {
+    visibility: hidden;
+  }
 }
