@@ -62,6 +62,18 @@ table, th, td {
   margin: 60px 0 20px 0;
 }
 
+.post-content > ul {
+  margin: 20px 0;
+}
+
+.post-content > ol {
+  margin: 20px 0;
+}
+
+.post-content li p {
+  margin: 5px 0;
+}
+
 .mermaid {
   border: 1px solid;
   border-radius: 10px;
