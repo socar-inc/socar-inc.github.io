@@ -17,11 +17,10 @@ img {
 
 img + em {
   display: block;
-  margin: 0 auto;
-  width: 80%;
+  margin: -30px auto 0 auto;
+  max-width: 80%;
   text-align: center;
   font-size: 0.8em;
-  margin-top: 5px;
   color: #21252980;
 }
 
@@ -34,6 +33,16 @@ table, th, td {
   padding: 5px
 }
 
+@media only screen and (min-width: 768px) {
+  .post-heading > .post-title {
+    margin-bottom: 10px !important;
+    font-size: 46px !important;
+  }
+}
+
+.post-content {
+  font-size: 18px;
+}
 
 .post-content hr {
   margin-top: 30px;
@@ -62,15 +71,11 @@ table, th, td {
   margin: 60px 0 20px 0;
 }
 
-.post-content > ul {
+.post-content > ol, .post-content > ul {
   margin: 20px 0;
 }
 
-.post-content > ol {
-  margin: 20px 0;
-}
-
-.post-content li p {
+.post-content li, .post-content li > p {
   margin: 5px 0;
 }
 
