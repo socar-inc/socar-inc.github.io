@@ -74,6 +74,10 @@ table, th, td {
   margin: 5px 0;
 }
 
+.post-content + hr {
+  margin-top: 20px;
+}
+
 .post-content > .footnotes {
   margin-top: 70px;
   border-top: 1px solid #00000080;
