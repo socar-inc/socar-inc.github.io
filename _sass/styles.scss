@@ -1,17 +1,53 @@
 // Import Core Clean Blog SCSS
 @import "../assets/vendor/startbootstrap-clean-blog/scss/clean-blog.scss";
 
+
+.post-content hr {
+  border: 3px solid black;
+  width: 10%;
+  margin: 20px 0 20px 0;
+}
+
+blockquote {
+  font-style: normal;
+  background-color: #fafafa;
+  padding: 10px 40px;
+  font-size: 0.9em;
+  border-left: 4px solid #e6e6e6;
+}
+
+img {
+  display: block; 
+  margin: 0 auto;
+  width: 80%;
+}
+
+img + em {
+  display: block;
+  margin: 0 auto;
+  width: 80%;
+  text-align: center;
+  font-size: 0.8em;
+  margin-top: 5px;
+  color: #21252980;
+}
+
+table {
+  width: 100%
+}
+
+table, th, td {
+  border: 1px solid #ccc;
+  padding: 5px
+}
+
+
 .mermaid {
   border: 1px solid;
   border-radius: 10px;
   padding: 20px;
   margin-top: 10px;
   margin-bottom: 10px;
-}
-
-hr {
-  margin-top: 20px;
-  margin-bottom: 20px;
 }
 
 .photo-copyright {
@@ -29,12 +65,25 @@ hr {
   color: gray;
 }
 
-blockquote {
-  font-style: normal;
-  background-color: #fafafa;
-  padding: 10px 40px;
-  font-size: 0.9em;
-  border-left: 4px solid #e6e6e6;
+.tags {
+  .label {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 2rem 0;
+
+    .tag-anchor {
+      display: flex;
+      padding: 0 1rem;
+      margin: 0.5rem 0;
+      margin-right: 0.5rem;
+      background-color: lightgrey;
+      border-radius: 0.5rem;
+      font-weight: bold;
+    }
+  }
+  .tagged-posts {
+    padding: 2rem 0;
+  }
 }
 
 table {
