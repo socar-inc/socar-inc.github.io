@@ -68,7 +68,7 @@ Aviatrix 솔루션 테스트를 위해, AWS Marketplace에서 Aviatrix을 선택
 - [AWS-Marketplace (Aviatrix Secure Networking Platform - Custom)](https://aws.amazon.com/marketplace/pp/B0155GB0MA?ref_=aws-mp-console-subscription-detail)
 
 설치 방법은 두가지를 제공합니다.
-![1](/img/posts_aviatrix/cloudformation-image.png){: width="100%" height="100%"}
+![1](/img/posts_aviatrix/cloudformation-image.png)
 
 1. Amazon Machine Image (AMI)를 통한 직접 설치
 2. CloudFormation Template을 이용한 자동화된 설치
@@ -79,25 +79,25 @@ Aviatrix 솔루션 테스트를 위해, AWS Marketplace에서 Aviatrix을 선택
 CloudFormation 배포가 완료된 상태에서 Output 카테고리에서 AviatrixControllerEIP 정보를 확인합니다. EIP에 대한 구성을 하지 않을 경우에는 AviatrixControllerPrivateIP 정보를 확인하여 웹 페이지 주소로 사용됩니다. PrivateIP는 **초기 임시 패스워드**로도 구성됩니다.
 * https://AviatrixControllerEIP
 
-![2](/img/posts_aviatrix/cloudformation-output.png){: width="100%" height="100%"}
+![2](/img/posts_aviatrix/cloudformation-output.png)
 
 AviatrixControllerEIP 접속 이후 관리자 아이디 및 버전을 설정합니다.  
 설정을 완료할 경우에는 초기 로그인화면에서 Onboarding 화면이 노출됩니다.  
 화면에서 이용하고 있는 Cloud Platform을 지정하고 추가적인 설정을 진행합니다.  
 
 모든 설정을 완료한 이후에 제공되는 Aviatrix의 사용자 페이지 입니다.
-![3](/img/posts_aviatrix/aviatrix-1.png){: width="100%" height="100%"}
+![3](/img/posts_aviatrix/aviatrix-1.png)
 EC2 의 Outbound 트래픽을 로깅 및 관리하기 위해서 우선적으로 Gateway의 설정이 필요해서, Aviatrix 사용자 카테고리에서 Gateway 설정으로 이동합니다.
 
 New Gateway 설정을 진행합니다.
-![10](/img/posts_aviatrix/aviatrix-gw-add.png){: width="100%" height="100%"}
+![10](/img/posts_aviatrix/aviatrix-gw-add.png)
 "OK"를 클릭할 경우 퍼센트에 대한 상태 이미지가 노출됩니다. 이후 작업은 직접 설치를 진행하지 않아도 자동 설치 및 Gateway 서버에 대한 환경이 구성됩니다. `(HA 구성의 경우에는 다양한 방법을 제공하고 있어 아래 링크를 추가해 드립니다, Aviatrix 깊게 들여다보기(HA, Egress FQDN Discovery) 내용은 블로그 하단에 분류하였습니다.)`
 * [`Gateway`](https://docs.aviatrix.com/HowTos/gateway.html)
 * [`Gateway-HA`](https://docs.aviatrix.com/HowTos/gateway.html#gateway-single-az-ha)
 * [`HA-옵션`](https://docs.aviatrix.com/Solutions/gateway_ha.html)
 
 Private Subnet의 Route Table을 생성해, 외부로 나가는 모든 트래픽이 Aviatrix-GW를 통해서 나가도록 설정을 진행합니다. `"0.0.0.0/0"` 에 대한 Target을 Aviatrix-GW <u>ENI</u>로 지정합니다. 자동 등록을 원할 경우 Aviatrix Controller 사용자 웹 페이지에서 `Gateway > Aviatrix-GW: Edit > Source NAT`를 통한 설정이 가능합니다.
-![11](/img/posts_aviatrix/route-table-avi.png){: width="100%" height="100%"}
+![11](/img/posts_aviatrix/route-table-avi.png)
 
 FQDN 로깅 및 관리를 위해, Aviatrix Controller 사용자 웹 페이지에서 **security > Egress Control > Egress FQDN Filter**를 설정합니다.
 
@@ -105,7 +105,7 @@ FQDN 로깅 및 관리를 위해, Aviatrix Controller 사용자 웹 페이지에
 2. 이후 **실 서버 환경** 도입의 경우 Egress FQDN View Log를 확인하고, 사용하고 있는 FQDN을 보안성에 맞도록 분리하여, Egress FQDN Filter를 White List기반으로 변경할 수 있는 환경을 사전에 대비합니다.
 
 테스트를 위해서 FQDN Filter를 아래의 이미지와 같이 <u>White</u> 설정한 이후에, Aviatrix-GW를 바라 보고 있는 `Private-route-table` 의 `Private-Subnet`에서 운영되는 인스턴스에서 다음 명령어를 실행하였습니다.
-![12](/img/posts_aviatrix/fqdn-list.png){: width="100%" height="100%"}
+![12](/img/posts_aviatrix/fqdn-list.png)
 ```bash
 curl -L -k -s -o /dev/null -w "%{http_code}\n" https://www.naver.com
 curl -L -k -s -o /dev/null -w "%{http_code}\n" https://google.com
@@ -131,7 +131,7 @@ curl -L -k -s -o /dev/null -w "%{http_code}\n" https://docs.google.com
 
 ## AWS Account with Aviatrix Gateway Architecture
 
-![13](/img/posts_aviatrix/fqdn-architecture.png){: width="100%" height="100%"}
+![13](/img/posts_aviatrix/fqdn-architecture.png)
 
 Instance Outbound Flow & Aviatrix Controller Gateway HA Flow
 
@@ -165,7 +165,7 @@ Gateway > Edit > Gateway Single AZ HA "Enable"
 Gateway > Edit > Gateway for High Availability Peering  
 (HA 구성을 위해 <u>운영</u> 중인 Gateway Subnet과 다른 [AZ](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html)의 <u>Public-Subnet</u>을 선택합니다.)
 
-![20](/img/posts_aviatrix/gateway-ha-public-b.png){: width="100%" height="100%"}
+![20](/img/posts_aviatrix/gateway-ha-public-b.png)
 
 HA 구성을 위한 설정은 마무리하였으며, 정상적으로 **Failover**가 되는지 확인을 위해 아래 구성을 진행하였습니다.
 
@@ -177,14 +177,14 @@ HA 구성을 위한 설정은 마무리하였으며, 정상적으로 **Failover*
 
 <u>Failover</u>를 테스트하기 전의 Aviatrix Gateway 상태 이미지입니다.
 
-![21](/img/posts_aviatrix/gateway-status.png){: width="100%" height="100%"}
+![21](/img/posts_aviatrix/gateway-status.png)
 <u>Failover</u>를 테스트하기 위해 Gateway를 강제 종료한 Aviatrix Gateway 상태 이미지입니다.
 
-![22](/img/posts_aviatrix/gateway-status-2.png){: width="100%" height="100%"}
+![22](/img/posts_aviatrix/gateway-status-2.png)
 
 테스트 결과: Private-Subnet에서 운영되고 있는 인스턴스에 모니터링 에이전트(Telegraf)를 설정하여, ICMP 프로토콜을 이용한 <u>1s</u> 기준으로 **Packet Loss** 현상이 발생 되지 않았습니다. 웹사이트 기준에서는 Gateway가 Failover 되는 시점을 인지할 수 없는 정도입니다.
 
-![23](/img/posts_aviatrix/monitoring.png){: width="100%" height="100%"}
+![23](/img/posts_aviatrix/monitoring.png)
 
 * `Aviatrix-Gateway HA Flow (Failover)`
 
@@ -233,7 +233,7 @@ end
 
 Security > Egress Control > (Optional) Egress FQDN Discovery > Gateway "Start" (선택된 Gateway는 FQDN Filter에 연결이 안 되어 있어야 합니다.)
 
-![23](/img/posts_aviatrix/fqdn-discovery-start.png){: width="100%" height="100%"}
+![23](/img/posts_aviatrix/fqdn-discovery-start.png)
 
 테스트를 위해 Private-Subnet에서 운영되고 있는 인스턴스에서 아래 명령어를 실행합니다.
 
@@ -243,7 +243,7 @@ curl -L -k -s -o /dev/null -w "%{http_code}\n" https://tech.socarcorp.kr
 
 1번 HA 테스트로 인해 변경된 Aviatrix-GW-hagw에서 발생한 FQDN 내용을 확인할 수 있습니다.
 
-![23](/img/posts_aviatrix/fqdn-discovery-status.png){: width="100%" height="100%"}
+![23](/img/posts_aviatrix/fqdn-discovery-status.png)
 
 테스트 결과: FQDN Discovery 기능을 통해 **실 서버** FQDN Outbound를 모두 사전에 확인하고, 필요 유무에 따라서 FQDN Filter 정책을 정의하는 데 유용합니다.
 
@@ -427,16 +427,16 @@ role-app Policy의 경우에는 아래 추가된 이미지처럼 <u>많은 Actio
                             "Effect": "Allow",
                             "Action": [..........................
 ```
-![4](/img/posts_aviatrix/role-check.png){: width="100%" height="100%"}
+![4](/img/posts_aviatrix/role-check.png)
 
 CloudFormation Template 으로 구성된 `AWS 인프라의 이미지`를 통해 정리할 경우, 아래와 같은 구성이 설정됩니다.
 
 * Aviatrix Controller Instance 에 role-ec2 설정
 
-![5](/img/posts_aviatrix/role-ec2.png){: width="100%" height="100%"}
+![5](/img/posts_aviatrix/role-ec2.png)
 * role-ec2 에 대한 Policy 는 아래와 같이 설정되며, 해당 설정에서 <u>STS 설정</u>을 주의 깊게 이해합니다.
 
-![6](/img/posts_aviatrix/role-ec2-policy.png){: width="100%" height="100%"}
+![6](/img/posts_aviatrix/role-ec2-policy.png)
 
 * 위의 이미지를 JSON 형태로 확인하면 이해가 더 쉽습니다.
 
@@ -452,13 +452,13 @@ CloudFormation Template 으로 구성된 `AWS 인프라의 이미지`를 통해 
 
 * Aviatrix Controller 웹 페이지의 Onboarding 카테고리에서 Cloud Platform에 맞게 설정을 하게 되면, AWS의 경우 role-ec2가 role-app의 policy을 `위임` 받아서 사용할 수 있는 상태가 됩니다. role-ec2는 Aviatrix Controller Instance에 등록 되어있는 role 이기 때문에, Aviatrix Controller 웹 페이지에서 role-app에 적용 되어있는 Policy 에 대한 이용이 가능합니다. `(멀티 Account의 경우에는 멀티 Account에 설정 되어 있는 role-app에 대한 AccountId Trust 등록을 진행하여, 멀티 Account의 role-app을 Controller Account의 role-app이 공유 받아 사용하는 방법으로 동일합니다.)`
 
-![7](/img/posts_aviatrix/role-app-trust.png){: width="100%" height="100%"}
+![7](/img/posts_aviatrix/role-app-trust.png)
 
 ---
 
 ## Multiple AWS Accounts with Role Switchin Aviatrix Architecture
 
-![8](/img/posts_aviatrix/role-ec2-app-muac.png){: width="100%" height="100%"}
+![8](/img/posts_aviatrix/role-ec2-app-muac.png)
 
 ---
 

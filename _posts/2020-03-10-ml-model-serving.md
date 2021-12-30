@@ -67,7 +67,7 @@ Photo by <a href="https://unsplash.com/@fabmag?utm_source=unsplash&utm_medium=re
 
 그래서 저희 쏘카 데이터 엔지니어링팀에서는 딥러닝 모델을 안정적으로 서빙하는 것에 포커스를 두고, 빠른 시간에 설계 및 개발을 완료하여 사내 시스템과 통합하는 것이 목표입니다. 몇 번의 논의와 수정을 거쳐 최종적으로 결정된 시스템은 아래 그림과 같습니다.
 
-![](/img/posts_dl_serving/picture01.png){: width="100%" height="100%"}
+![](/img/posts_dl_serving/picture01.png)
 *그림 1. 전체 시스템 구성도 - AWS SQS + Kubernetes + Git + Rancher + S3, DB*
 
 그럼, 이어서 위 그림에 표현된 각각의 모듈 및 시스템 구축 방법에 대해 좀 더 자세히 설명하도록 하겠습니다.
@@ -93,7 +93,7 @@ Photo by <a href="https://unsplash.com/@fabmag?utm_source=unsplash&utm_medium=re
 - AWS SQS는 특별한 설정 없이 기본 설정으로 사용해도 별 문제가 없으며, Queue에 메시지를 전송하는 방법 또한 간단합니다.
 - 아래 이미지는 AWS SQS를 생성할 때 입력하게 되는 페이지인데, 대기열 이름을 작성하고 맨 아래쪽 대기열 생성 버튼만 누르면 Queue가 생성됩니다. 구성하려는 서비스에 따라 대기열 유형을 결정하고, 대기열 속성의 값들을 적당히 조정하면 됩니다.
 
-![](/img/posts_dl_serving/picture02.png){: width="100%" height="100%"}
+![](/img/posts_dl_serving/picture02.png)
 <center>그림 2. AWS 콘솔에서의 SQS 생성 페이지</center>
 
 - Queue에 메시지를 전송하고, 메시지를 받아오기 위해서는 Python의 boto 라이브러리를 사용하면 됩니다. 메시지 Send, Receive, Delete는 아래 코드에서처럼 boto 라이브러리 함수를 호출하여 구현할 수 있습니다 (실 서비스 적용 시에는 개발 환경에 따른 예외 처리 방안들을 포함하여 구현해야 합니다).
@@ -204,7 +204,7 @@ Agent는 Python으로 작성하였고, Docker Image로 빌드했습니다. 차�
 
 현재 운영중인 설정에서는 작업이 없을 때 Node 1대에 Agent Pod이 2개가 배포되어 대기하고 있다가, SQS에 메시지가 쌓이기 시작하면 Node 5대에 Pod이 14개 배포될 때까지 Auto Scaling이 동작합니다. 이후, SQS 메시지를 모두 처리하게 되면 다시 처음의 상태로 Node와 Pod의 수가 조정됩니다.
 
-![](/img/posts_dl_serving/picture03.png){: width="100%" height="100%"}
+![](/img/posts_dl_serving/picture03.png)
 <center>그림 3. 처리량에 따른 Auto Scaling</center>
 
 Kubernetes를 사용할 때의 또 다른 잇점은 Pod의 상태를 확인하여 이상이 있는 경우, Pod을 재배포하여 복구시키는 방법이 간편하다는 점입니다.
@@ -238,12 +238,12 @@ Agent는 주기적으로 SQS를 Polling하고 메시지에 따라 이 후 작업
 - 보다 상세한 상태를 파악하기 위해서는 Prometheus, Grafana 등을 사용하여 모니터링 할 수도 있으나, 본 프로젝트에서는 Node가 Spot Instance로 동작하고 있어서 Node의 수가 가변적으로 운영되고 있고, 현재 동작중인 상태만 간단히 확인할 수 있는 정도면 되기 때문에 Rancher가 제공하는 기본 모니터링 기능만을 사용하여 운영중입니다.
 아래 그림에서와 같이 CPU, Memory, Storage, Network 사용량 등을 한눈에 확인할 수 있습니다.
 
-![](/img/posts_dl_serving/picture04.png){: width="100%" height="100%"}
+![](/img/posts_dl_serving/picture04.png)
 <center>그림 4. Rancher 모니터링 예시</center>
 
 현재 서빙 시스템의 로그는 Fluentd를 이용하여 별도의 S3 버킷에 저장하고 있습니다. 실시간 로그를 확인하여 Pod의 상태를 보고 싶은 경우 Rancher UI 상에서 쉽게 확인 가능합니다. 아래 그림과 같이 stdout으로 기록되는 로그를 붙잡아서 볼 수 있으므로 서빙 시스템의 상태를 간단히 체크하거나, 버전이 업데이트 되어 배포되는 시점에 동작 상태를 실시간으로 확인하기에 좋습니다.
 
-![](/img/posts_dl_serving/picture05.png){: width="100%" height="100%"}
+![](/img/posts_dl_serving/picture05.png)
 <center>그림 5. Rancher UI에서 Pod 로그 확인</center>
 
 ---

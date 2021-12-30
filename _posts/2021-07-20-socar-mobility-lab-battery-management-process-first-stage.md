@@ -40,7 +40,7 @@ tags:
 - 방전과 관련된 문제는 월 100건 이상 접수됩니다. 어떤 경로로 접수되어 수리를 받는가에 따라 다르지만 준중형차량(대표적으로 아반떼) 기준 수리비가 25만원까지 청구되기도 합니다. **방전 문제는 회사의 관리 손실을 일으키는 중요 요소입니다.**
 - 개인이 관리하는 일반적인 차량의 경우 3년간 600~800회의 시동 시도가 기록되고 배터리 제조사의 보증 시동 횟수도 600~800회 정도입니다. 그러나 쏘카가 운영하는 차량은 연간 2,200~2,800회 정도의 시동 시도가 발생합니다. 특히 2,200회를 넘어가는 시점에서는 배터리 관련 고장으로 인해 공업사에 차량이 입고될 확률이 급격히 높아집니다. 그러므로 **이 시기가 도래하기 전에 적절한 관리를 통해 배터리의 수명을 관리해주어야 합니다.**
 
-![](/img/socar-mobility-lab-battery-management-process-first-stage/Figure-1.png){: width="90%" height="90%" style="display: block; margin: 0 auto"}
+![](/img/socar-mobility-lab-battery-management-process-first-stage/Figure-1.png)
 *[그림 1] 시동 사이클 증가에 따른 장애 건수 분포*
 
 - 정상적인 배터리가 일부 고객의 특이적인 배터리 사용 방법에 따라 방전되는 경우도 있습니다. 통계적으로 실제 방전 신고의 60%는 현 고객 혹은 직전 고객의 특이적 배터리 사용 방법으로 인해 발생했습니다 .
@@ -64,7 +64,7 @@ tags:
   - 고객 신고가 들어오면 점프 혹은 배터리 교환을 했던 기존 프로세스를 **배터리 상태를 바탕으로 한 프로세스**로 바꾸었습니다.
   	- 배터리 상태가 어느 정도 보존된 상태의 방전 초입의 배터리는 물리 화학적 관리를 거치면 배터리 수명이 연장되어 교체하지 않아도 좀 더 사용할 수 있습니다.
   	
-  	![](/img/socar-mobility-lab-battery-management-process-first-stage/Figure0_KOR.jpg){: width="70%" height="70%" style="display: block; margin: 0 auto"}
+  	![](/img/socar-mobility-lab-battery-management-process-first-stage/Figure0_KOR.jpg)
   	*[그림 2] 배터리 Reconditioning 장치와 배터리*
 
   	- 방전 초입을 어떻게 잡아내는가에 따라 관리 가능 여부가 갈립니다.
@@ -77,27 +77,27 @@ tags:
   		- 예약 점유 시간 동안 배터리 관련 신고가 있는 예약 리스트 추출합니다.
   		- 위의 두 리스트의 배터리 전압과, 신호가 들어오지 않는 시간 간격을 추출합니다.
   		
-  		![](/img/socar-mobility-lab-battery-management-process-first-stage/Figure1_KOR.png){: width="90%" height="90%" style="display: block; margin: 0 auto"}
+  		![](/img/socar-mobility-lab-battery-management-process-first-stage/Figure1_KOR.png)
   		*[그림 3] 정상적인 배터리 운용 케이스와 문제가 생긴 케이스의 구분*
   	  
   		- DB 조회를 통해 배터리 관련 총 신고 건수, 배터리 관련 긴급출동 데이터, 정비 비용, 관리 중 발생하는 이동 거리에 기반한 물류비를 모두 반영한 기준을 수립합니다.
   		- 위의 그림 3 기준을 따라 배터리 신고가 들어오는 비율을 2D Contour로 나타내었습니다. (그림 4)
-  		![](/img/socar-mobility-lab-battery-management-process-first-stage/Figure2.png){: width="90%" height="90%" style="display: block; margin: 0 auto"}
+  		![](/img/socar-mobility-lab-battery-management-process-first-stage/Figure2.png)
   		*[그림 4] 배터리 신고가 들어오는 비율에 대한 2D Contour*
 
   		- 서울 경인과 그 외 지역의 관리 비용 차이로 인해 Contour가 조금 달라질 수 있어서 아래와 같이 분리해서 추출했고, 정상 배터리 전압영역 (12.4V) 이하를 이상 영역으로 명확히 보면 아래와 같습니다. 위의 Contour와 다르게 아래는 확률 분포가 무시된 Binary Contour입니다. (그림 5, 6)
-  		![](/img/socar-mobility-lab-battery-management-process-first-stage/Figure3.png){: width="90%" height="90%" style="display: block; margin: 0 auto"}
+  		![](/img/socar-mobility-lab-battery-management-process-first-stage/Figure3.png)
   		*[그림 5] 서울, 경인 지역 Binary Contour*
   		
-  		![](/img/socar-mobility-lab-battery-management-process-first-stage/Figure4.png){: width="90%" height="90%" style="display: block; margin: 0 auto"}
+  		![](/img/socar-mobility-lab-battery-management-process-first-stage/Figure4.png)
   	    *[그림 6] 기타 지역 Binary Contour*
   		
   		- Binary Contour는 아래의 수식(그림 7)을 기초로 하며, 운영 데이터를 통해 구해진 합리적 수치보다 Precision이 큰 영역을 Highlight 하여 만들어집니다.
-  		![](/img/socar-mobility-lab-battery-management-process-first-stage/Figure5.png){: width="90%" height="90%" style="display: block; margin: 0 auto"}
+  		![](/img/socar-mobility-lab-battery-management-process-first-stage/Figure5.png)
   		*[그림 7] Binary Contour의 계산에 사용된 수식*
   		
   		- 샘플로 추출된 특정 기간 동안 데이터를 바탕으로 Confusion Matrix를 계산하면 아래와 같습니다. 단, 113대 중 일부는 과잉정비가 아닐 수 있고 그 값을 정확히 알 수 없어 미지수인 alpha로 두었습니다.
-  		![](/img/socar-mobility-lab-battery-management-process-first-stage/Figure6_KOR.png){: width="90%" height="90%" style="display: block; margin: 0 auto"}
+  		![](/img/socar-mobility-lab-battery-management-process-first-stage/Figure6_KOR.png)
   	    *[그림 8] Confusion Matrix*
   		
   		- Contour를 바탕으로 실시간으로 차량 상태를 조회하여 전압과 dt가 Contour에 올라온다면 방전으로 판단하고 적절하게 조처합니다.

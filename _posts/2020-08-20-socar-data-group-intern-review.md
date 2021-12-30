@@ -72,7 +72,7 @@ tags:
 
 따라서 쏘카에 지원하기로 결정했습니다. 🚗
 
-![](/img/socar-data-group-intern-review/2.png){:width="65%" height="65%" style="display: block; margin: 0 auto"}
+![](/img/socar-data-group-intern-review/2.png)
 *학과 건물에서 바라본 서울의 야경. 저 멀리 밝게 빛나는 세상이 어떻게 돌아가는지 궁금해하곤 했습니다.*
 
 
@@ -90,7 +90,7 @@ tags:
 3. 마지막 대면🤠 면접은 회사의 CTO, 인사 담당자와 함께 1시간 진행됩니다. 지원서 내용을 기반으로 면접을 진행하고, 회사에 대해 궁금한 점도 자유롭게 질문할 수 있습니다. 
 
 
-![](/img/socar-data-group-intern-review/3.png){:width="70%" height="70%" style="display: block; margin: 0 auto"}
+![](/img/socar-data-group-intern-review/3.png)
 *전화 면접을 봐주셨던 디케이 데이터 그룹장님*
 
 
@@ -104,7 +104,7 @@ tags:
 
 그렇게 3번의 면접을 통해 2019년 11월 4일, 첫 출근을 하게 되었습니다. 🚃
 
-![](/img/socar-data-group-intern-review/4.png){:width="70%" height="70%" style="display: block; margin: 0 auto"}
+![](/img/socar-data-group-intern-review/4.png)
 *입사 전후로 많이 도움을 주신 동아리 선배님들. 현재 같은 동아리에서 6명이 쏘카에서 함께 일하고 있습니다.*
 
 
@@ -123,7 +123,7 @@ tags:
 
 사용할 데이터 종류, 알맞은 분석 방법을 결정하는 것부터 관련 운영 부서와 커뮤니케이션하는 모든 과정을 직접 진행했습니다. 데이터 분석이 운영에 접목되는 과정과 전반적인 업무 방식을 알아 갈 수 있었죠. 또한 **제가 제공한 데이터로 인한 결과를 즉각적인 운영 지표📈로 확인 할 수 있었고, 따라서 맡은 업무에 대해서 더욱 책임감을 가질 수 있었습니다.** 
 
-![](/img/socar-data-group-intern-review/5.jpg){:width="65%" height="65%" style="display: block; margin: 0 auto"}
+![](/img/socar-data-group-intern-review/5.jpg)
 *제가 입사한 타다데이터팀. 입사 후에 정말 많은 도움을 받았습니다. 그중에서도 오른쪽에서 두번째 초록색 옷을 입은 분이 카일 팀장님.*
 
 
@@ -139,7 +139,7 @@ tags:
 
 저는 요즘 **개인 프로젝트로 강화학습 모델을 사용해 적절한 가격**💰**을 찾는 모델을 만들고 있습니다.** 책과 논문을 읽고, 구현된 오픈소스 코드를 이해하는 등 공부가 많이 필요한 프로젝트입니다. 현재까지 운영되어 왔던 방식을 개선하면서 동시에 안정적인 모델을 만들어야 하므로 난이도가 높은 편이죠. 하지만 회사에서도 집중할 수 있는 환경을 제공해주고, 도움을 받을 수 있는 외부 강화학습 전문가를 초빙하는 등 적극적으로 지원해주고 있습니다. 무엇보다 적성에도 맞아 즐겁게 임하고 있습니다. 
 
-![](/img/socar-data-group-intern-review/6.png){:width="75%" height="75%" style="display: block; margin: 0 auto"}
+![](/img/socar-data-group-intern-review/6.png)
 *출근 후, 하루의 일정을 확인하는 모습. 사진 잘 찍어주신 데이터 엔지니어링팀 제프 감사합니다.*
 
 ### 3) 데이터 분석에서 무엇이 중요한가요?
@@ -148,21 +148,21 @@ tags:
 
 야마니는 서울의 각 쏘카존을 모니터링하면서, **각 존별로 증차량과 감차량을 결정하는 일을 맡게 되었습니다.** 이 때, 한양대 옆에 위치한 쏘카존의 이용 시간이 감소하고 있는 것을 포착하게 됩니다. 다른 서울의 쏘카존들과 비교해보면 그 감소폭은 더욱 두드러집니다. 그럼 한양대 옆 쏘카존(줄여서 한양대존)의 차량 수를 줄여야📉 할까요?
 
-![](/img/socar-data-group-intern-review/7.png){:width="100%" height="100%" style="display: block; margin: 0 auto"}
+![](/img/socar-data-group-intern-review/7.png)
 
 
 하지만, 한양대존의 매출을 확인해보니 오히려 증가했다는 것을 확인할 수 있었습니다. 이용 시간은 줄었지만 시간당 매출이 높아지면서 매출이 증가한 것으로 보입니다. 그럼 한양대존의 차량 수를 늘려야 할까요? 그런데 왜 이렇게 매출이 급격히 오른 걸까요? **답을 찾기 위해 정리된 과거 분석 결과를 살펴보던 중, 연령 별로 시간 당 매출이 많이 차이가 난다는 것을 알게 되었습니다.**📜
 
-![](/img/socar-data-group-intern-review/8.png){:width="100%" height="100%" style="display: block; margin: 0 auto"}
+![](/img/socar-data-group-intern-review/8.png)
 
 
 그렇게 한양대존의 매출을 연령 별로 나누어 살펴보니, 20대는 감소하고 30대 이상은 증가했다는 것을 확인했습니다. 대학교의 비대면 수업으로 인해 20대의 사용량이 줄고, 30대 이상은 출퇴근 시의 쏘카 이용이 증가한 경향이 반영된 것으로 보입니다. 그러면서 자연스레 존의 전체 사용량은 줄었지만 매출은 증가하는 현상이 나타났던 것입니다. 
 
-![](/img/socar-data-group-intern-review/9.png){:width="100%" height="100%" style="display: block; margin: 0 auto"}
+![](/img/socar-data-group-intern-review/9.png)
 
 이 때, **운영을 담당하시는 분이 사실 한양대존의 증가한 30대 이상의 수요는 뚝섬 근처에서 발생했을 것이라고 알려주시죠.**🤔 한양대존 사용자들이 어디서 예약을 했는지 위치를 살펴보니, 뚝섬 근처의 업무 지구였습니다. 또한 뚝섬의 쏘카존(줄여서 뚝섬존)은 차량이 매우 부족한 상태라는 것도 확인할 수 있었습니다. 뚝섬존의 차량이 부족하게 되자, 중랑천 너머의 한양대존까지 쏘카를 빌리러 오는 것이었죠.🏃‍♂️
 
-![](/img/socar-data-group-intern-review/10.png){:width="100%" height="100%" style="display: block; margin: 0 auto"}
+![](/img/socar-data-group-intern-review/10.png)
 
 이제 확실해졌습니다. 증차가 필요한 곳은 한양대존이 아니라 뚝섬존📈입니다. 한양대존의 차량도 뚝섬존으로 옮기는 것이 맞아 보입니다. 
 
@@ -176,10 +176,10 @@ tags:
 노션 사용과 관련한 내용은 노션에서 진행한 [쏘카 데이터 그룹의 노션 사용기](https://www.notion.so/customers/socar)를 참고해주세요 :)
  
 
-![](/img/socar-data-group-intern-review/11.png){:width="100%" height="100%" style="display: block; margin: 0 auto"}
+![](/img/socar-data-group-intern-review/11.png)
 *쏘카 데이터 그룹에서 사용하는 프로젝트와 태스크 템플릿. 프로젝트는 큰 그림을 파악할 수 있고, 태스크는 각 프로젝트 단계를 더 자세하게 기록하고 있습니다.*
 
-![](/img/socar-data-group-intern-review/12.png){:width="100%" height="100%" style="display: block; margin: 0 auto"}
+![](/img/socar-data-group-intern-review/12.png)
 *노션 칸반을 이용해 태스크를 단계 별, 팀 별, 프로젝트 별로 한눈에 파악할 수 있도록 정리합니다.*
 
 또한 '데일리 스크럼'과 '주간 정기 회의'를 통해 업무 공유 및 회의를 진행합니다. 
@@ -201,13 +201,13 @@ tags:
 3. 피플 매니저 및 면담 : 데이터 그룹은 피플 매니저가 있습니다.👨‍⚕️ 피플 매니저는 데이터 관련 발표, 블로그를 꾸준히 하고 계신 변성윤님([https://zzsza.github.io/](https://zzsza.github.io/))이 해주고 계십니다. **한 달에 한 번 피플 매니저와 회사 생활의 고민도 이야기하고, 개인의 커리어를 잘 쌓기 위한 방법도 논의합니다**. 그 외에 팀장님, 그룹장님과 면담을 하면서 회사에 바라는 점과 업무 외적인 진로 고민을 이야기할 수 있습니다. (저는 회사 입사 후에도 진로 고민이 정말 많았는데, 제가 진정으로 하고 싶은 것이 무엇인지 답을 내릴 때 면담이 많이 도움이 되었습니다) 
 
 
-![](/img/socar-data-group-intern-review/13.png){:width="100%" height="100%" style="display: block; margin: 0 auto"}
+![](/img/socar-data-group-intern-review/13.png)
 *피플 매니저님과 면담하며 작성해주시는 개인 정보와 업무 정리. 월별 면담 일지를 보면 매달 조금씩 성장하고 있는 것을 한눈에 파악할 수 있습니다.*
 
 
 이렇게 쌓인 사람들간의 친밀도는 업무에도 도움을 주곤 합니다. 저는 수학적 기반이 필요한 업무를 선호하고, 자율적으로 업무를 진행하는 것을 선호합니다. **이를 팀장님, 그룹장님과 이야기하면서 저의 강점을 강조하여 어필했는데,** (핍스나 해피아워를 통해 업무 외적으로도 가까워졌기에 솔직하게 이야기할 수 있었다고 생각합니다) **결과적으로 데이터를 수학적 모델로 분석하는 증감차 업무나, 모델 기반으로 가격제 업무 등 적성에 맞는 일을 맡을 수 있었죠.** 🚕
 
-![](/img/socar-data-group-intern-review/14.png){:width="100%" height="100%" style="display: block; margin: 0 auto"}
+![](/img/socar-data-group-intern-review/14.png)
 *데이터 그룹 해피아워 시간에 함께 한 보드게임. 이 날 정말 많이 웃었던 기억이 납니다.*
 
 
@@ -225,7 +225,7 @@ tags:
 
  **어셈블에서 쏘카의 수요를 분류하는 방법을 공유하였고, 다양한 업무에도 활용되었습니다.** 이처럼 어셈블은 유의미한 내용을 그룹 내에 공유하고, 각자 하는 일에 대해서 알아가는 시간입니다. 
 
-![](/img/socar-data-group-intern-review/15.png){:width="100%" height="100%" style="display: block; margin: 0 auto"}
+![](/img/socar-data-group-intern-review/15.png)
 *어셈블에서 발표한 자료. 데이터 그룹의 여러 프로그램들이 저 스스로의 동기부여에 많은 도움을 줍니다.*
 
 
@@ -243,7 +243,7 @@ tags:
 
 스쿨은 주최자가 정기적으로 1시간 정도 수업하고, 데이터 그룹에서 원하는 사람들이 참석하는 형식입니다. 통계학을 주제로 한 리미 스쿨이 있었고, 인생관과 신입 교육을 한 [카일 스쿨](https://github.com/zzsza/kyle-school)🏫도 진행 중입니다. **저 또한 머신러닝을 주제로 야마니 스쿨을 진행했습니다. 수업을 준비하면서 내용을 더 깊이 이해할 수 있었고, 제가 아는 것을 다른 사람들에게 잘 설명하는 방법에 대해서도 배워갈 수 있었습니다.**👩‍🎓👨‍🎓
 
-![](/img/socar-data-group-intern-review/16.png){:width="100%" height="100%" style="display: block; margin: 0 auto"}
+![](/img/socar-data-group-intern-review/16.png)
 *수업을 위해 만들었던 야마니 스쿨 자료. 10회에 걸쳐 매주 자료를 만들고, 수업을 하면서 내용을 확실히 이해할 수 있었습니다.*
 
 업무시간 외에도 공부를 하기 위해 노력하고, 스쿨과 세미나에 적극적으로 참여하는 동료들을 보며 저도 꾸준히 공부하게 됩니다. 이렇게 **적극적으로 배우고 나누고자 하는 멋진 동료들과 함께 있다는 것이 쏘카 데이터 그룹의 큰 장점 중 하나라고 생각합니다.** 🚀
@@ -260,14 +260,14 @@ tags:
 
    
 
-![](/img/socar-data-group-intern-review/17.png){:width="100%" height="100%" style="display: block; margin: 0 auto"}
+![](/img/socar-data-group-intern-review/17.png)
 *진로, 스스로의 강점, 회사 생활에서 보완할 점 등에 대해서 고민하며 적었던 2020년의 기록들. 회사에서의 경험들이 제가 한 발자국 더 성장하는 데에 많은 도움이 되었습니다.*
 
 업무를 다루는 방법에서도 유의미한 발전이 있었습니다. 사실 학교에서는 정제된 데이터를 이용하여 모델을 만들고, 성능 자체보다는 작동원리와 수학적 기반에 집중하는 편입니다. 하지만 실무에서는 노력 대비 최대의 효과를 보여주는 모델을 선택해야 하고, 그 효과가 운영에서 바로 나타날 수 있어야 합니다.⏳⌛
 
 프로젝트의 완성도를 0에서 100으로 표현한다면, 학부 시절의 저는 99에서 100을 만드는 것에 관심이 많았던 학생이었습니다. 현재의 것을 조금 더 개선할 수 있는 발전된 기술을 연구하는 것만이 엔지니어의 역할이라고 생각했습니다. 반면에 데이터 그룹의 업무는 빠르게 0에서 99를 만드는 것으로 설명할 수 있습니다. 완성도를 100까지 올리는 것보다는, 노력 input에 비해 프로젝트 완성도를 효과적으로 올리기 위해 노력하는 것이죠. **즉, 프로젝트 시작부터 운영에 접목하는 전 과정을 최대한 효율적으로 진행하는 것에 집중합니다.**📶👨‍💻👩‍💻
 
-![](/img/socar-data-group-intern-review/18.png){:width="100%" height="100%" style="display: block; margin: 0 auto"}
+![](/img/socar-data-group-intern-review/18.png)
 
 노력에 대비한 프로젝트 완성도의 그래프. 처음에는 단위 노력  input 당 완성도 증가량이 크지만(기울기가 가파르지만) 점점 감소하는 것을 볼 수 있습니다.
 

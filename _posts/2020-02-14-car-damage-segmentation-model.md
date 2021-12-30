@@ -44,7 +44,7 @@ tags:
 - 4) 약속한 이용 시간이 가까워지면 선택한 쏘카존에 방문해, 차량의 상태를 확인합니다.
 	- 이때 사용자는 차량의 당시 외관 사진을 앱 내에 업로드해야 합니다.
 	
-![](/img/car-damage-segmentation-model/socar-app.png){:width="65%" height="65%" style="display: block; margin: 0 auto"}
+![](/img/car-damage-segmentation-model/socar-app.png
 
 - 5) 문제가 없는 경우, 운행을 시작합니다.
 
@@ -85,7 +85,7 @@ tags:
 - 이러한 고민들 끝에, 딥러닝 모델을 이용한 차량 파손 탐지 자동화 프로젝트를 진행했습니다.
 - 주어진 차량 이미지 내의 파손 영역과 파손의 종류를 자동으로 판단하는 딥러닝 모델의 구현을 프로젝트의 목표로 설정했습니다.
 
-![](/img/car-damage-segmentation-model/expected-result.png){:width="100%" height="100%" style="display: block; margin: 0 auto"}
+![](/img/car-damage-segmentation-model/expected-result.png)
 
 
 프로젝트의 목적을 정의했고, 조금 더 구체화할 부분은 다음과 같습니다
@@ -126,7 +126,7 @@ tags:
   - 분할의 기본 단위를 **클래스**로 설정한 분할 문제입니다.
   - 만일 두 개 이상의 사물이 동일한 클래스에 해당하면 이들은 서로 같은 예측 마스크값을 가집니다.
 
-![](/img/car-damage-segmentation-model/semantic_and_instance_segmentation.png){:width="100%" height="100%" style="display: block; margin: 0 auto"}
+![](/img/car-damage-segmentation-model/semantic_and_instance_segmentation.png)
 
 
 다시 정리하면 모델은 **<span style="color:red">주어진 차량 이미지 내의 파손 영역과 파손 종류를 픽셀 단위로 분류</span>**해야 합니다.
@@ -216,7 +216,7 @@ tags:
 	- 네트워크 형태가 알파벳 U와 비슷하다고 하여 붙여진 이름으로, 의생명공학 이미지 Segmentation을 위해 개발된 모델입니다.
 	- 모델의 구조는 다음과 같습니다.
 
-![](/img/car-damage-segmentation-model/unet-architecture.png){:width="80%" height="80%" style="display: block; margin: 0 auto"}
+![](/img/car-damage-segmentation-model/unet-architecture.png)
 
 - U-Net의 장점
 	- U-Net은 기존의 Segmentation 모델의 문제점을 해결할 수 있습니다
@@ -235,7 +235,7 @@ tags:
 - U-Net with EfficientNet
 	- U-Net의 구조는 알파벳 U의 왼쪽 절반에 해당하는 Contracting Path와 오른쪽 절반에 해당하는 Expanding Path의 2가지 Path로 분리할 수 있습니다.
 
-![](/img/car-damage-segmentation-model/unet-architecture_path.png){:width="80%" height="80%" style="display: block; margin: 0 auto"}
+![](/img/car-damage-segmentation-model/unet-architecture_path.png)
 
 - 1) Contracting Path
 	- Contracting Path는 Encoder의 역할을 수행하는 부분으로 전형적인 Convolution Network로 구성됩니다.
@@ -268,7 +268,7 @@ tags:
 일반적인 머신러닝/딥러닝 모델 학습 과정은 다음 그림과 같습니다.
 
 
-![](/img/car-damage-segmentation-model/general_ml_train_flow.png){:width="100%" height="100%" style="display: block; margin: 0 auto"}
+![](/img/car-damage-segmentation-model/general_ml_train_flow.png)
 
 
 - Feature를 입력으로, 모델의 각 계층(Layer)의 파라미터와의 연산을 통해 예측값을 도출합니다. (Prediction)
@@ -277,7 +277,7 @@ tags:
 
 해당 프로젝트에서 사용한 모델의 학습 과정은 다음 그림과 같습니다.
 
-![](/img/car-damage-segmentation-model/unet_train_flow.png){:width="100%" height="100%" style="display: block; margin: 0 auto"}
+![](/img/car-damage-segmentation-model/unet_train_flow.png)
 
 - Feature는 차량 이미지, Target으로는 마스크(Binary Mask Image)가 사용됩니다.
   - 파손 영역별 좌표 형태(Polygon)로 주어진 입력 파일을 마스크 형식으로 가공합니다.
@@ -302,14 +302,14 @@ tags:
 
 해당 프로젝트에서 사용한 모델의 Inference 과정은 다음 그림과 같습니다.
 
-![](/img/car-damage-segmentation-model/postprocess_after_inference.png){:width="100%" height="100%" style="display: block; margin: 0 auto"}
+![](/img/car-damage-segmentation-model/postprocess_after_inference.png)
 
 - 차량 이미지를 입력으로, 학습이 완료된 Segmentation Network 내부 파라미터와의 연산을 통해 모델의 예측값이 출력됩니다.
   - 출력되는 예측값은 3장의 2차원 예측 마스크입니다.
   - 예측 마스크의 각 픽셀은 대응되는 입력 이미지의 픽셀이 해당 파손 클래스에 속할 확률(Probability Score)을 저장하고 있습니다. 
 - 이 예측 마스크는 Mask Policy에 의해 0과 1의 이진 마스크로 변환됩니다. 0과 1 사이의 연속적인 확률값을 속한다, 속하지 않는다는 이산적인 클래스 정보로 변환하는 과정을 거칩니다.
 
-	![](/img/car-damage-segmentation-model/mask_policy.png){:width="100%" height="100%" style="display: block; margin: 0 auto"}
+	![](/img/car-damage-segmentation-model/mask_policy.png)
 
 - 해당 프로젝트에서 고안해 사용한 Mask Policy는 각 파손 클래스 별 특성을 반영한 규칙입니다.
 	- 프로젝트에서 다룬 파손의 종류는 스크래치 (Scratch), 찌그러짐 (Dent), 이격 (Spacing) 총 3가지인데, 이 파손들의 속성이 서로 다르다고 생각했습니다.
@@ -334,12 +334,12 @@ tags:
 	- 1-1) 앱 내에서 차량 외관 촬영 시 가이드라인이 존재하지 않아 사용자들이 사진을 촬영하는 방식이 제각각이었습니다.
 	- 멀리서 찍어 차량이 아닌 주차선이 이미지의 대부분을 차지하거나, 차량 루프를 촬영하는 과정에서 뒤편에 주차된 차량들이 빼곡히 촬영되거나, 뒤편의 건물이 촬영된 이미지들이 종종 있었습니다.
 	
-	![](/img/car-damage-segmentation-model/problem1-without-guideline.png){:width="60%" height="60%" style="display: block; margin: 0 auto"}
+	![](/img/car-damage-segmentation-model/problem1-without-guideline.png)
 
 
    - 1-2) 어두운 곳에서 촬영된 차량 이미지에 취약점을 보였습니다.
 
-	![](/img/car-damage-segmentation-model/problem2-dark-images.png){:width="30%" height="30%" style="display: block; margin: 0 auto"}
+	![](/img/car-damage-segmentation-model/problem2-dark-images.png)
 	     
 
 - 2) **시간적인 제한에 대한 문제**
@@ -368,11 +368,11 @@ tags:
 
 - 모델의 전체 구조
 
-![](/img/car-damage-segmentation-model/model_architecture.png){:width="100%" height="100%" style="display: block; margin: 0 auto"}
+![](/img/car-damage-segmentation-model/model_architecture.png)
 
 - 전체 Inference 흐름도
 
-![](/img/car-damage-segmentation-model/inference_flow.png){:width="100%" height="100%" style="display: block; margin: 0 auto"}
+![](/img/car-damage-segmentation-model/inference_flow.png)
 
 
 
@@ -388,7 +388,7 @@ tags:
 	- Segmentation Network의 성능: Threshold 0.5 기준 96.7의 IoU를 기록했습니다.
 
 - IoU란?
-	- ![](/img/car-damage-segmentation-model/iou.png){:width="50%" height="50%" style="display: block; margin: 1 auto"}
+	- ![](/img/car-damage-segmentation-model/iou.png)
 	- Intersection on Union의 약자로, Segmentation Task 모델의 성능을 평가하는 지표입니다.
 	- IoU는 교집합 영역 넓이 / 합집합 영역 넓이로 계산되며, 이 때 Threshold 값은 한 픽셀이 특정 클래스에 속할 확률값이 몇 이상일 때 클래스에 속한다고 판단을 내릴지에 대한 경곗값입니다. 보편적으로는 Threshold 0.5 값을 기준으로 사용하나 이는 데이터, 모델의 특성 또는 달성해야 하는 목표에 따라 개발자가 조절 가능합니다. 
     
@@ -403,11 +403,11 @@ tags:
 <h2 id="index10">실제 데이터에 적용 예시</h2>
 다음 예시 이미지들은 실제 앱을 통해 업로드된 차량 이미지들을 입력으로 한 모델의 Inference 결과입니다.
 
-![](/img/car-damage-segmentation-model/result.png){:width="70%" height="70%" style="display: block; margin: 0 auto"}
+![](/img/car-damage-segmentation-model/result.png)
 	
 아래 이미지는 해당 모델을 통해 차량 파손 검수 결과를 제공하고 있는 실제 운영 페이지의 일부입니다.
 
-![](/img/car-damage-segmentation-model/admin.png){:width="100%" height="100%" style="display: block; margin: 0 auto"}
+![](/img/car-damage-segmentation-model/admin.png)
 	
 위와 같이 해당 모델의 검수 결과를 직접 운영 페이지에 녹여냄으로써, 업로드되는 차량 이미지 데이터를 차량 유지, 보수 업무에 적극적으로 활용하게 되었고, 차량 이미지 검수에 투입되었던 인력과 시간비용을 절감할 수 있게 되었습니다.
 

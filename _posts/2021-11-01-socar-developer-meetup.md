@@ -25,7 +25,7 @@ Photo by DaeHyun Kim
 
 다만 운 좋게도 쏘카의 고속 성장 직전에 합류할 수 있었습니다. 제가 입사할 때만 하더라도 개발자는 저 포함 고작 네 명이었습니다. 회의를 진행하기 매우 편한 환경이였습니다. 그냥 그 자리에서 뒤로 돌아앉기만 하면 그만이었거든요. 
 
-![](/img/socar-dev-meetup/20131226_112006.jpg){: width="100%" height="100%"}
+![](/img/socar-dev-meetup/20131226_112006.jpg)
 
 이랬던 조직이 회사의 성장 속도에 따라 급작스레 커지면서 점점 고민이 생기게 됩니다.
 
@@ -44,7 +44,7 @@ Photo by DaeHyun Kim
 
 ## 밋업회? 그거 개발자 세미나 같은 것 아닌가?
 
-![](/img/socar-dev-meetup/neonbrand-1-aA2Fadydc-unsplash.jpg){: width="100%" height="100%" style="display: block; margin: 0 auto"}
+![](/img/socar-dev-meetup/neonbrand-1-aA2Fadydc-unsplash.jpg)
 *Photo by <a href="https://unsplash.com/@neonbrand">NeONBRAND</a> on <a href="https://unsplash.com/s/photos/meetup">Unsplash</a>*
 
 틀린 말은 아닙니다. 실제로 많은 개발자 밋업이 기술 교류와 세미나로 이루어지고 있습니다. 그리고 이런 문화의 원류를 찾아 거슬러 올라가 보면 [HomeBrew Compute Club](https://en.wikipedia.org/wiki/Homebrew_Computer_Club)을 만나게 됩니다. 그리고 우리가 다들 아는 이바닥의 구루이자 전설 아닌 레전드들이 왕년에 저 멤버로 참여하셨죠. 그러한 대표적인 예로 스티브 워즈니악이 있습니다.
@@ -78,7 +78,7 @@ Photo by DaeHyun Kim
 
 ## 밋업을 진행하고 얻은 것
 
-![](/img/socar-dev-meetup/socar-meetup.jpg){: width="75%" height="75%" style="display: block; margin: 0 auto"}
+![](/img/socar-dev-meetup/socar-meetup.jpg)
 
 먼저 가장 주요한 발견으로, 조직별로 "지식의 사일로화"가 발생하고 있다는 것을 깨달았습니다. 조직이 전문 분야별로 나눠져 발달할 수는 있겠지만 상호 간에 기술 교류가 없으면 생각하지 못한 순간에 발목을 잡힙니다. 예를 들어 보자면 인프라 구조를 이해 못 해 과도한 컴퓨팅 비용을 지불한다던가, 잘못된 방식으로 배포한다던가 하는 일로 인해 시간비용을 소모하게 됩니다.  
 당연히 이러한 일들을 개발자는 회피하고 싶기에 사내 참고할만한 기술문서를 찾게 됩니다. 하지만 지속적으로 성장하며 변화가 빈번한 조직은 문서화 프로세스 하나 잡기도 만만치가 않습니다. 따라서 조직별로 기술문서는 만들고 있어도 다른 조직에서 참고하려면 무엇이 어디에 있는지도 몰라서 헤매는 일이 발생하게 되겠죠.  
@@ -86,7 +86,7 @@ Photo by DaeHyun Kim
 
 또한 새로운 기술을 스터디하는 데도 도움이 된다는 것을 발견했습니다. 조직이 전문분야로 나뉘면 각자의 도메인이 발달하게 됩니다. 따라서 새로운 기술 도입을 두고 이야기할 때 각 도메인끼리의 관점을 나누는데에도 효과적입니다. 밋업회를 통해 GO 언어를 스터디 할 수 있는 기회를 갖게 되었는데, 결국엔 쏘카라는 서비스를 만들고 운영할 때 최소한 현재 기준 어떤 도메인에서든 이점이 없다는 점을 평가할 수 있었습니다.
 
-![](/img/socar-dev-meetup/go-tshirt.jpg){: width="50%" height="50%" style="display: block; margin: 0 auto"}
+![](/img/socar-dev-meetup/go-tshirt.jpg)
 *덤으로 중국산 티셔츠는 잘못 세탁하면 큰일 난다는 것도 배웠지요.*
 
 그리고 고민은 나누는 것만으로도 가치가 있다는 것도 배웠습니다. 개발자 또는 한 조직의 구성원으로 털어놓기 어려운 주제도 던져봤는데 의외로 열띤 토론이 이어지는 경우가 많았습니다. 물론 밋업회 자체가 회사에서 업무 기능을 담당하지 않기에 토론 결과가 업무에 바로 반영되지는 않긴 합니다만, 서로 다른 조직끼리 "저 조직은 왜 우리와 다를까"라는 의문을 풀어주는 것만으로도 긍정적인 효과를 기대할 수 있다고 봅니다.
@@ -98,7 +98,7 @@ Photo by DaeHyun Kim
 
 ## Next Step!
 
-![](/img/socar-dev-meetup/meetup-history2.jpg){: width="50%" height="50%" style="display: block; margin: 0 auto"}
+![](/img/socar-dev-meetup/meetup-history2.jpg)
 
 
 뒤돌아보니 정말 많은 주제들을 이야기 했군요 :)
