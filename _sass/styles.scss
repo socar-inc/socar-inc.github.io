@@ -74,6 +74,13 @@ table, th, td {
   margin: 5px 0;
 }
 
+.post-content > .footnotes {
+  margin-top: 70px;
+  border-top: 1px solid #00000080;
+  padding-top: 20px;
+  font-size: 0.75em;
+}
+
 .mermaid {
   border: 1px solid;
   border-radius: 10px;
