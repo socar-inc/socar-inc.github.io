@@ -6,7 +6,8 @@ background: '/assets/images/home-bg-main-1.png'
 <div class="authors">
   <h1>작성자 목록</h1>
   <div class="label">
-    {% for author in site.data.authors %}
+    {% for author_hash in site.data.authors %}
+    {% assign author = author_hash[1] %}
     <div class="anchor">
       <a href="#{{ author.name }}">
         <span>{{ author.name }}</span>
@@ -16,7 +17,8 @@ background: '/assets/images/home-bg-main-1.png'
   </div>
   <h1>글 목록</h1>
   <div class="posts">
-  {% for author in site.data.authors %}
+    {% for author_hash in site.data.authors %}
+    {% assign author = author_hash[1] %}
     <h2 id="{{ author.name }}">
       <img src="{{ author.image }}" alt="">
       {{ author.name }}
