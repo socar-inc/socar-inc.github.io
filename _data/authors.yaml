@@ -16,7 +16,7 @@ kyle:
 serena:
   name: serena
   organization: AI 팀
-  image: '/assets/authors/dini.jpeg'
+  image: '/assets/authors/default.png'
 
 thomas:
   name: thomas
