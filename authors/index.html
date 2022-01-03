@@ -1,0 +1,44 @@
+---
+layout: page
+title: Authors ✍🏻
+background: '/assets/images/home-bg-main-1.png'
+---
+<div class="authors">
+  <h1>작성자 목록</h1>
+  <div class="label">
+    {% for author_hash in site.data.authors %}
+    {% assign author = author_hash[1] %}
+    <div class="anchor">
+      <a href="#{{ author.name }}">
+        <span>{{ author.name }}</span>
+      </a>
+    </div>
+    {% endfor %}
+  </div>
+  <h1>글 목록</h1>
+  <div class="posts">
+    {% for author_hash in site.data.authors %}
+    {% assign author = author_hash[1] %}
+    <h2 id="{{ author.name }}">
+      <img src="{{ author.image }}" alt="">
+      {{ author.name }}
+    </h2>
+    <ul class="post">
+      {% for post in site.posts %}
+        {% if post.author contains author.name %}
+          <li>
+            {% if post.link %}
+              <a href="{{ post.link }}">
+            {% else %}
+              <a href="{{ site.baseurl }}{{ post.url }}">
+            {% endif %}
+                {{ post.title }} 
+              </a>
+              <time>{{ post.date | date: "%Y-%m-%d" }}</time>
+          </li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+  {% endfor %}
+  </div>
+</div>
