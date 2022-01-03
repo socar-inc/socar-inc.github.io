@@ -1,0 +1,59 @@
+- name: dorma
+  organization: TD 팀
+  image: '/assets/authors/dorma.jpeg'
+
+- name: issac
+  organization: TD 팀
+  image: '/assets/authors/dini.jpeg'
+
+- name: kyle
+  organization: 그로스 코칭 팀
+  image: '/assets/authors/kyle.png'
+
+- name: serena
+  organization: AI 팀
+  image: '/assets/authors/dini.jpeg'
+
+- name: thomas
+  organization: 데이터 플랫폼 팀
+  image: '/assets/authors/thomas.jpeg'
+
+- name: gadi
+  organization: 프로덕트 디자인 팀
+  image: '/assets/authors/gadi.jpeg'
+
+- name: purin
+  organization: 프로덕트 디자인 팀
+  image: '/assets/authors/dini.jpeg'
+
+- name: sandy
+  organization: 프로덕트 디자인 팀
+  image: '/assets/authors/sandy.png'
+
+- name: yamani
+  organization: 넥스트 기획 팀
+  image: '/assets/authors/yamani.jpeg'
+
+- name: spock
+  organization: 모비딕 팀
+  image: '/assets/authors/spock.jpeg'
+
+- name: hardy
+  organization: 데이터 플랫폼 팀
+  image: '/assets/authors/hardy.jpeg'
+
+- name: charlie
+  organization: 모빌리티 Lab 팀
+  image: '/assets/authors/charlie.png'
+
+- name: mignon
+  organization: 안드로이드 팀
+  image: '/assets/authors/mignon.jpeg'
+
+- name: ray
+  organization: 모비딕 팀
+  image: '/assets/authors/ray.png'
+
+- name: dini
+  organization: 데이터 플랫폼 팀
+  image: '/assets/authors/dini.jpeg'

@@ -112,7 +112,7 @@ table, th, td {
   color: gray;
 }
 
-.tags, .categories { 
+.tags, .categories, .authors { 
   hr {
     border: 3px solid black;
     width: 10%;
@@ -146,10 +146,17 @@ table, th, td {
       margin-top: 0px;
     }
     h2 {
-      margin-top: 40px;
+      margin-top: 50px;
+    }
+    h2 > img {
+      width: 1.75rem;
+      display: inline;
+      border-radius: 50%;
+      margin: 0 5px 0 0;
     }
 
     .post {
+      margin-top: 20px;
       time {
         font-size: 0.75em;
       }
