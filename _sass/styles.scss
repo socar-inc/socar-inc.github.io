@@ -247,10 +247,14 @@ header.masthead {
   transform: translate(0, -50%);
   padding: 20px;
   line-height: 100%;
-  color: #00000090;
+  color: black;
   font-weight: 300;
   visibility: visible;
   transition: all 0.4s cubic-bezier(0.25, 0.8, 0.4, 0.95);
+
+  .is-active-link {
+    font-weight: 400;
+  }
 }
 
 .toc-hidden {
