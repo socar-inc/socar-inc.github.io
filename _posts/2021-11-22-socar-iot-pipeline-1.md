@@ -2,22 +2,20 @@
 layout: post
 title: "차량용 단말을 위한 IoT 파이프라인 구축기 #1"
 subtitle: "더 빨리, 더 많이, 더 믿을 수 있게"
-date: 2021-11-22 09:00:00 +0900
+date: 2022-01-06 09:00:00 +0900
 category: mobility
 background: '/assets/images/mike-benna-X-NAMq6uP3Q-unsplash.jpg'
 author: spock
 comments: true
 tags:
     - iot
-    - dataengineering
-
 ---
 
 <div class="photo-copyright">
 Photo by <a href="https://unsplash.com/@mbenna?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Mike Benna</a> on <a href="https://unsplash.com/s/photos/pipeline?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
 </div>
 
-### 떼려야 뗄 수 없는 관계, 단말과 서비스
+## 떼려야 뗄 수 없는 관계, 단말과 서비스
 
 안녕하세요. 모빌리티 플랫폼 그룹 - 모비딕 팀의 스팍입니다.
 
@@ -27,12 +25,9 @@ Photo by <a href="https://unsplash.com/@mbenna?utm_source=unsplash&utm_medium=re
 
 ![](/img/iot-pipeline-1/pipeline_concept.jpg){: width="75%" height="75%" style="display: block; margin: 0 auto"}
 
-<br />
-
 ---
 
-
-### 잠깐 쏘카의 구형 단말을 돌아봅시다
+## 잠깐 쏘카의 구형 단말을 돌아봅시다
 
 서비스 초기부터 쏘카는 차량 내에 서비스를 위한 단말을 장착하여 사용하고 있었습니다(편의상 구형 단말이라 부르겠습니다). 그리고 서비스가 급격하게 성장하던 시절에도 이 단말은 그럭저럭 제 역할을 해주었죠.
 
@@ -46,11 +41,9 @@ Photo by <a href="https://unsplash.com/@mbenna?utm_source=unsplash&utm_medium=re
 
 ![](/img/iot-pipeline-1/old_device_arch.jpg){: width="75%" height="75%" style="display: block; margin: 0 auto"}
 
-<br />
-
 ---
 
-### 이렇게 된 이상 새로운 단말을 만든다!
+## 이렇게 된 이상 새로운 단말을 만든다!
 
 이러한 문제를 해결하기 위해 새로운 단말을 만들기로 하였습니다.
 
@@ -88,11 +81,9 @@ MQTT를 지원하는 메시지 브로커는
 
 그리하여 저희 팀에서는 직접 브로커를 관리 및 운영하기보다는, 클라우드 관리형 메시지 브로커 서비스인 [AWS IoT Core](https://aws.amazon.com/ko/iot-core/)를 사용하기로 하였습니다.
 
-<br />
-
 ---
 
-### 새 술은 새 부대에. AWS IoT Core.
+## 새 술은 새 부대에. AWS IoT Core.
 
 AWS IoT Core를 쓰면 여러 이점을 얻을 수 있습니다.
 
@@ -111,7 +102,7 @@ AWS IoT Core를 쓸 때 서비스를 운영하는 입장에서 가장 주요한 
 
 ---
 
-### AWS IoT Core 쓰면 끝?
+## AWS IoT Core 쓰면 끝?
 
 AWS IoT Core를 활용하여 단순히 차량 데이터를 수집을 하는 것에만 머무르기엔 아쉽습니다. 여기서 더 나아가 각 부서(도메인)의 관점과 필요에 따라 수집된 데이터를 유연하게 활용한다면 더 좋을 것입니다. 기존에는 단말 데이터를 전부 DB에 저장하여 활용하는 방식을 사용했습니다. 그러나 이 방식은 DB 부하를 불러온다는 단점을 가지고 있습니다.
 
@@ -123,4 +114,3 @@ AWS IoT Core를 활용하여 단순히 차량 데이터를 수집을 하는 것�
 
 다음에는 실제 Amazon MSK를 구축할 때 마주쳤던 문제들을 해결하는 과정에서 얻어진 글로 찾아뵙겠습니다.
 
-<br />
