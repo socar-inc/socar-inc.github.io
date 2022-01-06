@@ -5,7 +5,6 @@ background: '/assets/images/home-bg-main-1.png'
 ---
 
 {% for post in paginator.posts %}
-
 <article class="post-preview">
   <a href="{{ post.url | prepend: site.baseurl | replace: '//', '/' }}">
     <h2 class="post-title">{{ post.title }}</h2>
@@ -15,18 +14,20 @@ background: '/assets/images/home-bg-main-1.png'
     <h3 class="post-subtitle">{{ post.excerpt | strip_html | truncatewords: 15 }}</h3>
     {% endif %}
   </a>
-  <p class="post-meta">Posted by
-    {% if post.author %}
-    {{ post.author }}
-    {% else %}
-    {{ site.author }}
-    {% endif %}
-    on {{ post.date | date: '%B %d, %Y' }} &middot; {% include read_time.html content=post.content %}
-  </p>
+  <div class="post-meta">
+    {% assign post_authors = post.author | split: ", " %}
+    {% for post_author in post_authors %}
+      {% assign author = site.data.authors[post_author] %}
+      <span class="author"><a href="/authors#{{ author.name }}"><img src="{{ author.image }}">{{ author.name | }}</a></span>
+    {% endfor %}
+      <span class="date">{{ post.date | date: '%Y-%m-%d' }}</span>
+      <span class="category"><a href="/categories#{{ post.category }}">{{ post.category }}</a></span> 
+    {% for tag in post.tags %}
+      <span class="tag"><a href="/tags#{{ tag }}">{{ tag }}</a></span>
+    {% endfor %}
+  </div>
 </article>
-
 <hr>
-
 {% endfor %}
 
 <!-- Pager -->
