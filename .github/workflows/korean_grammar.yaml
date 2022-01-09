@@ -3,7 +3,7 @@ name: Check korean grammar on pull request
 on: [pull_request]
 
 jobs:
-  build:
+  grammar_check:
     runs-on: ubuntu-latest
     steps:
     - name: "맞춤법 검사"
