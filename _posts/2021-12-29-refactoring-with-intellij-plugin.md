@@ -112,13 +112,13 @@ Kotlin compiler를 써서 parsing 하거나, LSP를 사용해서 수정하는 �
 
 앞서 이야기한 몇몇 기준점을 가지고 각각의 방식을 간략하게 비교하면 아래의 표와 같이 정리할 수 있습니다.
 
-|  | 대량 수정 가능(자동화) | reference | 포매팅 유지 | 기능 개발에필요한 시간 | 다른 기능으로의 확장 가능성 |
-| --- | --- | --- | --- | --- | --- |
-| rename 기능 | x | o | o | 없음 | 낮음 |
-| regex를 써서 replace | o | x | x | 보통 | 낮음 |
-| kotlin parser | o | o | ? | 매우 많음 | 보통 |
-| language server protocol | o | o | ? | 많음 | 보통 |
-| IntelliJ platform plugin 활용 | o | o | o | 보통 | 높음 |
+|  | IntelliJ rename | Regex replace | Kotlin parser | Language server | IntelliJ Plugin |
+|:---:|:---:|:---:|:---:|:---:|:---:|
+| 대량 수정(자동화) | X | O | O | O | **O** |
+| Usage 검색 기능 | O | X | O | O | **O** |
+| 포매팅 유지 | O | X | ? | ? | **O** |
+| 개발에 필요한 시간 | 없음 | 보통 | 많음 | 많음 | 보통 |
+| 확장성 | 낮음 | 낮음 | 보통 | 보통 | **높음** |
 
 이러한 비교를 바탕으로 개발 시간이 많이 필요하지 않으면서도 자동화가 가능한 IntelliJ Platform Plugin 방식을 선택했고, 이를 통해 view binding으로의 리팩토링을 진행해보기로 했습니다.
 
