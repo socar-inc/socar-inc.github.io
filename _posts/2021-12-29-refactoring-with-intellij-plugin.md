@@ -23,6 +23,7 @@ tags:
 
 당시에 리팩토링 작업을 하며 내부 세미나를 통해 발표했던 내용을, 연말연시를 맞이하여 이 글을 통해 다시금 정리해서 공유해 보고자 합니다.
 
+---
 # 리팩토링을 마음먹게 된 계기
 ## View binding으로의 전환
 안드로이드에서 뷰에 접근하는 방식은 [계속해서 바뀌어](https://medium.com/mobile-app-development-publication/how-android-access-view-item-the-past-to-the-future-bb003ae84527) 왔습니다.
@@ -63,6 +64,7 @@ class ChangedActivity : BaseActivity() {
 결국 이러한 문제로 인해 개발 시간이 불필요하게 늘어나고 있다는 의견에 도달하자 view binding으로 전환하는 리팩토링을 본격적으로 시작하게 되었습니다.
 다만, 무작정 작업에 돌입하기보다는 효율적인 방법에 대해서 생각해 볼 필요가 있었죠.
 
+---
 # 리팩토링 검토
 ## View binding 전환에 필요한 것
 위에서도 언급했다시피 view binding으로 리팩토링하는 작업을 위해 요구사항을 정리하다 보면 처음에 가졌던 생각보다 번거로운 지점이 보여서 멈칫멈칫하게 되는 부분들이 있었습니다.
@@ -122,6 +124,7 @@ Kotlin compiler를 써서 parsing 하거나, LSP를 사용해서 수정하는 �
 
 이러한 비교를 바탕으로 개발 시간이 많이 필요하지 않으면서도 자동화가 가능한 IntelliJ Platform Plugin 방식을 선택했고, 이를 통해 view binding으로의 리팩토링을 진행해 보기로 했습니다.
 
+---
 # IntelliJ Platform Plugin
 그렇다고 하더라도 자료를 찾기 어렵다면 개발 시간이 길어질 것이므로 걱정했지만, 다행스럽게도 JetBrains에서는 공식적으로 IntelliJ Platform에서 사용 가능한 [플러그인](https://lp.jetbrains.com/gradle-intellij-plugin/) 개발에 대한 [문서](https://plugins.jetbrains.com/docs/intellij/welcome.html)를 제공하고 있었습니다.
 이 문서의 [Getting Started 페이지](https://plugins.jetbrains.com/docs/intellij/getting-started.html)에 따르면 아래와 같은 방식으로 플러그인을 개발하는 것을 권장하고 있습니다.
@@ -306,6 +309,7 @@ class BindViewRefactoring : AnAction() {
 }
 ```
 
+---
 # 마무리하며
 이러한 과정을 거쳐서 작성한 플러그인 코드를 빌드 하여 Android Studio에 설치하고, 리팩토링에 빠르게 사용해 볼 수 있었습니다.
 ![Android Studio에 설치한 쏘카 플러그인](/assets/images/intellij-plugin/plugin.png)
