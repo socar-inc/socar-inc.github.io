@@ -21,9 +21,9 @@ Photo by <a href="https://unsplash.com/@fabmag?utm_source=unsplash&utm_medium=re
 
 쏘카에서 개발한 딥러닝 기반 차량 파손 탐지 모델을 시스템에 반영하는 과정에 대해 작성한 글입니다. 딥러닝 기반 차량 파손 탐지 모델에 대한 내용이 궁금하시면 [Semantic Segmentation을 활용한 차량 파손 탐지 딥러닝 모델 개발기](https://tech.socarcorp.kr/data/2020/02/13/car-damage-segmentation-model.html)을 참고하시면 좋을 것 같습니다.
 
----
+## 목차
 
-### 목차
+- [배경](#index0)
 - [딥러닝 모델을 서빙하기 위한 시스템은 어떻게 구성할까?](#index1)
 - [Serving Architecture](#index2)
 	- [이미지 수집: S3](#index3)
@@ -33,6 +33,8 @@ Photo by <a href="https://unsplash.com/@fabmag?utm_source=unsplash&utm_medium=re
 - [이제 큐가 비었습니다](#index7)
 
 ---
+
+<h2 id="index0">배경</h2>
 
 차량을 대여할 때 가장 먼저 하게 되는 일이 무엇일까요?
 여러 가지가 있겠지만 우선 차량에 손상이나 긁힘이 없는지를 꼼꼼히 살펴봅니다. 나중에 반납할 때 손상이 발견되면 해당 건의 책임을 물 수 있어 곤란을 겪게 되는 상황이 발생할 수도 있습니다. 그래서 차량을 구석구석 살펴본 뒤, 이미 손상이 있는 부분은 사진을 찍어놓기도 합니다.
@@ -44,7 +46,7 @@ Photo by <a href="https://unsplash.com/@fabmag?utm_source=unsplash&utm_medium=re
 
 ---
 
-<h3 id="index1">딥러닝 모델을 서빙하기 위한 시스템은 어떻게 구성할까?</h3>
+<h2 id="index1">딥러닝 모델을 서빙하기 위한 시스템은 어떻게 구성할까?</h2>
 딥러닝 모델을 개발할 때는 Input과 Output이 비교적 명확한 편입니다. 이미지를 분석하여 차량 파손을 탐지하는 모델의 경우에는 Input으로 차량 이미지(JPG, PNG 등)를 받고, Output으로 차량의 파손과 관련된 정보(파손 종류, 파손 확률 등)와 파손 영역이 표시된 결과 이미지를 생성하게 됩니다.
 
 그런데 딥러닝 모델을 실제 시스템과 결합하여 사용할 때에는 고려할 사항들이 좀 더 많아지고 복잡해지게 됩니다.  
@@ -65,8 +67,8 @@ Photo by <a href="https://unsplash.com/@fabmag?utm_source=unsplash&utm_medium=re
 
 그래서 저희 쏘카 데이터 엔지니어링팀에서는 딥러닝 모델을 안정적으로 서빙하는 것에 포커스를 두고, 빠른 시간에 설계 및 개발을 완료하여 사내 시스템과 통합하는 것이 목표입니다. 몇 번의 논의와 수정을 거쳐 최종적으로 결정된 시스템은 아래 그림과 같습니다.
 
-![](/img/posts_dl_serving/picture01.png){: width="100%" height="100%"}
-<center>그림 1. 전체 시스템 구성도 - AWS SQS + Kubernetes + Git + Rancher + S3, DB</center>
+![](/img/posts_dl_serving/picture01.png)
+*그림 1. 전체 시스템 구성도 - AWS SQS + Kubernetes + Git + Rancher + S3, DB*
 
 그럼, 이어서 위 그림에 표현된 각각의 모듈 및 시스템 구축 방법에 대해 좀 더 자세히 설명하도록 하겠습니다.
 
@@ -75,7 +77,6 @@ Photo by <a href="https://unsplash.com/@fabmag?utm_source=unsplash&utm_medium=re
 <h2 id="index2">Serving Architecture</h2>
 이 후 설명하는 내용은 사내 시스템 부분을 제외한 모델 서빙 시스템 관련 내용입니다. 사내 시스템과 관련된 내용은 향후 기회가 있을 때 쏘카 개발본부에서 자세히 소개드리는 것으로 하겠습니다.
 
-<br />
 
 <h3 id="index3">이미지 수집: S3</h3>
 차량을 대여한 사용자가 스마트폰으로 찍어서 업로드하는 사진은 S3에 저장됩니다. 이렇게 저장된 사진들은 사내 시스템을 담당하고 있는 개발본부에서 관리합니다. 각각의 이미지는 인증을 통해 CloudFront로 접근 가능합니다.
@@ -86,13 +87,13 @@ Photo by <a href="https://unsplash.com/@fabmag?utm_source=unsplash&utm_medium=re
 
 - 1) 쉽고 빠른 인터페이스의 구축 및 사용
 - 2) 향후 검수 시스템의 변경 또는 차량 손상 판정 모델의 변경 시 상호간의 영향 최소화
-- 3) 이미지 처리량의 변화에 따른 유연한 Scaling 지원<br />
+- 3) 이미지 처리량의 변화에 따른 유연한 Scaling 지원
 
 #### 1) 쉽고 빠른 인터페이스의 구축 및 사용
 - AWS SQS는 특별한 설정 없이 기본 설정으로 사용해도 별 문제가 없으며, Queue에 메시지를 전송하는 방법 또한 간단합니다.
 - 아래 이미지는 AWS SQS를 생성할 때 입력하게 되는 페이지인데, 대기열 이름을 작성하고 맨 아래쪽 대기열 생성 버튼만 누르면 Queue가 생성됩니다. 구성하려는 서비스에 따라 대기열 유형을 결정하고, 대기열 속성의 값들을 적당히 조정하면 됩니다.
 
-![](/img/posts_dl_serving/picture02.png){: width="100%" height="100%"}
+![](/img/posts_dl_serving/picture02.png)
 <center>그림 2. AWS 콘솔에서의 SQS 생성 페이지</center>
 
 - Queue에 메시지를 전송하고, 메시지를 받아오기 위해서는 Python의 boto 라이브러리를 사용하면 됩니다. 메시지 Send, Receive, Delete는 아래 코드에서처럼 boto 라이브러리 함수를 호출하여 구현할 수 있습니다 (실 서비스 적용 시에는 개발 환경에 따른 예외 처리 방안들을 포함하여 구현해야 합니다).
@@ -157,18 +158,16 @@ class SqsHelper():
             logging.getLogger(LOGGER_NAME).error("delete_message() error [%s]", e)
 ```
 
-- 본 프로젝트에서 메시지는 간단한 JSON 형태로 구성하여 전송했으나, 초당 처리량이 수십, 수백건으로 증가하는 것을 대비하여 Protocol Buffers를 고려하는 것도 좋습니다. Protocol Buffers를 사용하면 메시지의 특성에 따라 드라마틱하게 메시지 전송량과 처리속도를 향상시킬 수 있습니다.<br />
+- 본 프로젝트에서 메시지는 간단한 JSON 형태로 구성하여 전송했으나, 초당 처리량이 수십, 수백건으로 증가하는 것을 대비하여 Protocol Buffers를 고려하는 것도 좋습니다. Protocol Buffers를 사용하면 메시지의 특성에 따라 드라마틱하게 메시지 전송량과 처리속도를 향상시킬 수 있습니다.
 
 #### 2) 향후 검수 시스템의 변경 또는 차량 손상 판정 모델의 변경 시 상호간의 영향 최소화
 - Queue를 통해 전달하게될 메시지 구조만 협의되면 이후 작업은 메시지를 Push 하거나 Pull 하기만 하면 됩니다. 
 - 본 시스템은 모델에 판정을 의뢰할 사내 시스템은 판정 대상 이미지의 URL과 기타 정보를 메시지로 묶어 SQS에 Push하면 되고, 판정 모델 쪽은 SQS를 Polling 하면서 요청된 메시지를 받아와 판정 작업을 처리하고 결과를 업데이트하면 됩니다.
-<br />
+
 
 #### 3) 이미지 처리량의 변화에 따른 유연한 Scaling 지원
 - AWS SQS는 처리량 제한이 없습니다. 다 받아줍니다.
 - 다만 메시지 저장 제한 기간이 있으므로, 그 기간 안에 Queue의 메시지를 꺼내가면 됩니다. Push되는 메시지가 많아지는 경우에는 Pull하는 모델의 처리량을 늘려주면 되는데 모델 처리량을 늘리는 방법에 대해서는 잠시 후 설명하도록 하겠습니다.
-
----
 
 <h3 id="index5">Model Serving : AWS S3 + Agent(Python Application / Docker) + Kubernetes</h3>
 손상 판정 모델의 작업은 이미지를 Input으로 받고, 판정 결과가 표시된 이미지와 관련 정보들을 Output으로 리턴합니다. 모델이 판정 작업에 집중하는 동안, 사내 시스템과 여러 작업들을 수행하기 위한 서빙 시스템이 필요합니다. 본 프로젝트에서는, 이러한 서빙 시스템을 Agent로 지칭하도록 하겠습니다.
@@ -181,7 +180,7 @@ Agent의 주요 담당 업무는 아래와 같습니다.
 - 4) 모델 및 Agent의 상태를 확인하고 로그 저장
 
 Agent는 Python으로 작성하였고, Docker Image로 빌드했습니다. 차량 손상 모델은 PyTorch를 사용하여 개발되었고, Python 코드를 사용 시 다양한 Cloud 플랫폼의 API를 사용하는 것도 쉬우므로 자연스럽게 Python을 선택했습니다.
-<br />
+
 #### 1) 손상 판정 모델을 초기화
 - Agent가 시작되면 S3에 저장된 모델의 Weight 값들을 다운로드하고, 모델의 내부 상태를 초기화 하게 됩니다.
 - 차량 손상 판정 모델이 사용하는 내부의 Network Layer가 7개여서 각각 학습된 Weight들을 모아보면 크기가 상당히 큽니다. 해당 Weight들을 Docker Image에 포함하게 된다면 Image가 너무 커질 뿐만 아니라, 향후 Weight 값이 재학습으로 인하여 수정되는 경우 Docker Image를 다시 빌드해야 하는 불편함이 있습니다. 
@@ -196,9 +195,6 @@ Agent는 Python으로 작성하였고, Docker Image로 빌드했습니다. 차�
 
 #### 4) 모델 및 Agent의 상태를 확인하고 로그 저장
 - Agent는 작업 간 각종 로그를 생성하여 모델의 상태와 Agent 자체의 상태를 기록하게 되는데 이러한 정보는 Fluentd를 사용해 수집한 후, S3에 저장하고 있습니다.
-<br />
-
----
 
 여기까지 외부 시스템과 차량 손상 판정 모델을 연동할 수 있는 기본 시스템(Agent)은 마련된 상태입니다. 이제 이 Agent를 병렬적으로 운영하여 처리량을 높이는 방법에 대해 설명하도록 하겠습니다.
 
@@ -208,7 +204,7 @@ Agent는 Python으로 작성하였고, Docker Image로 빌드했습니다. 차�
 
 현재 운영중인 설정에서는 작업이 없을 때 Node 1대에 Agent Pod이 2개가 배포되어 대기하고 있다가, SQS에 메시지가 쌓이기 시작하면 Node 5대에 Pod이 14개 배포될 때까지 Auto Scaling이 동작합니다. 이후, SQS 메시지를 모두 처리하게 되면 다시 처음의 상태로 Node와 Pod의 수가 조정됩니다.
 
-![](/img/posts_dl_serving/picture03.png){: width="100%" height="100%"}
+![](/img/posts_dl_serving/picture03.png)
 <center>그림 3. 처리량에 따른 Auto Scaling</center>
 
 Kubernetes를 사용할 때의 또 다른 잇점은 Pod의 상태를 확인하여 이상이 있는 경우, Pod을 재배포하여 복구시키는 방법이 간편하다는 점입니다.
@@ -219,16 +215,13 @@ Agent는 주기적으로 SQS를 Polling하고 메시지에 따라 이 후 작업
 
 그리고 동작 중 발생하는 오류에 대해서는 슬랙 채널로 알림을 발송하도록 처리했습니다.
 
----
-
 <h3 id="index6">서빙 관련 배포 및 모니터링: Git + Rancher</h3>
 엔지니어의 욕심은 끝이 없는 법. Kubernetes가 엔지니어의 삶을 편안하게 도와주긴 하지만 배포도 좀 더 간단하면 어떨까 생각을 해봅니다. 배포 및 모니터링을 위한 다양한 툴들이 있는데, 데이터 엔지니어링팀에서는 요즘 꽤 핫한 [Rancher](https://rancher.com/)를 사용하는 것으로 결정하였습니다. 이미 개발본부에서 Rancher를 배포 및 모니터링에 적극 활용하고 있는 모습을 볼 수 있었기 때문에 팀에서도 별다른 고민 없이 채택할 수 있었습니다.
 일단 사용해 본 결과로는 조금 보완할 점도 있긴 하지만, 전반적으로 만족하며 사용하고 있습니다. Rancher와 함께 Git을 연동하면 다음과 같은 운영상의 편리함이 있습니다.
 
-#### Rancher와 Git 연동시 생기는 장점
 - 1) Git에 소스를 push하면 docker image 빌드부터 Kubernetes 배포까지 한방에!
 - 2) 복잡한 설정 없이 간편하게 Node와 Pod 상태 모니터링 및 로그 확인 가능
-<br />
+
 
 #### 1) Git에 소스를 push하면 docker image 빌드부터 Kubernetes 배포까지 한방에!
 - Git 브랜치는 master, release, develop로 구분하여 운영하고 있습니다. 
@@ -238,24 +231,24 @@ Agent는 주기적으로 SQS를 Polling하고 메시지에 따라 이 후 작업
 - stage에 배포된 서빙 모델이 별도의 테스트를 통해 정상적으로 동작하는 것으로 확인되면 release 브랜치를 master 브랜치에 머지합니다. 
 - 이후, 새 버전에 해당하는 Tag를 달게 되면 해당 Tag로 Docker Image를 빌드하여 production에 배포하도록 설정했습니다. 운영상의 실수로 master 브랜치에 의도하지 않게 소스가 머지될 수도 있으므로 명시적으로 Tag를 작성하는 경우에만 production에 배포가 됩니다.
 - 결과적으로 Git 관련 작업만으로 서빙 모델이 보다 간편하게 배포될 수 있는 구성이 가능합니다. 한가지 유의하실 점은, Tag가 변경되지 않으면 Rancher Pipeline에서 해당 Docker Image의 배포가 Skip 되므로 Image의 Tag는 수정이 되어야 합니다. 만약 latest 등의 Tag를 사용하는 경우에는, Rancher UI 상에서 `Redeploy` 를 클릭하여 수동으로 재배포할 수 있습니다.
-<br />
+
 
 #### 2) 복잡한 설정 없이 간편하게 Node와 Pod 상태 모니터링 및 로그 확인 가능
 - Rancher는 간단한 설정만으로 Node, Pod 상태를 모니터링 할 수 있는 기능을 제공합니다. 
 - 보다 상세한 상태를 파악하기 위해서는 Prometheus, Grafana 등을 사용하여 모니터링 할 수도 있으나, 본 프로젝트에서는 Node가 Spot Instance로 동작하고 있어서 Node의 수가 가변적으로 운영되고 있고, 현재 동작중인 상태만 간단히 확인할 수 있는 정도면 되기 때문에 Rancher가 제공하는 기본 모니터링 기능만을 사용하여 운영중입니다.
 아래 그림에서와 같이 CPU, Memory, Storage, Network 사용량 등을 한눈에 확인할 수 있습니다.
 
-![](/img/posts_dl_serving/picture04.png){: width="100%" height="100%"}
+![](/img/posts_dl_serving/picture04.png)
 <center>그림 4. Rancher 모니터링 예시</center>
 
 현재 서빙 시스템의 로그는 Fluentd를 이용하여 별도의 S3 버킷에 저장하고 있습니다. 실시간 로그를 확인하여 Pod의 상태를 보고 싶은 경우 Rancher UI 상에서 쉽게 확인 가능합니다. 아래 그림과 같이 stdout으로 기록되는 로그를 붙잡아서 볼 수 있으므로 서빙 시스템의 상태를 간단히 체크하거나, 버전이 업데이트 되어 배포되는 시점에 동작 상태를 실시간으로 확인하기에 좋습니다.
 
-![](/img/posts_dl_serving/picture05.png){: width="100%" height="100%"}
+![](/img/posts_dl_serving/picture05.png)
 <center>그림 5. Rancher UI에서 Pod 로그 확인</center>
 
 ---
 
-<h3 id="index7">이제 큐가 비었습니다</h3>
+<h2 id="index7">이제 큐가 비었습니다</h2>
 DL 모델 서빙 시스템을 구축하기 위해 사용된 주요 서비스와 연동 방법들에 대해 간단히 정리해 보았습니다.
 본문 내용을 세 줄로 요약한다면 아래와 같습니다.
 

@@ -11,17 +11,27 @@ layout: default
     <div class="overlay"></div>
     <div class="container">
       <div class="row">
-        <div class="col-lg-10 col-md-10 mx-auto">
+        <div class="col-lg-9 col-md-9 mx-auto">
           <div class="post-heading">
-            <h1>{{ page.title }}</h1>
+            <h1 class="post-title">{{ page.title }}</h1>
             {% if page.subtitle %}
             <h2 class="subheading">{{ page.subtitle }}</h2>
             {% endif %}
-            <span class="meta">Posted by
-              <a href="#">{% if page.author %}{{ page.author }}{% else %}{{ site.author }}{% endif %}</a>
-              on {{ page.date | date: '%B %d, %Y' }} &middot; {% include read_time.html
-              content=page.content %}
-            </span>
+            <div class="post-meta">
+              {% assign page_authors = page.author | split: ", " %}
+              {% for page_author in page_authors %}
+                {% assign author = site.data.authors[page_author] %}
+                <span class="author"><a href="/authors#{{ author.name }}"><img src="{{ author.image }}">{{ author.name | }}</a></span>
+              {% endfor %}
+                <br>
+                <span class="date">{{ page.date | date: '%Y-%m-%d' }}</span>
+                <br>
+                <span class="category"><a href="/categories#{{ post.category }}">{{ page.category }}</a></span> 
+                <br>
+              {% for tag in page.tags %}
+                <span class="tag"><a href="/tags#{{ tag }}">{{ tag }}</a></span>
+              {% endfor %}
+            </div>
           </div>
         </div>
       </div>
@@ -29,15 +39,15 @@ layout: default
   </header>
 
   <div class="container">
+    <div class="toc toc-hidden" id="toc">
+    </div>
     <div class="row">
-      <div class="col-lg-10 col-md-10 mx-auto">
-
+      <div class="col-lg-9 col-md-9 mx-auto">
+        <div class="post-content">
         {{ content }}
-
+        </div>
         <hr>
-
         <div class="clearfix">
-
           {% if page.previous.url %}
           <a class="btn btn-primary float-left" href="{{ page.previous.url | prepend: site.baseurl | replace: '//', '/' }}" data-toggle="tooltip" data-placement="top" title="{{ page.previous.title }}">&larr; Previous<span class="d-none d-md-inline">
               Post</span></a>
@@ -46,13 +56,10 @@ layout: default
           <a class="btn btn-primary float-right" href="{{ page.next.url | prepend: site.baseurl | replace: '//', '/' }}" data-toggle="tooltip" data-placement="top" title="{{ page.next.title }}">Next<span class="d-none d-md-inline">
               Post</span> &rarr;</a>
           {% endif %}
-
         </div>
-
         <div>
           <p class="recuit">쏘카는 언제나 쏘카 서비스를 함께 만들며 기술적인 문제를 함께 풀어나갈 능력있는 개발자/디자이너/기획자/데이터 사이언티스트 등을 모시고 있습니다. 자세한 내용은 <a href="https://bit.ly/SOCAR-RECRUIT">쏘카 채용공고 페이지</a>를 확인 부탁드립니다 :)</p>
         </div>
-
       </div>
     </div>
     <!-- disqus comments -->
@@ -60,3 +67,32 @@ layout: default
       {% include comments.html %}
     {% endif %}
   </div>
+
+<script>
+  // ref https://tscanlin.github.io/tocbot/
+  tocbot.init({
+    tocSelector: '#toc',
+    contentSelector: '.post-content',
+    headingSelector: 'h1, h2, h3',
+    hasInnerContainers: true,
+    collapseDepth: 6,
+    linkClass: 'toc-link'
+  });
+
+
+  $(window).on('scroll', function() {
+      let scrollTop = $(window).scrollTop()
+      let scrollBottom =  scrollTop + $(window).height()
+      let contentOffsetTop = $(".post-content").offset().top
+      let contentOffsetBottom = contentOffsetTop + $(".post-content").height()
+      let elementHeight = $(".post-content").height(); 
+
+      if ((scrollTop < contentOffsetTop) || (scrollBottom >= contentOffsetBottom)) {
+        // $('.toc').css('visibility', 'hidden')
+        $('.toc').addClass("toc-hidden")
+      }
+      else if (scrollTop >= contentOffsetTop) {
+        $(".toc").removeClass("toc-hidden")
+      }
+  });
+</script>

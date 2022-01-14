@@ -16,29 +16,34 @@ tags:
 Photo by <a href="https://unsplash.com/@zhenhu2424?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Zhen Hu</a> on <a href="https://unsplash.com/search/photos/lock?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
 </div>
 
-
-## 사내 SSO(Single Sign-On) 구축하기
-  이번에 쏘카에서 사내 보안 강화를 위해 SSO를 구축 하였습니다.
-  쏘팸과 파트너등이 업무에 사용하는 관리시스템(web) 및 wifi, ssh 접속 인증을 1개의 ID로 관리 하도록 하는 것이 목적입니다.
+이번에 쏘카에서 사내 보안 강화를 위해 SSO(Single Sign-On)를 구축 하였습니다.  
+쏘팸과 파트너등이 업무에 사용하는 관리시스템(web) 및 wifi, ssh 접속 인증을 1개의 ID로 관리 하도록 하는 것이 목적입니다.
   
-  정리된 요구 사항은 다음과 같습니다. 
+정리된 요구 사항은 다음과 같습니다. 
 
-```markdown
-  1. Web 사이트 인증.(Spring 베이스 사이트)
-  2. Wifi 인증
-  3. SSH 인증(+ Sudo 인증)
-  4. 2차 인증 (OTP) 지원
-  5. 유연한 권한 설정(Authorization)
+1. Web 사이트 인증.(Spring 베이스 사이트)
+2. Wifi 인증
+3. SSH 인증(+ Sudo 인증)
+4. 2차 인증 (OTP) 지원
+5. 유연한 권한 설정(Authorization)
+
+Identity Provider로 여러 유료 솔루션([Gluu](https://www.gluu.org/), [Google Identity Platform](https://developers.google.com/identity/) 등)도 검토 하였으나 설치형 + 오픈소스로 무료로 사용 가능한 [`Keycloak`](https://www.keycloak.org/)으로 구축으로 방향을 잡았습니다.
+
+Wifi 인증([FreeRADIUS에서 LDAP 모듈 지원](https://freeradius.org/modules/?s=ldap&mod=rlm_ldap))이나 ssh인증([pam_ldap](https://www.tldp.org/HOWTO/archived/LDAP-Implementation-HOWTO/pamnss.html))의 경우 OpenLDAP과 연동해서 처리 하는 방법에 대한 자료가 더 많지만, Web기반으로 운용 가능한 시스템을 더 선호해서 Keycloak을 선정하게 되었습니다. ~~험한길을 가게 되었습니다.~~
+
+## 목차
+
+- Keycloak 이란?
+- Keycloak으로 요구사항의 내용을 어떻게 구현할까?
+- 설치 계획 및 구성
+- Kubernetes(AWS EKS)에 Keycloak 설치
+- RADIUS 서버 설치 및 Keycloak 연동 설정
+
+---
+
+## [Keycloak](https://www.keycloak.org/) 이란?
+
 ```
-
-  Identity Provider로 여러 유료 솔루션([Gluu](https://www.gluu.org/), [Google Identity Platform](https://developers.google.com/identity/) 등)도 검토 하였으나 설치형 + 오픈소스로 무료로 사용 가능한 [`Keycloak`](https://www.keycloak.org/)으로 구축으로 방향을 잡았습니다.
-  
-  Wifi 인증([FreeRADIUS에서 LDAP 모듈 지원](https://freeradius.org/modules/?s=ldap&mod=rlm_ldap))이나 ssh인증([pam_ldap](https://www.tldp.org/HOWTO/archived/LDAP-Implementation-HOWTO/pamnss.html))의 경우 OpenLDAP과 연동해서 처리 하는 방법에 대한 자료가 더 많지만, Web기반으로 운용 가능한 시스템을 더 선호해서 Keycloak을 선정하게 되었습니다. ~~험한길을 가게 되었습니다.~~
-
------
-## [Keycloak](https://www.keycloak.org/)이란?
-
-```markdown
   - open source + 설치형
   - OpenID / SAML 지원
   - Restful API 지원 및 커스텀 API 추가 가능
@@ -49,30 +54,32 @@ Photo by <a href="https://unsplash.com/@zhenhu2424?utm_source=unsplash&utm_mediu
   - github: [https://github.com/keycloak/keycloak](https://github.com/keycloak/keycloak)
   - [RedHat SSO](https://access.redhat.com/products/red-hat-single-sign-on)의 오픈소스 버전
 
------
-## Keycloak으로 요구사항의 내용을 어떻게 구현 할까?
+---
 
-##### 1. Web 사이트 인증
+## Keycloak으로 요구사항의 내용을 어떻게 구현할까?
+
+### 1. Web 사이트 인증
   - OpenID / SAML 프로토콜 지원 및 Java client 지원
   - reverse proxy로 동작하는 [gatekeepr](https://github.com/keycloak/keycloak-gatekeeper)를 이용해 Web Application에서는 인증 / 권한 코드를 작성하지 않고도 처리 가능
 
-##### 2. Wifi 인증
+### 2. Wifi 인증
   - 사내에 Cisco 라우터를 사용하고 있고, RADIUS 프로토콜을 지원하므로 [RADIUS 서버](https://ko.wikipedia.org/wiki/RADIUS)를 구축하면 가능
   - [FreeRADIUS](https://freeradius.org)의 [Python 모듈](https://wiki.freeradius.org/modules/Rlm_python)에서 keycloak API를 호출해서 인증을 처리 하면 가능
 
-##### 3. SSH 인증(+ Sudo 인증)
+### 3. SSH 인증(+ Sudo 인증)
   - [sshd_config](https://linux.die.net/man/5/sshd_config)설정에서 UsePAM 옵션을 활성화 시키고 [pam_radius_auth.so](https://github.com/FreeRADIUS/pam_radius)를 사용해 RADIUS 서버를 통해서 인증 가능
 
-##### 4. 2차 인증 (OTP) 지원
+### 4. 2차 인증 (OTP) 지원
   - TOTP 지원
   - Wifi 인증시에는 사용하지 않을 예정이며, SSH(+ sudo) 인증시에는 [Access-Challenge + Reply-Message](https://www.iana.org/assignments/radius-types/radius-types.xhtml)를 회신하면 [pam_radius_auth.so](https://github.com/FreeRADIUS/pam_radius)에서 사용자에게 추가 입력을 받을 수 있음
 
-##### 5. 유연한 권한 설정(Authorization)
+### 5. 유연한 권한 설정(Authorization)
   - keycloak의 권한 설정은 상당히(~~과하게~~) 유연함. ([참고](https://www.keycloak.org/docs/4.8/authorization_services/))
 
------
+---
 
 ## 설치 계획 및 구성
+
 - Keycloak은 `Kubernetes 클러스터`에 설치
 - FreeRADIUS는 `별도 서버에 docker-compose`로 설치(kubernetes 클러스터에 설치해도 상관 없음)
   - RADIUS 프로토콜은 `UDP` Port2개를 사용합니다.(default: 1812, 1813)
@@ -106,7 +113,7 @@ graph TD;
   USER -->|SSH 접속|PAM_RADIUS
 </div>
 
------
+---
 
 ## Kubernetes(AWS EKS)에 Keycloak 설치
   - **[helm](https://helm.sh/)이 설치되어 있어야 합니다.**
@@ -191,17 +198,17 @@ helm install --name keycloak -f values.yaml codecentric/keycloak
   - 상세 설정은 keycloak의 공식 문서를 참조
     - https://www.keycloak.org/documentation.html
 
------
+---
 
 ## RADIUS 서버 설치 및 Keycloak 연동 설정
 
-##### 1. [EAP(확장 가능 인증 프로토콜)](https://ko.wikipedia.org/wiki/%ED%99%95%EC%9E%A5_%EA%B0%80%EB%8A%A5_%EC%9D%B8%EC%A6%9D_%ED%94%84%EB%A1%9C%ED%86%A0%EC%BD%9C)
+### 1. [EAP(확장 가능 인증 프로토콜)](https://ko.wikipedia.org/wiki/%ED%99%95%EC%9E%A5_%EA%B0%80%EB%8A%A5_%EC%9D%B8%EC%A6%9D_%ED%94%84%EB%A1%9C%ED%86%A0%EC%BD%9C)
   - Wifi 접속 인증으로 사용하기 위해서는 RADIUS 서버가 `EAP`를 지원해야 합니다.
     - 단말에서 사용자가 입력한 ID/PW를 RADIUS 서버에서 복호화해서 평문으로 추출 할수 있어야 Keycloak에 로그인 요청을 할 수 있습니다.
     - EAP 규격중 `EAP-TTLS`를 사용하고 2차인증으로 `PAP`를 사용합니다. PEAP, CHAP 등의 방식은 hash를 이용해 handshake하는 방식이라 RADIUS 서버에서 사용자가 입력한 Password를 알아 낼수 없습니다.
   - `Wifi 접속 인증이 필요없고, SSH 접속인증을 Keycloak과 연동하기 RADIUS 서버를 사용하는 경우 EAP 관련 설정은 불필요합니다.`
 
-##### 2.구성
+### 2. 구성
   - [Docker Hub에 공개되어 있는 이미지](https://hub.docker.com/r/freeradius/freeradius-server/)를 기반으로 python 사용이 가능하도록 수정한 이미지를 생성해 사용합니다.
   - FreeRADIUS는 다양한 모듈을 제공합니다. 그중에 [Python 모듈(rlm_python)](https://wiki.freeradius.org/modules/Rlm_python)을 이용해 keycloak과 연동합니다. 
     - ~~많은 모듈을 제공하는데 Keycloak 모듈은 없네요 ㅠ_ㅠ~~
@@ -221,20 +228,21 @@ graph LR;
     FREE_RADIUS -->|6. RADIUS 응답| CLIENT
 </div>
 
-##### 3. 설치시 주의사항(Kubernetes 사용시)
+### 3. 설치 시 주의사항 (Kubernetes 사용시)
   - **Radius는 `UDP` Port2개를 사용합니다.(default: 1812, 1813)**
   - ~~`UDP`는 AWS에서 Load Balancer를 사용할 수 없습니다.~~ [얼마 전부터 지원시작](https://aws.amazon.com/ko/blogs/aws/new-udp-load-balancing-for-network-load-balancer/)
   - Kubernetes에 설치시 ingress의 유형에 따라 UDP를 지원하지 않을 수 있습니다.
   - 그냥 NodePort로 노출 시키고, Route53에서 Kubernetes에 사용된 각 Node(EC2 Instance)의 Public IP로 Round Robin으로 분산 시켜도 됩니다.[(참고)](https://docs.aws.amazon.com/ko_kr/Route53/latest/DeveloperGuide/routing-policy.html)
   - Kubernetes에서 NodePort를 사용 할 경우 사용가능한 Port Range는 `30000-32767` 입니다.(Radius의 기본 Port번호 사용 불가)
 
-##### 4. FreeRADIUS 설정 및 Docker Image 생성
+### 4. FreeRADIUS 설정 및 Docker Image 생성
   - [Docker Hub에 공개되어 있는 이미지](https://hub.docker.com/r/freeradius/freeradius-server/)를 그대로 이용하면 좋지만... 기본 이미지는 `python`을 지원하지 않습니다. 
   - 저는 Python 모듈에서 암복호화 기능도 사용할 예정이므로 [pycrypto](https://pypi.org/project/pycrypto/)도 필요합니다.
   - FreeRADIUS 설정 파일들은 굳이 Docker Image에 넣지 않고 실행시 mount 해도 상관없습니다만, 저는 Docker Image에 설정파일을 수정해서 포함 시켰습니다.
   - FreeRADIUS에서 사용 할 인증서 파일도 생성해서 이미지에 포함시킵니다.(이것도.. 실행시 mount 해도 무방합니다.)
 
-##### 5. FreeRADIUS를 기반으로 커스텀 Docker Image 만들기
+### 5. FreeRADIUS를 기반으로 커스텀 Docker Image 만들기
+
 **step1. 설정 디렉토리 가져오기.**
   - 먼저 [Docker Hub에 공개되어 있는 이미지](https://hub.docker.com/r/freeradius/freeradius-server/)를 실행시킨 후 설정 디렉토리(`/etc/freeradius`)를 추출 합니다.
   - 추출한 설정 파일을 적절히 수정하고, 수정한 파일을 적용해서 Docker Image를 새롭게 생성할 예정입니다.
@@ -563,8 +571,7 @@ $ docker build -t socar/radius-server:0.9.1 .
 $ docker push -t socar/radius-server:0.9.1
 ```
 
------
-## 설치
+### 6. Docker-compose로 배포하기
   - `docker-compose.yml` 예시
 
 ```yaml
@@ -589,19 +596,18 @@ services:
 SHARED_SECRET=<my-shared-secret>
 ```
 
-  - 설치 (docker-compose.yml, config.env가 있는 경로에서 실행)
+  - 배포 (docker-compose.yml, config.env가 있는 경로에서 실행)
 
 ```bash
 $ docker-compose up -d
 ```
 
------
+---
 
 ## Keycloak 유저로 ssh 로그인 하기
   - `Ubuntu Linux` 기준으로 설정을 진행합니다.
 
------
-##### 1. 구성도
+### 1. 구성도
 <div class="mermaid">
 graph TD;
   subgraph Linux
@@ -621,9 +627,7 @@ graph TD;
   RADIUS_SERVER -->|5. RADIUS 응답| PAM
 </div>
 
------
-
-##### 2. [`pam_radius_auth.so`](https://github.com/FreeRADIUS/pam_radius) 빌드 하기
+### 2. [`pam_radius_auth.so`](https://github.com/FreeRADIUS/pam_radius) 빌드 하기
   - 저는 Mac을 사용하므로 ubuntu docker 이미지를 사용해서 빌드합니다.
   - 다운로드 혹은 clone 받은 소스 디렉토리에서 진행 합니다.
   - 빌드용 이미지 생성을 위한 Dockerfile
@@ -651,14 +655,11 @@ $ docker run -v $(pwd):/pam_radius -w /pam_radius pam_builder make
 
   - 빌드가 완료되면 `pam_radius_auth.so`파일이 생성됩니다.
 
------
 
-##### 3. `pam_radius_auth.so` 업로드 하기
+### 3. `pam_radius_auth.so` 업로드 하기
   - 저는 ubuntu 서버에 업로드 후 `/opt/pam/pam_radius_auth.so` 경로에 위치 시켰습니다.
 
------
-
-##### 4. `pam_radius_auth.so` 설정하기
+### 4. `pam_radius_auth.so` 설정하기
   1. `/etc/raddb/server` 파일 생성
     - 소스상의 [`pam_radius_auth.conf`](https://github.com/FreeRADIUS/pam_radius/blob/master/pam_radius_auth.conf) 파일 참조.
 
@@ -669,8 +670,7 @@ $ docker run -v $(pwd):/pam_radius -w /pam_radius pam_builder make
 ...
 ```
 
------
-##### 5. `sshd` 설정
+### 5. `sshd` 설정
   - [pam_radius_auth.so 설정 옵션](https://github.com/FreeRADIUS/pam_radius/blob/master/USAGE) 참고
   - `/etc/pam.d/sshd` 설정.
      - `@include common-auth`을 남겨두고. pam_radius_auth.so의 pam option을 `[default=ignore]`로 설정 하면 pam_radius_auth.so를 이용한 인증이 실패 할 경우 기본 linux 사용자 인증 방식으로 인증 가능합니다.
@@ -703,9 +703,7 @@ ChallengeResponseAuthentication yes
 AuthorizedKeysFile	/home/dorma/.ssh/authorized_keys
 ``` 
 
------
-
-##### 6. `sudo` 설정
+### 6. `sudo` 설정
   - `/etc/pam.d/sudo` 설정.
      - `@include common-auth`을 남겨두고. pam_radius_auth.so의 pam option을 `[default=ignore]`로 설정 하면 pam_radius_auth.so를 이용한 인증이 실패 할 경우 기본 linux 사용자 인증 방식으로 인증 가능.
      - `client_id`는 RADIUS서버로 전달 될때 `NAS-Identifier`로 전달되니 여러대의 서버에 설정 할 경우 서버 및 ssh, sudo를 구분 할 수 있는 값을 사용하면 됩니다.([RADIUS 서버 설치 및 Keycloak 연동 설정](/posts/keycloak-radius)의 python 모듈에서 `NAS-Identifier` 값으로 분기처리 가능.)
@@ -717,13 +715,14 @@ auth [success=done default=ignore] /opt/pam/pam_radius_auth.so client_id=sudo-10
 # ...
 ```
 
------
+---
 
 ## Cisco 무선 공유기 설정
   - `무선 공유기에서 RADIUS 서버와 연동 설정을 하고 SSID를 띄웁니다.
     - ~~자세한 설정은 네트워크 관리자에게 문의하세요?!~~
     - 참고: [Cisco 라우터에서 FreeRADIUS 연동 설정 하기](https://www.cisco.com/c/en/us/support/docs/wireless-mobility/wireless-lan-wlan/211263-Configure-802-1x-PEAP-with-FreeRadius.html)
 
+---
 
 ## 정리 + 추가로 가능한 것
   - `Keycloak + FreeRADIUS + pam_radius_auth.so + keycloak API로 인증처리 python 스크립트 작성`으로 web, wifi, ssh 인증을 `1개의 ID로 각종 사내 서비스 인증`을 구축 과정을 정리해 보았습니다.

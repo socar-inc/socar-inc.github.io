@@ -9,16 +9,15 @@ author: serena
 comments: true
 tags:
     - data
-    - deeplearning
+    - deep-learning
    
 ---
 
 
 쏘카에서 2019년 하반기에 딥러닝 기반의 차량 파손 탐지 모델을 개발했습니다. 이 포스트를 통해 왜 차량 파손 탐지 모델을 만들게 되었는지, 어떤 고민들을 거쳐 요구사항을 설정하였는지, 어떤 기술들이 사용되었는지 등 프로젝트의 전반적인 내용을 소개하는 글입니다.
 
----
+## 목차
 
-### 목차
 - [차량 파손 탐지 모델을 만들게 된 배경](#index1)
 - [문제 해결 방식](#index2)
 - [문제 접근 방식 정의 - Semantic Segmentation](#index3)
@@ -35,7 +34,8 @@ tags:
 
 ---
 
-<h3 id="index1">차량 파손 탐지 모델을 만들게 된 배경</h3>
+<h2 id="index1">차량 파손 탐지 모델을 만들게 된 배경</h2>
+
 먼저 사용자가 쏘카 앱을 통해 쏘카를 대여하고 운행하는 과정을 알아보겠습니다.
 
 - 1) 사용자가 차량을 이용할 쏘카존을 선택합니다.
@@ -44,16 +44,17 @@ tags:
 - 4) 약속한 이용 시간이 가까워지면 선택한 쏘카존에 방문해, 차량의 상태를 확인합니다.
 	- 이때 사용자는 차량의 당시 외관 사진을 앱 내에 업로드해야 합니다.
 	
-![](/img/car-damage-segmentation-model/socar-app.png){:width="65%" height="65%" style="display: block; margin: 0 auto"}
+![](/img/car-damage-segmentation-model/socar-app.png
 
 - 5) 문제가 없는 경우, 운행을 시작합니다.
 
-<br />
+
 
 ---
 
 
-### 발생할 수 있는 문제 
+## 발생할 수 있는 문제 
+
 쏘카는 카셰어링 업체로, 고객에게 차량을 대여하는 회사입니다. 따라서 차량은 쏘카의 가장 중요한 자원이기 때문에, **차량의 파손 상태를 꾸준히 모니터링하는 것은 반드시 해야 할 일 중 하나입니다.**
 
 차량의 파손에 대한 히스토리를 가장 잘 제공하는 데이터는 고객이 차량 후 상태 확인 과정에서 업로드하는 차량의 외관 이미지라고 판단해 이 데이터를 활용하기로 결정했습니다.
@@ -70,12 +71,12 @@ tags:
 
 파손 시점 추적은 담당자가 직접 차량의 외관 이미지를 현재부터 과거로 추적하며 파손 시점을 찾아내는 식으로 진행되었습니다.
 
-<br />
+
 
 ---
 
 
-<h3 id="index2">문제 해결 방식</h3>
+<h2 id="index2">문제 해결 방식</h2>
 위에도 언급했듯이, 차량 외관 이미지 데이터를 파손 시점 추적 용도로만 주로 사용하기에는 아쉬운 점이 존재했습니다. 
 
 결국 차량 외관 이미지를 적극적으로 활용하지 못한 이유는 업무 리소스를 할당하기에 부담이 크기 때문인데, "반드시 검수 작업을 수기로 진행해야 하는가?"에 대한 의문이 들었습니다.
@@ -84,7 +85,7 @@ tags:
 - 이러한 고민들 끝에, 딥러닝 모델을 이용한 차량 파손 탐지 자동화 프로젝트를 진행했습니다.
 - 주어진 차량 이미지 내의 파손 영역과 파손의 종류를 자동으로 판단하는 딥러닝 모델의 구현을 프로젝트의 목표로 설정했습니다.
 
-![](/img/car-damage-segmentation-model/expected-result.png){:width="100%" height="100%" style="display: block; margin: 0 auto"}
+![](/img/car-damage-segmentation-model/expected-result.png)
 
 
 프로젝트의 목적을 정의했고, 조금 더 구체화할 부분은 다음과 같습니다
@@ -93,28 +94,27 @@ tags:
 - **어떤 데이터**를 사용할 것인지?
 - **어떤 구조**의 모델을 사용하여 문제 해결 목표를 달성할 것인지?
 
-<br />
 
 ---
 
-<h3 id="index3"> 문제 접근 방식 정의 - Semantic Segmentation </h3>
+<h2 id="index3"> 문제 접근 방식 정의 - Semantic Segmentation </h2>
 본격적으로 프로젝트 시작 전, 프로젝트가 어떤 Task인지 정의했습니다.
 
 딥러닝을 이용한 이미지 처리 분야에서 가장 자주 다루게 되는 Task는 다음과 같습니다.
 
-##### 1. Classification
+### 1. Classification
 - 입력으로 주어진 이미지 안의 객체(Object)의 종류(Class)를 구분하는 Task입니다.
 - 예시) MNIST 데이터 세트의 경우, 0부터 9까지 총 10가지의 숫자들을 각각의 Class로 구분.
 
-##### 2. Localization
+### 2. Localization
 - 입력으로 주어진 이미지 안의 객체가 이미지 안의 어느 위치에 존재하는지 위치 정보를 판단하는 Task입니다.
 - 위치 정보의 형태는 주로 Bounding Box를 많이 사용합니다.
 
-##### 3. Object Detection
+### 3. Object Detection
 - 일반적으로 Classification과 Localization을 동시에 수행합니다.
 - 입력으로 주어진 이미지 안의 객체 위치(Localization)와 해당 객체의 종류(Classification)를 출력하는 Task입니다.
 
-##### 4. Segmentation
+### 4. Segmentation
 - Segmentation은 픽셀을 대상으로 한 Classification 문제로 접근할 수 있습니다.
 - 입력으로 주어진 이미지 내에서 각 픽셀이 어떤 클래스에 속하는지 분류합니다.
 - 각 픽셀의 분류된 클래스는 모델이 생성한 결과물인 예측 마스크 (mask)에 픽셀 단위로 기록됩니다. 만일 특정 픽셀이 어떤 클래스에도 해당하지 않는 경우, Background 클래스로 규정해 0을 표기하는 방식을 사용합니다.
@@ -126,7 +126,7 @@ tags:
   - 분할의 기본 단위를 **클래스**로 설정한 분할 문제입니다.
   - 만일 두 개 이상의 사물이 동일한 클래스에 해당하면 이들은 서로 같은 예측 마스크값을 가집니다.
 
-![](/img/car-damage-segmentation-model/semantic_and_instance_segmentation.png){:width="100%" height="100%" style="display: block; margin: 0 auto"}
+![](/img/car-damage-segmentation-model/semantic_and_instance_segmentation.png)
 
 
 다시 정리하면 모델은 **<span style="color:red">주어진 차량 이미지 내의 파손 영역과 파손 종류를 픽셀 단위로 분류</span>**해야 합니다.
@@ -135,11 +135,14 @@ tags:
 
 이러한 점들을 고려했을 때, 모델이 수행해야 하는 행위를 기술적으로 분류 시, **Semantic Segmentation**에 속한다고 설정할 수 있습니다.
 
-<br />
+
 
 ---
 
-<h3 id="index4">데이터 정의 및 준비 - 입력 데이터와 출력 데이터</h3>
+<h2 id="index4">데이터 정의 및 준비</h2>
+
+### 입력 데이터와 출력 데이터
+
 머신러닝/딥러닝 모델 학습에 필요한 데이터의 구조는 입력 데이터와 출력 데이터, 즉 Feature와 Label로 구분할 수 있습니다. 
 
 입력 데이터는 분석의 대상이 되는 데이터로, 알파벳 *X*로 표기합니다. 이는 독립변수, 설명변수라는 용어로 사용되기도 하며, 해당 포스트에서는 Feature라는 용어로 표현하겠습니다.
@@ -188,9 +191,6 @@ tags:
 }
 ```
 
-<br />
-
----
 
 ### Dataset 분리
 이렇게 정의된 데이터를 이용 목적에 따라 분리했습니다. 전체 2,000개 데이터를 학습용 데이터(Training Set), 검증 및 모델 선택용 데이터(Validation Set), 실제 테스트용 데이터(Test Set)로 나누었고, 그 비율은 8:1:1로 설정했습니다.
@@ -201,11 +201,14 @@ tags:
 
 해당 프로젝트에서는 파손 클래스와 전체 이미지 면적 대비 파손 영역이 차지하는 면적 비율이 편향되지 않도록 설정해 Training Set, Validation Set, Test Set으로 분리했습니다.
 
-<br />
+
 
 ---
 
-<h3 id="index5">사용한 모델의 구조</h3>
+<h2 id="index5">모델 정의</h2>
+
+### U-Net 모델과 구조
+
 해당 프로젝트에서는 Semantic Segmentation Task 수행을 위하여 U-Net with EfficientNet 모델을 사용했습니다.
 
 - U-Net이란?
@@ -213,7 +216,7 @@ tags:
 	- 네트워크 형태가 알파벳 U와 비슷하다고 하여 붙여진 이름으로, 의생명공학 이미지 Segmentation을 위해 개발된 모델입니다.
 	- 모델의 구조는 다음과 같습니다.
 
-![](/img/car-damage-segmentation-model/unet-architecture.png){:width="80%" height="80%" style="display: block; margin: 0 auto"}
+![](/img/car-damage-segmentation-model/unet-architecture.png)
 
 - U-Net의 장점
 	- U-Net은 기존의 Segmentation 모델의 문제점을 해결할 수 있습니다
@@ -232,7 +235,7 @@ tags:
 - U-Net with EfficientNet
 	- U-Net의 구조는 알파벳 U의 왼쪽 절반에 해당하는 Contracting Path와 오른쪽 절반에 해당하는 Expanding Path의 2가지 Path로 분리할 수 있습니다.
 
-![](/img/car-damage-segmentation-model/unet-architecture_path.png){:width="80%" height="80%" style="display: block; margin: 0 auto"}
+![](/img/car-damage-segmentation-model/unet-architecture_path.png)
 
 - 1) Contracting Path
 	- Contracting Path는 Encoder의 역할을 수행하는 부분으로 전형적인 Convolution Network로 구성됩니다.
@@ -246,11 +249,8 @@ tags:
 	- Expanding Path에서는 Contracting을 통해 얻은 Feature Map을 Upsampling하고, 각 Expanding 단계에 대응되는 Contracting 단계에서의 Feature Map과 결합해서(Skip-Connection Concatenate) 더 정확한 Localization을 수행합니다.
 	- 즉, Multi-Scale Object Segmentation을 위하여 Downsampling과 Upsampling을 순서대로 반복하는 구조입니다.
 
-<br />
-
----
  
-#### U-Net을 선택한 이유
+### U-Net을 선택한 이유
 - 모델 선택 과정에서 고려 대상이 되었던 모델은 Semantic Segmentation 분야에서 가장 널리 사용되고 있는 U-Net 모델과 DeepLab V3 모델입니다.
 - 일차적으로 두 모델의 성능을 정량적으로 나타내고 싶었으나, 각 모델이 개발된 목적이 달랐고, 논문에 성능 평가를 위해 사용된 지표가 일치하지 않아 정량적인 표현이 어려웠습니다.
 - U-Net 모델의 경우 의학 이미지 Segmentation을 주목적으로 개발된 모델이고, 그에 따라 일반적인 논문에서 사용되는 Pascal VOC 2012, COCO 등의 지표가 아닌 EM Segmentation Challenge의 지표를 사용했기 때문입니다.
@@ -259,16 +259,16 @@ tags:
 - 베이스라인 성능 비교 결과 DeepLab v3은 mIOU 80.7, U-Net은 mIOU 92.2를 기록했습니다.
 - 위의 성능 비교 결과를 통해 해당 프로젝트에선 U-Net을 이용한 Semantic Segmentation이 더 효과적이라 판단했고, 추후 개발 과정에서 U-Net을 사용했습니다.
 
-<br />
+
 
 ---
 
 
-<h3 id="index6">모델 학습(Training) 과정</h3>
+<h2 id="index6">모델 학습(Training) 과정</h2>
 일반적인 머신러닝/딥러닝 모델 학습 과정은 다음 그림과 같습니다.
 
 
-![](/img/car-damage-segmentation-model/general_ml_train_flow.png){:width="100%" height="100%" style="display: block; margin: 0 auto"}
+![](/img/car-damage-segmentation-model/general_ml_train_flow.png)
 
 
 - Feature를 입력으로, 모델의 각 계층(Layer)의 파라미터와의 연산을 통해 예측값을 도출합니다. (Prediction)
@@ -277,7 +277,7 @@ tags:
 
 해당 프로젝트에서 사용한 모델의 학습 과정은 다음 그림과 같습니다.
 
-![](/img/car-damage-segmentation-model/unet_train_flow.png){:width="100%" height="100%" style="display: block; margin: 0 auto"}
+![](/img/car-damage-segmentation-model/unet_train_flow.png)
 
 - Feature는 차량 이미지, Target으로는 마스크(Binary Mask Image)가 사용됩니다.
   - 파손 영역별 좌표 형태(Polygon)로 주어진 입력 파일을 마스크 형식으로 가공합니다.
@@ -293,23 +293,23 @@ tags:
   - 오차 계산을 위해 Binary Cross Entropy(BCE) 함수를 사용합니다. 
 - 이 오차를 최소화하는 방향으로 Segmentation Network의 내부 파라미터를 조정하며 최적화를 진행합니다.
 
-<br />
+
 
 ---
 
-<h3 id="index7">모델 Inference(Prediction) 후처리</h3>
+<h2 id="index7">모델 Inference(Prediction) 후처리</h2>
 학습을 마친 모델을 이용해, 실제로 모델의 예측값을 얻는 과정을 Inference(Prediction)라고 합니다. 
 
 해당 프로젝트에서 사용한 모델의 Inference 과정은 다음 그림과 같습니다.
 
-![](/img/car-damage-segmentation-model/postprocess_after_inference.png){:width="100%" height="100%" style="display: block; margin: 0 auto"}
+![](/img/car-damage-segmentation-model/postprocess_after_inference.png)
 
 - 차량 이미지를 입력으로, 학습이 완료된 Segmentation Network 내부 파라미터와의 연산을 통해 모델의 예측값이 출력됩니다.
   - 출력되는 예측값은 3장의 2차원 예측 마스크입니다.
   - 예측 마스크의 각 픽셀은 대응되는 입력 이미지의 픽셀이 해당 파손 클래스에 속할 확률(Probability Score)을 저장하고 있습니다. 
 - 이 예측 마스크는 Mask Policy에 의해 0과 1의 이진 마스크로 변환됩니다. 0과 1 사이의 연속적인 확률값을 속한다, 속하지 않는다는 이산적인 클래스 정보로 변환하는 과정을 거칩니다.
 
-	![](/img/car-damage-segmentation-model/mask_policy.png){:width="100%" height="100%" style="display: block; margin: 0 auto"}
+	![](/img/car-damage-segmentation-model/mask_policy.png)
 
 - 해당 프로젝트에서 고안해 사용한 Mask Policy는 각 파손 클래스 별 특성을 반영한 규칙입니다.
 	- 프로젝트에서 다룬 파손의 종류는 스크래치 (Scratch), 찌그러짐 (Dent), 이격 (Spacing) 총 3가지인데, 이 파손들의 속성이 서로 다르다고 생각했습니다.
@@ -319,11 +319,11 @@ tags:
 
 - 이렇게 변환된 이진 마스크를 이용해 파손 영역의 좌표를 구하고, 입력 이미지 위에 외곽선(Polyline)을 덧그려 이미지 검수 관리자가 확인하기 편리한 형태로 출력을 마칩니다.
 
-<br />
+
 
 ---
 
-<h3 id="index8">실제 데이터 검증 시 생긴 문제</h3>
+<h2 id="index8">실제 데이터 검증 시 생긴 문제</h2>
 학습된 모델을 사용해 업로드되는 이미지를 검증한 결과, 보완해야 할 점들을 발견했습니다.
 
 이는 크게 모델의 정확도에 대한 문제와 시간적인 제한에 대한 문제로 나눌 수 있었습니다.
@@ -334,12 +334,12 @@ tags:
 	- 1-1) 앱 내에서 차량 외관 촬영 시 가이드라인이 존재하지 않아 사용자들이 사진을 촬영하는 방식이 제각각이었습니다.
 	- 멀리서 찍어 차량이 아닌 주차선이 이미지의 대부분을 차지하거나, 차량 루프를 촬영하는 과정에서 뒤편에 주차된 차량들이 빼곡히 촬영되거나, 뒤편의 건물이 촬영된 이미지들이 종종 있었습니다.
 	
-	![](/img/car-damage-segmentation-model/problem1-without-guideline.png){:width="60%" height="60%" style="display: block; margin: 0 auto"}
+	![](/img/car-damage-segmentation-model/problem1-without-guideline.png)
 
 
    - 1-2) 어두운 곳에서 촬영된 차량 이미지에 취약점을 보였습니다.
 
-	![](/img/car-damage-segmentation-model/problem2-dark-images.png){:width="30%" height="30%" style="display: block; margin: 0 auto"}
+	![](/img/car-damage-segmentation-model/problem2-dark-images.png)
 	     
 
 - 2) **시간적인 제한에 대한 문제**
@@ -348,11 +348,11 @@ tags:
 	- 이는 하루 평균 7-8만장의 이미지를 처리해야 하는 업무 상황에 적절하지 못하다고 판단했습니다.
 	- 이러한 문제점들을 해결하기 위해, 데이터 측면에서 보완할 수 있는 점과 모델 측면에서 보완할 수 있는 점으로 구분해 전체적인 틀을 수정했습니다.
 
-<br />
+
 
 ---
 
-#### 문제점 보완
+## 문제점 보완
 - 1) **데이터 측면에서의 보완 방법**
 	- Data Augmentation을 사용했습니다.
 	- 어두운 곳에서 촬영된 이미지에 취약점을 보이는 문제점을 해결하기 위하여, Training Set에 무작위로 사진의 밝기와 대비를 변경하는 전처리를 가했습니다. (Random Brightness & Contrast Transformation)
@@ -368,18 +368,18 @@ tags:
 
 - 모델의 전체 구조
 
-![](/img/car-damage-segmentation-model/model_architecture.png){:width="100%" height="100%" style="display: block; margin: 0 auto"}
+![](/img/car-damage-segmentation-model/model_architecture.png)
 
 - 전체 Inference 흐름도
 
-![](/img/car-damage-segmentation-model/inference_flow.png){:width="100%" height="100%" style="display: block; margin: 0 auto"}
+![](/img/car-damage-segmentation-model/inference_flow.png)
 
 
-<br />
+
 
 ---
 
-<h3 id="index9">성능 평가</h3>
+<h2 id="index9">성능 평가</h2>
 - 모델의 처리 속도
 	- 이렇게 완성된 모델은 GPU 머신 위에서 초당 약 5장의 이미지를, CPU 머신 위에서 초당 약 0.7장의 이미지를 처리할 수 있습니다.
 - 모델의 정확도
@@ -388,49 +388,49 @@ tags:
 	- Segmentation Network의 성능: Threshold 0.5 기준 96.7의 IoU를 기록했습니다.
 
 - IoU란?
-	- ![](/img/car-damage-segmentation-model/iou.png){:width="50%" height="50%" style="display: block; margin: 1 auto"}
+	- ![](/img/car-damage-segmentation-model/iou.png)
 	- Intersection on Union의 약자로, Segmentation Task 모델의 성능을 평가하는 지표입니다.
 	- IoU는 교집합 영역 넓이 / 합집합 영역 넓이로 계산되며, 이 때 Threshold 값은 한 픽셀이 특정 클래스에 속할 확률값이 몇 이상일 때 클래스에 속한다고 판단을 내릴지에 대한 경곗값입니다. 보편적으로는 Threshold 0.5 값을 기준으로 사용하나 이는 데이터, 모델의 특성 또는 달성해야 하는 목표에 따라 개발자가 조절 가능합니다. 
     
 
-<br />
+
     
 
 ---
 
 
 
-<h3 id="index10">실제 데이터에 적용 예시</h3>
+<h2 id="index10">실제 데이터에 적용 예시</h2>
 다음 예시 이미지들은 실제 앱을 통해 업로드된 차량 이미지들을 입력으로 한 모델의 Inference 결과입니다.
 
-![](/img/car-damage-segmentation-model/result.png){:width="70%" height="70%" style="display: block; margin: 0 auto"}
+![](/img/car-damage-segmentation-model/result.png)
 	
 아래 이미지는 해당 모델을 통해 차량 파손 검수 결과를 제공하고 있는 실제 운영 페이지의 일부입니다.
 
-![](/img/car-damage-segmentation-model/admin.png){:width="100%" height="100%" style="display: block; margin: 0 auto"}
+![](/img/car-damage-segmentation-model/admin.png)
 	
 위와 같이 해당 모델의 검수 결과를 직접 운영 페이지에 녹여냄으로써, 업로드되는 차량 이미지 데이터를 차량 유지, 보수 업무에 적극적으로 활용하게 되었고, 차량 이미지 검수에 투입되었던 인력과 시간비용을 절감할 수 있게 되었습니다.
 
 차량 단위로 파손에 대한 히스토리를 매 예약건마다 시간 순으로 관리하기 때문에, 추후 파손의 책임자를 추적해야 하는 상황이 발생했을 때에도 파손 발생 시점을 바로 추론하는 것이 가능합니다.
 
-<br />
+
 
 ---
 
-<h3 id="index11">추후 발전 방향</h3>
+<h2 id="index11">추후 발전 방향</h2>
 실제 차량 파손 검수를 진행하는 운영 프로세스 내에서 모델의 검수 결과와 검수 인력의 판단 결과가 다른 경우, 해당 피드백을 모델의 2차 학습에 반영시키는 것을 계획하고 있습니다.
 
 이는 정량적인 모델의 성능 향상 뿐만 아니라, 실제 운영 시 의사결정 기준 합의와도 상당 부분 맞물려 있는 피드백으로, 더 '정확한' 모델 뿐만 아닌 더 '사람과 비슷한 의사 결정을 내리는' 모델로의 개선이 이뤄질 수 있을 것으로 기대하고 있습니다.
 ​
 ​​
-<br />
+
 
 차량 파손 탐지 모델 Serving과 관련 글이 추후 업로드될 예정입니다!
 
 ---
 
 
-<h3 id="Reference">Reference</h3>
+<h2 id="Reference">Reference</h2>
 
 - U-Net
 	- [Ronneberger et al. U-net: Convolutional Networks for Biomedical Image Segmentation, 2015.](https://arxiv.org/pdf/1505.04597.pdf) 
