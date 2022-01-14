@@ -1,8 +1,8 @@
 ---
 layout: post
-title: "차량 방전 방지 알림 개발기"
-subtitle: "쏘카 모빌리티Lab - 자동차 시동 배터리를 잘 관리하기 위한 여정 - 두 번째"
-date: 2021-12-31 09:00:00 +0900
+title: "쏘카 모빌리티Lab - 자동차 시동 배터리를 잘 관리하기 위한 여정 - 두 번째"
+subtitle: "차량 방전 방지 알림 개발기"
+date: 2022-01-14 09:00:00 +0900
 category: mobility
 background: '/assets/images/tyler-clemmensen-c5e6HmUTZDk-unsplash.jpg'
 author: charlie
