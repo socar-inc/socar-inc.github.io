@@ -11,17 +11,27 @@ layout: default
     <div class="overlay"></div>
     <div class="container">
       <div class="row">
-        <div class="col-lg-10 col-md-10 mx-auto">
+        <div class="col-lg-9 col-md-9 mx-auto">
           <div class="post-heading">
-            <h1>{{ page.title }}</h1>
+            <h1 class="post-title">{{ page.title }}</h1>
             {% if page.subtitle %}
             <h2 class="subheading">{{ page.subtitle }}</h2>
             {% endif %}
-            <span class="meta">Posted by
-              <a href="#">{% if page.author %}{{ page.author }}{% else %}{{ site.author }}{% endif %}</a>
-              on {{ page.date | date: '%B %d, %Y' }} &middot; {% include read_time.html
-              content=page.content %}
-            </span>
+            <div class="post-meta">
+              {% assign page_authors = page.author | split: ", " %}
+              {% for page_author in page_authors %}
+                {% assign author = site.data.authors[page_author] %}
+                <span class="author"><a href="/authors#{{ author.name }}"><img src="{{ author.image }}">{{ author.name | }}</a></span>
+              {% endfor %}
+                <br>
+                <span class="date">{{ page.date | date: '%Y-%m-%d' }}</span>
+                <br>
+                <span class="category"><a href="/categories#{{ post.category }}">{{ page.category }}</a></span> 
+                <br>
+              {% for tag in page.tags %}
+                <span class="tag"><a href="/tags#{{ tag }}">{{ tag }}</a></span>
+              {% endfor %}
+            </div>
           </div>
         </div>
       </div>
@@ -32,7 +42,7 @@ layout: default
     <div class="toc toc-hidden" id="toc">
     </div>
     <div class="row">
-      <div class="col-lg-10 col-md-10 mx-auto">
+      <div class="col-lg-9 col-md-9 mx-auto">
         <div class="post-content">
         {{ content }}
         </div>

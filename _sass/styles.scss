@@ -1,13 +1,6 @@
 // Import Core Clean Blog SCSS
 @import "../assets/vendor/startbootstrap-clean-blog/scss/clean-blog.scss";
 
-
-.post-content hr {
-  border: 3px solid black;
-  width: 10%;
-  margin: 20px 0 20px 0;
-}
-
 blockquote {
   font-style: normal;
   background-color: #fafafa;
@@ -18,17 +11,16 @@ blockquote {
 
 img {
   display: block; 
-  margin: 0 auto;
+  margin: 40px auto;
   width: 80%;
 }
 
 img + em {
   display: block;
-  margin: 0 auto;
-  width: 80%;
+  margin: -30px auto 0 auto;
+  max-width: 80%;
   text-align: center;
   font-size: 0.8em;
-  margin-top: 5px;
   color: #21252980;
 }
 
@@ -41,12 +33,99 @@ table, th, td {
   padding: 5px
 }
 
+a:hover {
+  text-decoration: none;
+  transition: 0.5;
+}
+
+@media only screen and (min-width: 768px) {
+  header.masthead {
+    .post-heading {
+      padding: 150px 0 50px 0;
+  
+      .post-title {
+        margin-bottom: 10px;
+        font-size: 46px;
+        font-weight: 600;
+      }
+
+      .subheading {
+        font-weight: 400;
+      }
+    }
+  }
+}
+
+header.masthead {
+  .post-heading {
+    padding: 150px 0 50px;
+
+    .post-title {
+      font-weight: 600;
+    }
+
+    .subheading {
+      font-weight: 400;
+    }
+  }
+  
+} 
+
+.post-content {
+  font-size: 18px;
+}
+
+.post-content hr {
+  margin-top: 30px;
+  border: 3px solid black;
+  width: 10%;
+  margin: 80px 0 20px 0;
+}
+
+.post-content h2 {
+  margin: 60px 0 20px 0;
+}
+
+.post-content hr + h2 {
+  margin: 0 0 20px 0;
+}
+
+.post-content h3 {
+  margin: 60px 0 20px 0;
+}
+
+.post-content h4 {
+  margin: 60px 0 20px 0;
+}
+
+.post-content h5 {
+  margin: 60px 0 20px 0;
+}
+
+.post-content > ol, .post-content > ul {
+  margin: 20px 0;
+}
+
+.post-content li, .post-content li > p {
+  margin: 5px 0;
+}
+
+.post-content + hr {
+  margin-top: 20px;
+}
+
+.post-content > .footnotes {
+  margin-top: 70px;
+  border-top: 1px solid #00000080;
+  padding-top: 20px;
+  font-size: 0.75em;
+}
+
 .mermaid {
   border: 1px solid;
   border-radius: 10px;
   padding: 20px;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  margin: 40px 0 40px 0;
 }
 
 .photo-copyright {
@@ -64,13 +143,24 @@ table, th, td {
   color: gray;
 }
 
-.tags {
+.tags, .categories, .authors { 
+  hr {
+    border: 3px solid black;
+    width: 10%;
+    margin: 20px 0 20px 0;
+  }
+  h1:first-child {
+    margin-top: 0px;
+  }
+  h1 {
+    margin-top: 60px
+  }
   .label {
     display: flex;
     flex-wrap: wrap;
-    padding: 2rem 0;
+    padding: 1rem 0;
 
-    .tag-anchor {
+    .anchor {
       display: flex;
       padding: 0 1rem;
       margin: 0.5rem 0;
@@ -80,24 +170,91 @@ table, th, td {
       font-weight: bold;
     }
   }
-  .tagged-posts {
+  .posts {
     padding: 2rem 0;
+
+    h2:first-child {
+      margin-top: 0px;
+    }
+    h2 {
+      margin-top: 50px;
+    }
+    h2 > img {
+      width: 1.75rem;
+      display: inline;
+      border-radius: 50%;
+      margin: 0 5px 0 0;
+    }
+
+    .post {
+      margin-top: 20px;
+      time {
+        font-size: 0.75em;
+      }
+    }
+  }
+}
+
+.post-preview {
+  .post-title {
+    font-weight: 500;
+  }
+}
+
+.post-preview, .post-heading {
+  .post-meta {
+    margin: 30px 0 20px 0;
+    font-size: 0.7em;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 3em;
+    color: black;
+
+    span {
+      margin-right: 2px;
+    }
+    .author, .date, .category, .tag {
+      border-radius: 0.5rem;
+      padding: 6px 10px;
+    }
+    .author {
+      background-color:azure;
+      img {
+        display: inline-block;
+        width: 1em;
+        border-radius: 50%;
+        margin: 0 5px 0 0;
+      }
+    }
+    .date {
+      background-color:lavenderblush;
+    }
+    .category {
+      background-color:ivory;
+    }
+    .tag {
+      background-color: lightgrey;
+    }
   }
 }
 
 .toc {
   width: 15%;
-  max-width: 280px;
+  max-width: 300px;
   left: 0;
   position: fixed;
   top: 50vh;
   transform: translate(0, -50%);
   padding: 20px;
   line-height: 100%;
-  color: #00000090;
+  color: black;
   font-weight: 300;
   visibility: visible;
   transition: all 0.4s cubic-bezier(0.25, 0.8, 0.4, 0.95);
+
+  .is-active-link {
+    font-weight: 400;
+  }
 }
 
 .toc-hidden {

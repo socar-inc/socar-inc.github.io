@@ -14,7 +14,6 @@ tags:
 
 안녕하세요. 모빌리티 플랫폼 그룹 모비딕팀의 레이입니다.
 
-
 문제 하나로 글을 시작합니다.
 
 - 어떤 항목 중에서 임의의 선택을 하되 가중치를 두어야 한다면 어떻게 구현할 수 있을까요?
@@ -23,11 +22,21 @@ tags:
 뜬금없이 가중치 문제로 시작했는데, 이 글에서 제시하는 답은 아래에 있습니다.
 일단 각자 아는 방법대로 구현해 보고 제 방법과 비교해 보시기 바랍니다.
 
+## 목차
+
+- Map 인터페이스와 세 가지 기본 구현체: HashMap, LinkedHashMap, TreeMap
+- Map 기능을 확장한 몇 가지 서브 인터페이스
+- 오늘의 주제: NavigableMap
+- NavigableMap 인터페이스 구현체
+- 간단한 사용 예제
+  - 1) 숫자 범위에 따른 값 할당
+  - 2) 가중치 문제 풀이
+- NavigableMap 전제 조건: 
+- 정리하며
+
 ---
 
-<br />
-
-# Map 인터페이스와 세 가지 기본 구현체: HashMap, LinkedHashMap, TreeMap
+## Map 인터페이스와 세 가지 기본 구현체: HashMap, LinkedHashMap, TreeMap
 
 요즘에는 인터페이스와 구현체를 구분해서 변수를 선언하는 방법이 거의 자리를 잡은 듯 합니다.
 다른 언어는 모르겠지만 자바로 제한한다면 예전에는 선언과 구현체 타입을 같게 지정하는 경우가 많았습니다.
@@ -65,21 +74,26 @@ Map map = new HashMap();
 보통은 이렇게 키의 정렬 순서를 특정하는 목적으로 세 가지 구현체를 상황에 맞게 사용하는 경우가 대부분입니다.
 그리고 많은 사람들이 관심있는 동시성 처리와 관련한 `ConcurrentHashMap` 같은 특수한 환경 아래 동작하는 구현체 이야기는 쉽게 찾아 볼 수 있는데, 이 글에서는 조금 다른 이야기를 해 보려고 합니다.
 
-<br />
+---
 
 ## Map 기능을 확장한 몇 가지 서브 인터페이스
 
 [Java API Doc](https://docs.oracle.com/javase/9/docs/api/java/util/Map.html)(v9)을 보면 `Map`의 서브 인터페이스는 11개 씩이나 됩니다.
-이 중에서 "Map” 하고 관계 있어 보이는 대상은 7개입니다: `ConcurrentMap`, `ConcurrentNavigableMap`, `NavigableMap`, `ObservableMap`, `ObservableMapValue`, `SortedMap`, `WritableMapValue`
+이 중에서 "Map” 하고 관계 있어 보이는 대상은 다음처럼 7개입니다
+
+- `ConcurrentMap`
+- `ConcurrentNavigableMap`
+- `NavigableMap`
+- `ObservableMap`
+- `ObservableMapValue`
+- `SortedMap`
+- `WritableMapValue`
 
 7가지 뿐만 아니라 11가지 인터페이스 모두를 다루었으면 좋겠지만 이 글에서는 이 중에서 `NavigableMap`이 무엇인지, `NavigableMap`의 구현체는 무엇인지를 이야기합니다.
 
 ---
 
-<br />
-
-
-# 오늘의 주제: NavigableMap
+## 오늘의 주제: NavigableMap
 
 `NavigableMap`을 설명하는 내용부터 약간 살펴 보겠습니다.
 ([https://docs.oracle.com/javase/9/docs/api/java/util/NavigableMap.html](https://docs.oracle.com/javase/9/docs/api/java/util/NavigableMap.html))
@@ -116,8 +130,6 @@ public interface NavigableMap<K,V> extends SortedMap<K,V>
 
 jdk 버전 9 기준 `NavigableMap` 고유 메서드는 21개 이지만 이 중에서도 개인적으로 `NavigableMap`의 특징을 잘 드러낸다고 생각하는 `floorEntry()`, `ceilingEntry()`, `lowerEntry()`, `higherEntry()` 네 가지를 설명하겠습니다.
 
-<br />
-
 
 ## NavigableMap 인터페이스 구현체
 
@@ -151,10 +163,9 @@ NavigableMap m = new LinkedHashMap();
 `Map`의 메서드는 25개나 되지만 사실상 `get(key)`, `put(key, value)` 말고는 사용하는 일이 거의 없습니다.
 비슷하게 `NavigableMap`의 21개 메서드 중 4가지 메서드의 특징만 살펴보면 `NavigableMap`을 충분히 사용할 수 있으리라고 생각합니다[^5].
 
-<br />
+## 간단한 사용 예제
 
-
-## 간단한 사용 예제 1: 숫자 범위에 따른 값 할당
+### 1) 숫자 범위에 따른 값 할당
 
 매우 간단한 예제를 살펴 보겠습니다[^6].
 
@@ -214,10 +225,8 @@ API 문서를 보면 이 경우 `null`을 반환한다고 명시했습니다.
 
 조금 더 쓸모있는 예제를 살펴볼까요?
 
-<br />
 
-
-## 간단한 사용 예제 2: 가중치 문제 풀이
+### 2) 가중치 문제 풀이
 
 글 처음에 보여드린 문제 풀이입니다.
 여러분은 어떤 방법으로 풀어 보셨나요? 해결 방법은 다양하지만 `NavigableMap`을 활용하면 비교적 간단하게 풀 수 있습니다.
@@ -256,8 +265,7 @@ val color = map.ceilEntry(Random.nextInt(1, 10)).getValue()
 
 매우 직관적이면서도 간결한 구현입니다.
 
-<br />
-
+---
 
 ## NavigableMap 전제 조건: SortedMap
 
@@ -283,10 +291,9 @@ Java에서는 `SortedMap`이나 `NavigableMap` 구현체가 따로 존재하지 
 저는 아직 `SortedMap`을 써야 할 만한 문제를 겪지는 않았습니다.
 언젠가는 이를 써서 해결해야 할 문제를 마주하게 될 날도 오겠지요.
 
-<br />
+---
 
-
-# 정리하며
+## 정리하며
 
 Map은 상당히 많이 사용하는 자료 구조입니다.
 대부분 `HashMap` 정도면 충분하지만 때로는 키 정렬 순서 때문에 `LinkedHashMap`, `TreeMap`을 사용하는 경우가 종종 있습니다.
@@ -295,8 +302,6 @@ Map은 상당히 많이 사용하는 자료 구조입니다.
 내부 구현의 차이가 있지만 단순한 키 - 값 대응만 사용하는 `Map` 을 넘어서 `Map`의 확장 인터페이스인  `NavigableMap` 관점으로 `TreeMap` 구현체를 어떻게 사용할 수 있는지 간략히 살펴 보았습니다.
 
 다음에는 `NavigableMap`으로 조금 더 깊이 있는 활용 사례를 선보이는 시간을 갖도록 하겠습니다.
-
-<br />
 
 
 [^1]: 엄밀히 이야기하면 `Hashtable`은 추상 클래스인 `Dictionary`를 상속한 구현체입니다. 자바 설계 당시 인터페이스 개념은 추상 클래스보다 늦게 도입한 개념입니다.
