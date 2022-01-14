@@ -11,6 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: "맞춤법 검사"
-      uses: heumsi/korean-grammar-action@v0.2.7
+      uses: heumsi/korean-grammar-action@v0.2.8
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
