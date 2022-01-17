@@ -72,3 +72,13 @@ dini:
   name: dini
   organization: 데이터 플랫폼 팀
   image: '/assets/authors/dini.jpeg'
+
+bada:
+  name: bada
+  organization: 모비딕 팀
+  image: '/assets/authors/bada.png'
+
+oliver:
+  name: oliver
+  organization: 모비딕 팀
+  image: '/assets/authors/oliver.png'
