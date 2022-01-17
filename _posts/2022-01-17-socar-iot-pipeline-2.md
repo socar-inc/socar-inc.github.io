@@ -142,7 +142,7 @@ Kafka 주제는 어떤 토픽에 메시지를 저장할 것인지 토픽명을 �
 
 이렇게 메시지를 IoT Core에서 Kafka 토픽으로 무사히 전달했습니다!
 
-### 텔레매틱스 서버에서의 메시지 생성
+#### 텔레매틱스 서버에서의 메시지 생성
 기존에 차량과 통신 할 때에는 총 두 채널로 통신을 했었어요. 명령전달은 MQ로 하고, 명령에 대한 응답보고 혹은 상태보고들을 텔레매틱스 서버로 https방식의 보고를 하고있었습니다. 이 때, 신규 sts단말기의 데이터형태와 구형 단말기(CSA단말기)의 형태가 달라 데이터를 호환시켜주는 모듈을 거쳐 동일하게 데이터가 Socar DB에 적재될 수 있도록 하는 일련의 과정들을 거칩니다. 이번 프로젝트에서는 텔레매틱스 서버가 AWS IoT Core로 전환하는 것이 목표였는데, 그 핸드오버 과정중에서 누락되는 역할이 없도록, 기존과 호환성을 잘 가져 갈 수 있도록 하는것이 우선적인 목표였어요
 텔레매틱스 서버는 하나의 프로듀서처럼 Kafka로 데이터를 제공하는 역할을 하게 됩니다. 차량에서 전송 된 상태보고 데이터, Kinematic 데이터, 주행 데이터들을 텔레매틱스 서버가 잘 조립해서 Kafka로 전달하게 됩니다. 
 
@@ -156,11 +156,11 @@ Kafka로 데이터를 보내기위해 작업하는 도중, 서버 앞단의 트�
 
 IoT Core를 도입하면서 telematics 서버의 역할을 점차 줄여나가고, 결국에는 telematics 서버의 역할을 Kakfa와 연결 된 Consumer들에서 처리 할 수 있도록 기능들을 점차 옮기려고 해요. 현재는 여러 차량들을 놓고 테스트 해 보고 있는데요, IoT Core를 적용 한 차량이 기존 차량과 동일하게 큰 어려움 없이 차량 데이터를 보내주고 있어요. 아직은 초기지만, 많은 차량들이 점차 업데이트가 되어서  IoT Core로 데이터를 보낼 수 있게 되는 날이 벌써 기대가 됩니다.  
 
-## Consumer
+### Consumer
 이제 수집된 차량 정보가 Kafka 토픽에 안전하게 저장되어 있습니다. 이제 이 데이터를 적재적소에 가져다가 활용하면 됩니다.
 하지만 카프카는 영구 저장소가 아니라서, 우리가 설정한 값에 따르면 2일 후에 사라지게 됩니다. 먼저 이를 더 오랫동안 보관하고 활용할 수 있는 공간으로 먼저 저장해야 합니다. 이런 툴을 일일이 개발해야 할까요?
 
-### Kafka Connect
+#### Kafka Connect
 물론 자신있는 언어의 카프카 클라이언트를 이용하여 컨슈머를 한 땀 한 땀 개발할 수도 있겠지만, Kafka 생태계에서는 카프카와 다른 데이터 시스템 사이를 쉽고 믿을 수 있게 이어줄 수 있는 툴 Kafka Connect를 제공합니다.
 
 많은 회사와 개발자들이 사용하는 RDBMS부터 NoSQL, S3같은 클라우드 저장소, ElasticSearch 등 수많은 데이터 시스템과 카프카를 이어주는 Connector를 컨플루언트가 공식적으로 제공하고 있으며, 커뮤니티에서 만든 비공식의 Connector들도 활발하게 만들어져 있어 Kafka connect 클러스터만 구축한다면 Connector들을 바로 사용할 수 있습니다.
@@ -171,7 +171,7 @@ IoT Core를 도입하면서 telematics 서버의 역할을 점차 줄여나가�
 
 Kafka Connect 클러스터는 구축되어 있다고 가정하고, 바로 Sink connector를 설정해보겠습니다. Kafka Connect에서는 Connector를 실행시킬 수 있는 REST API를 제공합니다. S3와 Elasticsearch Sink Connector를 세팅하면서 자세히 알아보도록 하겠습니다.
 
-### S3 Sink Connector
+##### S3 Sink Connector
 컨플루언트에서 공식으로 제공하는 S3 Sink Connector입니다.
 다음 요청을 통해 해당 커넥터를 이용한 Worker를 생성할 수 있습니다.
 
@@ -279,7 +279,7 @@ GET ${카프카_커넥트_호스트}/connectors?expand=info&expand=status
 
 Kafka Connect의 Worker들은 동작하면서 필요한 메타데이터를 Kafka에 별도의 토픽으로 저장합니다. Worker는 자신의 업무 프로세스를 기억하기 위해 순차적으로 토픽의 파티션에서 데이터를 읽어가면서 책갈피를 꽂아둡니다. 이 책갈피를 Offset이라고 하는데요. Kafka Connect는 프로세스가 죽어서 Worker가 재시작되는 상황이 발생해도 이 메타데이터를 다시 읽어와 책갈피를 꽂은 부분에서부터 다시 데이터를 읽어가도록 설계되어 있습니다.
 
-### Elasticsearch Sink Connector
+##### Elasticsearch Sink Connector
 S3에 무사히 적재했다면, 다음은 분석과 연구를 위한 Elasticsearch에 적재해보겠습니다. 컨플루언트에서 공식으로 제공하는 Elasticsearch Sink Connector를 사용합니다. S3 Sink Connector와 같은 방식으로 생성하는데, 다음과 같은 요청을 통해 Elasticsearch Sink Worker를 실행할 수 있습니다.
 
 ```json
