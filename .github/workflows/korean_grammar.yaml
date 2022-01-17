@@ -1,12 +1,16 @@
-# name: Check korean grammar on pull request
+name: Check korean grammar on pull request comment
 
-# on: [pull_request]
+on:
+  issue_comment:
+    types:
+      - created
 
-# jobs:
-#   grammar_check:
-#     runs-on: ubuntu-latest
-#     steps:
-#     - name: "맞춤법 검사"
-#       uses: heumsi/korean-grammar-action@v0.2.7
-#       env:
-#         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+jobs:
+  grammar_check:
+    if: ${{ github.event.issue.pull_request && github.event.comment.body == '/맞춤법'}}
+    runs-on: ubuntu-latest
+    steps:
+    - name: "맞춤법 검사"
+      uses: heumsi/korean-grammar-action@v0.2.8
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
