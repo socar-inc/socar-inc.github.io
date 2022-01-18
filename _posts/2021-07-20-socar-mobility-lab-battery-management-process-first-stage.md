@@ -1,7 +1,7 @@
 ---
 layout: post
-title: "쏘카 모빌리티Lab - 자동차 시동 배터리를 잘 관리하기 위한 여정"
-subtitle: "배터리 종합 관리 프로젝트"
+title: "자동차 배터리를 더 소중하게 공학적으로 관리하기 #1"
+subtitle: "배터리의 특성과 상태를 기준으로"
 date: 2021-07-20 09:00:00 +0900
 category: mobility
 background: '/assets/images/tyler-clemmensen-c5e6HmUTZDk-unsplash.jpg'
