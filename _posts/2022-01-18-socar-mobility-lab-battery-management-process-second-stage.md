@@ -2,7 +2,7 @@
 layout: post
 title: "자동차 배터리를 더 소중하게 공학적으로 관리하기 #2"
 subtitle: "차량 방전 위험 검출 로직과 알림봇 개발하기"
-date: 2022-01-14 09:00:00 +0900
+date: 2022-01-18 12:00:00 +0900
 category: mobility
 background: '/assets/images/tyler-clemmensen-c5e6HmUTZDk-unsplash.jpg'
 author: charlie
