@@ -15,7 +15,7 @@ tags:
 ---
 
 리팩토링 작업은 한두 개의 함수를 개선하는 것으로 충분한 때도 있지만, 때로는 여러 개의 파일을 전체적으로 고치고 나서야 끝이 나는 경우도 있습니다.
-복잡한 로직을 수정하는 것이 아니라 단순한 코드 변경이라고 생각해서 예상 작업량을 짧게 잡고 덤벼들었다가도, 리팩토링의 대상이 되는 코드가 곳곳에 사용되고 있다면 코드 전체를 수정하는 것에는 최초의 예상보다 많은 시간이 소요되어 난처해지는 경우도 생기곤 합니다.
+복잡한 로직이 아닌 단순한 코드 수정 작업이라 생각하여 가볍게 시작하더라도, 리팩토링의 대상이 되는 코드가 곳곳에 사용되고 있다면 처음에 생각한 예상 시간보다 많은 시간이 걸려 난처해지는 경우도 생기곤 합니다.
 또한 그 과정에서 처음에는 예상하지 못했던 특이한 케이스라던가, 수정 과정에서 실수로 빠트리는 부분, 반복되는 동일 작업으로 인한 집중력 하락 등으로 인해 일정이 밀리다 보면 '리팩토링을 시작하지 말았어야 했나?' 하는 생각이 드는 경우도 있습니다.
 
 안녕하세요, 쏘카 안드로이드팀의 지안(전현기)입니다. 저희 안드로이드팀에서도 몇 개월 전, 광범위한 코드에 대한 리팩토링을 수행한 경험이 있습니다.
@@ -168,17 +168,15 @@ platformPlugins = ..., java, Kotlin
 
 ## PSI 사용하기
 실질적으로 코드를 다루는 작업은 IntelliJ platform에서 제공하는 인터페이스인 [PSI(Program Structure Interface)](https://plugins.jetbrains.com/docs/intellij/psi.html)를 통해서 진행합니다.
-여기서 PSI란 [이곳](https://plugins.jetbrains.com/docs/intellij/implementing-parser-and-psi.html)에 적혀있는 것처럼 특정 언어를 다루기 쉽도록 IntelliJ platform이 파싱한 AST 요소들 위에 부가정보(문법적인 정보나, 언어 특유의 속성)들을 더한 것입니다.
+여기서 PSI란 [공식 문서](https://plugins.jetbrains.com/docs/intellij/implementing-parser-and-psi.html)에 적혀있는 것처럼 특정 언어를 다루기 쉽도록 IntelliJ platform이 파싱한 AST 요소들 위에 부가정보(문법적인 정보나, 언어 특유의 속성)들을 더한 것입니다.
 저희는 위에서 적었던 `platformPlugins = ..., Kotlin`을 통해서 IntelliJ Kotlin plugin이 제공하는 Kotlin PSI를 사용할 수 있게 되었습니다.
 
-즉, 위에서 `Kotlin` 의존성을 추가해 줌으로써 `org.jetbrains.kotlin.psi.KtClass`와 같이 `org.jetbrains.kotlin` 패키지에 있는 내용을 우리가 만드는 플러그인 코드에서 사용할 수 있고, 그래서 이제 이 플러그인에서 아래와 같은 동작을 할 수 있게 되었습니다.
+즉, 위에서 `Kotlin` 의존성을 추가해 줌으로써 `org.jetbrains.kotlin.psi.KtClass`와 같이 `org.jetbrains.kotlin` 패키지에 있는 내용을 우리가 만드는 플러그인 코드에서 사용할 수 있습니다.
+결과적으로 우리가 만드는 플러그인에서 PSI tree에 있는 이 Kotlin PSI element에 대해 다음과 같은 동작들을 해볼 수 있습니다.
 
-PSI tree에 있는 이 Kotlin PSI element에 대해서
 - 해당 element가 class인지 property인지 function인지 판별
 - 이 element를 참조하고 있는 다른 element로 이동
 - AST에 있는 하위 element들은 어떤 것들이 있는지 확인
-
-등의 다양한 동작을 해볼 수 있습니다.
 
 ### 모든 KtClass 이름 출력
 Kotlin PSI를 사용해서 프로젝트에 있는 모든 `.kt` 파일에 정의된 Kotlin class의 이름을 출력해 보려면 아래와 같은 함수를 만들어서 사용해 볼 수 있습니다.
@@ -202,7 +200,8 @@ Sandbox IDE에서 열린 프로젝트의 `KtClass` 이름들이 아래쪽의 콘
 다만 프로젝트가 열리는 시점에는 indexing이 끝나지 않아 모듈이나 파일 목록들이 아직 구성되지 않은 상태일 수도 있기 때문에 위와 같이 `DumbService.getInstance(project).runWhenSmart()`를 사용해서 indexing이 완료된 후에 실행될 수 있도록 했습니다.
 
 ### 특정 프로퍼티 가져오기
-그렇다면 `KtClass`안에 정의된, `bindView`를 사용하는 프로퍼티와 연결된 XML ID는 어떻게 가져올 수 있을까요?
+그렇다면 `KtClass` 내부에 정의된 `bindView`를 사용하는 프로퍼티와 연결된 XML ID는 어떻게 가져올 수 있을까요?
+
 클래스 안에 정의된 프로퍼티를 가져와서 그 PSI tree를 보면서 `bindView`를 사용하고 있는지, 그리고 어떤 ID를 사용하는지 확인해 보면 됩니다.
 현재 활성화된 파일의 PSI tree가 어떤 식으로 구성되어 있는지 간단하게 확인해 보기 위해 [이 문서](https://plugins.jetbrains.com/docs/intellij/explore-api.html#31-use-internal-mode-and-psiviewer)에 나와 있는 것처럼 IntelliJ Plugins Marketplace에 있는 *PsiViewer* 플러그인을 사용했습니다.
 
