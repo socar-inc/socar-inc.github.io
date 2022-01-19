@@ -33,7 +33,7 @@ tags:
 
 [지난 글](https://socarcharlie.github.io/mobility/2021/07/20/socar-mobility-lab-battery-management-process-first-stage.html)을 보면 쏘카에서 일어나는 배터리 방전의 60% 이상이 고객의 사용 습관과 밀접하다고 말씀드렸습니다. 그러나 배터리 방전을 고객께서 의도적으로 내지는 않습니다. 대부분은 어떤 상황에서 방전이 되는지 잘 모르시기 때문에 일어나곤 합니다.
 
-저 역시 의도치 않게 쏘카 차량의 방전을 일으킬만할 경험이 있습니다. 제가 보유하고 있는 차는 시동 버튼을 두 번 눌러 시동을 완전히 종료시키는 반면, 쏘카 차량 (현대/기아차, Jeep)은 시동 버튼을 한 번만 눌러도 시동 종료가 이루어졌습니다. 기어 상태도 시동을 종료하면 자동으로 주차 모드로 바뀌는 제 차와 달리 기어 봉을 직접 P로 옮겨주어야 했습니다. 사실 자동 변속기 차량에서 시동을 P에 두고 시동을 종료하는 일은 대단히 당연합니다. 단지 제가 익숙한 방식과 조금 달랐기에 이런 실수를 저질렀고, 그 결과 차량 반납 불가의 메시지를 받았습니다. 저와 비슷한 상황에 놓였던 고객과 핸들러 입장에서 가사동이나 기어본 P가 아닌 D 혹은 R 모드 중 강제 반납으로 인한 방전 상황 노출이 대단히 쉬운 일임을 깨닫게 된 순간이었습니다.
+저 역시 의도치 않게 쏘카 차량의 방전을 일으킬만할 경험이 있습니다. 제가 보유하고 있는 차는 시동 버튼을 두 번 눌러 시동을 완전히 종료시키는 반면, 쏘카 차량 (현대/기아차, Jeep)은 시동 버튼을 한 번만 눌러도 시동 종료가 이루어졌습니다. 기어 상태도 시동을 종료하면 자동으로 주차 모드로 바뀌는 제 차와 달리 기어 봉을 직접 P로 옮겨주어야 했습니다. 사실 자동 변속기 차량에서 시동을 P에 두고 시동을 종료하는 일은 대단히 당연합니다. 단지 제가 익숙한 방식과 조금 달랐기에 이런 실수를 저질렀고, 그 결과 차량 반납 불가의 메시지를 받았습니다. 저와 비슷한 상황에 놓였던 고객과 핸들러 입장에서 가시동이나 기어봉 P가 아닌 D 혹은 R 모드 중 강제 반납으로 인한 방전 상황 노출이 대단히 쉬운 일임을 깨닫게 된 순간이었습니다.
 
 주위에 비슷한 사례가 있나 싶어 지인들에게 물어보니, 쏘카 패스를 구독하는 저의 친구 역시 비슷한 경험이 있었습니다. 몹시 더운 여름 어느날 주차 중에 에어컨을 켜고 싶어서 가시동 상태로 송풍기를 열심히 돌리면서 노래도 들었다고 합니다. 그렇게 한 시간 정도가 지났고 차를 다시 움직여 이동하려고 하는데 시동이 걸리지 않았다고 합니다. 친구는 가시동 상태에서 송풍기를 돌리고(에어컨 컴프레셔는 멈춰있어서 바람만 나왔을텐데) 차량 스피커로 음악을 들으면 필요한 전력을 모두 차량 배터리에서 가져 온다는 사실을 몰랐습니다.
 
@@ -133,9 +133,10 @@ SW. ACC2 + 실내등 2개 (문 앞뒤 열림) + 송풍기 4단계 + Light 3단 +
 
 
 
-![](/img/socar-mobility-lab-battery-management-process-second-stage/Figure-2.jpg){: width="90%" height="90%" style="display: block; margin: 0 auto"}
+![](/img/socar-mobility-lab-battery-management-process-second-stage/Figure-2.jpg)
 *블루투스 계측기를 이용한 전류 측정*
-![](/img/socar-mobility-lab-battery-management-process-second-stage/Figure-3.png){: width="90%" height="90%" style="display: block; margin: 0 auto"}
+
+![](/img/socar-mobility-lab-battery-management-process-second-stage/Figure-3.png)
 *같은 잔존 수명을 가진 배터리가 암전류의 유무에 따라 시간당 전압 변화율이 어떻게 달라지는지 보여주는 예시*
 
 
@@ -150,7 +151,7 @@ SW. ACC2 + 실내등 2개 (문 앞뒤 열림) + 송풍기 4단계 + Light 3단 +
 
 데이터 수집은 위에서 정한 대로 10분마다 이루어지며 1~3은 모두 OR 조건으로 엮입니다. 따라서 어느 한 조건이라도 충족이 되면 그 차량은 알림의 대상이 됩니다. 
 
-![](/img/socar-mobility-lab-battery-management-process-second-stage/Figure-4.png){: width="90%" height="90%" style="display: block; margin: 0 auto"}
+![](/img/socar-mobility-lab-battery-management-process-second-stage/Figure-4.png)
 *실행 프로세서의 순서도. 실제 시스템 구축은 모비딕 팀 스팍께서 해주셨습니다.*
 
 
