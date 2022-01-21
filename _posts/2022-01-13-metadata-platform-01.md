@@ -12,7 +12,7 @@ tags:
     - data-engineering
 ---
 
-안녕하세요, 쏘카 데이터엔지니어링 그룹, 데이터플랫폼팀의 디니입니다. 
+안녕하세요. 데이터 플랫폼 팀의 디니입니다. 
 
 여러분, 혹시 도서관에서 가서 책을 찾아보신 경험이 있으신가요? 방대한 도서관에서 원하는 책을 찾으려면 책의 제목, 저자, 분류 기호 같은 정보가 매우 중요합니다. 이런 정보가 없다면 책을 찾기가 많이 힘들어질 겁니다. 
 
@@ -34,17 +34,19 @@ tags:
 
   
 
-# 1. 데이터 디스커버리란 무엇인가요?  <a name="what-is-metadata"></a>
+---
+## 1. 데이터 디스커버리란 무엇인가요?  <a name="what-is-metadata"></a>
 
 ## 데이터 디스커버리의 정의
 
-**데이터 디스커버리(Data Discovery)**란, "원하는 데이터를 쉽고 빠르게 찾을 수 있다" 의 개념입니다. 빅 데이터 시대에는 많은 양의 데이터가 여러 형태로 존재합니다. 여러 사람이 데이터를 생산 및 소비하고 시간이 지나게 되면 히스토리 파악도 복잡해지기도 합니다. 데이터 디스커버리는 이런 상황에서 어떤 데이터가 어떻게 존재하는지 한 곳에서 관리하고 이용하게 하는 절차에 가깝습니다. 
+**데이터 디스커버리(Data Discovery)**란, "원하는 데이터를 쉽고 빠르게 찾을 수 있다" 의 개념입니다. 빅 데이터 시대라는 흐름에 맞게, 회사에도 많은 양의 데이터가 여러 형태로 존재하게 되었습니다. 그리고 많은 사람이 데이터를 생산 및 소비하고 시간이 지나게 되면서 히스토리 파악도 점점 복잡해지기 시작합니다. 이런 상황에서 데이터 디스커버리는 "어떤 데이터"가 "어디에" "어떻게 존재"하는지를 쉽고 편하게 운영하기 위한 절차에 가깝습니다. 
 
-이런 데이터 디스커버리에는 "메타데이터"라는 개념이 중요합니다. 메타데이터는 간단히 말해서 테이블 정보, 칼럼 정보, 코멘트, 테이블을 만든 사람(오너), 테이블 사이의 관계 (데이터 리니지) 등을 말합니다. 이러한 메타데이터가 잘 관리되는 것이 데이터 디스커버리의 초석입니다.
+이런 데이터 디스커버리에는 "메타데이터"라는 개념이 중요합니다. 메타데이터는 간단히 말해서 테이블 정보, 칼럼 정보, 코멘트, 테이블을 만든 사람(오너), 테이블 사이의 관계 (데이터 리니지) 등을 말합니다. 이러한 메타데이터를 잘 관리하는 것이 데이터 디스커버리의 초석입니다.
 
 ## 데이터 디스커버리의 중요성
 
-데이터를 이용하는 기업에서, 데이터 디스커버리는 업무 효율성에 매우 중요합니다. 사내에서는 매우 다양한 데이터가 존재하고, 여러 배경의 사람들이 이런 데이터를 분석, 기획 등의 업무에 이용하려고 합니다. 하지만, 실제로 업무에 이용하기도 전에 "어떤 데이터를 어디서 찾아야 하는지", 혹은 "이 테이블의 데이터가 어떤 의미인지"를 파악하는 데에 대부분의 시간을 소요하게 된다면, 업무의 효율성이 매우 떨어지게 될 것입니다. 데이터 디스커버리가 잘 관리된다면, 이런 비효율성을 피할 수 있습니다.
+데이터를 적극적으로 활용하는 기업에서, 업무 효율성에 있어서 데이터 디스커버리는 매우 중요한 부분입니다. 사내에 많은 직원들이 데이터를 활용하여 분석, 기획 등의 업무에 이용하려고 할텐데, 자신에게 필요한 데이터가 "어디에 있는지", "이 데이터가 어떤 의미인지"를 파악하는 데에 대부분의 시간을 소요하게 된다면, 업무 효율성이 매우 떨어지게 될 겁니다.  
+데이터 디스커버리를 도입하여 잘 관리한다면, 이런 비효율성을 피할 수 있습니다.
 
 # 2. 데이터 디스커버리 플랫폼이 왜 필요한가요?  <a name="why-we-need-metadata-platform"></a>
 
@@ -84,9 +86,10 @@ tags:
 
 ## PoC 과정 소개
 
-PoC 는 Proof Of Concept 의 준말로, 어떤 개념을 실제로 도입하기 전 테스트해보는 단계, 줄여서 찍먹(!) 이라고 생각하시면 데이터 디스커버리 플랫폼을 선정하기 전, 비교적 대중적이면서 공식 문서 등의 지원이 풍부힌 Datahub 와 Amundsen 을 선정하여 PoC를 하기로 결정했습니다. 
+디스커버리 플랫폼을 선정하기 전, 공식 문서 등의 지원이 풍부하고, 일반적으로 많이 쓰이는 Datahub와 Amundsen을 직접 배포하고 테스트하며 비교하는 PoC 과정을 거쳐보기로 했습니다. 
 
-이 두 플랫폼을 직접 배포하고 다양한 시나리오를 테스트하면서 사용성, UI, 문서화, 권한, 인증 등 다양한 측면에서 비교분석을 진행했습니다. 이 글에서는 그 중 중요한 컨셉을 간추려서 소개드리려고 합니다. (각종 비교 자료는 글 작성 시점을 기준으로 합니다.)
+사용성, UI, 문서화, 권한, 인증 등 다양한 측면에서 비교해보았는데, 이 글에서는 그 중 중요한 컨셉을 간추려서 소개해보겠습니다.
+
 
 ## Datahub VS Amundsen 비교분석
 
@@ -94,9 +97,14 @@ PoC 는 Proof Of Concept 의 준말로, 어떤 개념을 실제로 도입하기 
 
 ### 0) 구조
 
-두 플랫폼의 구조에는 다음과 같은 공통점이 있습니다 : React 기반 frontend, Elasticsearch 기반 search engine, neo4j 기반 graph DB, mysql 기반 storage.
+두 플랫폼의 구조에는 다음과 같은 공통점이 있습니다.
 
-반면에 차이점은, Datahub 는 데이터를 주입할때 Kafka 를 사용한다는 점입니다. 즉 메타데이터 플랫폼 프레임워크의 히스토리를 살펴봤을 때, Amundsen 은 1세대 (monolith) 방식인 반면, Datahub는 3세대 (Event-based) 방식입니다. 메타데이터 플랫폼의 히스토리에 대해서 좀더 궁금하신 분들은, LinkedIn 의 엔지니어링 블로그에 작성된 [DataHub: Popular metadata architectures explained](https://engineering.linkedin.com/blog/2020/datahub-popular-metadata-architectures-explained) 글을 살펴보세요. 
+- React 기반 Frontend
+- Elasticsearch 기반 Search Engine
+- Neo4j 기반 Graph DB
+- MySql 기반 Storage
+
+반면에 차이점은, Datahub 는 데이터를 주입할때 Kafka 를 사용한다는 점입니다. 즉 메타데이터 플랫폼 프레임워크의 히스토리를 살펴봤을 때, Amundsen 은 1세대 (Monolith) 방식인 반면, Datahub는 3세대 (Event-based) 방식입니다. 메타데이터 플랫폼의 히스토리에 대해서 좀더 궁금하신 분들은, LinkedIn 의 엔지니어링 블로그에 작성된 [DataHub: Popular metadata architectures explained](https://engineering.linkedin.com/blog/2020/datahub-popular-metadata-architectures-explained) 글을 살펴보세요. 
 
 ### 1) 메타데이터 주입 방식
 
@@ -113,11 +121,11 @@ PoC 는 Proof Of Concept 의 준말로, 어떤 개념을 실제로 도입하기 
 
 ![amundsen-ingestion-script](/img/data-discovery-platform-01/amundsen-ingestion-script.png)*Amundsen의 Bigquery 데이터 주입 script*
 
- 흥미로운 점은, 같은 기능을 수행할때 Datauhb 와 Amundsen 의 script 길이 차이였습니다 Datahub 에서는 10줄 내외의 직관적인 yaml 코드로 가능한 반면, Amundsen의 script는 때에 따르지만 기본적으로 50 줄 이상이었습니다. 개인적으로 스크립트가 긴 만큼 섬세한 커스텀이 가능하거나 필요하다는 생각은 들지 않았고, 오히려 읽기 헤비하다는 생각이 들었습니다. (공식 깃헙에 있는 샘플이 400줄이었습니다.)
+ 흥미로운 점은, 같은 기능을 수행할때 Datauhb 와 Amundsen 의 **script 길이 차이**였습니다 Datahub 에서는 10줄 내외의 직관적인 yaml 코드로 가능한 반면, Amundsen의 script는 때에 따르지만 기본적으로 50 줄 이상이었습니다. 개인적으로 스크립트가 긴 만큼 섬세한 커스텀이 가능하거나 필요하다는 생각은 들지 않았고, 오히려 읽기 무겁다는 생각이 들었습니다. (공식 깃헙에 있는 샘플이 400줄이었습니다.)
 
 ### 2) UI
 
-개인 차가 있을 수 있으나, 내부 의견으로는 Datahub 이 훨씬 깔끔하고 보기 편하다는 의견이 많았습니다. Datahub UI 는 [공식 데모 사이트](https://demo.datahubproject.io/)에서 좀더 확인하실 수 있습니다. (Amundsen은 따로 데모사이트를 제공하지 않습니다.)
+개인 차가 있을 수 있으나, 팀원들의 의견으로는 Datahub 이 훨씬 깔끔하고 보기 편하다는 의견이 많았습니다. Datahub UI 는 [공식 데모 사이트](https://demo.datahubproject.io/)에서 좀더 확인하실 수 있습니다. (Amundsen은 따로 데모사이트를 제공하지 않습니다.)
 
 ![datahub-main](/img/data-discovery-platform-01/datahub-main.png)*데이터허브 메인 UI*
 
@@ -125,17 +133,18 @@ PoC 는 Proof Of Concept 의 준말로, 어떤 개념을 실제로 도입하기 
 
 ![amundsen-main](/img/data-discovery-platform-01/amundsen-main.png)*아문센 메인 UI*
 
-![amundsen-main](/img/data-discovery-platform-01/amundsen-main.png)*아문센 상세 UI*
+![amundsen-main](/img/data-discovery-platform-01/amundsen-main.png)*Amundsen 상세 UI*
 
 ### 3) 문서 기능
 
-* Datahub 는 테이블 별 / 칼럼 별 태그 부여가 가능합니다.
-* Amundsen 은 테이블 별 태그 부여가 가능합니다.
+- Datahub 
+  - 테이블 별 / 칼럼 별 태그 부여가 가능합니다.
+  - 테이블 별 / 칼럼 별 풍부한 마크다운 문서 작성이 가능하고, 원본 소스의 description 을 보존합니다.
+- Amundsen 
+  - 테이블 별 태그 부여가 가능합니다.
+  - 역시 테이블 별 / 칼럼 별 마크다운 제한적인 문서 작성이 가능하고, 원본소스의 description 을 보존하지 않습니다.
 
-* Datahub 는 테이블 별 / 칼럼 별 풍부한 마크다운 문서 작성이 가능하고, 원본 소스의 description 을 보존합니다.
-* Amundsen 역시 테이블 별 / 칼럼 별 마크다운 제한적인 문서 작성이 가능하고, 원본소스의 description 을 보존하지 않습니다.
-
-중요한 점은, 플랫폼 UI 상에서 테이블 혹은 칼럼의 설명을 작성했을 때 원본 소스의 description 을 따로 확인할 수 있는지의 여부였습니다. Datahub 는 다음과 같은 방식으로 original description 을 동시에 보여주지만, Amundsen 은 딱히 그런 기능이 없었습니다. 또한 Datahub 는 원본 description 과 UI 상 description이 별개로 버전 관리가 되고 있어서, 한쪽의 수정이 다른 쪽에 영향을 끼치지 않았습니다. 
+중요한 점은, 플랫폼 UI 상에서 테이블 혹은 칼럼의 설명을 작성했을 때 원본 소스의 description 을 따로 확인할 수 있는지의 여부였습니다. Datahub는 다음과 같은 방식으로 original description 을 동시에 보여주지만, Amundsen 은 딱히 그런 기능이 없었습니다. 또한 Datahub는 원본 description 과 UI 상 description이 별개로 버전 관리가 되고 있어서, 한쪽의 수정이 다른 쪽에 영향을 끼치지 않았습니다. 
 
 ![datahub-dataset](/img/data-discovery-platform-01/datahub-description.png)*UI 상 수정을 하더라도 "Original"(원본 코멘트) 이 함께 표기됩니다.*
 
@@ -202,11 +211,11 @@ Datahub 의 공식 슬랙 채널에는 현재 2000명이 넘는 사람이 활동
 
 개인적인 경험으로는 공식 채널에 질문을 올리면 답이 안달리는 경우가 거의 없었던 것 같습니다. 국내에 데이터 디스커버리 플랫폼 관련 자료가 많지 않고, 팀에 합류하지 얼마 되지 않은 신입 엔지니어의 입장에서는 이런 활발한 서포트가 있다는 것이 매우 중요했습니다. 여담으로 PoC 과정에서 데이터허브 공식 슬랙에 질문을 100개정도 던진 것 같은데, 이제는 사람들이 질문이 있으면 저를 호출합니다.(!) 
 
-![datahub-slack-01](/img/data-discovery-platform-01/datahub-slack-01.png)*디니 콜1*
+![datahub-slack-01](/img/data-discovery-platform-01/datahub-slack-01.png)*디니 콜 1*
 
-![datahub-slack-02](/img/data-discovery-platform-01/datahub-slack-02.png)*디니 콜2*
+![datahub-slack-02](/img/data-discovery-platform-01/datahub-slack-02.png)*디니 콜 2*
 
-![datahub-slack-03](/img/data-discovery-platform-01/datahub-slack-03.png)*디니 콜3*
+![datahub-slack-03](/img/data-discovery-platform-01/datahub-slack-03.png)*디니 콜 3*
 
 
 
@@ -214,7 +223,7 @@ Datahub 의 공식 슬랙 채널에는 현재 2000명이 넘는 사람이 활동
 
 이렇게 쏘카는 데이터 디스커버리 플랫폼으로 Datahub 을 선정하게 되었습니다. 다음 편에는 구체적으로 Datahub 를 어떻게 사내 인프라 환경에 구축했는지, 메타데이터 주입 방식을 어떻게 자동화하고 효율화 했는지 설명하려고 합니다.
 
-혹시 신입 데이터 엔지니어가 어떤 일을 하는지 궁금하시다면, [쏘카 신입 데이터 엔지니어 디니의 4개월 회고](https://tech.socarcorp.kr/data/2021/12/28/data-engineering-team-onboarding.html) 에서 확인하실 수 있습니다. (데이터 엔지니어링팀이 데이터 엔지니어링 그룹으로 바뀌고 데이터 웨어하우스 팀, 데이터 플랫폼 팀, 모비딕 팀으로 세분화 되었어요.) 
+> 쏘카에서 신입 데이터 엔지니어가 어떤 일을 하는지 궁금하시다면, [쏘카 신입 데이터 엔지니어 디니의 4개월 회고](https://tech.socarcorp.kr/data/2021/12/28/data-engineering-team-onboarding.html)에서 확인하실 수 있습니다. (데이터 엔지니어링팀이 데이터 엔지니어링 그룹으로 바뀌고 데이터 웨어하우스 팀, 데이터 플랫폼 팀, 모비딕 팀으로 세분화 되었어요.) 
 
 긴 글 읽어주셔서 감사합니다. 그러면 다음 편에서 만나요! 
 
