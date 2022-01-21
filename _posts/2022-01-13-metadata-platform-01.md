@@ -53,7 +53,7 @@ tags:
 데이터 디스커버리를 가능하게 하는 플랫폼입니다. 주로 웹 형태로 제공되며, 데이터의 구조와 관계 등 메타데이터를 한 곳에서 쉽게 보고 검색할 수 있습니다. (같은 이유로, 메타데이터 플랫폼 이라는 용어로 쓰이기도 합니다.) 예시로는 다음이 있습니다. 
 
 * [Datahub](https://github.com/linkedin/datahub) : LinkedIn에서 만든 플랫폼입니다.
-* [Amundsen](https://github.com/amundsen-io/amundsen) :  Lyft에서 만든 플랫폼입니다.
+* [Amundsen](https://github.com/amundsen-io/amundsen) : Lyft에서 만든 플랫폼입니다.
 * Databook : Uber에서 만든 인하우스 플랫폼 입니다.
 
 ---
@@ -178,10 +178,14 @@ Datahub 와 Amundsen 모두, dbt* 등을 연동하여 데이터 계보를 시각
 
 #### 7) 인증 및 권한
 
-* Datahub 는 SSO(Single Sing-On)로 keycloak, okta, google auth 를 지원합니다. 
-* Amundsen 은 SSO 로 keycloack, okta, flask_oidc 를 지원합니다.
-* Datahub 는 사용자 / 그룹 단위로 정책 부여가 가능합니다. 현재는 view 관련 권한은 설정할 수 없고, 테이블이나 컬럼에 대한 설명, 오너, 태그 들을 수정할 수 있는 edit 권한을 세부적으로 조정 가능합니다.
-* Amundsen 은 아직 자체적으로 권한 설정을 지원하지 않습니다.
+* Datahub 은 SSO 지원 및 세부적인 권한 설정이 가능합니다.
+  * SSO(Single Sing-On)로 keycloak, okta, google auth 를 지원합니다. 
+  * 사용자 / 그룹 단위로 정책 부여가 가능합니다. 현재는 view 관련 권한은 설정할 수 없고, 테이블이나 컬럼에 대한 설명, 오너, 태그 들을 수정할 수 있는 edit 권한을 세부적으로 조정 가능합니다.
+
+* Amundsen 은 SSO 을 지원하나 세부적인 권한 설정은 지원하지 않습니다.
+  * SSO 로 keycloack, okta, flask_oidc 를 지원합니다.
+  * Amundsen 은 아직 자체적으로 권한 설정을 지원하지 않습니다.
+
 
 ![datahub-policies](/img/data-discovery-platform-01/datahub-policies.png)*Datahub - 권한 및 정책 폐이지*
 
@@ -192,7 +196,11 @@ Datahub 와 Amundsen 모두, dbt* 등을 연동하여 데이터 계보를 시각
 
 #### 9) 사용자 이용 통게
 
-Data Discovery에서는 데이터 사용자의 이용 패턴도 중요한 요소 중 하나로 꼽힙니다. Datahub 는 시각화된 이용 분석 페이지가 따로 존재하여 자주 검색된 데이터셋  / 자주 수행된 액션 등을 그래프로 확인 할 수 있었습니다.(데모사이트 에서 [해당 페이지](https://demo.datahubproject.io/analytics)를 직접 확인하실 수 있습니다.) Amundsen 은 따로 분석 페이지는 없었으나 메인 화면에서 "인기 있는 데이터셋"을, 각 테이블마다 "해당 테이블을 자주 이용한 사용자"을 확인할 수 있었습니다.
+* Datahub 는 시각화된 이용 분석 페이지가 따로 존재합니다.
+  *  자주 검색된 데이터셋  / 자주 수행된 액션 등을 그래프로 확인 할 수 있습니다. (데모사이트 에서 [해당 페이지](https://demo.datahubproject.io/analytics)를 직접 확인하실 수 있습니다.) 
+* Amundsen 은 단편적인 이용 통계를 제공합니다.
+  * 메인 화면에서 "인기 있는 데이터셋"을, 각 테이블마다 "해당 테이블을 자주 이용한 사용자"을 확인할 수 있습습니다.
+  * 따로 분석 페이지는 없습니다.
 
 ![datahub-analytics](/img/data-discovery-platform-01/datahub-analytics.png)*Datahub - 사용자 이용 통계 폐이지*
 
