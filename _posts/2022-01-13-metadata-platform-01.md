@@ -68,7 +68,7 @@ tags:
 
 ![data-ask-brown](/img/data-discovery-platform-01/data-ask-brown.png)*데이터의 의미를 찾아 헤매는 브라운*
 
-![data-ask-jung](/img/data-discovery-platform-01/data-ask-brown.png)*데이터의 의미를 찾아 헤매는 정*
+![data-ask-jung](/img/data-discovery-platform-01/data-ask-jung.png)*데이터의 의미를 찾아 헤매는 정*
 
 ```
 이거 퍼블리시 전에 정이랑 브라운 컨펌을 받아야 할것 같긴 합니다 ㅎㅎ;;
