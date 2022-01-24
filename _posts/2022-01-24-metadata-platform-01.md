@@ -2,7 +2,7 @@
 layout: post
 title:  "쏘카의 데이터 디스커버리 플랫폼 도입기 - 1편. 데이터 디스커버리란? "
 subtitle: feat. Datahub VS Amundsen 비교분석
-date: 2022-01-12 17:00:00 +0900
+date: 2022-01-24 14:00:00 +0900
 category: data
 background : "/assets/images/discovery-bg.jpg"
 author: dini
@@ -155,9 +155,6 @@ tags:
 
 Datahub 는 메타데이터 주입 시 사용하는 yaml 파일에서 SQL profiling 기능을 활성화 할 수 있습니다. 이 기능을 이용하면 컬럼 별 통계와 해당 컬럼의 샘플 데이터를 볼 수 있습니다. 현재는 이 기능은 보안상 사용하지 못하도록 막아두었습니다. Amundsen 은 pandas 를 연결하여 비슷한 기능을 구현할 수 있다고 합니다. 
 
-```
-여기 테스트 스크린샷을 첨부하려다가, 괜히 이 기능을 시각적으로 보여줬다가 보안상으로 안 좋아보일까봐 고민하고 있는데요, 어떻게 생각하시나요?
-```
 
 #### 6) 데이터 계보 (Data Lineage)
 
