@@ -54,7 +54,7 @@ tags:
 
 * [Datahub](https://github.com/linkedin/datahub) : LinkedIn에서 만든 플랫폼입니다.
 * [Amundsen](https://github.com/amundsen-io/amundsen) : Lyft에서 만든 플랫폼입니다.
-* Databook : Uber에서 만든 인하우스 플랫폼 입니다.
+* [Databook](https://eng.uber.com/databook/) : Uber에서 만든 인하우스 플랫폼 입니다.
 
 ---
 
