@@ -43,9 +43,15 @@ tags:
 
 ![img](/img/control-device-with-car-sharing/sts-0-schematic.jpg)
 
+<<<<<<< HEAD:_posts/2022-02-14-control-device-with-car-sharing.md
 ---
 
 ## 쏘카 관제 장치가 하는 일
+=======
+![img](/img/socar-mobility-system-sts/sts-0-schematic.jpg)
+
+---
+>>>>>>> 5daae10 (Apply suggestions from code review):_posts/2021-12-03-socar-mobility-system.md
 
 ### 1. 차량의 데이터를 수집합니다.
 
