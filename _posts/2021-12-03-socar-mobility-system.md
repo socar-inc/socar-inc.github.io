@@ -89,7 +89,7 @@ tags:
 
 ![img](/img/socar-mobility-system-sts/sts-5-soldering.png){: width="90%" height="90%" style="display: block; margin: 0 auto"}
 
-<br />
+---
 
 ## 맺으며
 
