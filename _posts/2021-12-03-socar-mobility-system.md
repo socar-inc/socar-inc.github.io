@@ -64,7 +64,7 @@ tags:
 
 ![img](/img/socar-mobility-system-sts/sts-3-app.png){: width="90%" height="90%" style="display: block; margin: 0 auto"}
 
-
+<br />
 
 ## 3. 다양한 통신 방법으로 데이터를 교환합니다.
 
@@ -73,7 +73,7 @@ tags:
 
 블루투스 통신을 통해, 스마트폰 뿐만 아니라 다양한 전자장치와도 무선 통신이 가능합니다. 이를 통해 차량 내/외부, 도로와 주차장 등 다양한 환경에서의 센서나 장치로부터, 무선으로 데이터를 수집할 수 있습니다. 보다 정확하게 차량의 위치를 찾거나, 차량에 장착된 센서로부터 데이터를 획득하고, 인프라의 다양한 정보들을 수집하거나 데이터를 교환할 수 있습니다.
 
-
+<br />
 
 ## 4. 외부에 노출된, 차량이라는 악조건을 견뎌야만 합니다.
 
@@ -90,7 +90,7 @@ tags:
 
 ![img](/img/socar-mobility-system-sts/sts-5-soldering.png){: width="90%" height="90%" style="display: block; margin: 0 auto"}
 
-
+<br />
 
 ## 맺으며
 
