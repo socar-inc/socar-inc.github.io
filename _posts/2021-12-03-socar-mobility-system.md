@@ -61,7 +61,7 @@ tags:
 일반적인 차량에서는 스마트키를 통해 차량의 문을 열고 잠글 수 있으며 스마트키를 차량 실내에 두어야만 차량의 시동을 걸 수 있습니다.
 쏘카에서는, 스마트폰만으로도 차를 열고 잠글 수 있는 기술이 들어가 있습니다.  또한 고객 분들이 차량의 위치를 보다 편하게 찾을 수 있도록, 스마트폰으로도 비상등을 켜거나 경적(horn)을 울릴 수 있습니다.
 
-![img](/img/socar-mobility-system-sts/sts-3-app.png){: width="90%" height="90%" style="display: block; margin: 0 auto"}
+![img](/img/socar-mobility-system-sts/sts-3-app.png)
 
 <br />
 
