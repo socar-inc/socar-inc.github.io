@@ -39,9 +39,9 @@ tags:
 
 ![img](/img/socar-mobility-system-sts/sts-1-app.png)
 
-![img](/img/socar-mobility-system-sts/sts-0-schematic.jpg){: width="90%" height="90%" style="display: block; margin: 0 auto"}
+![img](/img/socar-mobility-system-sts/sts-0-schematic.jpg)
 
-<br />
+---
 
 ## 1. 차량의 데이터를 수집합니다.
 
@@ -49,11 +49,11 @@ tags:
 쏘카에는 40여 종에 달하는, 다양한 차종들이 있습니다. 차량의 위치는 어디에 있는지, 반납시 차량 시동은 잘 꺼져있는지, 주유량이나 전기차 충전량은 충분한지, 문은 제대로 잘 잠기고 열리는지, 원격에서 실시간으로 확인이 되어야 비대면 카셰어링 서비스가 가능합니다.
 데이터를 수집할 때 있어 보안에도 신경을 써야하는데요. 특히 고객의 개인정보, 위치 정보 데이터가 대표적으로 그렇습니다. 이런 데이터는 정보보호 및 개인정보보호 관리체계인증(ISMS-P)에 따라 보안을 철저히하여 숨겨져 있으며, 권한을 가진 일부 직원들만 해당 정보를 조회할 수 있습니다.
 
-![img](/img/socar-mobility-system-sts/sts-2-data.jpg){: width="90%" height="90%" style="display: block; margin: 0 auto"}
+![img](/img/socar-mobility-system-sts/sts-2-data.jpg)
 
 차량의 데이터를 수집함으로써, 고객의 편리한 운행을 돕는 것 뿐만 아니라, 보다 효율적으로 차량을 운영하고 관리할 수 있습니다. 관제기기는 차량 내부의 다양한 센서 및 ECU(Electronic Control Unit)로부터 수집되는 신호들 또한 수집합니다. 수집된 데이터를 기반으로, 건전성예측 및 관리(PHM, Prognostics and Health Management)가 가능합니다. 운용 중인 차량, 시스템, 장치에 대해, 결함상태를 지속 관찰할 수 있으며 이를 통해 이상 징후를 진단,  시스템의 전체적인 건전성을 관리할 수 있습니다. 
 
-<br />
+---
 
 ## 2. 차량의 문을 잠그고 열 수 있습니다.
 
