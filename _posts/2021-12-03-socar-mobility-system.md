@@ -85,9 +85,9 @@ tags:
 
 이러한 악조건 속에서도 서비스가 가능할 수 있도록, 장치의 개발, 제조, 납품, 장착, AS 전반에 걸쳐 다양한 노하우와 기술이 포함되어 있습니다.
 
-![img](/img/socar-mobility-system-sts/sts-4-env.png){: width="90%" height="90%" style="display: block; margin: 0 auto"}
+![img](/img/socar-mobility-system-sts/sts-4-env.png)
 
-![img](/img/socar-mobility-system-sts/sts-5-soldering.png){: width="90%" height="90%" style="display: block; margin: 0 auto"}
+![img](/img/socar-mobility-system-sts/sts-5-soldering.png)
 
 ---
 
