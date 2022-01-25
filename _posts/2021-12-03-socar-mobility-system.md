@@ -63,7 +63,7 @@ tags:
 
 ![img](/img/socar-mobility-system-sts/sts-3-app.png)
 
-<br />
+---
 
 ## 3. 다양한 통신 방법으로 데이터를 교환합니다.
 
