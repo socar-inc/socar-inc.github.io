@@ -2,7 +2,7 @@
 layout: post
 title: "카셰어링 서비스를 가능하게 하는 기술 "
 subtitle: "쏘카의 관제 기기"
-date: 2021-12-03 09:00:00 +0900
+date: 2021-01-25 09:00:00 +0900
 category: mobility
 background: '/assets/images/sts-background.jpg'
 author: juno
