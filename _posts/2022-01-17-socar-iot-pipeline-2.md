@@ -18,9 +18,36 @@ Photo by <a href="https://unsplash.com/@selimarda?utm_source=unsplash&utm_medium
 안녕하세요. 모빌리티플랫폼그룹 모비딕팀의 바다, 올리버입니다.
 [차량용 단말을 위한 IoT 파이프라인 구축기 #1](https://tech.socarcorp.kr/mobility/2022/01/06/socar-iot-pipeline-1.html)에 이어, 차량에서 수집한 정보를 전사적으로 활용할 수 있도록 어떻게 단말 파이프라인을 설계하고 만들어 가는지에 대해 자세히 이야기해보고자 합니다.
 
-## 쏘카의 첫 단말 파이프라인을 소개합니다
+이 글은 다음과 같은 분들에게 도움이 됩니다.
+- 데이터 파이프라인 구축에 관심 있는 개발자
+- 차량의 정보 수집과 데이터 흐름에 관심있는 비개발자
+- AWS IoT Core, MSK 솔루션에 관심있는 개발자
+
+## 목차
+
+1. [쏘카의 첫 단말 파이프라인을 소개합니다](#introduce)
+   - 기존 단말 파이프라인
+   - 기존 파이프라인의 한계
+   - 한계를 넘기 위한 신규 파이프라인 설계
+2. [본격적으로 신규 단말 파이프라인을 구축해보자](#build)
+    - Kafka 클러스터
+    - Producer
+      - IoT Core에서의 메시지 생성
+      - 텔레매틱스 서버에서의 메시지 생성
+    - Consumer
+      - Kafka Connect
+        - S3 Sink Connector
+        - Elasticsearch Sink Connector
+      - 단말-차량 Converter
+3. [단말 파이프라인 모니터링](#monitoring)
+    - 첫 프로젝트 : 메타데이터 플랫폼 구축
+    - 각종 파티 참여
+    - 온보딩 과정이 어떻게 도움되었나요?
+4. [마치며](#wrap-up)
+
+## 쏘카의 첫 단말 파이프라인을 소개합니다 <a name="introduce"></a>
 ### 기존 단말 파이프라인
-![](/img/iot-pipeline-2/pipeline-prev.png){: width="75%" height="75%" style="display: block; margin: 0 auto"}
+![](/img/iot-pipeline-2/pipeline-prev.png)
 
 과거에는 차량에서 수집한 정보를 HTTPS 프로토콜을 이용해 쏘카의 텔레매틱스 서버에 전달했습니다. 텔레매틱스 서버에서는 단말 데이터를 수집, 가공, 적재하는 작업의 일환으로 파이프라인에 단말 데이터를 투입했습니다. 텔레매틱스 서버는 쏘카 서비스의 원활한 운영과 고객 불편의 최소화를 위해 차량에서 수집한 정보를 최대한 빠른 시간 안에 처리하여야 합니다.
 
@@ -35,7 +62,7 @@ Photo by <a href="https://unsplash.com/@selimarda?utm_source=unsplash&utm_medium
 ### 기존 파이프라인의 한계
 하지만 단순히 ‘수집정보를 흘려보내기만 하면 되겠다’라고 가볍게 여겼던 Kinesis는 생각보다 많은 관리가 필요했고, Kinesis Stream을 사용하는 프로젝트가 늘어날 수록 파이프라인은 점점 복잡해졌습니다.
 
-![](/img/iot-pipeline-2/pipeline-bang.png){: width="75%" height="75%" style="display: block; margin: 0 auto"}
+![](/img/iot-pipeline-2/pipeline-bang.png)
 
 기본적으로 Elasticsearch와 S3, BigQuery에 적재하는 것 외에도, 전사에서 필요한 용도에 따라 단말 수집 정보가 실시간으로 수집되는 Kinesis Stream에 컨슈머를 연결하여 활용할 수 있었는데요. 그러나 이 파이프라인을 관리하는 주체가 없다보니 불필요하게 많은 컨슈머가 연결되었습니다. Kinesis 스트림에 많은 Lambda 함수, 많은 Process들이 붙었고 Kinesis Stream에 병목이 생기는 경우가 생겼습니다.
 
@@ -61,16 +88,16 @@ Server-side Application의 업데이트는 보통 즉각적인 효과를 발휘�
 
 이런 목표들을 가지고 설계한 파이프라인을 통해 차량에서 수집한 정보를 보고받고, MSK의 토픽에 정보가 담긴 메시지를 전달하며, 각각의 컨슈머가 MSK에 붙어 필요한 데이터들을 가져갈 수 있는 기존보다 안정적인 새로운 파이프라인을 구성하기로 했습니다.
 
-![](/img/iot-pipeline-2/pipeline-next.png){: width="75%" height="75%" style="display: block; margin: 0 auto"}
+![](/img/iot-pipeline-2/pipeline-next.png)
 
 이제 본격적으로 파이프라인을 구현해볼까요?
 
-## 본격적으로 신규 단말 파이프라인을 구축해보자
+## 본격적으로 신규 단말 파이프라인을 구축해보자 <a name="build"></a>
 쏘카의 신규 단말 파이프라인은 크게 토픽을 관리하며 메시지를 저장하는 Kafka 클러스터와 메시지를 생산하는 Producer, 메시지를 소비하는 Consumer 세 가지로 구성됩니다.
 
 ### Kafka 클러스터
 
-![](/img/iot-pipeline-2/create-msk-cluster.png){: width="75%" height="75%" style="display: block; margin: 0 auto"}
+![](/img/iot-pipeline-2/create-msk-cluster.png)
 
 
 Kafka 클러스터는 AWS MSK를 통해 쉽게 구축할 수 있었습니다. 사용하고자 하는 인스턴스와 브로커 당 용량 및 Kafka의 버전, 보안 설정만 거치면 쉽게 클러스터를 구축할 수 있습니다.
@@ -124,13 +151,13 @@ AWS IoT Core SQL에서 지원하는 SQL 구문은 일반적인 SQL 구문과 비
 
 이렇게 원하는대로 가공을 마쳤다면, 이 데이터를 다른 데이터 시스템으로 전달하기 위해 여러 개의 작업을 설정할 수 있습니다.
 
-![](/img/iot-pipeline-2/worker-list.png){: width="75%" height="75%" style="display: block; margin: 0 auto"}
+![](/img/iot-pipeline-2/worker-list.png)
 
 작업에는 미리 정의된 약 20여가지의 템플릿이 있으며, HTTPS 엔드포인트로도 전송할 수 있는 작업까지 준비되어 있어 원하는대로 커스텀이 가능합니다. 이제 Kafka에 메시지를 전송할 수 있도록 작업을 추가해 보겠습니다.
 
 Apache Kafka 클러스터에 메시지 전송을 선택한 후 구성을 누르면, Kafka의 구성정보를 입력하여 세팅할 수 있습니다.
 
-![](/img/iot-pipeline-2/create-kafka-sink-worker.png){: width="75%" height="75%" style="display: block; margin: 0 auto"}
+![](/img/iot-pipeline-2/create-kafka-sink-worker.png)
 
 먼저 기본적인 Kafka 정보(Kafka 엔드포인트, SASL 구성 등)를 설정해주세요.
 Kafka 주제는 어떤 토픽에 메시지를 저장할 것인지 토픽명을 지정합니다. 저희는 여기서 하나의 토픽에다가만 메시지를 전달하는 것이 아니라, 차량에서 수집된 정보의 종류에 따라 다른 토픽에 메시지를 전달하고 싶었습니다. 이런 처리를 위해서는 [대체 템플릿](https://docs.aws.amazon.com/ko_kr/iot/latest/developerguide/iot-substitution-templates.html)을 사용할 수 있습니다.
@@ -142,6 +169,8 @@ Kafka 주제는 어떤 토픽에 메시지를 저장할 것인지 토픽명을 �
 (참고로, Kafka의 `DefaultPartitioner`는 key값이 null인 경우 해당 토픽의 파티션에 Round Robin 방식으로 분배하며, key값이 null이 아닌 경우 key 값을 해시화하여 파티션을 선택해 분배합니다.)
 
 이렇게 메시지를 IoT Core에서 Kafka 토픽으로 무사히 전달했습니다!
+
+![](/img/iot-pipeline-2/pipeline-next-msk.png)
 
 #### 텔레매틱스 서버에서의 메시지 생성
 기존에 차량과 통신 할 때에는 총 두 채널로 통신을 했었어요. 명령전달은 MQ로 하고, 명령에 대한 응답보고 혹은 상태보고들을 텔레매틱스 서버로 https방식의 보고를 하고있었습니다. 이 때, 신규 sts단말기의 데이터형태와 구형 단말기(CSA단말기)의 형태가 달라 데이터를 호환시켜주는 모듈을 거쳐 동일하게 데이터가 Socar DB에 적재될 수 있도록 하는 일련의 과정들을 거칩니다. 
@@ -155,6 +184,8 @@ Kafka로 데이터를 보내기위해 작업하는 도중, 서버 앞단의 트�
 두번째로, IoT Core에서 전송된 데이터를 판별하여 데이터베이스에 적재 할 수 있도록 고민이 필요했어요. 단말기가 IoT Core로 보고하고 데이터가 바로 Kafka로 전송이 된다면, DB에 데이터를 저장해주는 역할을 하는 텔레매틱스 서버를 거치지 않기 때문에 차량 정보에 대해 저장이 어렵게됩니다. 이를 위해 AWS IoT Core에 Rule을 추가 해주어 IoT Core의 데이터가 바로 Kafka로 전송되지 않고, 텔레매틱스 서버를 한번 거쳐서 Kafka로 전송 할 수 있도록 해주었어요. 텔레매틱스 서버에서 IoT Core에 대한 새로운 엔드포인트를 만들고, 해당하는 엔드포인트에서 데이터를 받아온 후 판별하여 Kafka 토픽별로 전송하도록 해 주었습니다. 
 
 IoT Core를 도입하면서 텔레매틱스 서버의 역할을 점차 줄여나가고, 결국에는 텔레매틱스 서버의 역할을 Kakfa와 연결 된 Consumer들에서 처리 할 수 있도록 기능들을 점차 옮기려고 해요. 현재는 여러 차량들을 놓고 테스트 해 보고 있는데요, IoT Core를 적용 한 차량이 기존 차량과 동일하게 큰 어려움 없이 차량 데이터를 보내주고 있어요. 아직은 초기지만, 많은 차량들이 점차 업데이트가 되어서  IoT Core로 데이터를 보낼 수 있게 되는 날이 벌써 기대가 됩니다.  
+
+![](/img/iot-pipeline-2/pipeline-prev-msk.png)
 
 ### Consumer
 이제 수집된 차량 정보가 Kafka 토픽에 안전하게 저장되어 있습니다. 이제 이 데이터를 적재적소에 가져다가 활용하면 됩니다.
@@ -171,56 +202,55 @@ IoT Core를 도입하면서 텔레매틱스 서버의 역할을 점차 줄여나
 
 Kafka Connect 클러스터는 구축되어 있다고 가정하고, 바로 Sink connector를 설정해보겠습니다. Kafka Connect에서는 Connector를 실행시킬 수 있는 REST API를 제공합니다. S3와 Elasticsearch Sink Connector를 세팅하면서 자세히 알아보도록 하겠습니다.
 
+![](/img/iot-pipeline-2/pipeline-next-kafkaconnect.png)
+
 ##### S3 Sink Connector
 컨플루언트에서 공식으로 제공하는 S3 Sink Connector입니다.
 다음 요청을 통해 해당 커넥터를 이용한 Worker를 생성할 수 있습니다.
 
+Endpoint : `POST ${카프카_커넥트_호스트}/connectors`
 ```json
-POST ${카프카_커넥트_호스트}/connectors
 {
     "name":"s3-sink-worker",
     "config": {
+        // 사용하려는 커넥터의 클래스명
         "connector.class": "io.confluent.connect.s3.S3SinkConnector",
+        // S3가 위치한 리전
         "s3.region": "ap-northeast-2",
         "partition.duration.ms": "180000",
+        // 여기서 지정한 수 만큼 메시지가 쌓이면 S3에 파일로 저장합니다.
         "flush.size": "20000",
         "schema.compatibility": "NONE",
+        // 메시지를 가져오려는 카프카의 토픽명을 지정합니다.콤마 구분으로 여러 토픽을 가져올 수 있습니다.
         "topics": "토픽명",
+        // 하나의 파일이 가질 최대 용량을 지정합니다.
         "s3.part.size": "5242880",
+        // 타임존을 지정합니다.
         "timezone": "Asia/Seoul",
+        // 로케일을 지정합니다.
         "locale": "ko_KR",
+        // 압축방식을 지정합니다. none 또는 gzip을 사용할 수 있습니다.
         "s3.compression.type": "gzip",
+        // 데이터 포맷을 지정힙니다. JSON 타입이므로 JsonFormat을 사용합니다.
         "format.class": "io.confluent.connect.s3.format.json.JsonFormat",
+        // 메시지를 어떻게 파티셔닝할지 설정합니다. 여기서는 TimeBasedPartitioner를 사용하여 날짜 기준으로 S3에 저장되는 폴더를 분리합니다.
         "partitioner.class": "io.confluent.connect.storage.partitioner.TimeBasedPartitioner",
+        // S3Storage로 지정해주시면 됩니다.
         "storage.class": "io.confluent.connect.s3.storage.S3Storage",
+        // 저장될 S3의 버킷명입니다.
         "s3.bucket.name": "S3 버킷명",
+        // 얼마나 주기적으로 S3에 파일을 저장할 지 설정합니다. flush.size에서 설정한 메시지 수에 도달하지 않아도 해당 주기가 되면 S3에 파일을 쓰게 됩니다.
         "rotate.schedule.interval.ms": "180000",
+        // 파일이 저장될 위치를 설정합니다. 시간 기반의 파티셔너를 통해 시간별로 폴더가 나눠지도록 설정했습니다.
         "path.format": "YYYY/MM/dd/HH"
     }
 }
 ```
-설정값을 하나하나 자세히 살펴보겠습니다.
-```yaml
-connector.class : 사용하려는 커넥터의 클래스명
-s3.region : S3가 위치한 리전
-flush.size : 여기서 지정한 수 만큼 메시지가 쌓이면 S3에 파일로 저장합니다.
-topics : 메시지를 가져오려는 카프카의 토픽명을 지정합니다.콤마 구분으로 여러 토픽을 가져올 수 있습니다.
-s3.part.size: 하나의 파일이 가질 최대 용량을 지정합니다.
-timezone: 타임존을 지정합니다.
-locale: 로케일을 지정합니다.
-s3.compression.type: 압축방식을 지정합니다. none 또는 gzip을 사용할 수 있습니다.
-format.class : 데이터 포맷을 지정힙니다. JSON 타입이므로 JsonFormat을 사용합니다.
-partitioner.class : 메시지를 어떻게 파티셔닝할지 설정합니다. 여기서는 TimeBasedPartitioner를 사용하여 날짜 기준으로 S3에 저장되는 폴더를 분리합니다.
-storage.class : S3Storage로 지정해주시면 됩니다.
-s3.bucket.name : 저장될 S3의 버킷명입니다.
-rotate.schedule.interval.ms: 얼마나 주기적으로 S3에 파일을 저장할 지 설정합니다. flush.size에서 설정한 메시지 수에 도달하지 않아도 해당 주기가 되면 S3에 파일을 쓰게 됩니다.
-path.format: 파일이 저장될 위치를 설정합니다. 시간 기반의 파티셔너를 통해 시간별로 폴더가 나눠지도록 설정했습니다.
-```
 
 Worker를 생성한 후, 다음 REST API를 통해 Worker가 제대로 동작하는 지 확인하실 수 있습니다.
 
+Endpoint : `${카프카_커넥트_호스트}/connectors?expand=info&expand=status`
 ```json
-GET ${카프카_커넥트_호스트}/connectors?expand=info&expand=status
 {
   "s3-sink-worker": {
     "status": {
@@ -251,7 +281,22 @@ GET ${카프카_커넥트_호스트}/connectors?expand=info&expand=status
     "info": {
       "name": "s3-sink-worker",
       "config": {
-         ...${해당 Worker의 설정값들}
+        "connector.class": "io.confluent.connect.s3.S3SinkConnector",
+        "s3.region": "ap-northeast-2",
+        "partition.duration.ms": "180000",
+        "flush.size": "20000",
+        "schema.compatibility": "NONE",
+        "topics": "토픽명",
+        "s3.part.size": "5242880",
+        "timezone": "Asia/Seoul",
+        "locale": "ko_KR",
+        "s3.compression.type": "gzip",
+        "format.class": "io.confluent.connect.s3.format.json.JsonFormat",
+        "partitioner.class": "io.confluent.connect.storage.partitioner.TimeBasedPartitioner",
+        "storage.class": "io.confluent.connect.s3.storage.S3Storage",
+        "s3.bucket.name": "S3 버킷명",
+        "rotate.schedule.interval.ms": "180000",
+        "path.format": "YYYY/MM/dd/HH"
       },
       "tasks": [
         {
@@ -275,57 +320,54 @@ GET ${카프카_커넥트_호스트}/connectors?expand=info&expand=status
 
 다른 문제가 없다면 수 분 내로 S3의 파일로 메시지가 잘 적재되는 모습을 확인하실 수 있습니다.
 
-![](/img/iot-pipeline-2/result-s3.png){: width="75%" height="75%" style="display: block; margin: 0 auto"}
+![](/img/iot-pipeline-2/result-s3.png)
 
 Kafka Connect의 Worker들은 동작하면서 필요한 메타데이터를 Kafka에 별도의 토픽으로 저장합니다. Worker는 자신의 업무 프로세스를 기억하기 위해 순차적으로 토픽의 파티션에서 데이터를 읽어가면서 책갈피를 꽂아둡니다. 이 책갈피를 Offset이라고 하는데요. Kafka Connect는 프로세스가 죽어서 Worker가 재시작되는 상황이 발생해도 이 메타데이터를 다시 읽어와 책갈피를 꽂은 부분에서부터 다시 데이터를 읽어가도록 설계되어 있습니다.
 
 ##### Elasticsearch Sink Connector
 S3에 무사히 적재했다면, 다음은 분석과 연구를 위한 Elasticsearch에 적재해보겠습니다. 컨플루언트에서 공식으로 제공하는 Elasticsearch Sink Connector를 사용합니다. S3 Sink Connector와 같은 방식으로 생성하는데, 다음과 같은 요청을 통해 Elasticsearch Sink Worker를 실행할 수 있습니다.
 
+Endpoint : `POST ${카프카_커넥트_호스트}/connectors`
 ```json
 {
   "name":"es-sink-worker",
   "config": {
+    // 사용하려는 커넥터의 클래스명
     "connector.class": "io.confluent.connect.elasticsearch.ElasticsearchSinkConnector",
+    // ES7부터는 type이 사라져, _doc로 지정하면 됩니다.
     "type.name": "_doc",
     "behavior.on.null.values": "IGNORE",
+    // 메시지를 가져오려는 토픽명
     "topics": "토픽명",
+    // true일 때, 메시지에 문제가 있는 경우 무시합니다.
     "drop.invalid.message": "true",
+    // 문제가 생긴 경우 최대 재시도 횟수를 설정합니다.
     "max.retries": "50",
+    // true일 때, ES 문서의 키로 메시지의 key를 사용하지 않고, topic+partition+offset를 사용합니다. ex)message-log+0+1
     "key.ignore": "true",
+    // ES 동시 요청 수를 제한합니다. retry.backoff.ms: 요청 실패 후 재시도까지 기다릴 시간을 설정합니다. 다음 재시도때에는 이전 재시도 대기 시간보다 2배 더 기다립니다.
     "max.in.flight.requests": "20",
     "retry.backoff.ms": "2000",
-    "connection.url": "ESURL",
+    // 사용하려는 Elasticsearch의 Endpoint
+    "connection.url": "ELASTICSEARCH_ENDPOINT",
+    // ES 서버와의 Read Timeout을 설정합니다.
     "read.timeout.ms": "60000",
+    // 주어진 시간만큼 데이터가 쌓이기를 기다린 다음, Bulk Request로 처리하여 효율성을 높입니다. connection.compression: ES 서버와 통신시에 gzip 압축을 사용할 지 여부를 선택합니다.
     "linger.ms": "1000",
     "connection.compression": "true",
+    // 메시지가 원하는 만큼 쌓이지 않았더라도, 해당 주기가 되면 ES로 메시지를 전송합니다.
     "flush.timeout.ms": "60000",
+    // 배치로 처리할 메시지의 수
     "batch.size": "2000",
+    // 최대 버퍼될 레코드의 수, 태스크 당 메모리 사용량 제한을 위해 사용합니다.
     "max.buffered.records": "40000"
   }
 }
 ```
-Elasticsearch 커넥터의 자세한 설정값을 살펴보겠습니다.
-
-```yaml
-connector.class: 사용하려는 커넥터의 클래스명
-type.name: ES7부터는 type이 사라져, _doc로 지정하면 됩니다.
-topics: 메시지를 가져오려는 토픽명
-drop.invalid.message: true일 때, 메시지에 문제가 있는 경우 무시합니다.
-max.retries: 문제가 생긴 경우 최대 재시도 횟수를 설정합니다.
-key.ignore: true일 때, ES 문서의 키로 메시지의 key를 사용하지 않고, topic+partition+offset를 사용합니다. ex)message-log+0+1
-in.flight.requests: ES 동시 요청 수를 제한합니다. retry.backoff.ms: 요청 실패 후 재시도까지 기다릴 시간을 설정합니다. 다음 재시도때에는 이전 재시도 대기 시간보다 2배 더 기다립니다.
-connection.url: 사용하려는 Elasticsearch의 Endpoint
-read.timeout.ms: ES 서버와의 Read Timeout을 설정합니다.
-linger.ms: 주어진 시간만큼 데이터가 쌓이기를 기다린 다음, Bulk Request로 처리하여 효율성을 높입니다. connection.compression: ES 서버와 통신시에 gzip 압축을 사용할 지 여부를 선택합니다.
-flush.timeout.ms: 메시지가 원하는 만큼 쌓이지 않았더라도, 해당 주기가 되면 ES로 메시지를 전송합니다.
-batch.size: 배치로 처리할 메시지의 수
-max.buffered.records: 최대 버퍼될 레코드의 수, 태스트 당 메모리 사용량 제한을 위해 사용합니다.
-```
 
 S3 커넥터 설정시와 마찬가지로 REST API를 통해 Worker가 정상적으로 동작하고 있는 지를 확인해주세요. 잠시만 기다리면 ES에도 메시지가 잘 적재되는 것을 확인하실 수 있습니다!
 
-![](/img/iot-pipeline-2/result-es.png){: width="75%" height="75%" style="display: block; margin: 0 auto"}
+![](/img/iot-pipeline-2/result-es.png)
 
 ES Sink Connector에는 알려진 버그가 있습니다. 쏘카에서는 최신의 단말 데이터만 ES에서 활용하고 있어서 일자별로 인덱스를 생성하고, 며칠 뒤 오래된 인덱스를 삭제하는 형식을 취하고 있는데요. ES Sink Connector는 `TimebasedPartitioner`를 사용하면 Offset을 제대로 기록하지 못해 설정을 변경하는 등의 이유로 Worker를 재시작할 때 마다 토픽에 있는 모든 데이터를 처음부터 다시 읽는 버그가 있습니다.
 
@@ -341,12 +383,12 @@ ES Sink Connector에는 알려진 버그가 있습니다. 쏘카에서는 최신
 이렇게 조립한 데이터들이 앞으로 필요한 프로젝트들에 잘 활용될거라 기대하고 있습니다. 또한 어떤 프로젝트든 쉽게 데이터를 사용할 수 있게 데이터를 좀 더 좀 더 유연하게 설계해나가고 싶습니다.  
 추가적으로 필요한 연산 작업이라던지, 적재 작업들도 "단말-차량 Converter"를 통해 만들어나갈 수 있을 것 같고, 최근 뜨고있는 스트림 처리 프레임워크인 Flink를 써볼 수 있지도 않을까 하는 기대감도 가지고 있습니다.
 
-## 단말 파이프라인 모니터링
+## 단말 파이프라인 모니터링 <a name="monitoring"></a>
 구축한 단말 파이프라인이 문제 없이 원활히 흘러가도록 하려면 모니터링의 역할도 아주 중요합니다. 
 
 쏘카에는 여러 모니터링 시스템이 구축되어 있는데, 그 중 Grafana를 통해 단말 파이프라인 모니터링 대시보드를 구축했습니다. 데이터 소스로 CloudWatch가 이미 연동되어 있어, MSK의 중요한 메트릭으로 대시보드를 꾸리기만 하면 완성입니다.
 
-![](/img/iot-pipeline-2/monitoring.png){: width="75%" height="75%" style="display: block; margin: 0 auto"}
+![](/img/iot-pipeline-2/monitoring.png)
 
 CPU, Disk 사용량, 네트워크 In/Out, ES의 스토리지 사용량을 기본적으로 모니터링하고 있으며, 각 컨슈머의 OffsetLag까지 추가적으로 모니터링하여 각 컨슈머에서 데이터를 가져가는 데에 지연이 발생하지 않는지를 모니터링하고 있습니다.
 
@@ -356,13 +398,13 @@ OffsetLag가 무엇일까요? 각 컨슈머에서는 토픽의 파티션 별로 
 
 이렇게 단말 데이터 파이프라인을 모니터링 할 수 있는 대시보드가 완성되었습니다! 필요한 메트릭에 알림을 만들어, 임계치에 도달한 경우 Slack 또는 Opsgenie를 통해 알림을 받아 장애를 인지하고, 조치하고 있습니다.
 
-## 마치며
+## 마치며 <a name="wrap-up"></a>
 여전히 신규 데이터 파이프라인 개발은 현재진행형입니다. Schema Registry를 이용해 단말 데이터에 스키마를 입히고, 사내 많은 분들이 활발하게 사용 중인 BigQuery에 스트리밍으로 단말 데이터를 적재해야 하는 등 해야할 일들이 많이 있습니다.  
 하지만 첫 술에 배부를 수 없듯이, 이번 목표는 토대를 단단하게 구축하여 어떤 서비스나 프로젝트에 찰떡처럼 붙을 수 있는 파이프라인을 만드는 것이었고, 결과적으로 짦은 시간 안에 소기의 성과를 달성할 수 있었습니다.
 
 이번에 개선한 신규 단말 파이프라인을 토대로 전사에서 단말 데이터를 더욱 잘 활용할 수 있도록 하고, 더 나아가 유저에게 더 나은 쏘카 서비스 경험을 선물할 수 있도록 모비딕팀이 앞으로도 노력하겠습니다.
 
-![](/img/iot-pipeline-2/work-and-work.jpg){: width="75%" height="75%" style="display: block; margin: 0 auto"}
+![](/img/iot-pipeline-2/work-and-work.jpg)
 *다 쓰고나니 뭔가 눈에 습기가 차는거 같지만... 기분탓이겠죠?*
 
 
