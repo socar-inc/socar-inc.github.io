@@ -41,16 +41,16 @@ tags:
 
 **데이터 디스커버리(Data Discovery)**란, "원하는 데이터를 쉽고 빠르게 찾을 수 있다" 의 개념입니다. 빅데이터 시대라는 흐름에 맞게, 회사에도 많은 양의 데이터가 여러 형태로 존재하게 되었습니다. 그리고 많은 사람이 데이터를 생산 및 소비하고 시간이 지나게 되면서 히스토리 파악도 점점 복잡해지기 시작합니다. 이런 상황에서 데이터 디스커버리는 데이터 이용자에게 **"어떤 데이터"가 "어디에" "어떻게 존재"하는지에 대한 정보를 편리하게 제공**합니다. 
 
-이런 데이터 디스커버리에는 **"메타데이터"**라는 개념이 중요합니다. 메타데이터는 간단히 말해서 테이블 정보, 칼럼 정보, 코멘트, 테이블을 만든 사람(오너), 테이블 사이의 관계 (데이터 리니지) 등을 말합니다. 이러한 메타데이터를 잘 관리하는 것이 데이터 디스커버리의 초석입니다.
+이런 데이터 디스커버리에는 **"메타데이터"**라는 개념이 중요합니다. 메타데이터는 간단히 말해서 테이블 정보, 컬럼 정보, 코멘트, 테이블을 만든 사람(오너), 테이블 사이의 관계(데이터 리니지) 등을 말합니다. 이러한 메타데이터를 잘 관리하는 것이 데이터 디스커버리의 핵심 역할입니다.
 
 ### 데이터 디스커버리의 중요성
 
-데이터를 적극적으로 활용하는 기업에서, 업무 효율성에 있어서 데이터 디스커버리는 매우 중요한 부분입니다. 사내에 많은 직원들이 데이터를 활용하여 분석, 기획 등의 업무에 이용하려고 할텐데, 자신에게 필요한 데이터가 "어디에 있는지", "이 데이터가 어떤 의미인지"를 파악하는 데에 대부분의 시간을 소요하게 된다면, 업무 효율성이 매우 떨어지게 될 겁니다.  
+데이터를 적극적으로 활용하는 기업은 데이터 디스커버리의 존재에 따라 업무 효율성이 크게 달라집니다. 사내에 많은 직원들이 데이터를 활용해 데이터 분석, 머신러닝, 데이터 기반 기획 등을 하고 있습니다. 각자의 목적에 맞는 데이터가 "어디에 있는지", "이 데이터가 어떤 의미인지"를 파악하는 데에 대부분의 시간을 소요하게 된다면, 업무 효율성이 매우 떨어지게 될 겁니다.  
 데이터 디스커버리를 도입하여 잘 관리한다면, 이런 비효율성을 피할 수 있습니다.
 
 ### 데이터 디스커버리 플랫폼의 정의
 
-데이터 디스커버리를 가능하게 하는 플랫폼입니다. 주로 웹 형태로 제공되며, 데이터의 구조와 관계 등 메타데이터를 한 곳에서 쉽게 보고 검색할 수 있습니다. (같은 이유로, 메타데이터 플랫폼 이라는 용어로 쓰이기도 합니다.) 예시로는 다음이 있습니다. 
+데이터 디스커버리를 가능하게 하는 플랫폼입니다. 웹 UI 환경을 제공하며, 데이터의 구조와 관계 등 메타데이터를 한 곳에서 쉽게 보고 검색할 수 있습니다. (같은 이유로 데이터 디스커버리는 메타데이터 플랫폼이라는 용어로 쓰이기도 합니다.) 대표적인 데이터 디스커버리 프레임워크는 다음과 같습니다.
 
 * [Datahub](https://github.com/linkedin/datahub) : LinkedIn에서 만든 플랫폼입니다.
 * [Amundsen](https://github.com/amundsen-io/amundsen) : Lyft에서 만든 플랫폼입니다.
@@ -62,18 +62,18 @@ tags:
 
 ### 데이터 디스커버리 플랫폼 도입 효과
 
-#### Data Discovery 의 관점 
+#### Data Discovery의 관점 
 
-쏘카에서는 PM, 마케터, 분석가 등 여러 직군이 업무에 데이터를 활용합니다. 하지만 쏘카 안에서 데이터가 다양한 형식으로 존재하기도 하고, 비개발 직군 입장에서는 DB에 직접 접근하는 것도 허들이 있었습니다. 따라서  "어떤 데이터를 어디서 찾아야 하는지", 혹은 "이 테이블의 데이터가 어떤 의미인지" 에 대한 질문을 기존에는 슬랙 채널을 이용하여 수기로 받았습니다. 이런 방식은 히스토리 파악도 쉽지 않고, 질문을 받아주는 리소스도 많이 소요되었습니다. 
+쏘카에서는 데이터 분석가, PM, 마케터 등 여러 직군이 업무에 데이터를 활용합니다. 하지만 데이터가 다양한 형식으로 존재하고, 비개발 직군 입장에서는 DB에 직접 접근하는 것도 어려움이 있습니다. 기존에 스키마에 대한 정보를 알려주는 어드민이 있었지만, 유지보수가 되고 있지 않았습니다. 이런 이유로  "어떤 데이터를 어디서 찾아야 하는지", 혹은 "이 테이블의 데이터가 어떤 의미인지" 에 대한 질문을 기존에는 슬랙 채널을 이용해 받곤 했습니다. 이런 방식은 히스토리 파악도 쉽지 않고, 답변하는 사람의 시간을 많이 사용하게 됩니다.
 
 ![data-ask-brown](/img/data-discovery-platform-01/data-ask-brown.png)*데이터의 의미를 찾아 헤매는 브라운*
 
 ![data-ask-jung](/img/data-discovery-platform-01/data-ask-jung.png)*데이터의 의미를 찾아 헤매는 정*
 
 
-데이터 디스커버리 플랫폼을 도입하면, 개발에 대한 도메인이 없더라도 간편한 UI 를 통해서 메타데이터를 확인할 수 있습니다.
+데이터 디스커버리 플랫폼을 도입하면 개발에 대한 도메인이 없더라도 간편한 UI를 통해서 메타데이터를 확인할 수 있습니다.
 
-#### Data Governance 의 관점
+#### Data Governance의 관점
 
 데이터 거버넌스란 데이터를 효과적으로 관리하기 위한 일련의 보안, 품질, 규정 등과 관련된 체계를 말합니다. 여러 사람이 데이터를 생산하고 소비할 수록 데이터 거버넌스의 관점은 중요해집니다. 데이터 디스커버리 플랫폼을 도입하면 기존에 흩어져서 관리되던 테이블 스키마, 코멘트가 중앙 관리될 수 있습니다. 
 
@@ -81,15 +81,15 @@ tags:
 
 ---
 
-## 3. 데이터 디스커버리 플랫폼 비교분석 : Datahub vs Amundsen <a name="metadata-platform-comparison"></a>
+## 3. 데이터 디스커버리 플랫폼 비교 분석 : Datahub vs Amundsen <a name="metadata-platform-comparison"></a>
 
 ### PoC 과정 소개
 
-디스커버리 플랫폼을 선정하기 전, 공식 문서 등의 지원이 풍부하고, 일반적으로 많이 쓰이는 Datahub와 Amundsen을 직접 배포하고 테스트하며 비교하는 PoC 과정을 거쳐보기로 했습니다. 
+디스커버리 플랫폼을 선정하기 전, 공식 문서 등의 지원이 풍부하고 일반적으로 많이 쓰이는 Datahub와 Amundsen을 직접 배포하고 테스트하며 비교하는 PoC 과정을 거쳐보기로 했습니다. 
 
 사용성, UI, 문서화, 권한, 인증 등 다양한 측면에서 비교해보았는데, 이 글에서는 그 중 중요한 컨셉을 간추려서 소개해보겠습니다.
 
-### Datahub VS Amundsen 비교분석
+### Datahub VS Amundsen 비교 분석
 
 ![datathub-vs-amundsen](/img/data-discovery-platform-01/datahub-vs-amundsen.png)
 
@@ -102,28 +102,28 @@ tags:
 - Neo4j 기반 Graph DB
 - MySql 기반 Storage
 
-반면에 차이점은, Datahub 는 데이터를 주입할때 Kafka 를 사용한다는 점입니다. 즉 메타데이터 플랫폼 프레임워크의 히스토리를 살펴봤을 때, Amundsen 은 1세대 (Monolith) 방식인 반면, Datahub는 3세대 (Event-based) 방식입니다. 메타데이터 플랫폼의 히스토리에 대해서 좀더 궁금하신 분들은, LinkedIn 의 엔지니어링 블로그에 작성된 [DataHub: Popular metadata architectures explained](https://engineering.linkedin.com/blog/2020/datahub-popular-metadata-architectures-explained) 글을 살펴보세요. 
+차이점은 Datahub는 데이터를 주입할때 Kafka를 사용하고 Amundsen은 XXX을 사용하는 점입니다. 메타데이터 플랫폼 프레임워크의 히스토리를 살펴봤을 때, Amundsen 은 Monolith 방식인 반면 Datahub는 Event-based 방식입니다. 메타데이터 플랫폼의 히스토리에 대해서 좀더 궁금하신 분들은, LinkedIn의 엔지니어링 블로그에 작성된 [DataHub: Popular metadata architectures explained](https://engineering.linkedin.com/blog/2020/datahub-popular-metadata-architectures-explained) 글을 보시는 것을 추천합니다. 
 
 #### 1) 메타데이터 주입 방식
 
 * Datahub는 `yaml` 파일을 실행하여 메타데이터를 주입합니다. 
-  * `datahub CLI` 를 이용하여 yaml 파일을 실행합니다. 
-  * 연결하는 데이터 소스에 따라 Datahub 라이브러리에 따라오는 연결 플러그인 설치가 한두개 필요합니다.
+  * `datahub CLI`를 이용하여 yaml 파일을 실행합니다. 
+  * 연결하는 데이터 소스에 따라 Datahub 라이브러리에 따라오는 연결 플러그인 설치가 필요합니다.
 
-* Amundsen 은 `python` 파일 를 실행하여 메타데이터를 주입합니다. 
-  * 기본적으로 `amundsen databuilder` 라는 python 라이브러리 (ETL framework) 를 사용하며, Extract, Transform, Load 각 과정에 여러 자체 모듈을 끌어와서 사용하는 방식입니다. 
+* Amundsen은 `python` 파일을 실행하여 메타데이터를 주입합니다. 
+  * 기본적으로 `amundsen databuilder` 라는 Python 라이브러리 (ETL framework) 를 사용하며, Extract, Transform, Load 각 과정에 여러 자체 모듈을 끌어와서 사용하는 방식입니다. 
   * 이 외에도 종종 여러 디펜던시가 필요했습니다. 
 
 
-![datahub-ingestion-script](/img/data-discovery-platform-01/datahub-ingestion-script.png)*Datahub -  Bigquery 데이터 주입 script*
+![datahub-ingestion-script](/img/data-discovery-platform-01/datahub-ingestion-script.png)*Datahub -  BigQuery 데이터 주입 script*
 
-![amundsen-ingestion-script](/img/data-discovery-platform-01/amundsen-ingestion-script.png)*Amundsen - Bigquery 데이터 주입 script*
+![amundsen-ingestion-script](/img/data-discovery-platform-01/amundsen-ingestion-script.png)*Amundsen - BigQuery 데이터 주입 script*
 
- 흥미로운 점은, 같은 기능을 수행할때 Datauhb 와 Amundsen 의 **script 길이 차이**였습니다 Datahub 에서는 10줄 내외의 직관적인 yaml 코드로 가능한 반면, Amundsen의 script는 때에 따르지만 기본적으로 50 줄 이상이었습니다. 개인적으로 스크립트가 긴 만큼 섬세한 커스텀이 가능하거나 필요하다는 생각은 들지 않았고, 오히려 읽기 무겁다는 생각이 들었습니다. (공식 깃헙에 있는 샘플이 400줄이었습니다.)
+ 흥미로운 점은 같은 기능을 수행할 때 Datahub와 Amundsen의 **script 길이 차이**였습니다. Datahub는 10줄 내외의 직관적인 yaml 코드로 가능한 반면, Amundsen의 script는 기본적으로 50 줄 이상이었습니다. 개인적으로 스크립트가 긴 만큼 섬세한 커스텀이 가능하거나 필요하다는 생각은 들지 않았고, 오히려 읽기 무겁다는 생각이 들었습니다(공식 깃헙에 있는 샘플이 400줄이었습니다)
 
 #### 2) UI
 
-개인 차가 있을 수 있으나, 팀원들의 의견으로는 **Datahub 이 훨씬 깔끔하고 보기 편하다**는 의견이 많았습니다. Datahub UI 는 [공식 데모 사이트](https://demo.datahubproject.io/)에서 좀더 확인하실 수 있습니다. (Amundsen은 따로 데모사이트를 제공하지 않습니다.)
+개인 차가 있을 수 있으나, 팀원들의 의견으로는 **Datahub가 훨씬 깔끔하고 보기 편하다**는 의견이 많았습니다. Datahub UI는 [공식 데모 사이트](https://demo.datahubproject.io/)에서 더 확인하실 수 있습니다. (Amundsen은 따로 데모 사이트를 제공하지 않습니다)
 
 ![datahub-main](/img/data-discovery-platform-01/datahub-main.png)*Datahub - 메인 UI*
 
