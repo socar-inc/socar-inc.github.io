@@ -87,7 +87,7 @@ tags:
 
 디스커버리 플랫폼을 선정하기 전, 공식 문서 등의 지원이 풍부하고 일반적으로 많이 쓰이는 Datahub와 Amundsen을 직접 배포하고 테스트하며 비교하는 PoC 과정을 거쳐보기로 했습니다. 
 
-사용성, UI, 문서화, 권한, 인증 등 다양한 측면에서 비교해보았는데, 이 글에서는 그 중 중요한 컨셉을 간추려서 소개해보겠습니다.
+사용성, UI, 문서화, 권한, 인증 등 다양한 측면에서 비교해 보았는데, 이 글에서는 그중 중요한 콘셉트를 간추려서 소개해 보겠습니다.
 
 ### Datahub VS Amundsen 비교 분석
 
@@ -137,30 +137,30 @@ tags:
 
 - Datahub 
   - 테이블 별 / 칼럼 별 태그 부여가 가능합니다.
-  - 테이블 별 / 칼럼 별 풍부한 마크다운 문서 작성이 가능하고, 원본 소스의 description 을 보존합니다.
+  - 테이블 별 / 칼럼 별 풍부한 마크다운 문서 작성이 가능하고, 원본 소스의 Description을 보존합니다.
 - Amundsen 
   - 테이블 별 태그 부여가 가능합니다.
-  - 역시 테이블 별 / 칼럼 별 마크다운 제한적인 문서 작성이 가능하고, 원본소스의 description 을 보존하지 않습니다.
+  - 역시 테이블 별 / 칼럼 별 마크다운 제한적인 문서 작성이 가능하고, 원본 소스의 Description을 보존하지 않습니다.
 
-중요한 점은, 플랫폼 UI 상에서 테이블 혹은 칼럼의 설명을 수정했을 때 **원본 소스의 description 을 따로 확인할 수 있는지**의 여부였습니다. Datahub는 다음과 같은 방식으로 original description 을 동시에 보여주지만, Amundsen 은 딱히 그런 기능이 없었습니다. 또한 Datahub는 원본 description 과 UI 상 description이 별개로 버전 관리가 되고 있어서, 한쪽의 수정이 다른 쪽에 영향을 끼치지 않았습니다. 
+중요한 점은 플랫폼 UI 상에서 테이블 혹은 칼럼의 설명을 수정했을 때 **원본 소스의 Description을 따로 확인할 수 있는지**의 여부였습니다. Datahub는 다음과 같은 방식으로 Original Description을 동시에 보여주지만, Amundsen은 이런 기능이 없습니다. 또한 Datahub는 원본 Description과 UI 상 Description이 별개로 버전 관리가 되고 있어서, 한쪽의 수정이 다른 쪽에 영향을 끼치지 않았습니다. 
 
-![datahub-dataset](/img/data-discovery-platform-01/datahub-description.png)*Datahub - UI 상 수정을 하더라도 "Original"(원본 코멘트) 이 함께 표기됩니다.*
+![datahub-dataset](/img/data-discovery-platform-01/datahub-description.png)*Datahub - UI 상에서 수정하더라도 "Original"(원본 코멘트)이 함께 표기됩니다.*
 
 #### 4) 오너십
 
-* Datahub 는 테이블에 유저 / 그룹 단위로 오너십을 지정할 수 있습니다.
-* Amundsen 은 테이블에 유저 단위로만 오너십을 지정할 수 있습니다.
+* Datahub는 테이블에 유저 / 그룹 단위로 오너십을 지정할 수 있습니다.
+* Amundsen은 테이블에 유저 단위로만 오너십을 지정할 수 있습니다.
 
 #### 5) 데이터 샘플링
 
-Datahub 는 메타데이터 주입 시 사용하는 yaml 파일에서 SQL profiling 기능을 활성화 할 수 있습니다. 이 기능을 이용하면 컬럼 별 통계와 해당 컬럼의 샘플 데이터를 볼 수 있습니다. 현재는 이 기능은 보안상 사용하지 못하도록 막아두었습니다. Amundsen 은 pandas 를 연결하여 비슷한 기능을 구현할 수 있다고 합니다. 
+Datahub는 메타데이터 주입 시 사용하는 yaml 파일에서 SQL profiling 기능을 활성화 할 수 있습니다. 이 기능을 이용하면 컬럼 별 통계와 해당 컬럼의 샘플 데이터를 볼 수 있습니다. Amundsen 은 Pandas를 연결하여 비슷한 기능을 구현할 수 있다고 합니다. 
 
 
-#### 6) 데이터 계보 (Data Lineage)
+#### 6) 데이터 계보(Data Lineage)
 
-데이터 계보 (Data Lineage) 란 데이터의 흐름을 시각화한 개념으로, 특정 테이블이 어떤 테이블들을 참조하는지, 데이터가 어디에서 와서 어디로 흘러가는 지를 편리하게 알 수 있습니다. 
+데이터 계보(Data Lineage)란 데이터의 흐름을 시각화한 개념으로 특정 테이블이 어떤 테이블들을 참조하는지, 데이터가 어디에서 와서 어디로 흘러가는지를 편리하게 알 수 있습니다. 
 
-Datahub 와 Amundsen 모두, dbt* 등을 연동하여 데이터 계보를 시각화 할 수 있습니다. (최근에는 Datahub에 dbt 없이 BigQuery 자체에서도 데이터 계보를 가져오는 기능이 추가되었습니다.) 
+Datahub와 Amundsen 모두 dbt* 등을 연동하여 데이터 계보를 시각화 할 수 있습니다. (최근에는 Datahub에 dbt 없이 BigQuery 자체에서도 데이터 계보를 가져오는 기능이 추가되었습니다) 
 
 > *[dbt](https://github.com/dbt-labs/dbt-core) : 데이터 ETL 과정에서 T(Transform) 과정을 효율화하는 도구입니다. dbt 를 이용하면 SQL 쿼리 모듈화, 테스트, 계보 확인을 편하게 할 수 있습니다. 
 
@@ -170,31 +170,31 @@ Datahub 와 Amundsen 모두, dbt* 등을 연동하여 데이터 계보를 시각
 
 #### 7) 인증 및 권한
 
-* Datahub 은 SSO 지원 및 세부적인 권한 설정이 가능합니다.
-  * SSO(Single Sing-On)로 keycloak, okta, google auth 를 지원합니다. 
-  * 사용자 / 그룹 단위로 정책 부여가 가능합니다. 현재는 view 관련 권한은 설정할 수 없고, 테이블이나 컬럼에 대한 설명, 오너, 태그 들을 수정할 수 있는 edit 권한을 세부적으로 조정 가능합니다.
+* Datahub는 SSO 지원 및 세부적인 권한 설정이 가능합니다.
+  * SSO(Single Sing-On)로 Keycloak, Okta, Google Auth를 지원합니다. 
+  * 사용자 / 그룹 단위로 정책 부여가 가능합니다. 현재는 View 관련 권한은 설정할 수 없고, 테이블이나 컬럼에 대한 설명, 오너, 태그 등을 수정할 수 있는 Edit 권한을 세부적으로 조정 가능합니다.
 
-* Amundsen 은 SSO 을 지원하나 세부적인 권한 설정은 지원하지 않습니다.
-  * SSO 로 keycloack, okta, flask_oidc 를 지원합니다.
-  * Amundsen 은 아직 자체적으로 권한 설정을 지원하지 않습니다.
+* Amundsen은 SSO을 지원하나 세부적인 권한 설정은 지원하지 않습니다.
+  * SSO 로 Keycloack, Okta, Flask_oidc를 지원합니다.
+  * Amundsen은 자체적인 권한 설정을 지원하지 않습니다.
 
 
-![datahub-policies](/img/data-discovery-platform-01/datahub-policies.png)*Datahub - 권한 및 정책 폐이지*
+![datahub-policies](/img/data-discovery-platform-01/datahub-policies.png)*Datahub - 권한 및 정책 페이지*
 
 #### 8) 데이터 소스 지원
 
 * 두 플랫폼 모두 BigQuery, Mysql, dbt, AWS S3 등 대중적으로 쓰이는 데이터 소스를 지원합니다.
-* Amundsen 은 pandas, neo4j 등의 조금 더 다양한 형태를 지원합니다. 
+* Amundsen은 pandas, neo4j 등의 더 다양한 형태를 지원합니다. 
 
-#### 9) 사용자 이용 통게
+#### 9) 사용자 이용 통계
 
-* Datahub 는 시각화된 이용 분석 페이지가 따로 존재합니다.
-  *  자주 검색된 데이터셋  / 자주 수행된 액션 등을 그래프로 확인 할 수 있습니다. (데모사이트 에서 [해당 페이지](https://demo.datahubproject.io/analytics)를 직접 확인하실 수 있습니다.) 
-* Amundsen 은 단편적인 이용 통계를 제공합니다.
+* Datahub는 시각화된 이용 분석 페이지가 따로 존재합니다.
+  *  자주 검색된 데이터 셋  / 자주 수행된 액션 등을 그래프로 확인할 수 있습니다. (데모 사이트에서 [해당 페이지](https://demo.datahubproject.io/analytics)를 직접 확인하실 수 있습니다.) 
+* Amundsen은 단편적인 이용 통계를 제공합니다.
   * 메인 화면에서 "인기 있는 데이터셋"을, 각 테이블마다 "해당 테이블을 자주 이용한 사용자"을 확인할 수 있습습니다.
   * 따로 분석 페이지는 없습니다.
 
-![datahub-analytics](/img/data-discovery-platform-01/datahub-analytics.png)*Datahub - 사용자 이용 통계 폐이지*
+![datahub-analytics](/img/data-discovery-platform-01/datahub-analytics.png)*Datahub - 사용자 이용 통계 페이지*
 
 ![amundsen-analytics](/img/data-discovery-platform-01/amundsen-analytics.png)*Amundsen - 테이블을 자주 이용한 사용자*
 
