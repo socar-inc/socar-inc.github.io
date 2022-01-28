@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "쏘카의 데이터 디스커버리 플랫폼 도입기 - 1편. 데이터 디스커버리란? "
+title:  "쏘카의 데이터 디스커버리 플랫폼 도입기 - 1편. 데이터 디스커버리란?"
 subtitle: feat. Datahub VS Amundsen 비교 분석
 date: 2022-01-24 14:00:00 +0900
 category: data
@@ -93,7 +93,7 @@ tags:
 
 ![datathub-vs-amundsen](/img/data-discovery-platform-01/datahub-vs-amundsen.png)
 
-### 0) 구조
+### 1) 구조
 
 두 플랫폼의 구조에는 다음과 같은 공통점이 있습니다.
 
@@ -102,9 +102,9 @@ tags:
 - Neo4j 기반 Graph DB
 - MySql 기반 Storage
 
-차이점은 Datahub는 데이터를 주입할때 Kafka를 사용하고 Amundsen은 XXX을 사용하는 점입니다. 메타데이터 플랫폼 프레임워크의 히스토리를 살펴봤을 때, Amundsen 은 Monolith 방식인 반면 Datahub는 Event-based 방식입니다. 메타데이터 플랫폼의 히스토리에 대해서 좀더 궁금하신 분들은, LinkedIn의 엔지니어링 블로그에 작성된 [DataHub: Popular metadata architectures explained](https://engineering.linkedin.com/blog/2020/datahub-popular-metadata-architectures-explained) 글을 보시는 것을 추천합니다. 
+차이점은 Datahub는 데이터를 주입할때 Kafka를 사용하고 Amundsen은 ETL 라이브러리를 통한 크롤링 방식을 사용하는 점입니다. 메타데이터 플랫폼 프레임워크의 히스토리를 살펴봤을 때, Amundsen 은 Monolith 방식인 반면 Datahub는 Event-based 방식입니다. 메타데이터 플랫폼의 히스토리에 대해서 좀더 궁금하신 분들은, LinkedIn의 엔지니어링 블로그에 작성된 [DataHub: Popular metadata architectures explained](https://engineering.linkedin.com/blog/2020/datahub-popular-metadata-architectures-explained) 글을 보시는 것을 추천합니다. 
 
-#### 1) 메타데이터 주입 방식
+#### 2) 메타데이터 주입 방식
 
 * Datahub는 `yaml` 파일을 실행하여 메타데이터를 주입합니다. 
   * `datahub CLI`를 이용하여 yaml 파일을 실행합니다. 
@@ -112,7 +112,7 @@ tags:
 
 * Amundsen은 `python` 파일을 실행하여 메타데이터를 주입합니다. 
   * 기본적으로 `amundsen databuilder` 라는 Python 라이브러리 (ETL framework) 를 사용하며, Extract, Transform, Load 각 과정에 여러 자체 모듈을 끌어와서 사용하는 방식입니다. 
-  * 이 외에도 종종 여러 디펜던시가 필요했습니다. 
+  * 이 외에도 종종 여러 디펜던시(Dependancy)가 필요했습니다. 
 
 
 ![datahub-ingestion-script](/img/data-discovery-platform-01/datahub-ingestion-script.png)*Datahub -  BigQuery 데이터 주입 script*
@@ -121,7 +121,7 @@ tags:
 
  흥미로운 점은 같은 기능을 수행할 때 Datahub와 Amundsen의 **script 길이 차이**였습니다. Datahub는 10줄 내외의 직관적인 yaml 코드로 가능한 반면, Amundsen의 script는 기본적으로 50 줄 이상이었습니다. 개인적으로 스크립트가 긴 만큼 섬세한 커스텀이 가능하거나 필요하다는 생각은 들지 않았고, 오히려 읽기 무겁다는 생각이 들었습니다(공식 깃헙에 있는 샘플이 400줄이었습니다)
 
-#### 2) UI
+#### 3) UI
 
 개인 차가 있을 수 있으나, 팀원들의 의견으로는 **Datahub가 훨씬 깔끔하고 보기 편하다**는 의견이 많았습니다. Datahub UI는 [공식 데모 사이트](https://demo.datahubproject.io/)에서 더 확인하실 수 있습니다. (Amundsen은 따로 데모 사이트를 제공하지 않습니다)
 
@@ -133,27 +133,23 @@ tags:
 
 ![amundsen-main](/img/data-discovery-platform-01/amundsen-main.png)*Amundsen - 상세 UI*
 
-#### 3) 문서 기능
+#### 4) 문서 기능
 
 - Datahub 
-  - 테이블 별 / 칼럼 별 태그 부여가 가능합니다.
-  - 테이블 별 / 칼럼 별 풍부한 마크다운 문서 작성이 가능하고, 원본 소스의 Description을 보존합니다.
+  - 테이블 별 / 컬럼 별 태그 부여가 가능합니다.
+  - 테이블 별 / 컬럼 별 풍부한 마크다운 문서 작성이 가능하고, 원본 소스의 Description을 보존합니다.
 - Amundsen 
   - 테이블 별 태그 부여가 가능합니다.
-  - 역시 테이블 별 / 칼럼 별 마크다운 제한적인 문서 작성이 가능하고, 원본 소스의 Description을 보존하지 않습니다.
+  - 역시 테이블 별 / 컬럼 별 마크다운 제한적인 문서 작성이 가능하고, 원본 소스의 Description을 보존하지 않습니다.
 
-중요한 점은 플랫폼 UI 상에서 테이블 혹은 칼럼의 설명을 수정했을 때 **원본 소스의 Description을 따로 확인할 수 있는지**의 여부였습니다. Datahub는 다음과 같은 방식으로 Original Description을 동시에 보여주지만, Amundsen은 이런 기능이 없습니다. 또한 Datahub는 원본 Description과 UI 상 Description이 별개로 버전 관리가 되고 있어서, 한쪽의 수정이 다른 쪽에 영향을 끼치지 않았습니다. 
+중요한 점은 플랫폼 UI 상에서 테이블 혹은 컬럼의 설명을 수정했을 때 **원본 소스의 Description을 따로 확인할 수 있는지**의 여부였습니다. Datahub는 다음과 같은 방식으로 Original Description을 동시에 보여주지만, Amundsen은 이런 기능이 없습니다. 또한 Datahub는 원본 Description과 UI 상 Description이 별개로 버전 관리가 되고 있어서, 한쪽의 수정이 다른 쪽에 영향을 끼치지 않았습니다. 
 
 ![datahub-dataset](/img/data-discovery-platform-01/datahub-description.png)*Datahub - UI 상에서 수정하더라도 "Original"(원본 코멘트)이 함께 표기됩니다.*
 
-#### 4) 오너십
+#### 5) 오너십
 
 * Datahub는 테이블에 유저 / 그룹 단위로 오너십을 지정할 수 있습니다.
 * Amundsen은 테이블에 유저 단위로만 오너십을 지정할 수 있습니다.
-
-#### 5) 데이터 샘플링
-
-Datahub는 메타데이터 주입 시 사용하는 yaml 파일에서 SQL profiling 기능을 활성화 할 수 있습니다. 이 기능을 이용하면 컬럼 별 통계와 해당 컬럼의 샘플 데이터를 볼 수 있습니다. Amundsen 은 Pandas를 연결하여 비슷한 기능을 구현할 수 있다고 합니다. 
 
 
 #### 6) 데이터 계보(Data Lineage)
@@ -200,22 +196,22 @@ Datahub와 Amundsen 모두 dbt* 등을 연동하여 데이터 계보를 시각�
 
 #### 10) 서포트
 
-* 공식 github repository 의 star 수를 비교했을 때 Datahub가 4.5K, Amundsen 이 3K 로 Datahub 가 좀더 우세했습니다.
-* 두 플랫폼 모두 공식 슬랙, 웹사이트, github repository 등의 다양한 채널을 지원했으나, 슬랙에서 질답의 활발함이나 공식 문서의 체계성 측면에서 Datahub 가 좀더 우세했습니다.
+* 공식 Github Repository 의 Star 수를 비교했을 때 Datahub가 4.5K, Amundsen이 3K 로 Datahub 가 더 많은 Star를 보유하고 있었습니다.
+* 두 플랫폼 모두 공식 슬랙, 웹사이트, Github repository 등의 다양한 채널을 지원했으나, 슬랙의 활성화(질문, 답변의 활발함)나 공식 문서의 체계성 측면에서 Datahub가 좀더 우세했습니다.
 
 ---
 
-## 4. 최종 결정 : Datahub 결정 이유  <a name="final-decision"></a>
+## 4. 최종 결정 : Datahub!  <a name="final-decision"></a>
 
 ### 사용성의 편리함 
 
 가장 결정적인 이유는 사용성 차이였습니다. 사용성은 데이터 이용자와 플랫폼 개발자, 두 측면에서 생각할 수 있습니다.
 
-데이터 이용자 측면에서는 위에서도 비교했듯이, Datahub 가 문서화, 오너십, 권한, 통계, 데이터 계보 관점에서 **더 다양하고 풍부한 기능들을 지원**합니다. 이런 기능들이 실제로 도입됐을 때, 이용자가 원하는 데이터를 빠르게 찾고 쏘카의 데이터 디스커버리를 발전시키는 데에 더 많은 도움을 얻을 수 있을거라 판단했습니다.
+데이터 이용자 측면에서는 위에서도 비교했듯이, Datahub가 문서화, 오너십, 권한, 통계, 데이터 계보 관점에서 **더 다양하고 풍부한 기능들을 지원**합니다. 이런 기능들이 실제로 도입됐을 때, 이용자가 원하는 데이터를 빠르게 찾고 쏘카의 데이터 디스커버리를 발전시키는 데에 더 많은 도움을 얻을 수 있을거라 판단했습니다.
 
-플랫폼 개발자 측면에서도 **메타데이터 주입 시 Datahub가 더 편리**했습니다. 동일한 메타데이터를 주입한다고 가정했을 때 Datahub 는 10 줄 내외의 yaml 파일로 가능한 반면, Amundsen 은 100줄 이상의 python script가 필요했습니다. Amundsen script 가 긴 만큼 세세한 설정이 가능한지, 또 그런 세세한 설정이 가능하다고 해도 현재 상황에 필요한지를 고민해봤을 때는 의문점이 있었습니다. 따라서 쏘카의 상황에는 Datahub 가 더 적절하다고 판단했습니다. 
+플랫폼 개발자 측면에서도 **메타데이터 주입 시 Datahub가 더 편리**했습니다. 동일한 메타데이터를 주입한다고 가정했을 때 Datahub는 10 줄 내외의 yaml 파일로 가능한 반면, Amundsen은 100줄 이상의 Python Script가 필요했습니다. Amundsen Script 가 긴 만큼 세세한 설정이 가능한지, 또 그런 세세한 설정이 가능하다고 해도 현재 상황에 필요한지를 고민해봤을 때는 의문점이 있었습니다. 따라서 메타데이터를 주입할 데이터 소스가 한정된 쏘카의 상황에는 Datahub 가 더 적절하다고 판단했습니다. 
 
-### UI 의 깔끔함
+### UI의 깔끔함
 
 많은 사람이 이용하는 솔루션이나 플랫폼을 도입할때는 UI 도 무시할 수 없다고 생각합니다. PoC시 Datahub UI 가 훨씬 깔끔하다는 반응이 많았고, 매 버전마다 UI가 개선되고 있는 점도 Datahub으로 결정힌 이유 중 하나였습니다. 
 
