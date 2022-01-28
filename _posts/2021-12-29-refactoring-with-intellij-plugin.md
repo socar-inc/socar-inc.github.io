@@ -25,8 +25,8 @@ tags:
 당시에 리팩토링 작업을 하며 내부 세미나를 통해 발표했던 내용을, 연말연시를 맞이하여 이 글을 통해 다시금 정리해서 공유해 보고자 합니다.
 
 ---
-# 리팩토링을 마음먹게 된 계기
-## View Binding으로의 전환
+## 리팩토링을 마음먹게 된 계기
+### View Binding으로의 전환
 안드로이드에서 View에 접근하는 방식은 [계속해서 바뀌어](https://medium.com/mobile-app-development-publication/how-android-access-view-item-the-past-to-the-future-bb003ae84527) 왔습니다.
 이러한 변화 중에서 현재 가장 이슈가 되고 있는 것은 아무래도 Jetpack Compose의 [정식 출시](https://android-developers.googleblog.com/2021/07/jetpack-compose-announcement.html)겠지만, 이 글은 그보다 약간 이전에 있었던 사건에 관한 이야기입니다.
 
@@ -66,8 +66,8 @@ class ChangedActivity : BaseActivity() {
 다만, 무작정 작업에 돌입하기보다는 효율적인 방법에 대해서 생각해 볼 필요가 있었죠.
 
 ---
-# 리팩토링 검토
-## View Binding 전환에 필요한 것
+## 리팩토링 검토
+### View Binding 전환에 필요한 것
 위에서도 언급했다시피 View Binding으로 리팩토링하는 작업을 위해 요구사항을 정리하다 보면 처음에 가졌던 생각보다 번거로운 지점이 보여서 멈칫멈칫하게 되는 부분들이 있었습니다.
 
 - `by bindView` Delegate를 사용하는 변수들을 쓰고 있는 모든 Usage에 대해 이름 변경이 필요하다.
@@ -93,7 +93,7 @@ class ChangedActivity : BaseActivity() {
 
 그렇게 해서 자동으로 Kotlin 코드를 파싱 하여 수정하는 방법들까지도 검토해 보게 되었습니다.
 
-## 사용해 볼 만한 방법들
+### 사용해 볼 만한 방법들
 그런 생각을 거쳐서 아래에 있는 다섯 가지 정도의 방법을 떠올리고 간단하게 비교를 진행했습니다.
 
 - Android Studio의 Rename 기능을 변수 하나하나에 적용해서 바꾸기
@@ -127,7 +127,7 @@ Kotlin Compiler를 써서 Parsing 하거나, LSP를 사용해서 수정하는 �
 이러한 비교를 바탕으로 개발 시간이 많이 필요하지 않으면서도 자동화가 가능한 IntelliJ Platform Plugin 방식을 선택했고, 이를 통해 View Binding으로의 리팩토링을 진행해 보기로 했습니다.
 
 ---
-# IntelliJ Platform Plugin
+## IntelliJ Platform Plugin
 그렇다고 하더라도 자료를 찾기 어렵다면 개발 시간이 길어질 것이므로 걱정했지만, 다행스럽게도 JetBrains에서는 공식적으로 IntelliJ Platform에서 사용 가능한 [플러그인](https://lp.jetbrains.com/gradle-intellij-plugin/) 개발에 대한 [문서](https://plugins.jetbrains.com/docs/intellij/welcome.html)를 제공하고 있었습니다.
 이 문서의 [Getting Started 페이지](https://plugins.jetbrains.com/docs/intellij/getting-started.html)에 따르면 아래와 같은 방식으로 플러그인을 개발하는 것을 권장하고 있습니다.
 
@@ -135,7 +135,7 @@ Kotlin Compiler를 써서 Parsing 하거나, LSP를 사용해서 수정하는 �
 
 이렇게 나열된 방식 중에서 비교적 간단하게 개발할 수 있는 방식인 [GitHub Template](https://github.com/JetBrains/intellij-platform-plugin-template)를 통해 그 안에 있는 예제 플러그인 코드로부터 개발을 시작했습니다.
 
-## 예제 플러그인 동작 확인
+### 예제 플러그인 동작 확인
 [링크](https://github.com/JetBrains/intellij-platform-plugin-template)로부터 예제 템플릿 레포지토리를 클론 해와서 Android Studio로 열어보면 `Run Configurations` 중에 `Run Plugin`이라는 항목을 볼 수 있습니다.
 그 항목을 선택하고 `Run` 버튼을 눌러서 이를 실행시키면 예제 플러그인이 설치되어 동작할 IntelliJ Community Edition이 자동으로 다운로드되고, 그 Sandbox 인스턴스 IDE가 새로 뜨며, 그 위에서 예제 플러그인이 돌아가는 것을 확인해 볼 수 있습니다.
 
@@ -143,7 +143,7 @@ Kotlin Compiler를 써서 Parsing 하거나, LSP를 사용해서 수정하는 �
 
 ![기본 예제 확인](/assets/images/intellij-plugin/sample.png)
 
-## Kotlin 코드 다루기
+### Kotlin 코드 다루기
 하지만 우리가 플러그인을 통해 최종적으로 이름 변경을 하기 위해서는 Kotlin 코드를 인식하고 분석하는 기능이 필요합니다.
 기존에 Android Studio를 비롯한 IntelliJ 계열 IDE에도 Renaming 기능이 있기 때문에, 플러그인에도 관련 내용이 있으리라 판단했고, 아니나 다를까 [이 문서](https://plugins.jetbrains.com/docs/intellij/kotlin.html#handling-kotlin-code)에서 Kotlin 관련 내용을 찾을 수 있었습니다.
 
@@ -167,7 +167,7 @@ platformPlugins = ..., java, Kotlin
 
 이제 해당 변경사항을 IDE가 인지할 수 있도록 `Sync Project with Gradle Files`를 해주면 Kotlin 코드를 다룰 준비가 되었습니다.
 
-## PSI 사용하기
+### PSI 사용하기
 실질적으로 코드를 다루는 작업은 IntelliJ platform에서 제공하는 인터페이스인 [PSI(Program Structure Interface)](https://plugins.jetbrains.com/docs/intellij/psi.html)를 통해서 진행합니다.
 여기서 PSI란 [공식 문서](https://plugins.jetbrains.com/docs/intellij/implementing-parser-and-psi.html)에 적혀있는 것처럼 특정 언어를 다루기 쉽도록 IntelliJ Platform이 파싱한 AST 요소들 위에 부가정보(문법적인 정보나, 언어 특유의 속성)들을 더한 것입니다.
 저희는 위에서 적었던 `platformPlugins = ..., Kotlin`을 통해서 IntelliJ Kotlin Plugin이 제공하는 Kotlin PSI를 사용할 수 있게 되었습니다.
@@ -179,7 +179,7 @@ platformPlugins = ..., java, Kotlin
 - 이 Element를 참조하고 있는 다른 Element로 이동
 - AST에 있는 하위 Element들은 어떤 것들이 있는지 확인
 
-### 모든 KtClass 이름 출력
+#### 모든 KtClass 이름 출력
 Kotlin PSI를 사용해서 프로젝트에 있는 모든 `.kt` 파일에 정의된 Kotlin Class의 이름을 출력해 보려면 아래와 같은 함수를 만들어서 사용해 볼 수 있습니다.
 
 ```kotlin
@@ -200,7 +200,7 @@ fun printKtClassNames(project: Project) {
 Sandbox IDE에서 열린 프로젝트의 `KtClass` 이름들이 아래쪽의 콘솔 창에 찍힌 것을 확인해 볼 수 있습니다.
 다만 프로젝트가 열리는 시점에는 Indexing이 끝나지 않아 모듈이나 파일 목록들이 아직 구성되지 않은 상태일 수도 있기 때문에 위와 같이 `DumbService.getInstance(project).runWhenSmart()`를 사용해서 Indexing이 완료된 후에 실행될 수 있도록 했습니다.
 
-### 특정 프로퍼티 가져오기
+#### 특정 프로퍼티 가져오기
 그렇다면 `KtClass` 내부에 정의된 `bindView`를 사용하는 프로퍼티와 연결된 XML ID는 어떻게 가져올 수 있을까요?
 
 클래스 안에 정의된 프로퍼티를 가져와서 그 PSI tree를 보면서 `bindView`를 사용하고 있는지, 그리고 어떤 ID를 사용하는지 확인해 보면 됩니다.
@@ -226,7 +226,7 @@ fun KtClass.getBindViewProperties() = getProperties()
 data class BindViewProperty(val property: KtProperty, val xmlId: String)
 ```
 
-### 프로퍼티의 이름을 변경하기
+#### 프로퍼티의 이름을 변경하기
 위쪽 단락에서 받아온 Kotlin PSI의 `KtProperty` 타입은 `PsiNamedElement`를 구현한 타입입니다.
 따라서 아래와 같이 함수를 만들어서 Reference를 포함한 모든 장소의 이름을 변경하고, 그 변경사항을 반영할 수 있습니다.
 
@@ -266,7 +266,7 @@ fun String.snakeToLowerCamelCase(): String =
 psiElement.astReplace(PsiWhiteSpaceImpl(text))
 ```
 
-## Action으로 등록해서 사용
+### Action으로 등록해서 사용
 앞서 말한 동작들이 프로젝트 로딩 시점마다 매번 실행되는 것은 플러그인이라는 특성상 그다지 바람직하지 않은 일입니다.
 따라서 IntelliJ에서는 [action](https://plugins.jetbrains.com/docs/intellij/basic-action-system.html)을 등록할 수 있게 해 두었습니다.
 `plugins.xml`에 아래와 같이 작성하고 `Run Plugin`을 돌려서 켜진 Sandbox IntelliJ를 확인해 보면, 상단의 Tools 메뉴 가장 위에 Action이 등록된 것을 볼 수 있습니다.
@@ -311,7 +311,7 @@ class BindViewRefactoring : AnAction() {
 ```
 
 ---
-# 마무리하며
+## 마무리하며
 이러한 과정을 거쳐서 작성한 플러그인 코드를 빌드 하여 Android Studio에 설치하고, 리팩토링에 빠르게 사용해 볼 수 있었습니다.
 ![Android Studio에 설치한 쏘카 플러그인](/assets/images/intellij-plugin/plugin.png)
 
@@ -325,7 +325,7 @@ PR에서 코드 리뷰 과정을 거치는 도중, View Binding 초기화 코드
 그뿐만 아니라 현재는 이 플러그인을 확장해서 Live Template으로 하기에는 까다로운 템플릿 코드 기능을 추가하는 등, 더 다양한 형태로 활용하고 있습니다.
 이런 식으로 앞으로도 IntelliJ 플러그인을 통해서 개발자들의 소중한 개발 시간을 조금이나마 절약해 볼 수 있으면 좋겠습니다.
 
-## P.S.
+### P.S.
 2021년 11월 말, JetBrains에서 차세대 IDE [Fleet](https://www.jetbrains.com/fleet/)을 발표했습니다.
 짧은 지원자 신청 기간을 거쳐 현재는 Closed Preview를 진행 중인데요, Fleet에서 Plugin 지원은 어떻게 진행할지, Language Server에 대한 정책은 어떻게 바뀔지 흥미롭습니다.
 비록 플러그인을 작성하는 방식이 기존과 달라질 수도 있겠지만, 여기서 진행했던 리팩토링 자동화 경험에 약간의 변주만 더한다면 수월하게 작업할 수 있으리라 생각합니다.
