@@ -98,8 +98,8 @@ class ChangedActivity : BaseActivity() {
 
 - Android Studio의 Rename 기능을 변수 하나하나에 적용해서 바꾸기
 - Regex를 사용해서 찾아 바꾸기
-- Kotlin Compiler의 [parsing](https://github.com/JetBrains/kotlin/tree/master/compiler/psi/src/org/jetbrains/kotlin/parsing)을 사용하기
-- LSP와 [비공식 Kotlin Language Server](https://github.com/fwcd/kotlin-language-server)의 [rename](https://github.com/fwcd/kotlin-language-server/pull/319)을 사용하기
+- Kotlin Compiler의 [Parsing](https://github.com/JetBrains/kotlin/tree/master/compiler/psi/src/org/jetbrains/kotlin/parsing)을 사용하기
+- LSP와 [비공식 Kotlin Language Server](https://github.com/fwcd/kotlin-language-server)의 [Rename](https://github.com/fwcd/kotlin-language-server/pull/319)을 사용하기
 - [IntelliJ Platform Plugin](https://plugins.jetbrains.com/docs/intellij/welcome.html)을 만들어서 동작시키기
 
 이 중에서 Android Studio의 IDE 기능을 써서 Renaming 하는 방식은 신뢰도가 높고 추가적인 개발이 필요 없지만, 각각의 변수들을 하나하나 수정해야 하므로 작업에 걸리는 시간이 길어진다는 단점이 있었습니다.
@@ -316,10 +316,10 @@ class BindViewRefactoring : AnAction() {
 ![Android Studio에 설치한 쏘카 플러그인](/assets/images/intellij-plugin/plugin.png)
 
 또한 작성한 플러그인의 기능에는 전처리/후처리를 좀 더 편하게 할 수 있도록 위에서 언급했던 프로퍼티 변경 기능 외에도 아래와 같은 기능들을 추가했습니다.
-- View Binding Migration 페이지에 있는 것처럼 레이아웃을 `R.layout.~` resource 대신 `...Binding` 클래스로부터 받아와서 초기화하는 코드 삽입 기능
+- View Binding Migration 페이지에 있는 것처럼 레이아웃을 `R.layout.~` Resource 대신 `...Binding` 클래스로부터 받아와서 초기화하는 코드 삽입 기능
 - IntelliJ에서 제공하는 `OptimizeImportsProcessor`, `ReformatCodeProcessor` 등을 사용해서 수정한 코드를 다시 정리하는 기능
 
-덕분에 `Activity`, `Fragment`, custom view 등 100개가 넘는 파일에 있던 `bindView` 프로퍼티들을 한꺼번에 수정할 수 있었습니다.
+덕분에 `Activity`, `Fragment`, Custom View 등 100개가 넘는 파일에 있던 `bindView` 프로퍼티들을 한꺼번에 수정할 수 있었습니다.
 PR에서 코드 리뷰 과정을 거치는 도중, View Binding 초기화 코드를 수정하면 좋겠다는 의견이 있어서 이를 전체적으로 반영할 때에도 하나하나 파일을 찾아가며 고칠 필요가 없던 것도 큰 이득이었습니다.
 
 그뿐만 아니라 현재는 이 플러그인을 확장해서 Live Template으로 하기에는 까다로운 템플릿 코드 기능을 추가하는 등, 더 다양한 형태로 활용하고 있습니다.
