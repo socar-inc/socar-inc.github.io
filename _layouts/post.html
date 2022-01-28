@@ -21,12 +21,12 @@ layout: default
               {% assign page_authors = page.author | split: ", " %}
               {% for page_author in page_authors %}
                 {% assign author = site.data.authors[page_author] %}
-                <span class="author"><a href="/authors#{{ author.name }}"><img src="{{ author.image }}">{{ author.name | }}</a></span>
+                <span class="author"><a href="/authors#{{ author.name }}"><img src="{{ author.image }}">{{ author.name }}</a></span>
               {% endfor %}
                 <br>
                 <span class="date">{{ page.date | date: '%Y-%m-%d' }}</span>
                 <br>
-                <span class="category"><a href="/categories#{{ post.category }}">{{ page.category }}</a></span> 
+                <span class="category"><a href="/categories#{{ post.category }}">{{ page.category }}</a></span>
                 <br>
               {% for tag in page.tags %}
                 <span class="tag"><a href="/tags#{{ tag }}">{{ tag }}</a></span>
@@ -85,7 +85,7 @@ layout: default
       let scrollBottom =  scrollTop + $(window).height()
       let contentOffsetTop = $(".post-content").offset().top
       let contentOffsetBottom = contentOffsetTop + $(".post-content").height()
-      let elementHeight = $(".post-content").height(); 
+      let elementHeight = $(".post-content").height();
 
       if ((scrollTop < contentOffsetTop) || (scrollBottom >= contentOffsetBottom)) {
         // $('.toc').css('visibility', 'hidden')
