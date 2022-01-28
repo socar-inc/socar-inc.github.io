@@ -72,3 +72,8 @@ dini:
   name: dini
   organization: 데이터 플랫폼 팀
   image: '/assets/authors/dini.jpeg'
+
+monsieur:
+  name: monsieur
+  organization: 클라우드 인프라 팀
+  image: '/assets/authors/monsieur.png'
