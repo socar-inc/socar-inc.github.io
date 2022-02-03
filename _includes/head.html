@@ -9,8 +9,17 @@
   </title>
 
   <meta name="description" content="{{ page.excerpt | default: site.description | strip_html | normalize_whitespace | truncate: 160 | escape }}">
-  <meta property="og:title" content="{{ page.title }}">
-  <meta property="og:image" content="{{ site.url }}{{ page.background }}">
+
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="{{ site.url }}"/>
+  <meta property="og:title" content="{{ page.title }}"/>
+  <meta property="og:description" content="{{ page.excerpt | default: site.description | strip_html | normalize_whitespace | truncate: 160 | escape }}"/>
+  <meta property="og:site_name" content="{{ site.title }}"/>
+  <meta property="og:image" content="{{ site.url }}{{ page.background }}"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="{{ page.title }}"/>
+  <meta name="twitter:description" content="{{ page.excerpt | default: site.description | strip_html | normalize_whitespace | truncate: 160 | escape }}"/>
+  <meta name="twitter:image" content="{{ site.url }}{{ page.background }}"/>
 
   <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
   <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
