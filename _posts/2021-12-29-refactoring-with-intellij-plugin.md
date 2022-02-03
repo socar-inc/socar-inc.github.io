@@ -32,7 +32,7 @@ tags:
 
 2020년 말, Kotlin Synthetics 가 Kotlin Android Extensions와 함께 [deprecated](https://github.com/JetBrains/kotlin/releases/tag/v1.4.20) 되었습니다.
 다행스럽게도 저희는 그 시점에 Kotlin Synthetics를 직접 사용하지 않고 [ButterKnife](https://github.com/JakeWharton/butterknife) 기반의 [ButterKt](https://github.com/Rajin9601/ButterKt)를 수정해서 활용하고 있었기 때문에 deprecation의 직접적인 영향 없이 Kotlin 버전을 업데이트할 수 있었습니다.
-그러나 ButterKnife의 README 파일에도 적혀있듯이, View Binding을 사용하라는 권고는 늘 마음 한편(과 기술 부채 목록)에 남아있었죠.
+그러나 ButterKnife의 README 파일에도 적혀있듯이, View Binding을 사용하라는 권고는 늘 마음 한편과 기술 부채 목록에 남아있었죠.
 
 하기야 View에 대한 타입 추론도 잘해주고, 속도도 이전에 비해 빨라지고, View에 대한 구조적인 접근도 가능한 View Binding을 사용하는 것에 딱히 나쁜 점은 없었습니다.
 더군다나 이렇게 [Migration 가이드](https://developer.android.com/topic/libraries/view-binding/migration)도 제공하고 있고요.
