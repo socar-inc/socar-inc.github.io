@@ -179,7 +179,7 @@ platformPlugins = ..., java, Kotlin
 - 이 Element를 참조하고 있는 다른 Element로 이동
 - AST에 있는 하위 Element들은 어떤 것들이 있는지 확인
 
-#### 모든 KtClass 이름 출력
+### 모든 KtClass 이름 출력
 Kotlin PSI를 사용해서 프로젝트에 있는 모든 `.kt` 파일에 정의된 Kotlin Class의 이름을 출력해 보려면 아래와 같은 함수를 만들어서 사용해 볼 수 있습니다.
 
 ```kotlin
@@ -200,7 +200,7 @@ fun printKtClassNames(project: Project) {
 Sandbox IDE에서 열린 프로젝트의 `KtClass` 이름들이 아래쪽의 콘솔 창에 찍힌 것을 확인해 볼 수 있습니다.
 다만 프로젝트가 열리는 시점에는 Indexing이 끝나지 않아 모듈이나 파일 목록들이 아직 구성되지 않은 상태일 수도 있기 때문에 위와 같이 `DumbService.getInstance(project).runWhenSmart()`를 사용해서 Indexing이 완료된 후에 실행될 수 있도록 했습니다.
 
-#### 특정 프로퍼티 가져오기
+### 특정 프로퍼티 가져오기
 그렇다면 `KtClass` 내부에 정의된 `bindView`를 사용하는 프로퍼티와 연결된 XML ID는 어떻게 가져올 수 있을까요?
 
 클래스 안에 정의된 프로퍼티를 가져와서 그 PSI tree를 보면서 `bindView`를 사용하고 있는지, 그리고 어떤 ID를 사용하는지 확인해 보면 됩니다.
@@ -226,7 +226,7 @@ fun KtClass.getBindViewProperties() = getProperties()
 data class BindViewProperty(val property: KtProperty, val xmlId: String)
 ```
 
-#### 프로퍼티의 이름을 변경하기
+### 프로퍼티의 이름을 변경하기
 위쪽 단락에서 받아온 Kotlin PSI의 `KtProperty` 타입은 `PsiNamedElement`를 구현한 타입입니다.
 따라서 아래와 같이 함수를 만들어서 Reference를 포함한 모든 장소의 이름을 변경하고, 그 변경사항을 반영할 수 있습니다.
 
