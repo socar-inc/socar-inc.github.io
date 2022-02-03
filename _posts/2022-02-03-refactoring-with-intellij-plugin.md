@@ -2,7 +2,7 @@
 layout: post
 title: "Android Studio 플러그인으로 코드 자동 리팩토링하기"
 subtitle: "IntelliJ platform plugin을 활용한 대량의 Kotlin 코드 수정"
-date: 2021-12-29 09:00:00 +0900
+date: 2022-02-03 17:00:00 +0900
 category: dev
 background: '/assets/images/intellij-plugin/plugin.png'
 author: jian
