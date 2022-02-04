@@ -1,16 +1,16 @@
 ---
 layout: post
-title: "쏘카 AI팀의 Applied Research Scientist는 어떤 일을 하나요?"
-subtitle: "쏘카에서는 어떤 AI를 연구하나요?"
+title: "Applied Research Scientist는 어떤 일을 하나요?"
+subtitle: "쏘카가 연구하는 AI"
 date: 2022-02-04 17:00:00 +0900
 category: ai 
-background: '/assets/images/role-of-applied-research-scientist-at-socar/brain_background.png' # TODO
+background: '/assets/images/brain_background.png' # https://unsplash.com/photos/58Z17lnVS4U
 author: kp
 comments: true
 tags:
-  - applied research scientist
-  - deep learning
-  - ai
+  - Applied Research Scientist
+  - Deep Learning
+  - AI
 ---
 
 안녕하세요, 쏘카 AI팀의 팀장 케이피라고 합니다.
