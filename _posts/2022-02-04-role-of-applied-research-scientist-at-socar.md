@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "쏘카 AIXㅣㅁ의 Applied Research Scientist는 어떤 일을 하나요?"
+title: "쏘카 AI팀의 Applied Research Scientist는 어떤 일을 하나요?"
 subtitle: "IntelliJ platform plugin을 활용한 대량의 Kotlin 코드 수정" # TODO
 date: 2022-02-04 17:00:00 +0900
 category: ai
@@ -78,6 +78,7 @@ Research Scientist는 과거에 제안된 연구들을 파악하고 새로운 �
 ### 2) Applied Research Scientist: 우리 비즈니스 도메인의 문제를 어떻게 풀 수 있을까?
 
 **Concept**
+
 Applied Research Scientist는 특정 비즈니스 도메인의 문제를 풀 수 있는 AI를 연구하고, 연구된 모델을 배포하는 일을 수행하는 포지션입니다. **Research Scientist가 여러 도메인에 범용적으로 적용될 수 있는 AI를 연구한다면, Applied Research Scientist는 특정 도메인에 최적화된 AI를 연구하고 이를 prouction 환경에 맞게 구현하는 역할도 수행합니다.**
 
 Applied Research Scientist는 Public Benchmark Dataset을 이용하기도 하지만, 현실에서 발생한 real-world dataset을 주로 이용합니다. real-world dataset이란 현실에서 발생하는 데이터셋으로, 쏘카의 경우 카셰어링 서비스를 운영하면서 발생하는 여러 데이터 (i.e., 차량 이미지, 차량 센서, 채팅 텍스트 등)를 의미합니다 . 조직이 직면하고 있는 문제를 해결하기 때문에, Public Benchmark Dataset은 논문에서 제안된 여러 기법의 성능을 확인하는데 사용하고 주된 문제 해결에는 real-world dataset을 사용합니다. 하지만 세상만사 쉬운일이 없듯이 public benchmark 에서는 높은 성능을 달성한 기법(모델)이 real-world dataset에서는 잘 동작하지 않는 경우가 많습니다. **Applied Research Scientist는 public benchmark와 real-world의 차이를 고민하면서, SOTA 기법이 우리 도메인에서 왜 안되는지 (혹은 왜 잘되는지)를 파악하고, 제안된 여러 기법들을 최적화하거나 새로운 기법을 디자인하기도 합니다.**
@@ -110,9 +111,11 @@ Applied Research Scientist는 도메인의 문제를 해결할 수 있는 AI를 
 
 
 **Concept**
+
 마지막으로 Machine Learning Engineer는 AI모델의 개발과 서비스에 더 무게를 두고 있는 포지션입니다. Scientist와 커뮤니케이션하며 모델을 구현하고, 효율적으로 모델을 학습시킬 수 있는 환경을 구축하기도 합니다. 모델이 학습이 완료된 이후에는, 효율적으로 Inference를 수행할 수 있는 아키텍처를 구성하거나 모델을 리팩토링합니다.
 
 **Key Responsibility**
+
 전 문단에서 “효율”이라는 단어가 자주 등장했는데, Machine Learning Engineer는 특정 데이터셋에서 성능을 향상시키기 보다는 모델을 개발하고 운영하는 과정을 효율화하는 포지션입니다. AI모델의 학습과 배포하는 단계에서 Machine Learning Engineer가 하는 일들을 나열해보면, 아래 4가지 정도를 꼽아볼 수 있습니다.
 
 - Scientist가 사용하는 데이터셋을 효율적으로 구축하고 관리하기
@@ -142,10 +145,12 @@ Machine Learning Engineer는 데이터셋 구성에서부터 모델 구현, 학�
 
 
 ![](/img/role-of-applied-research-scientist-at-socar/human_in_the_loop.png)
-[Source](https://hai.stanford.edu/news/humans-loop-design-interactive-ai-systems)
+[Human-Interactive AI(Human-In-The-Loop)](https://hai.stanford.edu/news/humans-loop-design-interactive-ai-systems)
 
 
 **1) Vision Domain**
+
+
 현실에서 Robust한 AI 시스템을 디자인하기 위해서는 많은 고민들이 필요합니다. 먼저 Vision 도메인에서 간단한 예를 들어보겠습니다. 
 
 경차와 중형차 이미지를 구분하는 이진 차종 분류 모델 (Binary Classifier)이 존재한다고 가정해봅시다. 이진 분류기를 만드는 것은 간단합니다. DB에 쿼리를 날려 경차와 중형차 이미지를 수집하고, 레이블링을 수행하고, ResNet과 같은 Neural Network Architecture에 Cross Entropy Loss를 설정하여 분류 모델을 학습시키면 됩니다. 그러나 이 분류기가 현실에 배포되기 위해서는 더 깊고, 다양한 고민이 필요합니다. 
@@ -158,15 +163,12 @@ Machine Learning Engineer는 데이터셋 구성에서부터 모델 구현, 학�
 ![](/img/role-of-applied-research-scientist-at-socar/not_car_images.png)
 차종 분류와 관련없는 이미지들 예시 (출처: 본인)
 
-모델이 풀고자 하는 Task에 관련없는 이미지 (Out-of-Distribution sample)가 분류기에 들어오면, Supervised Learing 패러다임으로 학습된 분류기는 무조건 경차나 중형차 중에 하나로 판단을 내리게 됩니다. 즉, 불필요하고 잘못된 정보가 Inference 되어 End-User에게 전달됩니다. (몽쉘 사진을 경차라고 판단하여 실무자에게 전달되는 것이죠!) 
+모델이 풀고자 하는 Task에 관련없는 이미지 (Out-of-Distribution sample)가 분류기에 들어오면, Supervised Learing 패러다임으로 학습된 분류기는 무조건 경차나 중형차 중에 하나로 판단을 내리게 됩니다. 즉, 불필요하고 잘못된 정보가 Inference 되어 End-User에게 전달됩니다. (고기 사진을 경차라고 판단하여 실무자에게 전달하는 것입니다!) 이러한 문제는 어떻게 해결할 수 있을까요?  **사전에 경차나 중형차에 속하지 않는다고 판단하면서 (Out-of-Distribution Detection), 기존 분류기의 성능을 유지할 수는 없을까요? (Open-Set Recognition)**
 
-이러한 문제는 어떻게 해결할 수 있을까요?  **사전에 경차나 중형차에 속하지 않는다고 판단하면서 (Out-of-Distribution Detection), 기존 분류기의 성능을 유지할 수는 없을까요? (Open-Set Recognition)**
-
-다른 관점에서 차종 분류 모델을 살펴보겠습니다. CNN 기반의 분류 모델은 이미지가 들어왔을 때, 해당 이미지에 대한 예측의 confidence를 갖습니다. 이 confidence가 특정 이미지가 Class에 속할 probability(확률)이라고 말할 수 있을까요? 
-
-일반적인 CNN들은 대부분의 판단에 대해 overly-confident한 예측을 수행하는 overconfidence problem을 가지고 있습니다. 이 때, 과도하게 높은 confidence를 갖는 문제를 어떻게 해결할 수 있을까요? **잘못된 예측을 수행했을 때는 less-confident하게 틀리고, 옳은 예측에 대해서는 more confident하게 맞추도록 할 수는 없을까요? (Calibration) ** 실무에서는 모델의 예측 결과 뿐만 아니라, **모델이 확실하게 예측한 건들을 먼저 검토하고자 하는데, 이 확신의 정도를 어떻게 잘 측정할 수 있을까요?**
+다른 관점에서 차종 분류 모델을 살펴보겠습니다. CNN 기반의 분류 모델은 이미지가 들어왔을 때, 해당 이미지에 대한 예측의 confidence를 갖습니다. 이 confidence가 특정 이미지가 Class에 속할 probability(확률)이라고 말할 수 있을까요? 일반적인 CNN들은 대부분의 판단에 대해 overly-confident한 예측을 수행하는 overconfidence problem을 가지고 있습니다. 이 때, 과도하게 높은 confidence를 갖는 문제를 어떻게 해결할 수 있을까요? **잘못된 예측을 수행했을 때는 less-confident하게 틀리고, 옳은 예측에 대해서는 more confident하게 맞추도록 할 수는 없을까요? (Calibration) 실무에서는 모델의 예측 결과 뿐만 아니라, 모델이 확실하게 예측한 건들을 먼저 검토하고자 하는데, 이 확신의 정도를 어떻게 잘 측정할 수 있을까요?**
 
 **2) NLP Domain**
+
 AI 팀에서는 고객이 쏘카 이용 중 겪을 수 있는 문제를 빠르게 해결해줄 수 있는 채팅 AI (Dialogue Sytem)을 연구하고 있습니다. 예를 들어, 고객이 겪는 문제 상황을 이해하기 위해 간단한 Intent Classifier가 있다고 가정해보겠습니다. 고객의 여러 문제상황(Intent)들 중 “쏘카존에 반납이 불가능해요”라는 Intent가 있을 때, 아래와 같은 고객의 문의들은 어떻게 처리할 수 있을까요?
 
 - 1) “쏘카존 입구가 어디에 있는지 모르겠어서 반납을 못하겠어요”
@@ -181,15 +183,13 @@ AI 팀에서는 고객이 쏘카 이용 중 겪을 수 있는 문제를 빠르�
 - 3) 은 쏘카존 관리자와의 커뮤니케이션이 필요하며
 - 4)의 경우 긴급출동이 필요합니다.
 
-**고객이 필요로 하는 솔루션이 각기 다른데, 이 문의들을 하나의 Intent로 묶을 수 있을까요? 혹은 한 문장에 여러가지 문제가 섞여있을 때는 어떻게 처리할 수 있을까요? (Multi-Labeled Sample)** 뿐만 아니라, **사전에 정의해둔 Intent에서 벗어난 문의는 어떻게 응답해야 할까요? (Unknown Intent Detection)** Vision에서와 마찬가지로, 고객의 문의에 대해 **예측한 Intent에 대한 confidence를 어떻게 측정할 수 있을까요?**
+**고객이 필요로 하는 솔루션이 각기 다른데, 이 문의들을 하나의 Intent로 묶을 수 있을까요? 혹은 한 문장에 여러가지 문제가 섞여있을 때는 어떻게 처리할 수 있을까요? (Multi-Labeled Sample)** 뿐만 아니라, **사전에 정의해둔 Intent에서 벗어난 문의는 어떻게 응답해야 할까요? (Unknown Intent Detection)** Vision 도메인에서와 마찬가지로, 고객의 문의에 대해 **예측한 Intent에 대한 confidence를 어떻게 측정할 수 있을까요?**
 
 
 ---
 ## 3. 마무리
 
-쏘카의 AI팀은 이러한 고민들을 해결하기 위해 여러 분야의 논문을 스터디하고 구현하며, 실무에 적용하고 있습니다. 과거 논문에서 제안된 기법을 이용하는 것 뿐만 아니라, 비즈니스 도메인에서 최적의 성능을 달성하는 새로운 기법을 디자인하기도 합니다. 
-
-기술적인 문제를 해결한 후에는 다른 팀과 협업하며 현실에서 Business Impact을 달성합니다. 데이터사이언스 팀과 협업하여 개발한 AI가 가져올 임팩트를 산정하기도 하고, 엔지니어링 그룹과 협업하여 모델을 배포하고, 모델의 예측 결과를 모니터링합니다. 모델을 실무에 적용하고 프로젝트의 한 Cycle을 완수한 이후, End-User의 피드백을 기반으로 모델을 성장시키고 있습니다 (Human-in-the-Loop).
+쏘카의 AI팀은 이러한 고민들을 해결하기 위해 여러 분야의 논문을 스터디하고 구현하며, 실무에 적용하고 있습니다. 과거 논문에서 제안된 기법을 이용하는 것 뿐만 아니라, 비즈니스 도메인에서 최적의 성능을 달성하는 새로운 기법을 디자인하기도 합니다. 기술적인 문제를 해결한 후에는 다른 팀과 협업하며 현실에서 Business Impact을 달성합니다. 데이터사이언스 팀과 협업하여 개발한 AI가 가져올 임팩트를 산정하기도 하고, 엔지니어링 그룹과 협업하여 모델을 배포하고, 모델의 예측 결과를 모니터링합니다. 모델을 실무에 적용하고 프로젝트의 한 Cycle을 완수한 이후, End-User의 피드백을 기반으로 모델을 성장시키고 있습니다 (Human-in-the-Loop).
 
 앞으로 이어질 테크블로그 글에서는 쏘카 AI팀이 비즈니스의 문제를 해결한 Case들을 소개하고, Conference나 Journal에 Publish한 저희 팀의 연구실적에 대해서도 소개드리고자 합니다. 
 
