@@ -155,12 +155,12 @@ Machine Learning Engineer는 데이터셋 구성에서부터 모델 구현, 학�
 경차와 중형차 이미지를 구분하는 이진 차종 분류 모델 (Binary Classifier)이 존재한다고 가정해봅시다. 이진 분류기를 만드는 것은 간단합니다. DB에 쿼리를 날려 경차와 중형차 이미지를 수집하고, 레이블링을 수행하고, ResNet과 같은 Neural Network Architecture에 Cross Entropy Loss를 설정하여 분류 모델을 학습시키면 됩니다. 그러나 이 분류기가 현실에 배포되기 위해서는 더 깊고, 다양한 고민이 필요합니다. 
 
 ![](/img/role-of-applied-research-scientist-at-socar/car_images.png)
-경차 (왼쪽)와 SUV(오른쪽) 이미지 예시
+경차(왼쪽)와 SUV(오른쪽) 이미지 예시
 
 만약 분류기에 들어가는 Inference 이미지가 경차도, 중형차도 아닌 경우에는 어떻게 해야할까요? 자동차 사진이 아니라 음식 사진, 차종을 판단할 수 없는 사진, 심한 blur 등으로 식별할 수 없는 사진이 들어오면 어떻게 처리해야할까요? 
 
 ![](/img/role-of-applied-research-scientist-at-socar/not_car_images.png)
-차종 분류와 관련없는 이미지들 예시 (출처: 본인)
+차종 분류와 관련없는 이미지들 예시
 
 모델이 풀고자 하는 Task에 관련없는 이미지 (Out-of-Distribution sample)가 분류기에 들어오면, Supervised Learing 패러다임으로 학습된 분류기는 무조건 경차나 중형차 중에 하나로 판단을 내리게 됩니다. 즉, 불필요하고 잘못된 정보가 Inference 되어 End-User에게 전달됩니다. (고기 사진을 경차라고 판단하여 실무자에게 전달하는 것입니다!) 이러한 문제는 어떻게 해결할 수 있을까요?  **사전에 경차나 중형차에 속하지 않는다고 판단하면서 (Out-of-Distribution Detection), 기존 분류기의 성능을 유지할 수는 없을까요? (Open-Set Recognition)**
 
