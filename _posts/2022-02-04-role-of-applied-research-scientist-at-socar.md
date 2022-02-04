@@ -1,10 +1,10 @@
 ---
 layout: post
 title: "쏘카 AI팀의 Applied Research Scientist는 어떤 일을 하나요?"
-subtitle: "IntelliJ platform plugin을 활용한 대량의 Kotlin 코드 수정" # TODO
+subtitle: "쏘카에서는 어떤 AI를 연구하나요?"
 date: 2022-02-04 17:00:00 +0900
-category: ai
-background: '/assets/images/intellij-plugin/plugin.png' # TODO
+category: ai 
+background: '/assets/images/role-of-applied-research-scientist-at-socar/brain_background.png' # TODO
 author: kp
 comments: true
 tags:
@@ -134,7 +134,6 @@ Machine Learning Engineer는 데이터셋 구성에서부터 모델 구현, 학�
 - Pytorch로 작성된 모델이 비효율적인 것 같아. 프로덕션에 들어가려면 더 overhead를 낮춰야할 것 같은데, tensorflow로 이를 변환해볼 수 있을까?
 - GPU의 개수는 많은데 그 성능을 100% 사용하지는 못하네. 최대한 효율적으로 GPU 자원을 사용할 수는 없을까?
 
-<!-- Quote 처럼 어떻게 강조할 수 있을까요? TODO -->
 다시 한 번 강조드리고 싶은 점은, Research Scientist / Applied Research Scientist / Machine Learning Engineer로 나누어진 포지션이 절대적인 기준이 아니라는 것입니다. AI에 관련된 일들이 칼로 무 자르듯이 나누기 어렵기 때문에, 조직마다 수행하는 역할이 겹치기도 하고 한 포지션에서 여러 역할을 수행하는 경우도 많습니다. 각 조직이 풀고있는 문제, 성향, 문화 등 여러가지 요인이 작용하여 포지션을 구성하기 때문에, JD를 보실 때 참조하는 용도로 이 글을 읽으시는 것을 추천합니다.
 
 
