@@ -343,7 +343,7 @@ Endpoint : `POST ${카프카_커넥트_호스트}/connectors`
     "drop.invalid.message": "true",
     // 문제가 생긴 경우 최대 재시도 횟수를 설정합니다.
     "max.retries": "50",
-    // true일 때, ES 문서의 키로 메시지의 key를 사용하지 않고, topic+partition+offset를 사용합니다. ex)message-log+0+1
+    // true일 때, ES 문서의 키로 메시지의 key를 사용하지 않고, topic+partition+offset를 사용합니다. ex) message-log+0+1
     "key.ignore": "true",
     // ES 동시 요청 수를 제한합니다. retry.backoff.ms: 요청 실패 후 재시도까지 기다릴 시간을 설정합니다. 다음 재시도할 때엔 이전 재시도 대기 시간보다 2배 더 기다립니다.
     "max.in.flight.requests": "20",
