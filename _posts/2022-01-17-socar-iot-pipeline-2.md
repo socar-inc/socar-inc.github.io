@@ -9,6 +9,8 @@ author: bada, oliver
 comments: true
 tags:
     - iot
+    - data
+    - data-engineering
 ---
 
 <div class="photo-copyright">
