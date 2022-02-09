@@ -2,7 +2,7 @@
 layout: post
 title: "차량용 단말을 위한 IoT 파이프라인 구축기 #2"
 subtitle: "단말 파이프라인 본격 구축기"
-date: 2022-01-17 09:00:00 +0900
+date: 2022-02-09 10:00:00 +0900
 category: mobility
 background: '/img/iot-pipeline-2/iot-pipeline-2-background.jpg'
 author: bada, oliver
@@ -27,12 +27,11 @@ Photo by <a href="https://unsplash.com/@selimarda?utm_source=unsplash&utm_medium
 
 ## 목차
 
-- [목차](#목차)
 - [쏘카의 첫 단말 파이프라인을 소개합니다 <a name="introduce"></a>](#쏘카의-첫-단말-파이프라인을-소개합니다-)
   - [기존 단말 파이프라인](#기존-단말-파이프라인)
   - [기존 파이프라인의 한계](#기존-파이프라인의-한계)
   - [한계를 넘기 위한 신규 파이프라인 설계](#한계를-넘기-위한-신규-파이프라인-설계)
-- [본격적으로 신규 단말 파이프라인을 구축해보자 <a name="build"></a>](#본격적으로-신규-단말-파이프라인을-구축해보자-)
+- [본격적으로 신규 단말 파이프라인을 구축해봅시다 <a name="build"></a>](#본격적으로-신규-단말-파이프라인을-구축해봅시다-)
   - [Kafka 클러스터](#kafka-클러스터)
   - [Producer](#producer)
     - [IoT Core의 메시지 생성](#iot-core의-메시지-생성)
@@ -92,7 +91,7 @@ Server-side Application의 업데이트는 보통 즉각적인 효과를 발휘�
 
 이제 본격적으로 파이프라인을 구현해볼까요?
 
-## 본격적으로 신규 단말 파이프라인을 구축해보자 <a name="build"></a>
+## 본격적으로 신규 단말 파이프라인을 구축해봅시다 <a name="build"></a>
 쏘카의 신규 단말 파이프라인은 크게 토픽을 관리하며 메시지를 저장하는 Kafka 클러스터와 메시지를 생산하는 Producer, 메시지를 소비하는 Consumer 세 가지로 구성됩니다.
 
 ### Kafka 클러스터
@@ -124,11 +123,11 @@ log.retention.hours: 48
     --replication-factor <복제 팩터>
 ```
 
-참고로, `auto.create.topics.enable` 설정을 켜두면 자동으로 토픽을 생성하게 할 수 있습니다. 저희는 무분별하게 토픽이 생성되는 것을 막고자 이 방식은 사용하지 않았습니다.
+참고로 `auto.create.topics.enable` 설정을 켜두면 자동으로 토픽을 생성하게 할 수 있습니다. 저희는 무분별하게 토픽이 생성되는 것을 막고자 이 방식은 사용하지 않았습니다.
 
 토픽 생성 시에는 토픽 이름, 파티션의 개수, 복제 팩터를 설정하게 됩니다.
 
-Kafka는 토픽에 메시지를 저장할 때 파일 시스템을 사용하기 때문에, 파티션을 하나로 지정하면 브로커의 I/O에 따라 성능이 좌지우지됩니다. 따라서 클러스터의 브로커 수, 데이터의 크기, 소비자의 수 같은 요소를 적절하게 고려하여 파티션의 수량을 정해야 합니다.
+Kafka는 토픽에 메시지를 저장할 때 파일 시스템을 사용하기 때문에, 파티션을 하나로 지정하면 브로커의 I/O에 따라 성능이 좌지우지됩니다. 따라서 클러스터의 브로커 수, 데이터의 크기, Consumer의 수 같은 요소를 적절하게 고려하여 파티션의 수량을 정해야 합니다.
 
 복제 팩터는 중요한 설정 중 하나로, 하나의 파티션이 몇 개까지 복제될지를 설정하는 수치입니다. MSK는 중요 보안 업데이트나 설정 변경 시에 브로커를 한 대씩 차례차례 재부팅합니다. 이때 복제 팩터가 1인 경우 해당 파티션이 있는 브로커가 업데이트 등으로 인해 잠시 OFF되어 있을 때 Producer가 해당 파티션에 데이터를 쓰려고 하면 데이터 유실이 발생할 수 있습니다. 이러한 문제 없이 운영하기 위해서는 복제 팩터를 최소 2 이상으로 설정해 주셔야 합니다. 2 이상으로 설정한 경우, 기존 파티션 Leader를 가지고 있던 브로커가 OFF 되어도 복제본을 갖고 있던 다른 브로커가 파티션 Leader를 넘겨받아 Kafka 클러스터가 다운타임 없이 정상적으로 역할을 수행해냅니다.
 
@@ -138,7 +137,7 @@ Kafka 클러스터가 준비되었으니, 메시지를 생산할 Producer를 설
 위에서 말씀드린 것처럼, **단말의 펌웨어는 Server-side Application처럼 어느 시점에 한 번에 업데이트하기 어렵습니다**. 빨라도 몇 주에서 오래 걸리면 몇 달은 길게 두고 보아야 하는 작업입니다. 이렇게 짧지 않은 기간동안 보고 채널이 파편화되어 있는 동안에도 파이프라인에는 펌웨어 구분 없이 모든 차량에서 수집한 정보가 적재되어야 했습니다. 그렇게 하기 위해 IoT Core의 메시지 생성과 텔레매틱스 서버의 메시지 생성을 모두 구현하게 되었습니다.
 
 #### IoT Core의 메시지 생성
-먼저 신규 펌웨어에서 IoT Core로 차량에서 수집한 정보를 전달하는 경우를 살펴보겠습니다. 단말에서는 차량 정보를 수집하여 IoT Core의 특정 주제에 보고합니다. 그리고 IoT Core Rule을 만들어 이 정보를 구독할 수 있습니다. 예를 들어 단말은 `report`라는 주제에 차량 정보를 보고하고, IoT Core Rule에 `report` 주제를 구독하도록 Rule을 생성했다면, 새로운 차량 정보 메시지가 보고될 때마다 Rule에 설정된 작업이 실행됩니다.
+먼저 신규 펌웨어에서 IoT Core로 차량에서 수집한 정보를 전달하는 경우를 살펴보겠습니다. 단말에서는 차량 정보를 수집하여 IoT Core의 특정 토픽에 보고합니다. 그리고 IoT Core Rule을 만들어 이 정보를 구독할 수 있습니다. 예를 들어 단말은 `report`라는 토픽에 차량 정보를 보고하고, IoT Core Rule에 `report` 토픽을 구독하도록 Rule을 생성했다면, 새로운 차량 정보 메시지가 보고될 때마다 Rule에 설정된 작업이 실행됩니다.
 
 IoT Core Rule에 대해 자세히 알아볼까요? IoT Core Rule은 익숙한 SQL 쿼리(정확히는 AWS IoT Core SQL)를 통해 입맛에 맞게 단말에서 보고한 데이터를 가공할 수 있으며, 다른 데이터 시스템으로 전달하는 역할을 수행합니다. 신규 단말 파이프라인에서는 단말에서 JSON 형식의 메시지를 전달받고, 여기에 SQL을 이용하여 Timestamp를 추가해 사용합니다. 이를 위해 다음과 같은 쿼리문을 사용합니다.
 
@@ -160,7 +159,7 @@ Apache Kafka 클러스터에 메시지 전송을 선택한 후 구성을 누르�
 ![](/img/iot-pipeline-2/create-kafka-sink-worker.png)
 
 먼저 기본적인 Kafka 정보(Kafka 엔드포인트, SASL 구성 등)를 설정해 주세요.
-Kafka 주제는 어떤 토픽에 메시지를 저장할 것인지 토픽 이름을 지정합니다. 저희는 여기서 하나의 토픽에만 메시지를 전달하는 것이 아니라, 차량에서 수집된 정보의 종류에 따라 다른 토픽에 메시지를 전달하고 싶었습니다. 이런 처리를 위해서는 [대체 템플릿](https://docs.aws.amazon.com/ko_kr/iot/latest/developerguide/iot-substitution-templates.html)을 사용할 수 있습니다.
+Kafka에서 어떤 토픽에 메시지를 저장할 것인지 토픽 이름을 지정해야 합니다. 저희는 여기서 하나의 토픽에만 메시지를 전달하는 것이 아니라, 차량에서 수집된 정보의 종류에 따라 다른 토픽에 메시지를 전달하고 싶었습니다. 이런 처리를 위해서는 [대체 템플릿](https://docs.aws.amazon.com/ko_kr/iot/latest/developerguide/iot-substitution-templates.html)을 사용할 수 있습니다.
 
 대체 템플릿은 치환자라고 생각하시면 됩니다. IoT SQL 레퍼런스에서 지원하는 SELECT 절, WHERE 절 또는 Function을 사용할 수 있습니다. 쏘카 단말에서 보고하는 정보 중에는 해당 정보의 종류를 나타내는 타입이 존재합니다. 이 타입 별로 토픽을 분리하기 위해, 토픽 이름을 `message-${type}` 으로 지정하였습니다. 이렇게 설정하면 log 타입의 메시지는 `message-log`에, boot 타입의 메시지는 `message-boot`에 저장하게 됩니다. 토픽이 자동 생성되는 옵션을 켜지 않으신 경우 꼭 미리 각 type에 대한 토픽을 먼저 생성하셔야 한다는 점 잊지 말아 주세요!
 
@@ -177,7 +176,7 @@ Kafka 주제는 어떤 토픽에 메시지를 저장할 것인지 토픽 이름�
 
 텔레매틱스 서버가 AWS IoT Core로 전환이 된다면, HTTPS로 텔레매틱스 서버에 상태 데이터를 전달하고 쏘카 데이터베이스에 적재되는 일련의 과정들이 생략됩니다. 기존의 연구나 분석에 사용하고 있던 데이터의 형태가 달라질 수 있기 때문에 기존에 보내고 있는 데이터의 형태와 호환성을 잘 가져갈 수 있도록 하는 것을 우선적인 목표로 잡았습니다.
 
-첫 번째로, 텔레매틱스 서버로 차량이 상태 보고를 하게 되면, 차량의 정보와 상태가 담긴 데이터가 Kinesis와 Kafka로 동시에 보내도록 작업을 했습니다. Kafka는 데이터를 전송할 때 여러 개의 토픽으로 나누어 데이터를 전송할 수 있습니다. 그 기능을 활용해 차량에서 올라오는 데이터들을 GPS, Kinematic, ADAS와 차량 주기 보고 데이터 등 각각 다른 토픽에 전송했습니다. 이로써 차량 데이터가 쏘카 데이터베이스에 저장됨은 물론, 프로젝트별로 데이터를 가져갈 때 실시간 데이터를 원하는 정보만, 원하는 주제만을 가져와서 쉽게 처리할 수 있게 되었습니다.
+첫 번째로, 텔레매틱스 서버로 차량이 상태를 보고 하게 되면, 차량의 정보와 상태가 담긴 데이터가 Kinesis와 Kafka로 동시에 보내도록 작업을 했습니다. Kafka는 데이터를 전송할 때 여러 개의 토픽으로 나누어 데이터를 전송할 수 있습니다. 그 기능을 활용해 차량에서 올라오는 데이터들을 GPS, Kinematic, ADAS와 차량 주기 보고 데이터 등 각각 다른 토픽에 전송했습니다. 이로써 차량 데이터가 쏘카 데이터베이스에 저장됨은 물론, 프로젝트별로 데이터를 가져갈 때 실시간 데이터를 원하는 정보만, 원하는 토픽만을 가져와서 쉽게 처리할 수 있게 되었습니다.
 
 Kafka로 데이터를 보내기 위해 작업하는 도중, 서버 앞단의 트래픽을 보조하기 위해 사용한 uWSGI 모듈과 Python에서 Kafka를 사용할 수 있게 해 주는 kafka-python 모듈 간에 서로 충돌이 생겨서 첫 테스트에는 많은 어려움을 겪었습니다. 결국 uWSGI을 gunicorn으로 대체하고, Kafka 라이브러리도 kafka-python 대신 AWS가 제공하는 라이브러리인 boto3로 대체했습니다.
 
@@ -209,38 +208,53 @@ Confluent에서 공식으로 제공하는 S3 Sink Connector입니다.
 다음 요청을 통해 해당 커넥터를 이용한 Worker를 생성할 수 있습니다.
 
 Endpoint : `POST ${카프카_커넥트_호스트}/connectors`
-```json
+```
 {
     "name":"s3-sink-worker",
     "config": {
         // 사용하려는 커넥터의 클래스 이름
         "connector.class": "io.confluent.connect.s3.S3SinkConnector",
+
         // S3가 위치한 리전
         "s3.region": "ap-northeast-2",
+
         "partition.duration.ms": "180000",
+        
         // 여기서 지정한 수만큼 메시지가 쌓이면 S3에 파일로 저장합니다.
         "flush.size": "20000",
+        
         "schema.compatibility": "NONE",
+        
         // 메시지를 가져오려는 카프카의 토픽 이름을 지정합니다. 콤마를 사용해 여러 토픽을 가져올 수 있습니다.
         "topics": "토픽 이름",
+        
         // 하나의 파일이 가질 최대 용량을 지정합니다.
         "s3.part.size": "5242880",
+        
         // 타임존을 지정합니다.
         "timezone": "Asia/Seoul",
+        
         // 로케일을 지정합니다.
         "locale": "ko_KR",
+        
         // 압축 방식을 지정합니다. none 또는 gzip을 사용할 수 있습니다.
         "s3.compression.type": "gzip",
+        
         // 데이터 포맷을 지정힙니다. JSON 타입이므로 JsonFormat을 사용합니다.
         "format.class": "io.confluent.connect.s3.format.json.JsonFormat",
+        
         // 메시지를 어떻게 파티셔닝할지 설정합니다. 여기서는 TimeBasedPartitioner를 사용하여 날짜 기준으로 S3에 저장되는 폴더를 분리합니다.
         "partitioner.class": "io.confluent.connect.storage.partitioner.TimeBasedPartitioner",
+        
         // S3Storage로 지정해주시면 됩니다.
         "storage.class": "io.confluent.connect.s3.storage.S3Storage",
+        
         // 저장될 S3의 버킷 이름입니다.
         "s3.bucket.name": "S3 버킷 이름",
+        
         // 얼마나 주기적으로 S3에 파일을 저장할지 설정합니다. flush.size에서 설정한 메시지 수에 도달하지 않아도 해당 주기가 되면 S3에 파일을 쓰게 됩니다.
         "rotate.schedule.interval.ms": "180000",
+        
         // 파일이 저장될 위치를 설정합니다. 시간 기반의 파티셔닝을 통해 시간별로 폴더가 나눠지도록 설정했습니다.
         "path.format": "YYYY/MM/dd/HH"
     }
@@ -250,7 +264,7 @@ Endpoint : `POST ${카프카_커넥트_호스트}/connectors`
 Worker를 생성한 후, 다음 REST API를 통해 Worker가 제대로 동작하는지 확인하실 수 있습니다.
 
 Endpoint : `${카프카_커넥트_호스트}/connectors?expand=info&expand=status`
-```json
+```
 {
   "s3-sink-worker": {
     "status": {
@@ -328,37 +342,51 @@ Kafka Connect의 Worker들은 동작하면서 필요한 메타데이터를 Kafka
 S3에 무사히 적재했다면, 다음은 분석과 연구를 위한 Elasticsearch에 적재해보겠습니다. Confluent에서 공식으로 제공하는 Elasticsearch Sink Connector를 사용합니다. S3 Sink Connector와 같은 방식으로 생성하는데, 다음과 같은 요청을 통해 Elasticsearch Sink Worker를 실행할 수 있습니다.
 
 Endpoint : `POST ${카프카_커넥트_호스트}/connectors`
-```json
+```
 {
   "name":"es-sink-worker",
   "config": {
     // 사용하려는 커넥터의 클래스 이름
     "connector.class": "io.confluent.connect.elasticsearch.ElasticsearchSinkConnector",
+    
     // Elasticsearch7부터는 type이 사라져, _doc로 지정하면 됩니다.
     "type.name": "_doc",
+    
     "behavior.on.null.values": "IGNORE",
+    
     // 메시지를 가져오려는 토픽 이름
     "topics": "토픽 이름",
+    
     // true일 때, 메시지에 문제가 있는 경우 무시합니다.
     "drop.invalid.message": "true",
+    
     // 문제가 생긴 경우 최대 재시도 횟수를 설정합니다.
     "max.retries": "50",
+    
     // true일 때, Elasticsearch 문서의 키로 메시지의 key를 사용하지 않고, topic+partition+offset를 사용합니다. ex) message-log+0+1
     "key.ignore": "true",
+    
     // Elasticsearch 동시 요청 수를 제한합니다. retry.backoff.ms: 요청 실패 후 재시도까지 기다릴 시간을 설정합니다. 다음 재시도할 때엔 이전 재시도 대기 시간보다 2배 더 기다립니다.
     "max.in.flight.requests": "20",
+    
     "retry.backoff.ms": "2000",
+    
     // 사용하려는 Elasticsearch의 Endpoint
     "connection.url": "ELASTICSEARCH_ENDPOINT",
+    
     // Elasticsearch 서버와의 Read Timeout을 설정합니다.
     "read.timeout.ms": "60000",
+    
     // 주어진 시간만큼 데이터가 쌓이기를 기다린 다음, Bulk Request로 처리하여 효율성을 높입니다. connection.compression: Elasticsearch 서버와 통신 시에 gzip 압축을 사용할지 여부를 선택합니다.
     "linger.ms": "1000",
     "connection.compression": "true",
+    
     // 메시지가 원하는 만큼 쌓이지 않았더라도, 해당 주기가 되면 Elasticsearch로 메시지를 전송합니다.
     "flush.timeout.ms": "60000",
+    
     // 배치로 처리할 메시지의 수
     "batch.size": "2000",
+    
     // 최대 버퍼 될 레코드의 수, 태스크 당 메모리 사용량 제한을 위해 사용합니다.
     "max.buffered.records": "40000"
   }
@@ -380,7 +408,7 @@ Elasticsearch Sink Connector에는 알려진 버그가 있습니다. 쏘카에�
 
 "단말-차량 Converter"의 기능을 구체적으로 말씀드리면, 단말기에서 올라온 정보를 기반으로 차량 정보를 매칭해 주고, 해당하는 데이터가 어떤 차량의 어떤 상태인지 파악할 수 있도록 데이터 조립을 해 줍니다. 차량의 정보를 데이터베이스에서 계속 가져온다면 너무 비효율적이기 때문에, 임시로 저장해 놓은 캐싱 된 데이터를 사용하고, 일정 주기로 데이터를 새로 받아오는 일들을 하고 있습니다. 
 
-이렇게 조립한 데이터들이 앞으로 필요한 프로젝트들에 잘 활용될거라 기대하고 있습니다. 또한 어떤 프로젝트든 쉽게 데이터를 사용할 수 있게 데이터를 좀 더 좀 더 유연하게 설계해나가고 싶습니다.  
+이렇게 조립한 데이터들이 앞으로 필요한 프로젝트들에 잘 활용될거라 기대하고 있습니다. 또한 어떤 프로젝트든 쉽게 데이터를 사용할 수 있게 데이터를 좀 더 좀 더 유연하게 설계해나가고 싶습니다. 
 추가적으로 필요한 연산 작업이라든지, 적재 작업들도 "단말-차량 Converter"를 통해 만들어나갈 수 있을 것 같고, 최근 뜨고 있는 스트림 처리 프레임워크인 Flink를 써볼 수 있지도 않을까 하는 기대감도 가지고 있습니다.
 
 ## 단말 파이프라인 모니터링 <a name="monitoring"></a>
@@ -389,6 +417,7 @@ Elasticsearch Sink Connector에는 알려진 버그가 있습니다. 쏘카에�
 쏘카에는 여러 모니터링 시스템이 구축되어 있는데, 그중 Grafana를 통해 단말 파이프라인 모니터링 대시보드를 구축했습니다. 데이터 소스로 CloudWatch가 이미 연동되어 있어, MSK의 중요한 메트릭으로 대시보드를 꾸리기만 하면 완성입니다.
 
 ![](/img/iot-pipeline-2/monitoring.png)
+*운영 중인 Grafana 대시보드*
 
 CPU, Disk 사용량, 네트워크 In/Out, Elasticsearch의 스토리지 사용량을 기본적으로 모니터링하고 있으며, 각 Consumer의 OffsetLag까지 추가적으로 모니터링하여 각 Consumer에서 데이터를 가져가는 데에 지연이 발생하지 않는지를 모니터링하고 있습니다.
 
@@ -403,8 +432,4 @@ OffsetLag가 무엇일까요? 각 Consumer에서는 토픽의 파티션 별로 �
 하지만 첫 술에 배부를 수 없듯이, 이번 목표는 토대를 단단하게 구축하여 어떤 서비스나 프로젝트에 찰떡처럼 붙을 수 있는 파이프라인을 만드는 것이었고, 결과적으로 짧은 시간 안에 소기의 성과를 달성할 수 있었습니다.
 
 이번에 개선한 신규 단말 파이프라인을 토대로 전사에서 단말 데이터를 더욱 잘 활용할 수 있도록 하고, 더 나아가 유저에게 더 나은 쏘카 서비스 경험을 선물할 수 있도록 앞으로도 모비딕 팀이 계속 노력하겠습니다.
-
-![](/img/iot-pipeline-2/work-and-work.jpg)
-*다 쓰고 나니 뭔가 눈에 습기가 차는 거 같지만... 기분 탓이겠죠?*
-
 
