@@ -61,3 +61,12 @@ dini:
 jian:
   name: jian
   image: '/assets/authors/jian.png'
+
+bada:
+  name: bada
+  image: '/assets/authors/bada.png'
+
+oliver:
+  name: oliver
+  image: '/assets/authors/oliver.png'
+
