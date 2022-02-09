@@ -1,7 +1,7 @@
 ---
 layout: post
-title: "차량용 단말을 위한 IoT 파이프라인 구축기 #2"
-subtitle: "단말 파이프라인 본격 구축기"
+title: "차량용 단말을 위한 IoT 파이프라인 구축기 (feat. Kafka) #2"
+subtitle: "Kafka를 활용한 단말 파이프라인 본격 구축기"
 date: 2022-02-09 10:00:00 +0900
 category: mobility
 background: '/img/iot-pipeline-2/iot-pipeline-2-background.jpg'
@@ -25,6 +25,8 @@ Photo by <a href="https://unsplash.com/@selimarda?utm_source=unsplash&utm_medium
 - 차량의 정보 수집과 데이터 흐름에 관심 있는 분
 - AWS IoT Core, MSK(Managed Streaming for Apache Kafka) 솔루션에 관심 있는 개발자
 
+---
+
 ## 목차
 
 - [쏘카의 첫 단말 파이프라인을 소개합니다 <a name="introduce"></a>](#쏘카의-첫-단말-파이프라인을-소개합니다-)
@@ -44,7 +46,10 @@ Photo by <a href="https://unsplash.com/@selimarda?utm_source=unsplash&utm_medium
 - [단말 파이프라인 모니터링 <a name="monitoring"></a>](#단말-파이프라인-모니터링-)
 - [마치며 <a name="wrap-up"></a>](#마치며-)
 
+---
+
 ## 쏘카의 첫 단말 파이프라인을 소개합니다 <a name="introduce"></a>
+
 ### 기존 단말 파이프라인
 ![](/img/iot-pipeline-2/pipeline-prev.png)
 
@@ -90,6 +95,8 @@ Server-side Application의 업데이트는 보통 즉각적인 효과를 발휘�
 ![](/img/iot-pipeline-2/pipeline-next.png)
 
 이제 본격적으로 파이프라인을 구현해볼까요?
+
+---
 
 ## 본격적으로 신규 단말 파이프라인을 구축해봅시다 <a name="build"></a>
 쏘카의 신규 단말 파이프라인은 크게 토픽을 관리하며 메시지를 저장하는 Kafka 클러스터와 메시지를 생산하는 Producer, 메시지를 소비하는 Consumer 세 가지로 구성됩니다.
@@ -411,6 +418,8 @@ Elasticsearch Sink Connector에는 알려진 버그가 있습니다. 쏘카에�
 이렇게 조립한 데이터들이 앞으로 필요한 프로젝트들에 잘 활용될거라 기대하고 있습니다. 또한 어떤 프로젝트든 쉽게 데이터를 사용할 수 있게 데이터를 좀 더 좀 더 유연하게 설계해나가고 싶습니다. 
 추가적으로 필요한 연산 작업이라든지, 적재 작업들도 "단말-차량 Converter"를 통해 만들어나갈 수 있을 것 같고, 최근 뜨고 있는 스트림 처리 프레임워크인 Flink를 써볼 수 있지도 않을까 하는 기대감도 가지고 있습니다.
 
+---
+
 ## 단말 파이프라인 모니터링 <a name="monitoring"></a>
 구축한 단말 파이프라인이 문제 없이 원활히 흘러가도록 하려면 모니터링의 역할도 아주 중요합니다. 
 
@@ -426,6 +435,8 @@ OffsetLag가 무엇일까요? 각 Consumer에서는 토픽의 파티션 별로 �
 (참고로 OffsetLag는 MSK의 고급 모니터링 옵션을 사용해야 모니터링이 가능합니다.)
 
 이렇게 단말 데이터 파이프라인을 모니터링할 수 있는 대시보드가 완성되었습니다! 필요한 메트릭에 알림을 만들어, 임계치에 도달한 경우 Slack 또는 Opsgenie를 통해 알림을 받아 장애를 인지하고, 조치하고 있습니다.
+
+---
 
 ## 마치며 <a name="wrap-up"></a>
 여전히 신규 데이터 파이프라인 개발은 현재진행형입니다. Schema Registry를 이용해 단말 데이터에 스키마를 입히고, 사내 많은 분들이 활발하게 사용 중인 BigQuery에 스트리밍으로 단말 데이터를 적재해야 하는 등 해야 할 일들이 많이 있습니다.  
