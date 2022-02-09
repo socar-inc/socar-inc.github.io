@@ -4,7 +4,7 @@ title: "차량용 단말을 위한 IoT 파이프라인 구축기 #2"
 subtitle: "단말 파이프라인 본격 구축기"
 date: 2022-01-17 09:00:00 +0900
 category: mobility
-Xbackground: '/img/iot-pipeline-2/iot-pipeline-2-background.jpg'
+background: '/img/iot-pipeline-2/iot-pipeline-2-background.jpg'
 author: bada, oliver
 comments: true
 tags:
