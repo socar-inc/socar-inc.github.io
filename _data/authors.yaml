@@ -70,3 +70,6 @@ oliver:
   name: oliver
   image: '/assets/authors/oliver.png'
 
+juno:
+  name: juno
+  image: '/assets/authors/juno.png'
