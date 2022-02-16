@@ -8,9 +8,9 @@ background: '/assets/images/brain_background.png' # https://unsplash.com/photos/
 author: kp
 comments: true
 tags:
-  - applied Research scientist
-  - deep Learning
-  - ai
+  - Applied Research Scientist
+  - Deep Learning
+  - AI
 ---
 
 안녕하세요, 쏘카 AI팀의 팀장 케이피라고 합니다.
