@@ -99,7 +99,7 @@ Applied Research Scientist는 도메인의 문제를 해결할 수 있는 AI를 
 
 **Research Questions**
 
-원활한 이해를 돕기 위해 Applied Research Scientist가 고민해봄직한 Research Question들을 한 번 정리해보았습니다.
+원활한 이해를 돕기 위해 Applied Research Scientist가 고민해 봄직한 Research Question들을 한 번 정리해 보았습니다.
 
 - 논문A는 ImageNet, SUN, Place 365에서 높은 성능을 달성했는데, 우리 도메인에서는 성능이 높지 않은데, 그 이유가 뭘끼? 우리 데이터와 public benchmark에는 어떤 차이가 있어서 그럴까?
 - 우리 도메인에서 다루는 데이터는 public benchmark들과는 너무 다른데, 우리 도메인에서 잘 동작하는 새로운 Neural Architecture를 디자인해볼까?
