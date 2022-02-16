@@ -22,16 +22,12 @@
 ### 1.3 어떤 글을 써야 할까요?
 - 회사 업무하면서 배운 내용, 에러 디버깅 등 다양한 내용을 작성할 수 있습니다
 	- 단, 회사의 기밀이 있는 경우엔 팀장님/본부장님 확인 후 올려주세요! (애매하다 생각되면 여쭤보시는 것이 좋습니다)
-	
 - 프로젝트 글 (예시 : 새 버전을 출시하며 익힌 점)
-
 - 회고 글 (예시 : 신입 데이터 분석가 1년 회고)
-
 - 행사 후기 (예시 : O'Reilly Strata Newyork 2019 참여 후기)
-
 - 사내 스터디 후기 (예시 : 기획자와 개발자가 같이 진행한 UX 스터디 후기)
 
-  > 글쓰기에 대해 전반적인 경험담이 궁금하시면 카일이 발표한 [개발자를 위한 (블로그) 글쓰기 intro](https://www.slideshare.net/zzsza/intro-102870757)를 참고하시면 좋을 것 같습니다
+> 글쓰기에 대해 전반적인 경험담이 궁금하시면 카일이 발표한 [개발자를 위한 (블로그) 글쓰기 intro](https://www.slideshare.net/zzsza/intro-102870757)를 참고하시면 좋을 것 같습니다
 
 
 ### 1.4 자주 하시는 고민 
@@ -71,12 +67,12 @@
 
 ### 2.2 글 작성하기
 
-* 글 하나 당 하나의 브랜치를 생성하여 작업합니다. 브랜치 이름의 규칙은 `feature/{닉네임}-{주제}` 입니다. 
+* 글 하나 당 하나의 브랜치를 생성하여 작업합니다. 브랜치 이름의 규칙은 `feature/{닉네임}-{주제}` 입니다.
 
-```shell
-$ git checkout -b feature/dini-metadata-platform
-$ git push -u origin feature/dini-metadata-platform
-```
+  ```shell
+  $ git checkout -b feature/dini-metadata-platform
+  $ git push -u origin feature/dini-metadata-platform
+  ```
 
 * 이제 `_posts` 디렉토리에 post를 생성 합니다.
   * 파일명은 `YYYY-MM-DD-<post-name>.md`로 합니다.
@@ -92,22 +88,24 @@ $ git push -u origin feature/dini-metadata-platform
 
 먼저, Jekyll 과 필요한 의존성을 설치합니다.
 
-##### MacOS 인 경우
+* MacOS
 
-```shell
-/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" #homebrew 설치
-brew install ruby # ruby 설치
-gem install --user-install bundler jekyll # jekyll , bundler 설치
-```
+  ```shell
+  /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" #homebrew 설치
+  brew install ruby # ruby 설치
+  gem install --user-install bundler jekyll # jekyll , bundler 설치
+  ```
 
-##### Window 인 경우	
+* Window
 
-https://rubyinstaller.org/ 에서 ruby 를 다운받습니다.
+  * https://rubyinstaller.org/ 에서 ruby 를 다운받습니다.
 
-````shell
-gem update
-gem install jekyll bundler # jekyll, bundler 설치
-````
+  ```shell
+  gem update
+  gem install jekyll bundler # jekyll, bundler 설치
+  ```
+
+
 
 이제 `bundle exec jekyll serve`  명령어로 로컬 ( http://127.0.0.1:4000/) 에서 확인할 수 있습니다.
 
@@ -164,7 +162,6 @@ $ git push
   	- base: master
   - head repository: socar-{닉네임}/socar-{닉네임}.github.io
     - compare: feature/{닉네임}-{주제}
-  
   ```
 
 * PR 생성시 default 리뷰어는 카일 (@socar-kyle), 하디(@socar-hardy)입니다. 추가적으로 팀에서 리뷰어를 지정해주세요 :) 
@@ -234,11 +231,11 @@ $ git push
 
 ### 3.2 이렇게 하면 더 좋아요!
 
-#### 1. `subtitle` 설정 하기
+#### 3.2.1 `subtitle` 설정 하기
 - subtitle를 설정하지 않으면 글 목록에 본문의 앞 몇글자를 잘라서 보여 주게 됩니다.
 - subtitle를 사용하면 글 목록에 노출 되기 원하는 문구를 별도로 지정 가능합니다.
 
-#### 2. 상단 배너 이미지 넣기
+#### 3.2.2 상단 배너 이미지 넣기
 - `https://unsplash.com`에서 적절히 고릅니다. (저작권 고민안하고 써도 되는 이미지 사이트 입니다.)
 - 다운받은 후 `/assets/images/`에 넣고 `background`에 경로를 적습니다.
 - (선택) Download시 나오는 `Photo by *** on Unsplash` 문구를 Post 상단에 넣습니다.
@@ -250,7 +247,7 @@ $ git push
     </div>
     ```
 
-#### 3. [mermaid.js](https://mermaidjs.github.io/#/) 사용하기
+#### 3.2.3 [mermaid.js](https://mermaidjs.github.io/#/) 사용하기
 - Text를 이용해 다이어그램을 그릴 수 있습니다. 
 - Flowchart / Sequence diagrams을 그릴 수 있습니다.
 - 아래 예시 처럼 `<div class="mermaid">`를 본문에 사용하시면 됩니다.
@@ -262,11 +259,11 @@ $ git push
     </div>
     ```
     
-#### 4. markdown 중간에 html을 섞어서 사용해도 됩니다
+#### 3.2.4 markdown 중간에 html을 섞어서 사용해도 됩니다
 - 위 mermaid.js 예시처럼 markdown 내부에 html을 사용해도 상관 없습니다
 - jekyll에서 html 태그는 변환하지 않고 그대로 그 위치에 출력해 줍니다
 
-#### 5. 글 구조
+#### 3.2.5 글 구조
 - 글의 구조는 취향껏 작성하시면 되지만, 어려우신 분들은 아래의 흐름 정도를 가지셔도 좋을 것 같습니다
 		
 	```
