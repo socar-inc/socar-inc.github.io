@@ -140,7 +140,7 @@ Machine Learning Engineer는 데이터셋 구성에서부터 모델 구현, 학�
 ---
 ## 2. 쏘카 AI팀은 어떤 일을 할까?
 
-쏘카의 AI팀은 Human-Interactive AI System라는 목표 아래, Vision, NLP 기술을 활용해 카셰어링 서비스에서 발생하는 여러 문제를 해결하고 있습니다. “Human-Interactive”라는 말이 다소 생소하실텐데요, 저희 팀이  정의한 **Human-Interactive AI System이란 End User(사람)의 피드백을 기반으로 지속적으로 성장하는 시스템으로, 현실에서 Robust하게 동작하여 비즈니스 임팩트를 내는 AI 시스템을 뜻합니다.**
+쏘카의 AI팀은 Human-Interactive AI System라는 목표 아래, Vision, NLP 기술을 활용해 카셰어링 서비스에서 발생하는 여러 문제를 해결하고 있습니다. “Human-Interactive”라는 말이 다소 생소하실텐데요, 저희 팀이 정의한 **Human-Interactive AI System이란 End User(사람)의 피드백을 기반으로 지속적으로 성장하는 시스템으로, 현실에서 Robust하게 동작하여 비즈니스 임팩트를 내는 AI 시스템을 뜻합니다.**
 
 
 ![](/img/role-of-applied-research-scientist-at-socar/human_in_the_loop.png)
