@@ -56,9 +56,11 @@
 
 - 이 [Repository](https://github.com/socar-inc/socar-inc.github.io)를 본인의 계정으로 `fork` 합니다.
 
-- `fork 한 본인 계정의 Repository`의 `Settings`에서 `Repository name`을 수정합니다.
+  ![레포지토리 fork 하기](/img/readme/fork.png)
 
-  - `socar-{닉네임}.github.io`로 변경.
+- `fork 한 본인 계정의 Repository`의 `Settings`에서 `Repository name`을 `socar-{닉네임}.github.io`로 변경합니다.
+
+  - ![fork한 레포지토리 이름 변경하기](/img/readme/rename.png)
 
 - Fork 받은 본인의 Repository를 clone 합니다.
 
@@ -87,7 +89,7 @@ $ git push -u origin feature/dini-metadata-platform
 
 내가 쓰고 있는 글이 실제 블로그에서는 어떤 모양일지 직접 확인하고 싶을 때, 다음 방법으로 확인하실 수 있습니다.
 
-#### 2.3.1로컬에 [Jekyll](https://jekyllrb.com/docs/)를 설치 하는 경우
+#### 2.3.1 로컬에 [Jekyll](https://jekyllrb.com/docs/)를 설치 하는 경우
 
 먼저, Jekyll 과 필요한 의존성을 설치합니다.
 
@@ -108,11 +110,9 @@ gem update
 gem install jekyll bundler # jekyll, bundler 설치
 ````
 
+Jekyll 설치 뒤에는, `bundle exec jekyll serve`  명령어로 로컬 ( http://127.0.0.1:4000/) 에서 확인할 수 있습니다.
 
-
-Jekyll 설치 뒤에는, `bundle exec jekyll serve`  명령어로 로컬에서 확인할 수 있습니다.
-
-Jekyll 설치 시, 전체적인 글 작성 및 확인 흐름은 다음과 같습니다. 
+* Jekyll 설치 시, 전체적인 글 작성 및 확인 흐름은 다음과 같습니다. 
 
 ```shell
 # 레포지토리 클론 및 브랜치 생성
@@ -129,7 +129,7 @@ $ git commit -m '초안을 작성합니다'
 $ git push 
 ```
 
-#### 2.3.2 Jekyll을 설치 하지 않고 하는 경우
+#### 2.3.2 Jekyll을 설치하지 않고 하는 경우
 
 fork 한 레포지토리에서 글을 작성하고 있는 feature branch 를 master branch에 merge 하여 확인합니다. 
 
@@ -137,7 +137,7 @@ master branch에 변경사항이 push 되면 1~2분 이내에 수정사항이 �
 
 > 원본 [Repository](https://github.com/socar-inc/socar-inc.github.io)로의 PR을 만들기 위해 수정은 생성한 `feature` branch에서 진행합니다. 단, 수정사항 확인을 위해 해당 `feature` branch 를 fork 한 레포지토리의 master branch에 merge 합니다. 
 
-Jekyll 을 설치하지 않을 시, 전체적인 글 작성 및 확인 흐름은 다음과 같습니다.
+* Jekyll 을 설치하지 않을 시, 전체적인 글 작성 및 확인 흐름은 다음과 같습니다.
 
 ```shell
 # 레포지토리 클론 및 브랜치 생성
@@ -162,7 +162,7 @@ $ git push
 
 post가 완성되면 리뷰를 받기 위해 원본 [Repository](https://github.com/socar-inc/socar-inc.github.io)로 PR을 생성합니다. 
 
-> PR 리뷰 전에, 수정한 글을 fork 한 레포지토리에서 master branch 로 merge 하여 웹에서 확인할 수 있게 해주세요. 자세한 것은 아래 3.1.2 PR 리뷰 전에 먼저 웹으로 띄우기 확인!
+> PR 리뷰 전에, 수정한 글을 fork 한 레포지토리에서 master branch 로 merge 하여 웹에서 확인할 수 있게 해주세요. 자세한 것은 아래 [3.1.2 PR 리뷰 전에 먼저 master에 머지하기](#master-merge-before-pr) 확인!
 
 PR(Pull Request)를 생성할때 from / to는 아래와 같이 설정 합니다.
 
@@ -190,7 +190,7 @@ PR 생성시 default 리뷰어는 카일 (@socar-kyle), 하디(@socar-hardy)입�
 
 글 맨위 부분에 다음과 같이 머리말을 설정해주세요. 내용은 마음대로 바꾸셔도 됩니다. 
 
-참고로, date 를 현재 시간보다 늦게 설정하면 Jekyll 등을 이용하여 블로그를 띄워도 글이 보이지 않아요! (로컬에서 확인할 때는 하루 정도 전 시간으로 하는 설정해두는 것 추천 - 글이 작성 완료된 후에는 공개 시점에 맞도록 수정합니다. )
+참고로, date 를 현재 시간보다 늦게 설정하면 Jekyll 등을 이용하여 블로그를 띄워도 글이 보이지 않습니다. (로컬에서 확인할 때는 하루 정도 전 시간으로 하는 설정해두는 것 추천 - 글이 작성 완료된 후에는 공개 시점에 맞도록 수정합니다. )
 
 ```
 ---
@@ -210,7 +210,7 @@ tags:
 
 
 
-#### 3.1.2 PR 리뷰 전에 먼저 웹으로 띄우기 
+#### [3.1.2 PR 리뷰 전에 먼저 master에 머지하기](#master-merge-before-pr)
 
 PR 리뷰 전에, 최종 버전의 글을 fork 한 레포지토리에서 master branch 로 merge 해서 리뷰어들이 작성한 글을 웹에서 확인할 수 있게 해주세요. 
 
