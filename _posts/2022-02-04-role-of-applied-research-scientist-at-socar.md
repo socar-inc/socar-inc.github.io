@@ -152,7 +152,7 @@ Machine Learning Engineer는 데이터셋 구성에서부터 모델 구현, 학�
 
 현실에서 Robust한 AI 시스템을 디자인하기 위해서는 많은 고민들이 필요합니다. 먼저 Vision 도메인에서 간단한 예를 들어보겠습니다. 
 
-경차와 중형차 이미지를 구분하는 이진 차종 분류 모델 (Binary Classifier)이 존재한다고 가정해봅시다. 이진 분류기를 만드는 것은 간단합니다. DB에 쿼리를 날려 경차와 중형차 이미지를 수집하고, 레이블링을 수행하고, ResNet과 같은 Neural Network Architecture에 Cross Entropy Loss를 설정하여 분류 모델을 학습시키면 됩니다. 그러나 이 분류기가 현실에 배포되기 위해서는 더 깊고, 다양한 고민이 필요합니다. 
+경차와 중형차 이미지를 구분하는 이진 차종 분류 모델(Binary Classifier)이 존재한다고 가정해봅시다. 이진 분류기를 만드는 것은 간단합니다. DB에 쿼리를 날려 경차와 중형차 이미지를 수집하고, 레이블링을 수행하고, ResNet과 같은 Neural Network Architecture에 Cross Entropy Loss를 설정하여 분류 모델을 학습시키면 됩니다. 그러나 이 분류기가 현실에 배포되기 위해서는 더 깊고, 다양한 고민이 필요합니다. 
 
 ![](/img/role-of-applied-research-scientist-at-socar/car_images.png)
 경차(왼쪽)와 SUV(오른쪽) 이미지 예시
