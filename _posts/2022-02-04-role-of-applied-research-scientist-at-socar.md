@@ -164,7 +164,7 @@ Machine Learning Engineer는 데이터셋 구성에서부터 모델 구현, 학�
 
 모델이 풀고자 하는 Task에 관련없는 이미지 (Out-of-Distribution sample)가 분류기에 들어오면, Supervised Learing 패러다임으로 학습된 분류기는 무조건 경차나 중형차 중에 하나로 판단을 내리게 됩니다. 즉, 불필요하고 잘못된 정보가 Inference 되어 End-User에게 전달됩니다. (고기 사진을 경차라고 판단하여 실무자에게 전달하는 것입니다!) 이러한 문제는 어떻게 해결할 수 있을까요?  **사전에 경차나 중형차에 속하지 않는다고 판단하면서 (Out-of-Distribution Detection), 기존 분류기의 성능을 유지할 수는 없을까요? (Open-Set Recognition)**
 
-다른 관점에서 차종 분류 모델을 살펴보겠습니다. CNN 기반의 분류 모델은 이미지가 들어왔을 때, 해당 이미지에 대한 예측의 confidence를 갖습니다. 이 confidence가 특정 이미지가 Class에 속할 probability(확률)이라고 말할 수 있을까요? 일반적인 CNN들은 대부분의 판단에 대해 overly-confident한 예측을 수행하는 overconfidence problem을 가지고 있습니다. 이 때, 과도하게 높은 confidence를 갖는 문제를 어떻게 해결할 수 있을까요? **잘못된 예측을 수행했을 때는 less-confident하게 틀리고, 옳은 예측에 대해서는 more confident하게 맞추도록 할 수는 없을까요? (Calibration) 실무에서는 모델의 예측 결과 뿐만 아니라, 모델이 확실하게 예측한 건들을 먼저 검토하고자 하는데, 이 확신의 정도를 어떻게 잘 측정할 수 있을까요?**
+다른 관점에서 차종 분류 모델을 살펴보겠습니다. CNN 기반의 분류 모델은 이미지가 들어왔을 때, 해당 이미지에 대한 예측의 Confidence를 갖습니다. 이 Confidence가 특정 이미지가 Class에 속할 Probability(확률)이라고 말할 수 있을까요? 일반적인 CNN들은 대부분의 판단에 대해 Overly-Confident한 예측을 수행하는 Overconfidence Problem을 가지고 있습니다. 이 때, 과도하게 높은 Confidence를 갖는 문제를 어떻게 해결할 수 있을까요? **잘못된 예측을 수행했을 때는 Less-confident하게 틀리고, 옳은 예측에 대해서는 More Confident하게 맞추도록 할 수는 없을까요? (Calibration) 실무에서는 모델의 예측 결과 뿐만 아니라, 모델이 확실하게 예측한 건들을 먼저 검토하고자 하는데, 이 확신의 정도를 어떻게 잘 측정할 수 있을까요?**
 
 **2) NLP Domain**
 
