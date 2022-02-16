@@ -58,17 +58,17 @@
 
   ![레포지토리 fork 하기](/img/readme/fork.png)
 
-- `fork 한 본인 계정의 Repository`의 `Settings`에서 `Repository name`을 `socar-{닉네임}.github.io`로 변경합니다.
+- fork 받은 본인 계정의 Repository의 `Settings`에서 `Repository name`을 `socar-{닉네임}.github.io`로 변경합니다.
 
   - ![fork한 레포지토리 이름 변경하기](/img/readme/rename.png)
 
-- Fork 받은 본인의 Repository를 clone 합니다.
+- fork 받은 본인의 Repository를 clone 합니다.
 
-  ```shell
   $ git clone git@github.com:socar-{닉네임}/socar-{낙네임}.github.io.git
-  ```
 
 >  fork 하는 이유 : 현재 레포지토리는 main 으로 머지되는 경우, 쏘카 기술 블로그에 글이 노출되게 되어 있습니다. 미완성된 글을 노출시키긴 싫지만, 한편으로는 내가 쓰고 있는 글이 블로그에는 어떻게 보일까 궁금할 것입니다. 그렇기 때문에, 현재 레포지토리를 fork 하여 안전한 url 에서 글을 확인합니다. ( + 커밋 히스토리를 깨끗하게 유지합니다 :sparkles: )
+
+
 
 ### 2.2 글 작성하기
 
@@ -84,6 +84,8 @@ $ git push -u origin feature/dini-metadata-platform
 * 파일명은 `YYYY-MM-DD-<post-name>.md`로 합니다.
 
 - 본문을 html로 작성할 경우 `.html`도 사용 할 수 있습니다.
+
+
 
 ### 2.3 수정한 글 확인하기
 
@@ -162,8 +164,6 @@ $ git push
 
 post가 완성되면 리뷰를 받기 위해 원본 [Repository](https://github.com/socar-inc/socar-inc.github.io)로 PR을 생성합니다. 
 
-> PR 리뷰 전에, 수정한 글을 fork 한 레포지토리에서 master branch 로 merge 하여 웹에서 확인할 수 있게 해주세요. 자세한 것은 아래 [3.1.2 PR 리뷰 전에 먼저 master에 머지하기](#master-merge-before-pr) 확인!
-
 PR(Pull Request)를 생성할때 from / to는 아래와 같이 설정 합니다.
 
 - base repository: socar-inc/socar-inc.github.io
@@ -179,6 +179,8 @@ PR 생성시 default 리뷰어는 카일 (@socar-kyle), 하디(@socar-hardy)입�
 > * `Squash and merge` 를 원칙으로 함
 > * master push 권한은 하디와 카일에게만 있음 
 > * resolve 되지 않은 conversation 이 있으면 merge 불가
+
+>  PR 리뷰 전에, 수정한 글을 fork 한 레포지토리에서 master branch 로 merge 하여 웹에서 확인할 수 있게 해주세요. 자세한 것은 아래 [3.1.2 PR 리뷰 전에 먼저 master에 머지하기](#master-merge-before-pr) 확인!
 
 <br><br><br>
 
@@ -210,7 +212,7 @@ tags:
 
 
 
-#### [3.1.2 PR 리뷰 전에 먼저 master에 머지하기](#master-merge-before-pr)
+#### 3.1.2 PR 리뷰 전에 먼저 master에 머지하기 <a name="master-merge-before-pr"></a>
 
 PR 리뷰 전에, 최종 버전의 글을 fork 한 레포지토리에서 master branch 로 merge 해서 리뷰어들이 작성한 글을 웹에서 확인할 수 있게 해주세요. 
 
