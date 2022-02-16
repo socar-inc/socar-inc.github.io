@@ -128,7 +128,7 @@ Machine Learning Engineer는 데이터셋 구성에서부터 모델 구현, 학�
 
 **Research Questions**
 
-이번에도 원활한 이해를 돕기 위해 Machine Learning Engineer가 고민해봄직한 질문들을 몇 개 가져왔습니다.
+이번에도 원활한 이해를 돕기 위해 Machine Learning Engineer가 고민해 봄직한 질문들을 몇 개 가져왔습니다.
 
 - 매 실험에 사용된 데이터셋과 모델의 아키텍처, weight 파일들이 관리가 어려운데, 이를 좀 효과적으로 관리할 수 있는 방법이 없을까?
 - Pytorch로 작성된 모델이 비효율적인 것 같아. 프로덕션에 들어가려면 더 overhead를 낮춰야할 것 같은데, Tensorflow로 이를 변환해볼 수 있을까?
