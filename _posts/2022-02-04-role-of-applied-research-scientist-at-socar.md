@@ -71,7 +71,7 @@ Research Scientist는 과거에 제안된 연구들을 파악하고 새로운 �
 원활한 이해를 돕기 위해 Research Scientist가 고민해봄직한 Research Question들을 한 번 정리해보았습니다.
 
 - Gradient Descent를 기반으로 Learning Objective를 달성하는 것이 아니라, 인간처럼 Reasoning을 하는 AI를 만들 수는 없을까?
-- 이미지를 이해하는 여러 Neural Networks Architecture가 있는데, 특정한 패턴에 bias되지 않고 더 인간처럼 이미지를 이해하는 (혹은 인간보다 더 뛰어나게) 구조는 없을까?
+- 이미지를 이해하는 여러 Neural Networks Architecture가 있는데, 특정한 패턴에 Bias되지 않고 더 인간처럼 이미지를 이해하는(혹은 인간보다 더 뛰어난) 구조는 없을까?
 - 최근에 제안된 Language Model (BERT, RoBERTa, S-BERT 등)보다 더 인간처럼 (혹은 인간보다 더 뛰어나게) 지식을 이해하는 모델은 없을까?
 
 
