@@ -17,7 +17,7 @@ tags:
 
 저희 AI팀은 다양한 데이터를 이용해 카셰어링 서비스의 운영을 효율화하고, 고객에게 더 나은 이동경험을 제공하는 AI product를 연구개발하고 있습니다. Computer Vision, Natural Language Processing 등의 도메인에서 현실의 문제를 해결하는 AI를 연구하고, 실질적인 Business Impact를 낼 수 있는 Product로 만들어가는 일을 하고 있습니다. 
 
-최근 여러 기업에서 AI를 도입하면서 AI, Deep Learning, Machine Learning에 관련된 포지션이 많이 늘어나고 있습니다. 그러나 기업마다 정의하는 직무명이나 요구하는 Responsibility가 달라서 헷갈려하시는 분들을 종종 질문하는 분들이 많이 계셨습니다.
+최근 여러 기업에서 AI를 도입하면서 AI, Deep Learning, Machine Learning에 관련된 포지션이 많이 늘어나고 있습니다. 그러나 기업마다 정의하는 직무 이름이나 요구 조건이 달라서 헷갈릴 수 있습니다.
 
 이번 글에서는 AI에 관련된 포지션에 대해서 간단하게 정리해보고, 쏘카 AI팀의 Applied Research Scientist가 어떤 일을 하는지 소개드리고자 합니다. 이 글을 다 읽으시면 AI에 관련된 포지션이 요구하는 직무 역량에 대해 어느정도 윤곽을 잡고, 쏘카의 Applied Research Scientist가 어떤 일을 하는지도 이해하실 수 있습니다 :)
 
