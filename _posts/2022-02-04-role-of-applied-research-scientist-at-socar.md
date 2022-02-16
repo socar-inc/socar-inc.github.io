@@ -49,7 +49,7 @@ Scientist 포지션을 보면 Research와 Applied Research를 구분해두었습
 
 **Concept**
 
-Research Scientist는 AI에 관련된 원천기술을 연구하는 포지션입니다. 특정 비즈니스 도메인 (i.e., 자율주행, 카셰어링 등)에만 적용할 수 있는 주제가 아닌, 여러 비즈니스 도메인에 적용될 수 있는 근간이 되는 원천기술을 연구하는 포지션이라고 생각합니다.
+Research Scientist는 AI에 관련된 원천 기술을 연구하는 포지션입니다. 특정 비즈니스 도메인(i.e., 자율주행, 카셰어링 등)에만 적용할 수 있는 주제가 아닌, 여러 비즈니스 도메인에 적용될 수 있는 근간이 되는 원천기술을 연구하는 포지션이라고 생각합니다.
 
 다양한 도메인에 적용할 수 있는 원천 기술을 연구하기 때문에, Research Scientist들은 여러 도메인의 연구자들이 이해하고 실험결과를 납득할 수 있는 Public Benchmark Dataset을 이용하는 경우가 많습니다. **Research Scientist는 Public Benchmark Dataset에서 이전 연구가 달성한 최고 성능 (State-of-the-Art; SOTA)를 넘어서는 기법을 연구하고, 이전 SOTA의 한계점을 보완하는 기법을 연구하기도 합니다.**
 
