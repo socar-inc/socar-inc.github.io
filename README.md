@@ -22,19 +22,16 @@
 ### 1.3 어떤 글을 써야 할까요?
 - 회사 업무하면서 배운 내용, 에러 디버깅 등 다양한 내용을 작성할 수 있습니다
 	- 단, 회사의 기밀이 있는 경우엔 팀장님/본부장님 확인 후 올려주세요! (애매하다 생각되면 여쭤보시는 것이 좋습니다)
-- 프로젝트 글 
-  - 예시 : 새 버전을 출시하며 익힌 점
+	
+- 프로젝트 글 (예시 : 새 버전을 출시하며 익힌 점)
 
-- 회고 글 
-  - 예시 : 신입 데이터 분석가 1년 회고
+- 회고 글 (예시 : 신입 데이터 분석가 1년 회고)
 
-- 행사 후기 
-  - 예시 : O'Reilly Strata Newyork 2019 참여 후기
+- 행사 후기 (예시 : O'Reilly Strata Newyork 2019 참여 후기)
 
-- 사내 스터디 후기 
-  - 예시 : 기획자와 개발자가 같이 진행한 UX 스터디 후기
+- 사내 스터디 후기 (예시 : 기획자와 개발자가 같이 진행한 UX 스터디 후기)
 
-- 글쓰기에 대해 전반적인 경험담이 궁금하시면 카일이 발표한 [개발자를 위한 (블로그) 글쓰기 intro](https://www.slideshare.net/zzsza/intro-102870757)를 참고하시면 좋을 것 같습니다
+  > 글쓰기에 대해 전반적인 경험담이 궁금하시면 카일이 발표한 [개발자를 위한 (블로그) 글쓰기 intro](https://www.slideshare.net/zzsza/intro-102870757)를 참고하시면 좋을 것 같습니다
 
 
 ### 1.4 자주 하시는 고민 
@@ -64,26 +61,26 @@
 
 - fork 받은 본인의 Repository를 clone 합니다.
 
+  ```shell
   $ git clone git@github.com:socar-{닉네임}/socar-{낙네임}.github.io.git
+  ```
 
->  fork 하는 이유 : 현재 레포지토리는 main 으로 머지되는 경우, 쏘카 기술 블로그에 글이 노출되게 되어 있습니다. 미완성된 글을 노출시키긴 싫지만, 한편으로는 내가 쓰고 있는 글이 블로그에는 어떻게 보일까 궁금할 것입니다. 그렇기 때문에, 현재 레포지토리를 fork 하여 안전한 url 에서 글을 확인합니다. ( + 커밋 히스토리를 깨끗하게 유지합니다 :sparkles: )
+  > fork 하는 이유 : 현재 레포지토리는 main 으로 머지되는 경우, 쏘카 기술 블로그에 글이 노출되게 되어 있습니다. 미완성된 글을 노출시키긴 싫지만, 한편으로는 내가 쓰고 있는 글이 블로그에는 어떻게 보일까 궁금할 것입니다. 그렇기 때문에, 현재 레포지토리를 fork 하여 안전한 url 에서 글을 확인합니다. ( + 커밋 히스토리를 깨끗하게 유지합니다 :sparkles: )
 
 
 
 ### 2.2 글 작성하기
 
-글 하나 당 하나의 브랜치를 생성하여 작업합니다. 브랜치 이름의 규칙은 `feature/{닉네임}-{주제}` 입니다. 
+* 글 하나 당 하나의 브랜치를 생성하여 작업합니다. 브랜치 이름의 규칙은 `feature/{닉네임}-{주제}` 입니다. 
 
 ```shell
 $ git checkout -b feature/dini-metadata-platform
 $ git push -u origin feature/dini-metadata-platform
 ```
 
-이제 `_posts` 디렉토리에 post를 생성 합니다.
-
-* 파일명은 `YYYY-MM-DD-<post-name>.md`로 합니다.
-
-- 본문을 html로 작성할 경우 `.html`도 사용 할 수 있습니다.
+* 이제 `_posts` 디렉토리에 post를 생성 합니다.
+  * 파일명은 `YYYY-MM-DD-<post-name>.md`로 합니다.
+  * 본문을 html로 작성할 경우 `.html`도 사용 할 수 있습니다.
 
 
 
@@ -112,7 +109,7 @@ gem update
 gem install jekyll bundler # jekyll, bundler 설치
 ````
 
-Jekyll 설치 뒤에는, `bundle exec jekyll serve`  명령어로 로컬 ( http://127.0.0.1:4000/) 에서 확인할 수 있습니다.
+이제 `bundle exec jekyll serve`  명령어로 로컬 ( http://127.0.0.1:4000/) 에서 확인할 수 있습니다.
 
 * Jekyll 설치 시, 전체적인 글 작성 및 확인 흐름은 다음과 같습니다. 
 
@@ -133,12 +130,8 @@ $ git push
 
 #### 2.3.2 Jekyll을 설치하지 않고 하는 경우
 
-fork 한 레포지토리에서 글을 작성하고 있는 feature branch 를 master branch에 merge 하여 확인합니다. 
-
-master branch에 변경사항이 push 되면 1~2분 이내에 수정사항이 반영 됩니다. socar-{닉네임}.github.io 에서 확인할 수 있습니다.
-
-> 원본 [Repository](https://github.com/socar-inc/socar-inc.github.io)로의 PR을 만들기 위해 수정은 생성한 `feature` branch에서 진행합니다. 단, 수정사항 확인을 위해 해당 `feature` branch 를 fork 한 레포지토리의 master branch에 merge 합니다. 
-
+* fork 한 레포지토리에서 글을 작성하고 있는 feature branch 를 master branch에 merge 하여 확인합니다. 
+* master branch에 변경사항이 push 되면 1~2분 이내에 수정사항이 반영 됩니다. socar-{닉네임}.github.io 에서 확인할 수 있습니다.
 * Jekyll 을 설치하지 않을 시, 전체적인 글 작성 및 확인 흐름은 다음과 같습니다.
 
 ```shell
@@ -158,20 +151,23 @@ $ git merge feature/{닉네임}-{주제}
 $ git push
 ```
 
-
+> 원본 [Repository](https://github.com/socar-inc/socar-inc.github.io)로의 PR을 만들기 위해 수정은 생성한 `feature` branch에서 진행합니다. 단, 수정사항 확인을 위해 해당 `feature` branch 를 fork 한 레포지토리의 master branch에 merge 합니다. 
 
 ### 2.4 PR 요청하기
 
-post가 완성되면 리뷰를 받기 위해 원본 [Repository](https://github.com/socar-inc/socar-inc.github.io)로 PR을 생성합니다. 
+* post가 완성되면 리뷰를 받기 위해 원본 [Repository](https://github.com/socar-inc/socar-inc.github.io)로 PR을 생성합니다. 
 
-PR(Pull Request)를 생성할때 from / to는 아래와 같이 설정 합니다.
+* PR(Pull Request)를 생성할때 from / to는 아래와 같이 설정 합니다.
 
-- base repository: socar-inc/socar-inc.github.io
-  - base: master
-- head repository: socar-{닉네임}/socar-{닉네임}.github.io
-  - compare: feature/{닉네임}-{주제}
+  ```
+  - base repository: socar-inc/socar-inc.github.io
+  	- base: master
+  - head repository: socar-{닉네임}/socar-{닉네임}.github.io
+    - compare: feature/{닉네임}-{주제}
+  
+  ```
 
-PR 생성시 default 리뷰어는 카일 (@socar-kyle), 하디(@socar-hardy)입니다. 추가적으로 팀에서 리뷰어를 지정해주세요 :) 
+* PR 생성시 default 리뷰어는 카일 (@socar-kyle), 하디(@socar-hardy)입니다. 추가적으로 팀에서 리뷰어를 지정해주세요 :) 
 
 > 현재 Merge 조건 및 권한은 다음과 같습니다.
 >
@@ -190,9 +186,7 @@ PR 생성시 default 리뷰어는 카일 (@socar-kyle), 하디(@socar-hardy)입�
 
 #### 3.1.1 머리말 설정하기
 
-글 맨위 부분에 다음과 같이 머리말을 설정해주세요. 내용은 마음대로 바꾸셔도 됩니다. 
-
-참고로, date 를 현재 시간보다 늦게 설정하면 Jekyll 등을 이용하여 블로그를 띄워도 글이 보이지 않습니다. (로컬에서 확인할 때는 하루 정도 전 시간으로 하는 설정해두는 것 추천 - 글이 작성 완료된 후에는 공개 시점에 맞도록 수정합니다. )
+* 글 맨위 부분에 다음과 같이 머리말을 설정해주세요. 내용은 마음대로 바꾸셔도 됩니다. 
 
 ```
 ---
@@ -210,11 +204,11 @@ tags:
 ---
 ```
 
-
+> 참고로, date 를 현재 시간보다 늦게 설정하면 Jekyll 등을 이용하여 블로그를 띄워도 글이 보이지 않습니다. (로컬에서 확인할 때는 하루 정도 전 시간으로 하는 설정해두는 것 추천 - 글이 작성 완료된 후에는 공개 시점에 맞도록 수정합니다. )
 
 #### 3.1.2 PR 리뷰 전에 먼저 master에 머지하기 <a name="master-merge-before-pr"></a>
 
-PR 리뷰 전에, 최종 버전의 글을 fork 한 레포지토리에서 master branch 로 merge 해서 리뷰어들이 작성한 글을 웹에서 확인할 수 있게 해주세요. 
+* PR 리뷰 전에, 최종 버전의 글을 fork 한 레포지토리에서 master branch 로 merge 해서 리뷰어들이 작성한 글을 웹에서 확인할 수 있게 해주세요. 
 
 ```shell
 # feature 브랜치에서 글 작성 후 레포지토리 반영
