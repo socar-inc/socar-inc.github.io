@@ -79,7 +79,7 @@ Research Scientist는 과거에 제안된 연구들을 파악하고 새로운 �
 
 **Concept**
 
-Applied Research Scientist는 특정 비즈니스 도메인의 문제를 풀 수 있는 AI를 연구하고, 연구된 모델을 배포하는 일을 수행하는 포지션입니다. **Research Scientist가 여러 도메인에 범용적으로 적용될 수 있는 AI를 연구한다면, Applied Research Scientist는 특정 도메인에 최적화된 AI를 연구하고 이를 prouction 환경에 맞게 구현하는 역할도 수행합니다.**
+Applied Research Scientist는 특정 비즈니스 도메인의 문제를 풀 수 있는 AI를 연구하고, 연구된 모델을 배포하는 일을 수행하는 포지션입니다. **Research Scientist가 여러 도메인에 범용적으로 적용될 수 있는 AI를 연구한다면, Applied Research Scientist는 특정 도메인에 최적화된 AI를 연구하고 이를 Production 환경에 맞게 구현하는 역할도 수행합니다.**
 
 Applied Research Scientist는 Public Benchmark Dataset을 이용하기도 하지만, 현실에서 발생한 real-world dataset을 주로 이용합니다. real-world dataset이란 현실에서 발생하는 데이터셋으로, 쏘카의 경우 카셰어링 서비스를 운영하면서 발생하는 여러 데이터 (i.e., 차량 이미지, 차량 센서, 채팅 텍스트 등)를 의미합니다 . 조직이 직면하고 있는 문제를 해결하기 때문에, Public Benchmark Dataset은 논문에서 제안된 여러 기법의 성능을 확인하는데 사용하고 주된 문제 해결에는 real-world dataset을 사용합니다. 하지만 세상만사 쉬운일이 없듯이 public benchmark 에서는 높은 성능을 달성한 기법(모델)이 real-world dataset에서는 잘 동작하지 않는 경우가 많습니다. **Applied Research Scientist는 public benchmark와 real-world의 차이를 고민하면서, SOTA 기법이 우리 도메인에서 왜 안되는지 (혹은 왜 잘되는지)를 파악하고, 제안된 여러 기법들을 최적화하거나 새로운 기법을 디자인하기도 합니다.**
 
