@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "쏘카 AI팀의 Applied Research Scientist는 어떤 일을 하나요?"
+title: "쏘카 AI 팀의 Applied Research Scientist는 어떤 일을 하나요?"
 subtitle: "쏘카가 지향하는 AI"
 date: 2022-02-04 17:00:00 +0900
 category: data 
