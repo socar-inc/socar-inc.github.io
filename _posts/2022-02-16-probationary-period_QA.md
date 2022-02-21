@@ -78,10 +78,10 @@ tags:
 ‘QA = Tester’ 라고 생각하시는 분들이 많습니다. 물론 QA의 활동 중 기능테스트도 포함되어 있습니다. 하지만 QA는 단순히 서비스의 기능테스트만을 통해 품질 보증 활동을 하는 것이 아닌 프로젝트의 시작부터 마무리까지 모든 과정에 참여하여 각 단계별로 품질을 저하시키거나 리소스가 낭비될 수 있는 요소를 발견하여 해당 프로젝트의 품질을 향상시키고 리소스 낭비를 방지하는 것을 목적으로 품질 보증 활동을 합니다.
 
 
-<img width=300" src="/assets/images/QA/qa_1.png">
+<img src="/assets/images/QA/qa_1.png" width="100" height="100"/>
 
-|:---:|
-|![img](/assets/images/QA/qa_1.png)|
+![img](/assets/images/QA/qa_1.png)
+
 
 ## 2. 쏘카에 지원한 이유
 
@@ -110,8 +110,8 @@ QA 요청서가 발의되면 팀 내에서 담당자를 정하게되고 본격�
 프로젝트별로 QA가 완료되고나면 하나의 버전으로 배포하기 위해 검토를 한 후 빌드 요청을 합니다. 빌드된 앱의 회귀 테스트(Regression test)를 진행한 후 앱 심사를 요청하고 심사가 완료되고 난 뒤 QA팀에서 마켓 배포를 수행합니다.
     
 
-<img src="/assets/images/QA/qa_2.png" width="50" height="50"/>
 ![img](/assets/images/QA/qa_2.png)
+
 
 ### 2) 회의
 
@@ -156,7 +156,10 @@ QA는 지속적으로 개발자, 기획자와 소통 하며 기획의 목적대�
 
 다음은 QA의 업무 단계별 활동과 산출물 입니다.
 
+
 ![img](/assets/images/QA/qa_3.png)
+
+<img src="/assets/images/QA/qa_3.png" width="50" height="200"/>
 
 킥오프가 진행 된 후에는 기획서를 분석하여 프로젝트 수행시 발생할 수 있는 리스크를 예상해보고 테스트 전략을 수립합니다.
 
