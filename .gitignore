@@ -9,3 +9,4 @@ vendor/
 # IDE
 .vscode/
 .idea/
+.DS_Store
