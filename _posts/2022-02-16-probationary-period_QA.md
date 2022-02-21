@@ -80,7 +80,7 @@ tags:
 
 <img src="/assets/images/QA/qa_1.png" width="50%" height="50%"/>
 
-![img](/assets/images/QA/qa_1.png)
+![img](/assets/images/QA/qa_1.png){: width="50" height="50"}
 
 
 
@@ -161,9 +161,8 @@ QA는 지속적으로 개발자, 기획자와 소통 하며 기획의 목적대�
 다음은 QA의 업무 단계별 활동과 산출물 입니다.
 
 
-![img](/assets/images/QA/qa_3.png)
+![img](/assets/images/QA/qa_3.png){: width="50%"}
 
-<img src="/assets/images/QA/qa_3.png" width="50%" height="50%"/>
 
 킥오프가 진행 된 후에는 기획서를 분석하여 프로젝트 수행시 발생할 수 있는 리스크를 예상해보고 테스트 전략을 수립합니다.
 
