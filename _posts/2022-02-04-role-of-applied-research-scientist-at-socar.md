@@ -15,7 +15,7 @@ tags:
 
 안녕하세요, 쏘카 AI 팀의 팀장 케이피라고 합니다.
 
-저희 AI팀은 다양한 데이터를 이용해 카셰어링 서비스의 운영을 효율화하고, 고객에게 더 나은 이동경험을 제공하는 AI product를 연구개발하고 있습니다. Computer Vision, Natural Language Processing 등의 도메인에서 현실의 문제를 해결하는 AI를 연구하고, 실질적인 Business Impact를 낼 수 있는 Product로 만들어가는 일을 하고 있습니다. 
+저희 AI 팀은 다양한 데이터를 이용해 카셰어링 서비스의 운영을 효율화하고, 고객에게 더 나은 이동 경험을 제공하는 AI product를 연구개발하고 있습니다. Computer vision, Natural Language Processing 등의 도메인에서 현실의 문제를 해결하는 AI를 연구하고, 실질적인 Business Impact를 낼 수 있는 Product로 만들어가는 일을 하고 있습니다. 
 
 최근 여러 기업에서 AI를 도입하면서 AI, Deep Learning, Machine Learning에 관련된 포지션이 많이 늘어나고 있습니다. 그러나 기업마다 정의하는 직무 이름이나 요구 조건이 달라서 헷갈릴 수 있습니다.
 
