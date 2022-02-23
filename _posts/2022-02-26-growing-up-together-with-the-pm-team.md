@@ -2,9 +2,9 @@
 layout: post
 title: "쏘카 PM(Product Manager)은 어떻게 성장하나요?"
 subtitle: "쏘카 PM 팀의 함께 자라기: 2021년 하반기 회고"
-date: 2022-02-10 10:00:00 +0900
+date: 2022-02-23 16:00:00 +0900
 category: product
-background: '/img/iot-pipeline-2/iot-pipeline-2-background.jpg'
+background: '/img/growing-up-together-with-the-pm-team/4.jpg'
 author: marie
 comments: true
 tags:
