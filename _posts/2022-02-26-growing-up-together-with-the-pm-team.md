@@ -34,7 +34,7 @@ tags:
 
 IT 스타트업 업계에서도, 회사마다 PM의 역할이 조금씩 다릅니다. 크게 Product Manager, Project Manager, Product Owner로 이야기해 볼 수 있을 것 같습니다. 주요 관리 대상이 Product라면 Product Manager, Project라면 Project Manager로 칭합니다. Product를 관장하더라도 관리의 범위 및 역할을 넓혀 Product Owner라고 칭하기도 합니다. 
 
-쏘카의 PM은 Product Manager로 쏘카의 여러 Product를 관리합니다. PM 그룹은 PM1팀과 PM2팀으로 구성되어 있습니다. PM 1팀은 고객분들이 사용하는 앱&웹 제품을 담당하고 PM 2팀은 B2B, 쏘카 내부 구성원들을 위한 인터널 프로덕트를 담당합니다(보다 상세한 설명은 현재 1팀과 2팀의 [채용 문서](http://socar-inc.github.io)에 나와있습니다 😉) 
+쏘카의 PM은 Product Manager로 쏘카의 여러 Product를 관리합니다. PM 그룹은 PM1팀과 PM2팀으로 구성되어 있습니다. PM 1팀은 고객분들이 사용하는 앱&웹 제품을 담당하고 PM 2팀은 B2B, 쏘카 내부 구성원들을 위한 인터널 프로덕트를 담당합니다(보다 상세한 설명은 [채용 문서](https://bit.ly/SOCAR-RECRUIT)의 프로덕트 매니저 부분에 나와있습니다 😉) 
 
 그리고 팀 명칭에서도 알 수 있듯이, 쏘카의 PM 조직은 기능 조직의 형태로 구성되어 있습니다. 기능 조직이란 조직 안에서 같은 전문 기능 영역을 수행하는 구성원들 간 같은 팀으로 구성되어 있는 형태를 말합니다. 기능 조직의 가장 큰 장점은 동일한 업무를 진행하는 PM들과 고민을 나누고, 주변 동료들이 진행하는 프로젝트를 가까이서 보면서 정말 많이 배울 수 있다는 점입니다. 
 
