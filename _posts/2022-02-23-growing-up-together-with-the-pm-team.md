@@ -4,7 +4,7 @@ title: "쏘카 PM(Product Manager)은 어떻게 성장하나요?"
 subtitle: "쏘카 PM 팀의 함께 자라기: 2021년 하반기 회고"
 date: 2022-02-23 16:00:00 +0900
 category: product
-background: '/img/growing-up-together-with-the-pm-team/background.jpg'
+background: '/img/growing-up-together-with-the-pm-team/4.jpg'
 author: marie
 comments: true
 tags:
@@ -67,6 +67,7 @@ IT 스타트업 업계에서도, 회사마다 PM의 역할이 조금씩 다릅�
 처음 위클리 미팅을 만들자는 제안이 나왔을 때, 동료들의 의견은 반반이었습니다. “오, 너무 좋겠다. 나 이야기해보고 싶은 것 있어.” 라고 긍정적인 견해를 가진 경우도 있었지만, “매주 이야기할 만큼, 고민이 많을까.” 회의적인 동료들도 있었습니다. 그래서 안건이 있을 때마다 만나자고 한 것인데, 되돌아보니 한 달 평균 3번 이상, 1주 정도를 제외하면 늘 만났습니다. 
 
 ![](/img/growing-up-together-with-the-pm-team/4.jpg)
+*가을 날의 서울숲 미팅은 정말 환상입니다! 😍*
 
 위클리 미팅은 ‘함께’ ‘빠르게’ 문제를 풀어나가는 창구가 되었습니다. 개개인은 프로젝트를 진행하면서 겪는 다음과 같은 문제를 해결할 수 있는 아이디어를 얻어 갔습니다. 
 
