@@ -1,7 +1,7 @@
 ---
 layout: post
-title:  "쏘카의 데이터 디스커버리 플랫폼 도입기 - 1편. 데이터 디스커버리란?"
-subtitle: feat. Datahub VS Amundsen 비교 분석
+title:  "데이터 디스커버리 플랫폼 도입기 - 1편. 데이터 디스커버리란?(feat. Datahub VS Amundsen 비교 분석)"
+subtitle: Datahub 도입기
 date: 2022-02-25 11:00:00 +0900
 category: data
 background : "/assets/images/discovery-bg.jpg"
