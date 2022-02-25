@@ -2,7 +2,7 @@
 layout: post
 title:  "쏘카의 데이터 디스커버리 플랫폼 도입기 - 1편. 데이터 디스커버리란?"
 subtitle: feat. Datahub VS Amundsen 비교 분석
-date: 2022-01-24 14:00:00 +0900
+date: 2022-02-25 11:00:00 +0900
 category: data
 background : "/assets/images/discovery-bg.jpg"
 author: dini
@@ -115,11 +115,13 @@ tags:
   * 이 외에도 종종 여러 디펜던시(Dependancy)가 필요했습니다. 
 
 
-![datahub-ingestion-script](/img/data-discovery-platform-01/datahub-ingestion-script.png)*Datahub -  BigQuery 데이터 주입 script*
-
-![amundsen-ingestion-script](/img/data-discovery-platform-01/amundsen-ingestion-script.png)*Amundsen - BigQuery 데이터 주입 script*
+|![datahub-ingestion-script](/img/data-discovery-platform-01/datahub-ingestion-script.png)|![amundsen-ingestion-script](/img/data-discovery-platform-01/amundsen-ingestion-script.png)|
+|:-:|:-:|
+|*Datahub -  BigQuery 데이터 주입 script* |*Amundsen - BigQuery 데이터 주입 script*|
 
  흥미로운 점은 같은 기능을 수행할 때 Datahub와 Amundsen의 **script 길이 차이**였습니다. Datahub는 10줄 내외의 직관적인 yaml 코드로 가능한 반면, Amundsen의 script는 기본적으로 50 줄 이상이었습니다. 개인적으로 스크립트가 긴 만큼 섬세한 커스텀이 가능하거나 필요하다는 생각은 들지 않았고 오히려 읽기 무겁다는 생각이 들었습니다(공식 깃헙에 있는 샘플이 400줄이었습니다)
+
+각 ingestion 소스코드는 [Datahub 공식 Github Repository](https://github.com/linkedin/datahub/blob/master/metadata-ingestion/examples/recipes/bigquery_to_datahub.yml) 와 [Amundsen 공식 Repository](https://github.com/amundsen-io/amundsen/blob/main/databuilder/example/scripts/sample_bigquery_metadata.py) 에서 좀더 자세히 확인할 수 있습니다. 
 
 #### 3) UI
 
