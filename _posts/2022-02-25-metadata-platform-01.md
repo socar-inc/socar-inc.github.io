@@ -93,7 +93,7 @@ tags:
 
 ![datathub-vs-amundsen](/img/data-discovery-platform-01/datahub-vs-amundsen.png)
 
-### 1) 구조
+#### 1) 구조
 
 두 플랫폼의 구조에는 다음과 같은 공통점이 있습니다.
 
