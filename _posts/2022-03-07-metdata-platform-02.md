@@ -340,9 +340,9 @@ def get_column_info_query(pattern_clause) -> str:
 
  입사하고 맡은 첫 프로젝트였는데, 쏘카 데이터 플랫폼팀의 전반적인 인프라와 배포 흐름에 대해 알수 있는 좋은 기회였습니다. 여담으로, 구현하면서 슬랙에서 질답을 너무 많이 한 나머지 커뮤니티 기여자로 Datahub 개발팀과 원격 인터뷰를 하는 기회도 얻었습니다 (!) 
 
- ![datahub-swag-all](/img/data-discovery-platform-02/datahub-swag-all.jpeg) *인터뷰 기념품으로 준 Datahub 굿즈 세트*
+ ![datahub-swag-all](/img/data-discovery-platform-02/datahub-swag-all.jpeg) *인터뷰 기념품으로 준 Datahub 기념품 세트*
 
-![datahub-swag-mug](/img/data-discovery-platform-02/datahub-swag-mug.jpeg)*머그컵의 문구가 인상적입니다.*
+![datahub-swag-thanks](/img/data-discovery-platform-02/datahub-swag-thanks.jpeg)*기념품과 함께 온 감사 메세지*
 
 다음 편에서는 실제로 데이터 디스커버리 플랫폼이 도입된 후의 운영 방식과 효과에 대해서 살펴보겠습니다.
 
