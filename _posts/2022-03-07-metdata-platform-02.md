@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 쏘카의 데이터 디스커버리 플랫폼 도입기 - 2편. GKE에 플랫폼 구축하기
+title: 데이터 디스커버리 플랫폼 도입기 - 2편. GKE에 Datahub 구축하기
 subtitle: feat. 메타데이터 플랫폼이 실제로 배포되기까지 
 date: 2022-03-07 17:00:00 +0900
 category: data
@@ -8,8 +8,9 @@ background : "/assets/images/cloud-bg.jpg"
 author: dini
 comments: true
 tags:
+
     - data
-    - data-engineering
+        - data-engineering
 ---
 
 
@@ -28,7 +29,7 @@ tags:
 
 1. [Datahub on GKE 배포 과정](#datahub-on-gke)
 
-   1.1 GKE 배포 (with CI/CD)
+   1.1 GKE 배포 
 
    1.2 CloudSQL DB migration 
 
@@ -44,67 +45,41 @@ tags:
 
 3. [마무리](#wrap-up)
 
-> 데이터 플랫폼팀이 하는 업무가 궁금하시다면 [데이터 엔지니어링 팀이 하는 일](https://tech.socarcorp.kr/data/2021/03/24/what-socar-data-engineering-team-does.html)과 [쏘카 데이터 엔지니어 채용공고](https://www.notion.so/socarcorp/d458b6b77a2243fb873d1ac800c321f7?p=1e895c6f8d6c49d0962d9c3af3e37f81)를, 데이터 플랫폼 팀의 신입 온보딩 과정이 궁금하시다면 [쏘카 신입 데이터 엔지니어 디니의 4개월 회고](https://tech.socarcorp.kr/data/2021/12/28/data-engineering-team-onboarding.html)를 보시기를 추천드립니다. 
 
 
+이 글에서는 이러한 과정을 통해 데이터 허브를 구축합니다
 
-## 1. Datahub on GKE 배포 과정 <a name="datahub-on-gke"></a>
+* 첫번째로는, 플랫폼을 사내 클라우드 환경에 안정적으로 배포합니다. 
 
- Datahub 을 포함한 데이터 디스커버리 플랫폼을 도입하는데는 크게 두가지의 과정이 필요합니다. 
-
-* 첫번째로는, 플랫폼이 사내 클라우드 환경에 안정적으로 배포되어있어야 합니다. 
-* 두번째로는, 플랫폼에 메타데이터를 주입하는 파이프라인이 자동화되어야 합니다. 
+* 두번째로는, 플랫폼에 메타데이터를 주입하는 파이프라인을 자동화합니다.
 
 먼저, Datahub 를 어떻게 사내 클라우드 환경에 안정적으로 배포했는지 알아보겠습니다.
 
 >  Datahub 는 오픈소스 기반으로 매우 빠르게 업데이트 되고 있습니다. 해당 배포는 6개월 전에 이루어진 것으로, 현재 Datahub 배포 및 metadata ingestion 과정과는 다소 차이가 있을 수 있습니다. 이 점 양해 부탁 드립니다. 
 
-### 1.1 GKE 배포 (with CI/CD)
 
-#### Helm Chart 를 이용합니다
 
-쏘카 데이터엔지니어링 그룹의 쿠버네티스 환경은 GCP(Google Cloud Platform)의 GKE(Google Kuberentes Engine) 를 사용하고 있습니다. 또한 대부분의 어플리케이션을 helm chart 를 이용하여 클러스터에 배포하고 있습니다. Datahub 역시 공식 [helm chart](링크) 를 제공하고 있으며, 총 2 벌의 차트로 구성되어 있습니다. 구성은 다음과 같습니다.
+
+## 1. Datahub on GKE 배포 과정 <a name="datahub-on-gke"></a>
+
+### 1.1 GKE 배포 
+
+쏘카 데이터엔지니어링 그룹의 쿠버네티스 환경은 GCP(Google Cloud Platform)의 GKE(Google Kuberentes Engine) 를 사용하고 있습니다. 또한 대부분의 어플리케이션을 [Helm](https://helm.sh/) Chart 를 이용하여 클러스터에 배포하고 있습니다. Datahub 역시 공식 [Helm Chart](https://github.com/acryldata/datahub-helm) 를 제공하고 있으며, 총 2 벌의 차트로 구성되어 있습니다. 구성은 다음과 같습니다.
 
 * datahub : Datahub 어플리케이션에 필요한 요소들 설치 (frontend, gms 등)
 * prerequisites : Datahub 에 필요한 사전 요소들을 설치 (MySQL, Kafka, ElasticSearch, neo4j 등)
 
-> helm : 쿠버네티스의 패키지 관리 도구입니다. linux의 yum, apt 랑 비슷하게 어플리케이션을 패키징하여 배포하게 해주는 툴입니다. 이 helm 으로 애플리케이션을 배포할때 쓰는 선언적인 차트를 helm chart 라고 합니다. 
+![datahub-helm-chart-tree](/img/data-discovery-platform-02/datahub-helm-chart-tree.png) *Datahub 차트 구조*
 
-공식 Helm Chart 의 ingress 를 쏘카의 환경에 맞게 수정한 뒤 배포하였습니다. 또한 원활한 테스트를 위해 개발 클러스터, 운영 클러스터에 각각 배포하였습니다. 
+공식 Helm Chart 의 ingress 를 쏘카의 환경에 맞게 수정한 뒤 배포하였습니다. 또한 원활한 테스트를 위해 개발 클러스터, 운영 클러스터에 각각 배포하였습니다.  
 
-```yaml
-service:
-  type: ClusterIP
-  port: 9002
-  annotations: {}
-
-ingress:
-  enabled: true
-  annotations: 
-    kubernetes.io/ingress.class: nginx
-  hosts:
-    - host: <우리의_멋진_도메인>
-      paths:
-				- / 
-```
-
-*Datahub helm chart 에서 ingress 를 수정한 부분*
-
-#### CI/CD 파이프라인을 이용합니다
-
-쏘카 데이터 플랫폼 팀에서 어플리케이션을 배포할 때는 helm chart + Github + ArgoCD 의 CI/CD 파이프라인 조합을 주로 이용합니다.
-
-PoC 과정에서는 CI/CD 과정 없이 로컬에서 helm install 로 GKE에 배포하였습니다. 하지만 Datahub 도입이 정식으로 결정되고 난 뒤에는 쏘카 데이터 플랫폼팀의 CI/CD 파이프라인을 통해 재배포하였습니다. 
-
-쏘카 데이터플랫폼 팀에서 관리하는 helm chart 레포지토리에 Datahub helm chart 를 푸시한 뒤, 해당 브랜치와 연결하는 ArgoCD App 을 생성하였습니다. 모니터링에는 Lens 와 Grafana 를 이용하였습니다. 
-
-> CI/CD : 소프트웨어 개발에 있어서 지속적인 통합과 지속적인 배포 (혹은 서비스 제공) 를 이르는 말입니다. 이 CI/CD 자동화를 위해 Buddy, github action, jenkins 등의 다양한 툴이 존재합니다 .
+![datahub-pods](/img/data-discovery-platform-02/datahub-pods.png) *Datahub 최초 배포시 pod 상태*
 
 ### 1.2 CloudSQL DB migration
 
  Datahub 는 자체 db (storage) 로 mysql pod 을 사용합니다. 물론 PVC(PersistentVolumeClaim) 이 붙어있긴 했지만, 앞으로 Datahub 어플리케이션 상에서 쌓일 데이터가 점점 늘어날 것이며 데이터의 내용 또한 중요하기 때문에, 앞으로의 확장성과 만에 하나라도 있을 유실 가능성을 방지하는 방향으로 아키텍쳐를 고민했습니다. 결국에는 mysql pod 대신 외부 스토리지로 GCP CloudSQL instance 를 연결하기로 결정했습니다.
 
-CloudSQL instance에 새로운 db를 생성하여 기존 datahub 의 db를  마이그레이션하고, 해당 db 주소를 datahub helm chart 에 명시하여 연결하는 방식으로 진행했습니다. 구체적으로는 다음 과정으로 진행했습니다. 
+CloudSQL instance에 새로운 db를 생성하여 기존 datahub 의 db를  마이그레이션하고, 해당 db 주소를 datahub Helm Chart 에 명시하여 연결하는 방식으로 진행했습니다. 구체적으로는 다음 과정으로 진행했습니다. 
 
 #### 1.2.1 MySQL -> CloudSQL data dump
 
@@ -135,7 +110,7 @@ CloudSQL instance에 새로운 db를 생성하여 기존 datahub 의 db를  마�
 
 #### 1.2.2 datahub 가 CloudSQL 가리키게 하기
 
-기존 datahub 의 helm chart 는 sql host 로 mysql pod 을 가리키고 있습니다. 위에서 만든 cloudsql db 를 가리키게 하기 위해서 helm chart 를 다음과 같이 수정합니다. 민감한 정보들은 helm chart 에 직접 명시하지 않고 별도의 secret 으로 생성하여 참조합니다.  
+기존 datahub 의 Helm Chart 는 sql host 로 mysql pod 을 가리키고 있습니다. 위에서 만든 cloudsql db 를 가리키게 하기 위해서 Helm Chart 를 다음과 같이 수정합니다. 민감한 정보들은 Helm Chart 에 직접 명시하지 않고 별도의 secret 으로 생성하여 참조합니다.  
 
 ```yaml
 # charts/datahub/values.yaml
@@ -166,7 +141,7 @@ sql:
       secretKey: <별도로 생성한 secret 키>
 ```
 
- 이렇게 helm chart 까지 수정하고 배포된 helm chart 를 upgrade 하면 (ex. `helm upgrade datahub`)  migration 작업은 완료되었습니다. 최종적으로 다음을 통해 정상 작동을 확인합니다. 
+ 이렇게 Helm Chart 까지 수정하고 배포된 Helm Chart 를 upgrade 하면 (ex. `helm upgrade datahub`)  migration 작업은 완료되었습니다. 최종적으로 다음을 통해 정상 작동을 확인합니다. 
 
 * helm upgrade 과정에서 upgrade job, mysql-setup-job 이 성공 (lens 혹은 argocd 로 확인)
 
@@ -176,11 +151,11 @@ sql:
 
   
 
-### 1.3 Keycloack 인증
+### 1.3 Keycloak 인증
 
  Datahub 이 배포되고 나면, 인증된 사용자만 어플리케이션에 접속되어야 합니다. Datahub는 okta, keycloak 등 여러 SSO 를 지원하는데, 쏘카에서 이미 keycloak 을 이용하고 있기 때문에 keycloak 을 사용하기로 결정했습니다. 
 
- Datahub 에 keycloak 로그인을 적용하는 방법은 간단했습니다. helm cart의 frontend 부분에 몇 줄의 설정만 넣어주면 가능했습니다. 
+ Datahub 에 keycloak 로그인을 적용하는 방법은 간단했습니다. Helm Chart의 `values.yaml`파일에서 frontend 부분에 몇 줄의 설정만 넣어주면 가능했습니다. 
 
 ```yaml
 datahub-frontend:
@@ -215,8 +190,6 @@ AUTH_OIDC_PRE_PROVISIONING_REQUIRED=false
 AUTH_OIDC_EXTRACT_GROUPS_ENABLED=true 
 AUTH_OIDC_GROUPS_CLAIM=<your-groups-claim-name>
 ```
-
-> SSO(Single Sign-On): 한 번의 인증 과정으로 여러 컴퓨터 상의 자원을 이용 가능하게 하는 인증 기능
 
 
 
@@ -274,7 +247,7 @@ CMD ["ingest", "-c", "/datahub-ingestion-bigquery/recipe_bigquery.yaml"]
 
 #### 어떻게 하면 최소한의 권한으로 메타데이터를 추출할 수 있을까?
 
- 데이터허브는 메타데이터를 끌어오는 모든 대상 db에 select 권한을 허용해야 메타데이터 추출이 가능하도록 만들어져 있습니다. 예를 들면 MySQL DB에 3000개의 db가 있다고 가정할때, 데이터허브의 서비스 계정은 3000개의 db에 대해 모두 권한이 있어야 하는 것입니다. 
+ Datahub는 메타데이터를 끌어오는 모든 대상 db에 select 권한을 허용해야 메타데이터 추출이 가능하도록 만들어져 있습니다. 예를 들면 MySQL DB에 3000개의 db가 있다고 가정할때, Datahub의 서비스 계정은 3000개의 db에 대해 모두 권한이 있어야 하는 것입니다. 
 
  하지만 이 권한을 단독 솔루션에 부여하기에는 보안상 너무 무겁다고 판단했습니다. 그래서 어떻게 하면 최소한의 db에 접근하면서 같은 기능을 구현할 수 있을지가 큰 고민거리였습니다.
 
@@ -282,9 +255,9 @@ CMD ["ingest", "-c", "/datahub-ingestion-bigquery/recipe_bigquery.yaml"]
 
 사실 대부분 DB의 메타데이터는 information_schema 라는 파일에 별도로 저장이 되어 있습니다. 여기만 접근해서 가져와도 될것 같은데 꼭 모든 DB에 권한이 필요할지를 고민하던 와중에, 당시 데이터엔지니어링팀 팀장 (이시고 지금은 그룹장이신) 토마스가 아이디어를 주셨습니다.
 
- 데이터허브에는 데이터 소스의 메타데이터를 특정 형태의 json file 로 변환하여 저장하는 기능이 있습니다. 또한 같은 형식의 json file 을 기반으로 메타데이터를 데이터허브 플랫폼에 주입하는 것도 가능했습니다. 그리고 해당 파일 형식을 확인해본 결과, information_schema 에서 대부분(사실 모두) 가져올 수 있는 정보였습니다. 
+ Datahub에는 데이터 소스의 메타데이터를 특정 형태의 json file 로 변환하여 저장하는 기능이 있습니다. 또한 같은 형식의 json file 을 기반으로 메타데이터를 Datahub 플랫폼에 주입하는 것도 가능했습니다. 그리고 해당 파일 형식을 확인해본 결과, information_schema 에서 대부분(사실 모두) 가져올 수 있는 정보였습니다. 
 
- 그러면 information_schema 에서 정보를 가져와서 file 형식을 맞춰 만들어주는 기능을 개발하고, 그 file 기반으로 metadata ingestion 하면 되지 않을까? 하는 생각이 들었습니다. 그래서 앞부분은 python script 로 개발하고, file 을 기반으로 메타데이터를 주입하는 부분은 기존 데이터허브 프레임워크를 그대로 이용했습니다. 
+ 그러면 information_schema 에서 정보를 가져와서 file 형식을 맞춰 만들어주는 기능을 개발하고, 그 file 기반으로 metadata ingestion 하면 되지 않을까? 하는 생각이 들었습니다. 그래서 앞부분은 python script 로 개발하고, file 을 기반으로 메타데이터를 주입하는 부분은 기존 Datahub 프레임워크를 그대로 이용했습니다. 
 
 ```dockerfile
 # 파이썬 이미지를 이용합니다. 
@@ -324,13 +297,13 @@ def get_column_info_query(pattern_clause) -> str:
 
 #### 최종 테스트
 
-이렇게 기능을 구현하고, 프로젝트에 같이 참여하시고 계시는 인프라팀(현재 CloudDB팀)의 제이든과 직접 테스트를 해보았습니다. 좌충우돌 끝에 결과적으로는 information_schema 에만 권한이 있는 계정으로, 원하는 DB의 모든 메타데이터를 가져와서 데이터허브에 주입하는 데에 성공했습니다. 
+이렇게 기능을 구현하고, 프로젝트에 같이 참여하시고 계시는 인프라팀(현재 CloudDB팀)의 제이든과 직접 테스트를 해보았습니다. 좌충우돌 끝에 결과적으로는 information_schema 에만 권한이 있는 계정으로, 원하는 DB의 모든 메타데이터를 가져와서 Datahub에 주입하는 데에 성공했습니다. 
 
 ```
 스크린샷 (제이든 허락맡기)
 ```
 
-이 기능 개발로 쏘카의 DB에 접근하는 데이터허브 계정의 권한이 크게 축소되어, 내부 정보보호 규칙에 맞게 보안을 개선할 수 있습니다. 그리고 데이터허브 최종 도입 결정에 긍정적인 영향을 미쳤습니다. 
+이 기능 개발로 쏘카의 DB에 접근하는 Datahub 계정의 권한이 크게 축소되어, 내부 정보보호 규칙에 맞게 보안을 개선할 수 있습니다. 그리고 Datahub 최종 도입 결정에 긍정적인 영향을 미쳤습니다. 
 
 
 
@@ -347,3 +320,6 @@ def get_column_info_query(pattern_clause) -> str:
 다음 편에서는 실제로 데이터 디스커버리 플랫폼이 도입된 후의 운영 방식과 효과에 대해서 살펴보겠습니다.
 
 긴 글 읽어주셔서 감사합니다. 
+
+> 데이터 플랫폼팀이 하는 업무가 궁금하시다면 [데이터 엔지니어링 팀이 하는 일](https://tech.socarcorp.kr/data/2021/03/24/what-socar-data-engineering-team-does.html)과 [쏘카 데이터 엔지니어 채용공고](https://www.notion.so/socarcorp/d458b6b77a2243fb873d1ac800c321f7?p=1e895c6f8d6c49d0962d9c3af3e37f81)를, 데이터 플랫폼 팀의 신입 온보딩 과정이 궁금하시다면 [쏘카 신입 데이터 엔지니어 디니의 4개월 회고](https://tech.socarcorp.kr/data/2021/12/28/data-engineering-team-onboarding.html)를 보시기를 추천드립니다. 
+
