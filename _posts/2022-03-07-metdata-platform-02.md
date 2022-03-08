@@ -77,40 +77,15 @@ tags:
 
 ### 1.2 CloudSQL DB migration
 
- Datahub 는 자체 db (storage) 로 mysql pod 을 사용합니다. 물론 PVC(PersistentVolumeClaim) 이 붙어있긴 했지만, 앞으로 Datahub 어플리케이션 상에서 쌓일 데이터가 점점 늘어날 것이며 데이터의 내용 또한 중요하기 때문에, 앞으로의 확장성과 만에 하나라도 있을 유실 가능성을 방지하는 방향으로 아키텍쳐를 고민했습니다. 결국에는 mysql pod 대신 외부 스토리지로 GCP CloudSQL instance 를 연결하기로 결정했습니다.
+Datahub 는 자체 db (storage) 로 mysql pod 을 사용합니다. 물론 PVC(PersistentVolumeClaim) 이 붙어있긴 했지만, 앞으로 Datahub 어플리케이션 상에서 쌓일 데이터가 점점 늘어날 것이며 데이터의 내용 또한 중요하기 때문에, 앞으로의 확장성과 만에 하나라도 있을 유실 가능성을 방지하는 방향으로 아키텍쳐를 고민했습니다. 결국에는 mysql pod 대신 외부 데이터베이스로 GCP CloudSQL instance 를 연결하기로 결정했습니다.
 
-CloudSQL instance에 새로운 db를 생성하여 기존 datahub 의 db를  마이그레이션하고, 해당 db 주소를 datahub Helm Chart 에 명시하여 연결하는 방식으로 진행했습니다. 구체적으로는 다음 과정으로 진행했습니다. 
-
-#### 1.2.1 MySQL -> CloudSQL data dump
-
-* 기존 mysql pod shell 에 접속하여 dump file 생성 (해당 db의 모든 데이터를 파일로 추출합니다.)
-
-  ```shell
-  # mysql pod 접속
-  kubectl exec -it prerequisites-mysql-0 bash
-  
-  # mysql -> k8s
-  mysqldump --databases datahub -h localhost -u root -p \
-  --hex-blob --single-transaction --set-gtid-purged=OFF \
-  --default-character-set=utf8mb4 > /tmp/datahub.sql
-  
-  exit
-  
-  # k8s -> local
-  kubectl cp prerequisites-mysql-0:/tmp/datahub.sql datahub.sql
-  ```
-
-* GCS bucket 생성 & dump file 업로드
+구체적으로는 다음 과정으로 진행했습니다. 
 
 * CloudSQL db (혹은 새로운 instance) 생성
+* (Optional) 사용자 생성
+* datahub 가 CloudSQL 가리키게 하기
 
-* GCS bucker 에서 해당 CloudSQL 으로 dump file import
-
-* migration 정상 확인 (workbench 접속하여 dump 된 데이터 확인)
-
-#### 1.2.2 datahub 가 CloudSQL 가리키게 하기
-
-기존 datahub 의 Helm Chart 는 sql host 로 mysql pod 을 가리키고 있습니다. 위에서 만든 cloudsql db 를 가리키게 하기 위해서 Helm Chart 를 다음과 같이 수정합니다. 민감한 정보들은 Helm Chart 에 직접 명시하지 않고 별도의 secret 으로 생성하여 참조합니다.  
+기존 datahub 의 Helm Chart 는 sql host 로 mysql pod 을 가리키고 있습니다. 위에서 만든 cloudsql db 를 가리키게 하기 위해서 Helm Chart 를 다음과 같이 수정합니다.
 
 ```yaml
 # charts/datahub/values.yaml
@@ -141,15 +116,37 @@ sql:
       secretKey: <별도로 생성한 secret 키>
 ```
 
- 이렇게 Helm Chart 까지 수정하고 배포된 Helm Chart 를 upgrade 하면 (ex. `helm upgrade datahub`)  migration 작업은 완료되었습니다. 최종적으로 다음을 통해 정상 작동을 확인합니다. 
+실제로는, 민감한 정보들을 Helm Chart 에 직접 명시하지 않고 다음 처럼 별도의 secret 으로 생성하여 참조하였습니다.
 
-* helm upgrade 과정에서 upgrade job, mysql-setup-job 이 성공 (lens 혹은 argocd 로 확인)
+```yaml
+  sql:
+    datasource:
+      host:
+        secretRef: mysql-secrets
+        secretKey: mysql-host
+      url:
+        secretRef: mysql-secrets
+        secretKey: mysql-url
+      hostForMysqlClient:
+        secretRef: mysql-secrets
+        secretKey: mysql-hostForMysqlClient
+      port: "3306
+      driver: "com.mysql.jdbc.Driver"
+      username:
+        secretRef: mysql-secrets
+        secretKey: mysql-username
+      password:
+        secretRef: mysql-secrets
+        secretKey: mysql-password
+```
 
-* datahub ui 상에서 데이터 수정뒤 clousql 연결한 workbench 에서 데이터 업데이트 되는지 확인
+ 최종적으로 정상 작동을 테스트합니다. 예를 들어, datahub ui 상에서 데이터를 수정한 뒤 해당 CloudSQL db에서 동일한 데이터가 업데이트 되는지 확인합니다.
 
-* datahub 에 메타데이터 ingestion 작업을 수행한 뒤 clousql 연결한 workbench 에서 데이터 업데이트 되는지 확인
+![create-test-policy](/img/data-discovery-platform-02/datahub-create-policy.png)*test_policy 라는 정책을 생성해보았습니다.*
 
-  
+![check-data](/img/data-discovery-platform-02/datahub-check-data.png)*CloudSQL db에서 동일한 데이터가 확인됩니다.*
+
+
 
 ### 1.3 Keycloak 인증
 
