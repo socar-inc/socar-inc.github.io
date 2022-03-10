@@ -37,11 +37,13 @@ tags:
 
 2. [메타데이터 주입 과정](#metadata-ingestion) 
 
-   2.1 ingestion 정책 결정
+   2.1 메타데이터 주입 방법
 
-   2.2 ingestion 과정 자동화 (with Airflow)
+   2.2 메타데이터 주입 정책 결정
 
-   2.3 메타데이터 추출 과정의 권한 축소 
+   2.3 메타데이터 주입 과정 자동화 (with Airflow)
+
+   2.4 메타데이터 추출 과정의 권한 축소 
 
 3. [마무리](#wrap-up)
 
@@ -194,7 +196,33 @@ AUTH_OIDC_GROUPS_CLAIM=<your-groups-claim-name>
 
 이렇게 Datahub을 클라우드 상에 안정적으로 구축했습니다. 하지만 아직 데이터 디스커버리 플랫폼으로서의 기능을 하지는 못합니다. 데이터 소스에서 실제로 메타데이터를 가져와서 플랫폼에서 보여줘야 하고, 이렇게 메타데이터를 가져오는 과정(=Metadata Ingestion)이 자동화 되어야 합니다. 
 
-### 2.1 메타데이터 주입 정책 결정
+### 2.1 메타데이터 주입 방법
+
+Datahub 에서는 recipe 라고 불리는 yaml 파일을 datahub CLI 로 실행하여 메타데이터를 주입합니다. 다음은 bigquery 에서 메타데이터를 가져오는 recipe 파일의 기본 예시입니다. 
+
+```yaml
+source:
+ type: bigquery
+ config:
+   project_id: socar-data
+   options:
+     credentials_path : ${GOOGLE_APPLICATION_CREDENTIALS}
+
+sink:
+ type: "datahub-rest"
+ config:
+   server: ${DATAHUB_GMS_ADDRESS} # datahub 어플리케이션의 backend 서버
+
+```
+
+* `source` : 데이터 소스, 즉 "데이터를 어디서 가져오는지" 정의합니다.
+* `sink` : "데이터를 어디에 저장하는지" 를 정의합니다. 데이터허브 어플리케이션에 올릴 수도 있고, 콘솔에 출력할 수도 있고, 파일로 저장할 수도 있습니다.
+
+ 이 형식을 바탕으로, 데이터 소스를 바꿀 수도 있고 여러 설정을 적용할 수도 있습니다. 파일을 실행할 때는 `datahub ingestion -c "<파일_이름>"` 으로 실행합니다. 
+
+ 
+
+### 2.2 메타데이터 주입 정책 결정
 
 먼저 "어떤 데이터 소스"에서 메타데이터를 "얼마나 자주" 가져올건지 결정해야 합니다.
 
@@ -219,13 +247,15 @@ source:
 
 그러면 얼마나 자주 가져와야 할까요? 매일매일 필요에 따라 테이블이 생겨났다가 사라지기도 하고, 테이블의 컬럼이 추가되거나 변경되는 일도 있을 것입니다. 하지만 이런 변화들을 꼭 실시간으로 봐야 할 필요는 없다고 생각했습니다. 하루에 한번 정도 업데이트한다면, 들이는 리소스도 효율화하고 사내 데이터 현황을 파악하는 데 충분하다고 결정을 내렸습니다. 
 
-### 2.2 메타데이터 주입 과정 자동화 (with Airflow)
+### 2.3 메타데이터 주입 과정 자동화 (with Airflow)
 
 이렇게 하루에 한번 메타데이터 주입을 결정하고 난 뒤, 메타데이터 주입을 어떻게 자동화했는지 알아보겠습니다. 
 
 하루에 한번 batch 성 주입이라면 airflow DAG 로 간단하게 구현할 수 있었습니다. 데이터소스에서 메타데이터를 주입하는 task 를 만들고, 하루 한번만 돌려주면 됐습니다. 그런데 이 작업에는 `datahub` 패키지를 설치해야 하는 의존성이 필요합니다. 
 
 데이터플랫폼 팀에서는 이런 경우 airflow 에 직접 의존성을 설치하지 않고, 필요한 의존성을 담은 docker image 를 실행하는 K8sPodOperator 를 만들어 해결하고 있습니다. 이렇게 하면 DAG 가 아무리 많아도 의존성의 충돌을 방지할 수 있습니다. 
+
+![metadata-ingestion-flow](/img/data-discovery-platform-02/metadata-ingestion-flow.png) *메타데이터 주입 흐름*
 
 ```dockerfile
 # datahub-ingestion 이미지를 이용합니다. 
@@ -240,7 +270,7 @@ CMD ["ingest", "-c", "/datahub-ingestion-bigquery/recipe_bigquery.yaml"]
 
 
 
-### 2.3 메타데이터 추출 과정의 권한 축소
+### 2.4 메타데이터 추출 과정의 권한 축소
 
 #### 어떻게 하면 최소한의 권한으로 메타데이터를 추출할 수 있을까?
 
@@ -252,9 +282,19 @@ CMD ["ingest", "-c", "/datahub-ingestion-bigquery/recipe_bigquery.yaml"]
 
 사실 대부분 DB의 메타데이터는 information_schema 라는 파일에 별도로 저장이 되어 있습니다. 여기만 접근해서 가져와도 될것 같은데 꼭 모든 DB에 권한이 필요할지를 고민하던 와중에, 당시 데이터엔지니어링팀 팀장 (이시고 지금은 그룹장이신) 토마스가 아이디어를 주셨습니다.
 
+![file-based-ingestion-flow](/img/data-discovery-platform-02/file-based-ingestion-flow.png) *file 을 이용하여 메타데이터 상태를 저장하는 흐름*
+
  Datahub에는 데이터 소스의 메타데이터를 특정 형태의 json file 로 변환하여 저장하는 기능이 있습니다. 또한 같은 형식의 json file 을 기반으로 메타데이터를 Datahub 플랫폼에 주입하는 것도 가능했습니다. 그리고 해당 파일 형식을 확인해본 결과, information_schema 에서 대부분(사실 모두) 가져올 수 있는 정보였습니다. 
 
- 그러면 information_schema 에서 정보를 가져와서 file 형식을 맞춰 만들어주는 기능을 개발하고, 그 file 기반으로 metadata ingestion 하면 되지 않을까? 하는 생각이 들었습니다. 그래서 앞부분은 python script 로 개발하고, file 을 기반으로 메타데이터를 주입하는 부분은 기존 Datahub 프레임워크를 그대로 이용했습니다. 
+ 그러면 information_schema 에서 정보를 가져와서 file 형식을 맞춰 만들어주는 기능을 개발하고, 그 file 기반으로 metadata ingestion 하면 되지 않을까? 하는 생각이 들었습니다. 
+
+![metadata-ingestion-as-is](/img/data-discovery-platform-02/metadata-ingestion-as-is.png)*metadata ingestion AS-IS 흐름* 
+
+![metadata-ingestion-to-be](/img/data-discovery-platform-02/metadata-ingestion-to-be.png)*metadata ingestion TO-BE 흐름* 
+
+
+
+그래서 앞부분은 python script 로 개발하고, file 을 기반으로 메타데이터를 주입하는 부분은 기존 Datahub 프레임워크를 그대로 이용했습니다. 
 
 ```dockerfile
 # 파이썬 이미지를 이용합니다. 
