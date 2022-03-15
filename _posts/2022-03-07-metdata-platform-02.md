@@ -459,9 +459,9 @@ def get_column_info_query(pattern_clause) -> str:
 
 * TO-BE : 모든 DB에 대해 REFERENCE 권한
 
-  ```
+  ```sql
   CREATE USER '<username>'@'XX.XX.%' IDENTIFIED BY '<password>';
-  GRANT References ON *.* TO 'username>'@'XX.XX.%';
+  GRANT References ON *.* TO '<username>'@'XX.XX.%';
   ```
 
 결과적으로 원하는 DB의 모든 메타데이터를 가져와서 Datahub에 주입하는 데에 성공했습니다. 
