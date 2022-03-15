@@ -244,7 +244,7 @@ Datahub에서는 `recipe`라고 불리는 yaml 파일을 `datahub CLI`로 실행
 source:
  type: bigquery
  config:
-   project_id: socar-data
+   project_id: <project_id>
    options:
      credentials_path : ${GOOGLE_APPLICATION_CREDENTIALS}
 
