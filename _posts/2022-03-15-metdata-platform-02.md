@@ -489,5 +489,5 @@ def get_column_info_query(pattern_clause) -> str:
 
 긴 글 읽어주셔서 감사합니다. 
 
-> 데이터 플랫폼팀이 하는 업무가 궁금하시다면 [데이터 엔지니어링 팀이 하는 일](https://tech.socarcorp.kr/data/2021/03/24/what-socar-data-engineering-team-does.html)과 [쏘카 데이터 엔지니어 채용공고](https://www.notion.so/socarcorp/d458b6b77a2243fb873d1ac800c321f7?p=1e895c6f8d6c49d0962d9c3af3e37f81)를, 데이터 플랫폼 팀의 신입 온보딩 과정이 궁금하시다면 [쏘카 신입 데이터 엔지니어 디니의 4개월 회고](https://tech.socarcorp.kr/data/2021/12/28/data-engineering-team-onboarding.html)를 보시기를 추천드립니다. 
+> 데이터 플랫폼팀이 하는 업무가 궁금하시다면 [데이터 엔지니어링 팀이 하는 일](https://tech.socarcorp.kr/data/2021/03/24/what-socar-data-engineering-team-does.html)과 [쏘카 데이터 플랫폼 엔지니어 채용공고](https://www.notion.so/socarcorp/d458b6b77a2243fb873d1ac800c321f7?p=7c55b58735794368876dfb58acae96c5)를, 데이터 플랫폼 팀의 신입 온보딩 과정이 궁금하시다면 [쏘카 신입 데이터 엔지니어 디니의 4개월 회고](https://tech.socarcorp.kr/data/2021/12/28/data-engineering-team-onboarding.html)를 보시기를 추천드립니다. 
 
