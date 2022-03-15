@@ -146,7 +146,7 @@ sql:
         secretKey: mysql-password
 ```
 
-secret yaml 파일은 다음과 같습니다. (helm secret 으로 정의하지 않고, kubectl secret 으로 정의하였습니다.)
+secret yaml 파일은 다음과 같습니다.
 
 ```yaml
 apiVersion: v1
@@ -154,26 +154,7 @@ kind: Secret
 metadata:
   name: mysql-secrets
   namespace: datahub
-  uid: <uid>
-  resourceVersion: <version>
-  creationTimestamp: '2021-11-08T08:18:46Z'
-  managedFields:
-    - manager: kubectl-create
-      operation: Update
-      apiVersion: v1
-      time: '2021-11-08T08:18:46Z'
-      fieldsType: FieldsV1
-      fieldsV1:
-        'f:data':
-          .: {}
-          'f:mysql-host': {}
-          'f:mysql-hostForMysqlClient': {}
-          'f:mysql-password': {}
-          'f:mysql-root-password': {}
-          'f:mysql-url': {}
-          'f:mysql-username': {}
-        'f:type': {}
-  selfLink: /api/v1/namespaces/datahub/secrets/mysql-secrets
+type: Opaque
 data:
   mysql-host: <data>
   mysql-hostForMysqlClient: <data>
@@ -181,7 +162,6 @@ data:
   mysql-root-password: <data>
   mysql-url: <data>
   mysql-username: <data>
-type: Opaque
 
 ```
 
@@ -362,7 +342,7 @@ RUN pip install --no-cache-dir mysql-connector-python==8.0.27 && pip install --n
 CMD python main.py ; datahub ingest -c recipe_mysql_prod.yaml 
 ```
 
-main.py 의 내용은 다음과 같습니다.
+`main.py` 의 내용은 다음과 같습니다.
 
 ```python
 # main.py
@@ -406,7 +386,7 @@ def get_metadata_from_info_schema(user: str, password: str, host: str, pattern_c
             json_table_template=json_table_template,
         )
         with open("metadata.json", "w+") as f:
-     			  f.write(json_result)
+            f.write(json_result)
         cursor.close()
         cnx.close()
 
@@ -442,8 +422,8 @@ def get_column_info_query(pattern_clause) -> str:
                column_key
         FROM   information_schema.columns 
         {pattern_clause}
-        ORDER  BY schemaname,
-                  ordinal_position; 
+        ORDER BY schemaname,
+                 ordinal_position; 
         """
     return column_info_query
  
