@@ -50,20 +50,23 @@ tags:
 
 ## 1. 문제 정의<a name="problem-definition"></a>
 
-이 글에서는 이러한 과정을 통해 데이터 허브를 구축합니다
+### 무엇을 해야 하나요? 
 
-* 첫번째로는 플랫폼을 사내 클라우드 환경에 안정적으로 배포합니다. 
+* Datahub을 사내 클라우드 환경에 안정적으로 배포합니다. 
+* Datahub에 메타데이터를 주입하는 파이프라인을 자동화합니다.
 
-* 두번째로는 플랫폼에 메타데이터를 주입하는 파이프라인을 자동화합니다.
+### 고려해야 할 부분
+
+* 쏘카는 데이터 소스로 MySQL(운영) 과 BigQuery(분석) 를 사용하고 있습니다. 두 데이터 소스의 특성을 고려한 메타데이터 주입 파이프라인이 필요합니다.
+* 플랫폼 상의 데이터가 유실 위험 없이 안전하게 저장되어야 합니다. 
+* 인증된 사용자만 플랫폼에 접속할 수 있어야 합니다.
+* CI/CD 파이프라인을 이용한 배포 자동화가 되어야 합니다.
+
+## 2. Datahub on GKE 배포 과정 <a name="datahub-on-gke"></a>
 
 먼저 Datahub를 어떻게 사내 클라우드 환경에 안정적으로 배포했는지 알아보겠습니다.
 
 >  Datahub 는 오픈소스 기반으로 매우 빠르게 업데이트 되고 있습니다. 해당 배포는 6개월 전에 이루어진 것으로, 현재 Datahub 배포 및 metadata ingestion 과정과는 다소 차이가 있을 수 있습니다. 이 점 양해 부탁 드립니다. 
-
-
-
-
-## 2. Datahub on GKE 배포 과정 <a name="datahub-on-gke"></a>
 
 ### 2.1 GKE 배포 
 
@@ -326,7 +329,7 @@ datahub-ingestion-bigquery 안에는 recipe 파일이 들어 있습니다.
 
 #### Information Schema 에서 직접 뽑아내보자
 
-사실 대부분 DB의 메타데이터는 `information_schema`라는 파일에 별도로 저장이 되어 있습니다. 여기만 접근해서 가져와도 될것 같은데 꼭 모든 DB에 권한이 필요할지를 고민하던 와중에, 당시 데이터엔지니어링팀 팀장 (이시고 지금은 그룹장이신) 토마스가 아이디어를 주셨습니다.
+당시 데이터엔지니어링팀 팀장 (이시고 지금은 그룹장이신) 토마스가 아이디어를 주셨습니다.
 
 ![file-based-ingestion-flow](/img/data-discovery-platform-02/file-based-ingestion-flow.png) *file 을 이용하여 메타데이터 상태를 저장하는 흐름*
 
@@ -450,11 +453,26 @@ def get_column_info_query(pattern_clause) -> str:
 
 #### 최종 테스트
 
-이렇게 기능을 구현한 뒤 프로젝트에 같이 참여하시고 계시는 인프라팀(현재 CloudDB팀)의 제이든과 직접 테스트를 해보았습니다. 좌충우돌 끝에 결과적으로는 `information_schema` 에만 권한이 있는 계정으로 원하는 DB의 모든 메타데이터를 가져와서 Datahub에 주입하는 데에 성공했습니다. 
+이렇게 기능을 구현한 뒤 프로젝트에 같이 참여하시고 계시는 인프라팀(현재 CloudDB팀)의 제이든과 직접 테스트를 해보았습니다. 마지막으로 MySQL 계정 권한에 변경이 필요했습니다. 
 
-```
-스크린샷 (제이든 허락맡기)
-```
+* AS-IS : 모든 DB에 대해 SELECT 권한
+
+* TO-BE : 모든 DB에 대해 REFERENCE 권한
+
+  ```
+  CREATE USER '<username>'@'XX.XX.%' IDENTIFIED BY '<password>';
+  GRANT References ON *.* TO 'username>'@'XX.XX.%';
+  ```
+
+결과적으로 원하는 DB의 모든 메타데이터를 가져와서 Datahub에 주입하는 데에 성공했습니다. 
+
+![datahub-test-success](/img/data-discovery-platform-02/datahub-test-success.png) *기능 구현 내용*
+
+![datahub-test-success](/img/data-discovery-platform-02/datahub-test-success-3.png) *축소된 권한으로 모든 정보를 가져올 수 있습니다.*
+
+
+
+
 
 이 기능 개발로 쏘카의 DB에 접근하는 Datahub 계정의 권한이 크게 축소되어 내부 정보보호 규칙에 맞게 보안을 개선할 수 있습니다. 그리고 Datahub 최종 도입 결정에 긍정적인 영향을 미쳤습니다. 
 
