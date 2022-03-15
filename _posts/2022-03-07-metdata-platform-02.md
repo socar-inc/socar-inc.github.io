@@ -26,7 +26,11 @@ tags:
 
 1. [문제 정의](#problem-definition)
 
-1. [Datahub on GKE 배포 과정](#datahub-on-gke)
+   1.1 무엇을 해야 하나요?
+
+   1.2 고려해야 할 부분
+
+2. [Datahub on GKE 배포 과정](#datahub-on-gke)
 
    2.1 GKE 배포 
 
@@ -34,7 +38,7 @@ tags:
 
    2.3 Keycloak 인증
 
-2. [메타데이터 주입 과정](#metadata-ingestion) 
+3. [메타데이터 주입 과정](#metadata-ingestion) 
 
    3.1 메타데이터 주입 방법
 
@@ -44,18 +48,18 @@ tags:
 
    3.4 메타데이터 추출 과정의 권한 축소 
 
-3. [마무리](#wrap-up)
+4. [마무리](#wrap-up)
 
 
 
 ## 1. 문제 정의<a name="problem-definition"></a>
 
-### 무엇을 해야 하나요? 
+### 1.1 무엇을 해야 하나요? 
 
 * Datahub을 사내 클라우드 환경에 안정적으로 배포합니다. 
 * Datahub에 메타데이터를 주입하는 파이프라인을 자동화합니다.
 
-### 고려해야 할 부분
+### 1.2 고려해야 할 부분
 
 * 쏘카는 데이터 소스로 MySQL(운영) 과 BigQuery(분석) 를 사용하고 있습니다. 두 데이터 소스의 특성을 고려한 메타데이터 주입 파이프라인이 필요합니다.
 * 플랫폼 상의 데이터가 유실 위험 없이 안전하게 저장되어야 합니다. 
