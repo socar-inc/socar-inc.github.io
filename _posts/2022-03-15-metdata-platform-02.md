@@ -202,13 +202,13 @@ datahub-frontend:
 ```yaml
 # User and groups provisioning
 
-# OIDC 로그인 시, datahub 상에 유저 없으면 자동 생성 여부
+# OIDC 로그인 시, Datahub 상에 유저 없으면 자동 생성 여부
 AUTH_OIDC_JIT_PROVISIONING_ENABLED=true 
 
-# OIDC 로그인 시, datahub 상에 유저가 이미 존재해야 로그인 성공하는지
+# OIDC 로그인 시, Datahub 상에 유저가 이미 존재해야 로그인 성공하는지 여부
 AUTH_OIDC_PRE_PROVISIONING_REQUIRED=false
 
-# OIDC의 그룹 정보를 datahub에 연동
+# OIDC의 그룹 정보를 Datahub에 연동
 AUTH_OIDC_EXTRACT_GROUPS_ENABLED=true 
 AUTH_OIDC_GROUPS_CLAIM=<your-groups-claim-name>
 ```
@@ -239,7 +239,7 @@ sink:
 ```
 
 * `source` : 데이터 소스, 즉 "데이터를 어디서 가져오는지" 정의합니다.
-* `sink` : "데이터를 어디에 저장하는지" 를 정의합니다. 데이터허브 어플리케이션에 올릴 수도 있고, 콘솔에 출력할 수도 있고, 파일로 저장할 수도 있습니다.
+* `sink` : "데이터를 어디에 저장하는지" 를 정의합니다. Datahub 어플리케이션에 올릴 수도 있고, 콘솔에 출력할 수도 있고, 파일로 저장할 수도 있습니다.
 
  이 형식을 바탕으로 데이터 소스를 바꿀 수도 있고 여러 설정을 적용할 수도 있습니다. 파일을 실행할 때는 `datahub ingestion -c "<파일_이름>"`으로 실행합니다. 
 
@@ -338,7 +338,7 @@ USER root
 # datahub을 포함한 필요한 의존성을 설치합니다. 
 RUN pip install --no-cache-dir mysql-connector-python==8.0.27 && pip install --no-cache-dir --upgrade acryl-datahub==0.8.20 
 
-# information_schema에서 메타데이터를 추출하는 python script를 실행하고, datahub CLI로 datahub 플랫폼에 주입합니다.
+# information_schema에서 메타데이터를 추출하는 python script를 실행하고, datahub CLI로 Datahub 플랫폼에 주입합니다.
 CMD python main.py ; datahub ingest -c recipe_mysql_prod.yaml 
 ```
 
