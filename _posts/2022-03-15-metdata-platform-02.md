@@ -2,7 +2,7 @@
 layout: post
 title: 데이터 디스커버리 플랫폼 도입기 - 2편. GKE에 Datahub 구축하기
 subtitle: feat. 메타데이터 플랫폼이 실제로 배포되기까지 
-date: 2022-03-07 17:00:00 +0900
+date: 2022-03-15 17:00:00 +0900
 category: data
 background : "/assets/images/cloud-bg.jpg"
 author: dini
@@ -26,11 +26,7 @@ tags:
 
 1. [문제 정의](#problem-definition)
 
-   1.1 무엇을 해야 하나요?
-
-   1.2 고려해야 할 부분
-
-2. [Datahub on GKE 배포 과정](#datahub-on-gke)
+1. [Datahub on GKE 배포 과정](#datahub-on-gke)
 
    2.1 GKE 배포 
 
@@ -38,7 +34,7 @@ tags:
 
    2.3 Keycloak 인증
 
-3. [메타데이터 주입 과정](#metadata-ingestion) 
+2. [메타데이터 주입 과정](#metadata-ingestion) 
 
    3.1 메타데이터 주입 방법
 
@@ -48,20 +44,20 @@ tags:
 
    3.4 메타데이터 추출 과정의 권한 축소 
 
-4. [마무리](#wrap-up)
+3. [마무리](#wrap-up)
 
 
 
 ## 1. 문제 정의<a name="problem-definition"></a>
 
-### 1.1 무엇을 해야 하나요? 
+### 무엇을 해야 하나요? 
 
 * Datahub을 사내 클라우드 환경에 안정적으로 배포합니다. 
 * Datahub에 메타데이터를 주입하는 파이프라인을 자동화합니다.
 
-### 1.2 고려해야 할 부분
+### 고려해야 할 부분
 
-* 쏘카는 데이터 소스로 MySQL(운영) 과 BigQuery(분석) 를 사용하고 있습니다. 두 데이터 소스의 특성을 고려한 메타데이터 주입 파이프라인이 필요합니다.
+* 쏘카는 데이터 소스로 MySQL(운영)과 BigQuery(분석)를 사용하고 있습니다. 두 데이터 소스의 특성을 고려한 메타데이터 주입 파이프라인이 필요합니다.
 * 플랫폼 상의 데이터가 유실 위험 없이 안전하게 저장되어야 합니다. 
 * 인증된 사용자만 플랫폼에 접속할 수 있어야 합니다.
 * CI/CD 파이프라인을 이용한 배포 자동화가 되어야 합니다.
@@ -70,32 +66,32 @@ tags:
 
 먼저 Datahub를 어떻게 사내 클라우드 환경에 안정적으로 배포했는지 알아보겠습니다.
 
->  Datahub 는 오픈소스 기반으로 매우 빠르게 업데이트 되고 있습니다. 해당 배포는 6개월 전에 이루어진 것으로, 현재 Datahub 배포 및 metadata ingestion 과정과는 다소 차이가 있을 수 있습니다. 이 점 양해 부탁 드립니다. 
+>  Datahub는 오픈소스 기반으로 매우 빠르게 업데이트 되고 있습니다. 해당 배포는 6개월 전에 이루어진 것으로, 현재 Datahub 배포 및 metadata ingestion 과정과는 다소 차이가 있을 수 있습니다. 이 점 양해 부탁 드립니다. 
 
 ### 2.1 GKE 배포 
 
-쏘카 데이터엔지니어링 그룹의 쿠버네티스 환경은 GCP(Google Cloud Platform)의 GKE(Google Kuberentes Engine) 를 사용하고 있습니다. 또한 대부분의 어플리케이션을 [Helm](https://helm.sh/) Chart를 이용하여 클러스터에 배포하고 있습니다. Datahub 역시 공식 [Helm Chart](https://github.com/acryldata/datahub-helm)를 제공하고 있으며, 총 2 벌의 차트로 구성되어 있습니다. 구성은 다음과 같습니다.
+쏘카 데이터엔지니어링 그룹의 쿠버네티스 환경은 GCP(Google Cloud Platform)의 GKE(Google Kuberentes Engine)를 사용하고 있습니다. 또한 대부분의 어플리케이션을 [Helm](https://helm.sh/) Chart를 이용하여 클러스터에 배포하고 있습니다. Datahub 역시 공식 [Helm Chart](https://github.com/acryldata/datahub-helm)를 제공하고 있으며, 총 2벌의 차트로 구성되어 있습니다. 구성은 다음과 같습니다.
 
-* datahub : Datahub 어플리케이션에 필요한 요소들 설치 (frontend, gms 등)
-* prerequisites : Datahub에 필요한 사전 요소들을 설치 (MySQL, Kafka, ElasticSearch, neo4j 등)
+* `datahub` : Datahub 어플리케이션에 필요한 요소들 설치 (Frontend, GMS 등)
+* `prerequisites` : Datahub에 필요한 사전 요소들을 설치 (MySQL, Kafka, ElasticSearch, Neo4j 등)
 
 ![datahub-helm-chart-tree](/img/data-discovery-platform-02/datahub-helm-chart-tree.png) *Datahub 차트 구조*
 
-공식 Helm Chart의 ingress를 쏘카의 환경에 맞게 수정한 뒤 배포하였습니다. 또한 원활한 테스트를 위해 개발 클러스터, 운영 클러스터에 각각 배포하였습니다.  
+공식 Helm Chart의 Ingress를 쏘카의 환경에 맞게 수정한 뒤 배포하였습니다. 또한 원활한 테스트를 위해 개발 클러스터, 운영 클러스터에 각각 배포하였습니다.  
 
-![datahub-pods](/img/data-discovery-platform-02/datahub-pods.png) *Datahub 최초 배포시 pod 상태*
+![datahub-pods](/img/data-discovery-platform-02/datahub-pods.png) *Datahub 최초 배포시 Pod 상태*
 
 ### 2.2 CloudSQL DB migration
 
-Datahub는 자체 DB(storage)로 MySQL pod을 사용합니다. 물론 PVC(PersistentVolumeClaim) 이 붙어있긴 했지만, 앞으로 Datahub 어플리케이션 상에서 쌓일 데이터가 점점 늘어날 것이며 데이터의 내용 또한 중요하기 때문에, 앞으로의 확장성과 만에 하나라도 있을 유실 가능성을 방지하는 방향으로 아키텍쳐를 고민했습니다. 결국에는 MySQL pod 대신 외부 데이터베이스로 GCP CloudSQL instance를 연결하기로 결정했습니다.
+Datahub는 자체 DB(storage)로 MySQL Pod을 사용합니다. 물론 PVC(PersistentVolumeClaim) 이 붙어있긴 했지만, 앞으로 Datahub 어플리케이션 상에서 쌓일 데이터가 점점 늘어날 것이며 데이터의 내용 또한 중요하기 때문에, 앞으로의 확장성과 만에 하나라도 있을 유실 가능성을 방지하는 방향으로 아키텍쳐를 고민했습니다. 결국에는 MySQL Pod 대신 외부 데이터베이스로 GCP CloudSQL Instance를 연결하기로 결정했습니다.
 
 구체적으로는 다음 과정으로 진행했습니다. 
 
-* CloudSQL DB (혹은 새로운 instance) 생성
+* CloudSQL DB (혹은 새로운 Instance) 생성
 * (Optional) 사용자 생성
 * Datahub 가 CloudSQL 가리키게 하기
 
-기존 Datahub의 Helm Chart는 sql host로 MySQL pod을 가리키고 있습니다. 위에서 만든 CloudSQL DB를 가리키게 하기 위해서 Helm Chart를 다음과 같이 수정합니다.
+기존 Datahub의 Helm Chart는 SQL Host로 MySQL Pod을 가리키고 있습니다. 위에서 만든 CloudSQL DB를 가리키게 하기 위해서 Helm Chart를 다음과 같이 수정합니다.
 
 ```yaml
 # charts/datahub/values.yaml
@@ -126,7 +122,7 @@ sql:
       secretKey: <별도로 생성한 secret 키>
 ```
 
-실제로는, 민감한 정보들을 Helm Chart에 직접 명시하지 않고 다음 처럼 별도의 secret으로 생성하여 참조하였습니다.
+실제로는 민감한 정보들을 Helm Chart에 직접 명시하지 않고 다음 처럼 별도의 Secret으로 생성하여 참조하였습니다.
 
 ```yaml
   sql:
@@ -150,7 +146,7 @@ sql:
         secretKey: mysql-password
 ```
 
-secret yaml 파일은 다음과 같습니다.
+Secret yaml 파일은 다음과 같습니다.
 
 ```yaml
 apiVersion: v1
@@ -221,7 +217,7 @@ AUTH_OIDC_GROUPS_CLAIM=<your-groups-claim-name>
 
 ## 3. 메타데이터 주입 과정  <a name="metadata-ingestion"></a>
 
-이렇게 Datahub을 클라우드 상에 안정적으로 구축했습니다. 하지만 아직 데이터 디스커버리 플랫폼으로서의 기능을 하지는 못합니다. 데이터 소스에서 실제로 메타데이터를 가져와서 플랫폼에서 보여줘야 하고, 이렇게 메타데이터를 가져오는 과정(=Metadata Ingestion)이 자동화 되어야 합니다. 
+이렇게 Datahub을 클라우드 상에 안정적으로 구축했습니다. 하지만 아직 데이터 디스커버리 플랫폼으로서의 기능을 하지는 못합니다. 데이터 소스에서 실제로 메타데이터를 가져와서 플랫폼에서 보여줘야 하고, 이렇게 메타데이터를 가져오는 과정(=metadata ingestion)이 자동화 되어야 합니다. 
 
 ### 3.1 메타데이터 주입 방법
 
@@ -278,13 +274,13 @@ source:
 
 이렇게 하루에 한번 메타데이터 주입을 결정하고 난 뒤, 메타데이터 주입을 어떻게 자동화했는지 알아보겠습니다. 
 
-하루에 한번 batch 성 주입이라면 `Airflow DAG` 로 간단하게 구현할 수 있었습니다. 데이터소스에서 메타데이터를 주입하는 task 를 만들고, 하루 한번만 돌려주면 됐습니다. 그런데 이 작업에는 `datahub` 패키지를 설치해야 하는 의존성이 필요합니다. 
+하루에 한번 Batch 성 주입이라면 `Airflow DAG` 로 간단하게 구현할 수 있었습니다. 데이터소스에서 메타데이터를 주입하는 Task 를 만들고, 하루 한번만 돌려주면 됐습니다. 그런데 이 작업에는 `datahub` 패키지를 설치해야 하는 의존성이 필요합니다. 
 
-데이터플랫폼 팀에서는 이런 경우 Airflow 에 직접 의존성을 설치하지 않고, 필요한 의존성을 담은 docker image 를 실행하는 `KubernetesPodOperator`를 만들어 해결하고 있습니다. 이렇게 하면 DAG 가 아무리 많아도 DAG 간 사용하는 라이브러리나 환경의 의존성 충돌을 방지할 수 있습니다. 
+데이터플랫폼 팀에서는 이런 경우 Airflow 에 직접 의존성을 설치하지 않고, 필요한 의존성을 담은 Docker Image 를 실행하는 `KubernetesPodOperator`를 만들어 해결하고 있습니다. 이렇게 하면 DAG 가 아무리 많아도 DAG 간 사용하는 라이브러리나 환경의 의존성 충돌을 방지할 수 있습니다. 
 
 ![metadata-ingestion-flow](/img/data-discovery-platform-02/metadata-ingestion-flow.png) *메타데이터 주입 흐름*
 
-작성한 Dockerfile 은 다음처럼 간단합니다.
+작성한 Dockerfile은 다음처럼 간단합니다.
 
 ```dockerfile
 # datahub-ingestion 이미지를 이용합니다. 
@@ -315,9 +311,9 @@ datahub-ingestion-bigquery 안에는 recipe 파일이 들어 있습니다.
 
 당시 데이터엔지니어링팀 팀장 (이시고 지금은 그룹장이신) 토마스가 아이디어를 주셨습니다.
 
-![file-based-ingestion-flow](/img/data-discovery-platform-02/file-based-ingestion-flow.png) *file 을 이용하여 메타데이터 상태를 저장하는 흐름*
+![file-based-ingestion-flow](/img/data-discovery-platform-02/file-based-ingestion-flow.png) *file을 이용하여 메타데이터 상태를 저장하는 흐름*
 
- Datahub에는 데이터 소스의 메타데이터를 특정 형태의 `json file` 로 변환하여 저장하는 기능이 있습니다. 또한 같은 형식의 json file 을 기반으로 메타데이터를 Datahub 플랫폼에 주입하는 것도 가능했습니다. 그리고 해당 파일 형식을 확인해본 결과 `information_schema`에서 대부분(사실 모두) 가져올 수 있는 정보였습니다. 
+ Datahub에는 데이터 소스의 메타데이터를 특정 형태의 `json file` 로 변환하여 저장하는 기능이 있습니다. 또한 같은 형식의 json file을 기반으로 메타데이터를 Datahub 플랫폼에 주입하는 것도 가능했습니다. 그리고 해당 파일 형식을 확인해본 결과 `information_schema`에서 대부분(사실 모두) 가져올 수 있는 정보였습니다. 
 
  그러면 `information_schema`에서 정보를 가져와서 file 형식을 맞춰 만들어주는 기능을 개발하고, 그 file을 기반으로 Datahub에 메타데이터를 주입하면 되지 않을까? 하는 생각이 들었습니다. 
 
@@ -327,7 +323,7 @@ datahub-ingestion-bigquery 안에는 recipe 파일이 들어 있습니다.
 
 
 
-그래서 앞부분은 python script 로 개발하고, file 을 기반으로 메타데이터를 주입하는 부분은 기존 Datahub 프레임워크를 그대로 이용했습니다. 
+그래서 앞부분은 python script로 개발하고, file을 기반으로 메타데이터를 주입하는 부분은 기존 Datahub 프레임워크를 그대로 이용했습니다. 
 
 ```dockerfile
 # 파이썬 이미지를 이용합니다. 
@@ -410,7 +406,7 @@ if __name__ == "__main__":
 
 
 
-information_schema 에서는 Table 정보, Column 정보, Constraint (Primary Key 등) 정보 등 여러가지 정보를 추출해오는데요. 예를 들어 Column 정보는 다음과 같은 쿼리로 추출합니다. 이렇게 실행한 쿼리 결과를 datahub 에서 이용하는 json 형식에 맞게 바꿔줍니다.
+information_schema에서는 Table 정보, Column 정보, Constraint (Primary Key 등) 정보 등 여러가지 정보를 추출해오는데요. 예를 들어 Column 정보는 다음과 같은 쿼리로 추출합니다. 이렇게 실행한 쿼리 결과를 Datahub에서 이용하는 json 형식에 맞게 바꿔줍니다.
 
 ```python
 # python script 중 information_schema 에서 column info 를 뽑아내는 부분
@@ -477,8 +473,8 @@ def get_column_info_query(pattern_clause) -> str:
 **데이터 소스 특성에 따라서 메타데이터 파이프라인 구현 방법 정하기**
 
 * 데이터 소스와 업데이트 주기를 결정한 뒤 구현 방법을 결정하기를 추천합니다. 
-* 하루 한번 정도의 배치성 작업이라면 `Airflow DAG` 로도 충분합니다.
-* 최근에는 Datahub UI 상에서 ingestion 을 설정할 수 있는 기능도 나왔습니다. 장단점을 비교해보고 결정하시면 좋을 것 같습니다.
+* 하루 한번 정도의 Batch성 작업이라면 `Airflow DAG` 로도 충분합니다.
+* 최근에는 Datahub UI 상에서 Ingestion 을 설정할 수 있는 기능도 나왔습니다. 장단점을 비교해보고 결정하시면 좋을 것 같습니다.
 
 **DB 특성에 따라서 메타데이터 추출 로직 조정하기**
 
@@ -486,7 +482,7 @@ def get_column_info_query(pattern_clause) -> str:
 
 **Datahub 공식 Slack Workspace에 참여하기**
 
-* ingestion, deployment 등 다양한 주제별로 질답을 나눌 수 있는 채널이 있습니다. 
+* Ingestion, Deployment 등 다양한 주제별로 질답을 나눌 수 있는 채널이 있습니다. 
 * 거의 모든 질문에 빠르게 답이 달릴 정도로 커뮤니티가 활성화되어 있습니다. 적극적으로 참여하시면서 도움을 얻기를 추천드립니다. 
 
 다음 편에서는 실제로 데이터 디스커버리 플랫폼이 도입된 후의 운영 방식과 효과에 대해서 살펴보겠습니다.
