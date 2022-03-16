@@ -2,13 +2,14 @@
 layout: post
 title: 데이터 디스커버리 플랫폼 도입기 - 2편. GKE에 Datahub 구축하기
 subtitle: feat. 메타데이터 플랫폼이 실제로 배포되기까지 
-date: 2022-03-15 17:00:00 +0900
+date: 2022-03-16 16:00:00 +0900
 category: data
 background : "/assets/images/cloud-bg.jpg"
 author: dini
 comments: true
 tags:
     - data
+    - metadata-platform
     - data-engineering
 ---
 
@@ -26,27 +27,27 @@ tags:
 
 1. [문제 정의](#problem-definition)
 
-    1.1 무엇을 해야 하나요?
+    1.1. 무엇을 해야 하나요?
 
-    1.2 고려해야 할 부분
+    1.2. 고려해야 할 부분
 
 2. [Datahub on GKE 배포 과정](#datahub-on-gke)
 
-   2.1 GKE 배포 
+   2.1. GKE 배포 
 
-   2.2 CloudSQL DB migration 
+   2.2. CloudSQL DB migration 
 
-   2.3 Keycloak 인증
+   2.3. Keycloak 인증
 
 3. [메타데이터 주입 과정](#metadata-ingestion) 
 
-   3.1 메타데이터 주입 방법
+   3.1. 메타데이터 주입 방법
 
-   3.2 메타데이터 주입 정책 결정
+   3.2. 메타데이터 주입 정책 결정
 
-   3.3 메타데이터 주입 과정 자동화 (with Airflow)
+   3.3. 메타데이터 주입 과정 자동화 (with Airflow)
 
-   3.4 메타데이터 추출 과정의 권한 축소 
+   3.4. 메타데이터 추출 과정의 권한 축소 
 
 4. [마무리](#wrap-up)
 
@@ -54,12 +55,12 @@ tags:
 
 ## 1. 문제 정의<a name="problem-definition"></a>
 
-### 1.1 무엇을 해야 하나요? 
+### 1.1. 무엇을 해야 하나요? 
 
 * Datahub을 사내 클라우드 환경에 안정적으로 배포합니다. 
 * Datahub에 메타데이터를 주입하는 파이프라인을 자동화합니다.
 
-### 1.2 고려해야 할 부분
+### 1.2. 고려해야 할 부분
 
 * 쏘카는 데이터 소스로 MySQL(운영)과 BigQuery(분석)를 사용하고 있습니다. 두 데이터 소스의 특성을 고려한 메타데이터 주입 파이프라인이 필요합니다.
 * 플랫폼 상의 데이터가 유실 위험 없이 안전하게 저장되어야 합니다. 
@@ -72,7 +73,7 @@ tags:
 
 >  Datahub는 오픈소스 기반으로 매우 빠르게 업데이트되고 있습니다. 해당 배포는 6개월 전에 이루어진 것으로, 현재 Datahub 배포 및 metadata ingestion 과정과는 다소 차이가 있을 수 있습니다. 이 점 양해 부탁드립니다. 
 
-### 2.1 GKE 배포 
+### 2.1. GKE 배포 
 
 쏘카 데이터 엔지니어링 그룹의 쿠버네티스 환경은 GCP(Google Cloud Platform)의 GKE(Google Kuberentes Engine)를 사용하고 있습니다. 또한 대부분의 애플리케이션을 [Helm](https://helm.sh/) Chart를 이용하여 클러스터에 배포하고 있습니다. Datahub 역시 공식 [Helm Chart](https://github.com/acryldata/datahub-helm)를 제공하고 있으며, 총 2벌의 차트로 구성되어 있습니다. 구성은 다음과 같습니다.
 
@@ -85,7 +86,7 @@ tags:
 
 ![datahub-pods](/img/data-discovery-platform-02/datahub-pods.png) *Datahub 최초 배포 시 Pod 상태*
 
-### 2.2 CloudSQL DB migration
+### 2.2. CloudSQL DB migration
 
 Datahub는 자체 DB(storage)로 MySQL Pod을 사용합니다. 물론 PVC(PersistentVolumeClaim) 이 붙어있긴 했지만, 앞으로 Datahub 애플리케이션 상에서 쌓일 데이터가 점점 늘어날 것이며 데이터의 내용 또한 중요하기 때문에, 앞으로의 확장성과 만에 하나라도 있을 유실 가능성을 방지하는 방향으로 아키텍처를 고민했습니다. 결국에는 MySQL Pod 대신 외부 데이터베이스로 GCP CloudSQL Instance를 연결하기로 결정했습니다.
 
@@ -177,7 +178,7 @@ data:
 
 
 
-### 2.3 Keycloak 인증
+### 2.3. Keycloak 인증
 
  Datahub이 배포되고 나면, 인증된 사용자만 애플리케이션에 접속되어야 합니다. Datahub는 Okta, Keycloak 등 여러 SSO를 지원합니다. 쏘카에서 이미 Keycloak을 이용하고 있기 때문에 Keycloak을 사용하기로 결정했습니다. 
 
@@ -223,7 +224,7 @@ AUTH_OIDC_GROUPS_CLAIM=<your-groups-claim-name>
 
 이렇게 Datahub을 클라우드 상에 안정적으로 구축했습니다. 하지만 아직 데이터 디스커버리 플랫폼으로서의 기능을 하지는 못합니다. 데이터 소스에서 실제로 메타데이터를 가져와서 플랫폼에서 보여줘야 하고, 이렇게 메타데이터를 가져오는 과정(=metadata ingestion)이 자동화되어야 합니다. 
 
-### 3.1 메타데이터 주입 방법
+### 3.1. 메타데이터 주입 방법
 
 Datahub에서는 `recipe`라고 불리는 yaml 파일을 `datahub CLI`로 실행하여 메타데이터를 주입합니다. 다음은 BigQuery에서 메타데이터를 가져오는 recipe 파일의 기본 예시입니다. 
 
@@ -249,7 +250,7 @@ sink:
 
  
 
-### 3.2 메타데이터 주입 정책 결정
+### 3.2. 메타데이터 주입 정책 결정
 
 먼저 "어떤 데이터 소스"에서 메타데이터를 "얼마나 자주" 가져올 건지 결정해야 합니다.
 
@@ -274,7 +275,7 @@ source:
 
 그러면 얼마나 자주 가져와야 할까요? 매일매일 필요에 따라 테이블이 생겨났다가 사라지기도 하고, 테이블의 칼럼이 추가되거나 변경되는 일도 있을 것입니다. 하지만 이런 변화들을 꼭 실시간으로 봐야 할 필요는 없다고 생각했습니다. 하루에 한 번 정도 업데이트한다면, 리소스도 효율화하고 사내 데이터 현황을 파악하는 데 충분하다고 결정을 내렸습니다. 
 
-### 3.3 메타데이터 주입 과정 자동화 (with Airflow)
+### 3.3. 메타데이터 주입 과정 자동화 (with Airflow)
 
 이렇게 하루에 한 번 메타데이터 주입을 결정하고 난 뒤, 메타데이터 주입을 어떻게 자동화했는지 알아보겠습니다. 
 
@@ -303,7 +304,7 @@ datahub-ingestion-bigquery 안에는 recipe 파일이 들어 있습니다.
 
 ![datahub-ingestion-bigquery](/img/data-discovery-platform-02/datahub-ingestion-bigquery.png) *datahub-ingestion-bigquery 디렉터리 구조*
 
-### 3.4 메타데이터 추출 과정의 권한 축소
+### 3.4. 메타데이터 추출 과정의 권한 축소
 
 #### 어떻게 하면 최소한의 권한으로 메타데이터를 추출할 수 있을까?
 
