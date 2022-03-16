@@ -25,7 +25,9 @@ tags:
 목차는 이렇습니다.
 
 1. [문제 정의](#problem-definition)
+
     1.1 무엇을 해야 하나요?
+
     1.2 고려해야 할 부분
 
 2. [Datahub on GKE 배포 과정](#datahub-on-gke)
