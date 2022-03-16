@@ -75,26 +75,26 @@ tags:
 
 ### 2.1. GKE 배포 
 
-쏘카 데이터 엔지니어링 그룹의 쿠버네티스 환경은 GCP(Google Cloud Platform)의 GKE(Google Kuberentes Engine)를 사용하고 있습니다. 또한 대부분의 애플리케이션을 [Helm](https://helm.sh/) Chart를 이용하여 클러스터에 배포하고 있습니다. Datahub 역시 공식 [Helm Chart](https://github.com/acryldata/datahub-helm)를 제공하고 있으며, 총 2벌의 차트로 구성되어 있습니다. 구성은 다음과 같습니다.
+쏘카 데이터 엔지니어링 그룹의 쿠버네티스 환경은 GCP(Google Cloud Platform)의 GKE(Google Kuberentes Engine)를 사용하고 있습니다. 또한 대부분의 애플리케이션을 [Helm](https://helm.sh/) Chart를 이용하여 클러스터에 배포하고 있습니다. Datahub 역시 공식 [Helm Chart](https://github.com/acryldata/datahub-helm)를 제공하고 있으며, 총 2벌의 차트로 구성되어 있습니다. Datahub Helm Chart 구성은 다음과 같습니다.
 
 * `datahub` : Datahub 애플리케이션에 필요한 요소들 설치 (Frontend, GMS 등)
 * `prerequisites` : Datahub에 필요한 사전 요소들을 설치 (MySQL, Kafka, ElasticSearch, Neo4j 등)
 
 ![datahub-helm-chart-tree](/img/data-discovery-platform-02/datahub-helm-chart-tree.png) *Datahub 차트 구조*
 
-공식 Helm Chart의 Ingress를 쏘카의 환경에 맞게 수정한 뒤 배포하였습니다. 또한 원활한 테스트를 위해 개발 클러스터, 운영 클러스터에 각각 배포하였습니다.  
+공식 Datahub Helm Chart의 Ingress를 쏘카의 환경에 맞게 수정한 뒤 배포하였습니다. 또한 원활한 테스트를 위해 개발 클러스터, 운영 클러스터에 각각 배포하였습니다.  
 
 ![datahub-pods](/img/data-discovery-platform-02/datahub-pods.png) *Datahub 최초 배포 시 Pod 상태*
 
 ### 2.2. CloudSQL DB migration
 
-Datahub는 자체 DB(storage)로 MySQL Pod을 사용합니다. 물론 PVC(PersistentVolumeClaim) 이 붙어있긴 했지만, 앞으로 Datahub 애플리케이션 상에서 쌓일 데이터가 점점 늘어날 것이며 데이터의 내용 또한 중요하기 때문에, 앞으로의 확장성과 만에 하나라도 있을 유실 가능성을 방지하는 방향으로 아키텍처를 고민했습니다. 결국에는 MySQL Pod 대신 외부 데이터베이스로 GCP CloudSQL Instance를 연결하기로 결정했습니다.
+Datahub는 자체 DB(storage)로 MySQL Pod을 사용합니다. 물론 PVC(PersistentVolumeClaim)이 붙어있긴 했지만, 앞으로 Datahub 애플리케이션 상에서 쌓일 데이터가 점점 늘어날 것이며 데이터의 내용 또한 중요하기 때문에, 앞으로의 확장성과 만에 하나라도 있을 유실 가능성을 방지하는 방향으로 아키텍처를 고민했습니다. 결국에는 MySQL Pod 대신 외부 데이터베이스로 GCP CloudSQL Instance를 연결하기로 결정했습니다.
 
 구체적으로는 다음 과정으로 진행했습니다. 
 
 * CloudSQL DB (혹은 새로운 Instance) 생성
 * (Optional) 사용자 생성
-* Datahub 가 CloudSQL 가리키게 하기
+* Datahub가 CloudSQL 가리키게 하기
 
 기존 Datahub의 Helm Chart는 SQL Host로 MySQL Pod을 가리키고 있습니다. 위에서 만든 CloudSQL DB를 가리키게 하기 위해서 Helm Chart를 다음과 같이 수정합니다.
 
@@ -222,7 +222,7 @@ AUTH_OIDC_GROUPS_CLAIM=<your-groups-claim-name>
 
 ## 3. 메타데이터 주입 과정  <a name="metadata-ingestion"></a>
 
-이렇게 Datahub을 클라우드 상에 안정적으로 구축했습니다. 하지만 아직 데이터 디스커버리 플랫폼으로서의 기능을 하지는 못합니다. 데이터 소스에서 실제로 메타데이터를 가져와서 플랫폼에서 보여줘야 하고, 이렇게 메타데이터를 가져오는 과정(=metadata ingestion)이 자동화되어야 합니다. 
+이렇게 Datahub를 클라우드 상에 안정적으로 구축했습니다. 하지만 아직 데이터 디스커버리 플랫폼으로서의 기능을 하지는 못합니다. 데이터 소스에서 실제로 메타데이터를 가져와서 플랫폼에서 보여줘야 하고, 이렇게 메타데이터를 가져오는 과정(=metadata ingestion)이 자동화되어야 합니다. 
 
 ### 3.1. 메타데이터 주입 방법
 
@@ -254,9 +254,9 @@ sink:
 
 먼저 "어떤 데이터 소스"에서 메타데이터를 "얼마나 자주" 가져올 건지 결정해야 합니다.
 
-쏘카에서는 주요 데이터 소스로 MySQL Aurora(운영)와 BigQuery(분석)을 사용하고 있습니다. 하지만 이 데이터 소스의 모든 테이블을 가져올 필요는 없었습니다. 예를 들면 DB에 따라서 개인 정보 관련 민감한 데이터들도 있고, 분석 DB 쪽에는 굳이 전사에 공유될 필요는 없는 임시 테이블들도 다수 존재했습니다. 따라서 각 데이터 소스 별 DB의 목록을 사전에 정하고, 해당 DB의 메타데이터를 주입하기로 했습니다.
+쏘카에서는 주요 데이터 소스로 MySQL Aurora(운영)와 BigQuery(분석)를 사용하고 있습니다. 하지만 이 데이터 소스의 모든 테이블을 가져올 필요는 없었습니다. 예를 들면 DB에 따라서 개인 정보 관련 민감한 데이터들도 있고, 분석 DB 쪽에는 굳이 전사에 공유될 필요는 없는 임시 테이블들도 다수 존재했습니다. 따라서 각 데이터 소스 별 DB의 목록을 사전에 정하고, 해당 DB의 메타데이터를 주입하기로 했습니다.
 
-참고로, 다음과 같이 Table 혹은 DB의 이름을 `regex pattern`으로 감지하여 선택적 메타데이터 주입이 가능합니다. (물론 데이터 소스마다 방법이 약간 다를 수 있습니다 - 예시는 BigQuery의 경우입니다.)
+참고로, 다음과 같이 Table 혹은 DB의 이름을 `regex pattern`으로 감지하여 선택적 메타데이터 주입이 가능합니다. (물론 데이터 소스마다 방법이 약간 다를 수 있습니다 - 예시는 BigQuery입니다.)
 
 ```yaml
 source:
@@ -279,7 +279,7 @@ source:
 
 이렇게 하루에 한 번 메타데이터 주입을 결정하고 난 뒤, 메타데이터 주입을 어떻게 자동화했는지 알아보겠습니다. 
 
-하루에 한 번 Batch 성 주입이라면 `Airflow DAG`로 간단하게 구현할 수 있었습니다. 데이터 소스에서 메타데이터를 주입하는 Task를 만들고, 하루 한 번만 돌려주면 됐습니다. 그런데 이 작업에는 `datahub` 패키지를 설치해야 하는 의존성이 필요합니다. 
+하루에 한 번 Batch 단위의 주입이라면 `Airflow DAG`로 간단하게 구현할 수 있었습니다. 데이터 소스에서 메타데이터를 주입하는 Task를 만들고, 하루 한 번만 돌려주면 됐습니다. 그런데 이 작업에는 `datahub` 패키지를 설치해야 하는 의존성이 필요합니다. 
 
 데이터 플랫폼 팀에서는 이런 경우 Airflow에 직접 의존성을 설치하지 않고, 필요한 의존성을 담은 Docker Image를 실행하는 `KubernetesPodOperator`를 만들어 해결하고 있습니다. 이렇게 하면 DAG 가 아무리 많아도 DAG 간 사용하는 라이브러리나 환경의 의존성 충돌을 방지할 수 있습니다. 
 
@@ -314,7 +314,7 @@ datahub-ingestion-bigquery 안에는 recipe 파일이 들어 있습니다.
 
 #### Information Schema에서 직접 뽑아내 보자
 
-당시 데이터 엔지니어링 팀 팀장 (이시고 지금은 그룹장이신) 토마스가 아이디어를 주셨습니다.
+당시 데이터 엔지니어링 팀 팀장(이시고 지금은 그룹장이신) 토마스가 아이디어를 주셨습니다.
 
 ![file-based-ingestion-flow](/img/data-discovery-platform-02/file-based-ingestion-flow.png) *file을 이용하여 메타데이터 상태를 저장하는 흐름*
 
@@ -340,7 +340,7 @@ WORKDIR /datahub-ingestion-mysql/src
 
 USER root
 
-# datahub을 포함한 필요한 의존성을 설치합니다. 
+# datahub를 포함한 필요한 의존성을 설치합니다. 
 RUN pip install --no-cache-dir mysql-connector-python==8.0.27 && pip install --no-cache-dir --upgrade acryl-datahub==0.8.20 
 
 # information_schema에서 메타데이터를 추출하는 python script를 실행하고, datahub CLI로 Datahub 플랫폼에 주입합니다.
@@ -411,7 +411,7 @@ if __name__ == "__main__":
 
 
 
-information_schema에서는 Table 정보, Column 정보, Constraint (Primary Key 등) 정보 등 여러 가지 정보를 추출해오는데요. 예를 들어 Column 정보는 다음과 같은 쿼리로 추출합니다. 이렇게 실행한 쿼리 결과를 Datahub에서 이용하는 json 형식에 맞게 바꿔줍니다.
+information_schema에서는 Table 정보, Column 정보, Constraint (Primary Key 등) 정보 등 여러 가지 정보를 추출합니다. 예를 들어 Column 정보는 다음과 같은 쿼리로 추출합니다. 이렇게 실행한 쿼리 결과를 Datahub에서 이용하는 json 형식에 맞게 바꿔줍니다.
 
 ```python
 # python script 중 information_schema에서 column info를 뽑아내는 부분
@@ -438,7 +438,7 @@ def get_column_info_query(pattern_clause) -> str:
 
 #### 최종 테스트
 
-이렇게 기능을 구현한 뒤 프로젝트에 같이 참여하시고 계시는 인프라팀(현재 CloudDB 팀)의 제이든과 직접 테스트를 해보았습니다. 마지막으로 MySQL 계정 권한에 변경이 필요했습니다. 
+이렇게 기능을 구현한 뒤 프로젝트에 같이 참여하시고 계시는 DBA 제이든과 직접 테스트를 해보았습니다. 마지막으로 MySQL 계정 권한에 변경이 필요했습니다. 
 
 * AS-IS : 모든 DB에 대해 SELECT 권한
 
