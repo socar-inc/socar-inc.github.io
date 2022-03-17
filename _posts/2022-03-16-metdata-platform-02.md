@@ -141,7 +141,7 @@ sql:
       hostForMysqlClient:
         secretRef: mysql-secrets
         secretKey: mysql-hostForMysqlClient
-      port: "3306
+      port: "3306"
       driver: "com.mysql.jdbc.Driver"
       username:
         secretRef: mysql-secrets
