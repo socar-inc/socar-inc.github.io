@@ -414,7 +414,7 @@ if __name__ == "__main__":
 information_schema에서는 Table 정보, Column 정보, Constraint (Primary Key 등) 정보 등 여러 가지 정보를 추출합니다. 예를 들어 Column 정보는 다음과 같은 쿼리로 추출합니다. 이렇게 실행한 쿼리 결과를 Datahub에서 이용하는 json 형식에 맞게 바꿔줍니다.
 
 ```python
-# python script 중 information_schema에서 column info를 뽑아내는 부분h
+# python script 중 information_schema에서 column info를 뽑아내는 부분
 
 def get_column_info_query(pattern_clause) -> str:
     column_info_query = f"""
