@@ -77,3 +77,7 @@ juno:
 marie:
   name: marie
   image: '/assets/authors/marie.png'
+
+camila:
+  name: camila
+  image: '/assets/authors/camila.png'
