@@ -2,7 +2,7 @@
 layout: post
 title: "쏘카 QA는 무슨 일을 하고 어떻게 일하나요?"
 subtitle: "카밀라의 QA 팀 적응기"
-date: 2022-02-16 11:00:00 +0900
+date: 2022-03-18 11:00:00 +0900
 category: QA
 background: '/assets/images/QA/background_from_unsplash.jpg'
 author: camila
