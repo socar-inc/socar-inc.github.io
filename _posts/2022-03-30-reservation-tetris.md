@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "예약 테트리스"
+title: "모빌리티 업계의 최적화 프로젝트 - 예약 테트리스"
 subtitle: "Constraint Programming을 활용한 예약 차량 배정 최적화"
 date: 2022-03-30 09:00:00 +0900
 category: data
