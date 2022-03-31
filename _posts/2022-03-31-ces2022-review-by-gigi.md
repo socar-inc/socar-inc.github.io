@@ -2,7 +2,7 @@
 layout: post
 title: "CES 2022 - 미래 모빌리티를 만나다"
 subtitle: "지지의 CES2022 출장기"
-date: 2022-03-30 09:00:00 +0900
+date: 2022-03-31 10:00:00 +0900
 category: product
 background: '/img/ces2022-review-by-gigi/0_background.jpg'
 author: gigi
