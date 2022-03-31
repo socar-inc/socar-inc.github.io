@@ -81,3 +81,7 @@ marie:
 camila:
   name: camila
   image: '/assets/authors/camila.png'
+
+gigi:
+  name: gigi
+  image: '/assets/authors/gigi.png'
