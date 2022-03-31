@@ -104,8 +104,6 @@ CES는 익히 알려진 것처럼 세계 최대 IT 제품 박람회입니다. �
 
 베이거스 루프를 이용해보면 탑승장에 들어서서 이동 후 차량에서 내리기까지 막힘이 없다는 인상을 줍니다.  차량을 선택하고 목적지로 호출하는 등 고민할 필요 없이 그저 원하는 장소를 떠올리고 이동해서 기다리면 되었는데요. 짧은 거리이지만 탑승 후 일방향의 지하 터널로 이동하다보니 트래픽을 마주할 일도 없고, 어떤 경로로 이동할지 고민할 필요 없이 목적지로 이어지는 구간을 따라가다 보면 목적지에 다다르는 경험은 새로웠습니다.
 
-**미래의 모빌리티는 마치 앱에서 상품을 주문 결제하여 원스톱으로 배달받는 것처럼 사용자가 이동수단을 이용하는 과정에서 어떤 막힘없이 이동할 수 있는 형태가 되지 않을까** 생각이 들었습니다.
-
 <div style="padding:56.25% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/693440867?h=e2d46a7392&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;" title="PXL_20220105_233426550.mp4"></iframe></div><script src="https://player.vimeo.com/api/player.js"></script>
 
 베이거스 루프를 직접 체험해보니 일부 기술의 한계도 보입니다. 베이거스 루프의 구간은 2km 남짓으로 길지 않은 구간이며 법적인 제한으로 인하여 자율주행 운행이 제한되기도 하였습니다. 그래서 사람이 1-2분의 구간을 운전해주는데 꼭 차로 이러한 터널을 이동해야하나 싶은 생각도 들었습니다.
