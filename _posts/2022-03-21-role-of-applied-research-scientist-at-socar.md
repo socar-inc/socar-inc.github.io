@@ -47,9 +47,9 @@ Research라는 단어가 포함된 포지션을 보면, Research와 Applied Rese
 
 단, 이 글에서 정리하는 정의가 절대진리는 아닙니다! 조직마다 추구하는 인재상이 다르고, 시간이 흐르면서 요구하는 역량이 달라질 수 있기 때문입니다. 어느 정도의 윤곽을 잡는 목적으로 참고해주시면 감사드리겠습니다.
 
-### 1) Research Scientist: 어떻게 SOTA를 뛰어넘을 수 있을까?
+### Research Scientist: 어떻게 SOTA를 뛰어넘을 수 있을까?
 
-**Concept**
+#### Concept
 
 Research Scientist는 AI에 관련된 원천기술을 연구하는 포지션입니다. 특정 비즈니스 도메인 (i.e., 자율주행, 카셰어링 등)에만 적용할 수 있는 주제가 아닌, 여러 비즈니스 도메인에 적용될 수 있는 근간이 되는 원천기술을 연구하는 포지션이라고 생각합니다.
 
@@ -58,7 +58,7 @@ Research Scientist는 AI에 관련된 원천기술을 연구하는 포지션입�
 2010년 즈음 부터 지금까지 이미지, 텍스트(자연어), 시계열, 생성(Generation)등의 다양한 기법들의 SOTA가 개선되면서 AI 연구가 점점 성장하고 있습니다. 아직 해결되지 않은 문제들과 연구주제들도 무수히 많이 남아있어, 더 많은 연구들이 등장할 것으로 기대하고 있습니다.
 
 
-**Key Responsibility**
+#### Key Responsibility
 
 Research Scientist는 과거에 제안된 연구들을 파악하고 새로운 연구를 수행해야 하기 때문에, 주로 요구되는 Responsibility는 아래와 같습니다. (조직마다 다르고, 시간이 흐름에 따라 변경될 수 있습니다)
 
@@ -68,7 +68,7 @@ Research Scientist는 과거에 제안된 연구들을 파악하고 새로운 �
 - 다른 연구자들과 원활하게 소통하고 협력할 수 있는 능력
 
 
-**Research Questions**
+#### Research Questions
 
 원활한 이해를 돕기 위해 Research Scientist가 고민해봄직한 Research Question들을 한 번 정리해보았습니다.
 
@@ -77,9 +77,9 @@ Research Scientist는 과거에 제안된 연구들을 파악하고 새로운 �
 - 최근에 제안된 Language Model (BERT, RoBERTa, S-BERT 등)보다 더 인간처럼 (혹은 인간보다 더 뛰어나게) 지식을 이해하는 모델은 없을까?
 
 
-### 2) Applied Research Scientist: 우리 비즈니스 도메인의 문제를 어떻게 풀 수 있을까?
+### Applied Research Scientist: 우리 비즈니스 도메인의 문제를 어떻게 풀 수 있을까?
 
-**Concept**
+#### Concept
 
 Applied Research Scientist는 특정 비즈니스 도메인의 문제를 풀 수 있는 AI를 연구하고, 연구된 모델을 배포하는 일을 수행하는 포지션입니다. **Research Scientist가 여러 도메인에 범용적으로 적용될 수 있는 AI를 연구한다면, Applied Research Scientist는 특정 도메인에 최적화된 AI를 연구하고 이를 prouction 환경에 맞게 구현하는 역할도 수행합니다.**
 
@@ -88,7 +88,7 @@ Applied Research Scientist는 Public Benchmark Dataset을 이용하기도 하지
 AI 연구에서 더 나아가, Applied Research Scientist는 Software Engineer, Data Engineer와 협업하여 AI 모델을 배포하는 과정에도 참여합니다. 리서치용으로 작성했던 코드를 배포 가능한 형태로 리팩토링하고, 다른 조직과 커뮤니케이션하며 배포에 필요한 요소들을 결정합니다. 뿐만 아니라, AI모델의 추론(Inference) 결과를 모니터링하여 Dataset Shift나 Feature Drift, Out-of-Distribution 샘플이 프로덕션에 들어오는지 여부를 파악합니다. 
 
 
-**Key Responsibility**
+#### Key Responsibility
 
 Applied Research Scientist는 도메인의 문제를 해결할 수 있는 AI를 연구하고, 다른 조직과 협업하여 배포하는 과정까지의 업무를 수행하므로, 주로 요구되는 Key Responsibility는 아래와 같습니다.
 
@@ -99,7 +99,7 @@ Applied Research Scientist는 도메인의 문제를 해결할 수 있는 AI를 
 - 다른 연구자, 엔지니어, End-User들과 커뮤니케이션하고 니즈를 파악할 수 있는 능력
 
 
-**Research Questions**
+#### Research Questions
 
 원활한 이해를 돕기 위해 Applied Research Scientist가 고민해봄직한 Research Question들을 한 번 정리해보았습니다.
 
@@ -109,14 +109,13 @@ Applied Research Scientist는 도메인의 문제를 해결할 수 있는 AI를 
 
 
 
-### 3) Machine Learning Engineer: AI모델을 어떻게 효과적으로 구현하고 서비스화 시킬까?
+### Machine Learning Engineer: AI모델을 어떻게 효과적으로 구현하고 서비스화 시킬까?
 
-
-**Concept**
+#### Concept
 
 Machine Learning Engineer는 AI모델의 개발과 서비스에 더 무게를 두고 있는 포지션입니다. Scientist와 커뮤니케이션하며 모델을 구현하고, 효율적으로 모델을 학습시킬 수 있는 환경을 구축하기도 합니다. 모델이 학습이 완료된 이후에는, 효율적으로 Inference를 수행할 수 있는 아키텍처를 구성하거나 모델을 리팩토링합니다.
 
-**Key Responsibility**
+#### Key Responsibility
 
 전 문단에서 “효율”이라는 단어가 자주 등장했는데, Machine Learning Engineer는 특정 데이터셋에서 성능을 향상시키기 보다는 모델을 개발하고 운영하는 과정을 효율화하는 포지션입니다. AI모델의 학습과 배포하는 단계에서 Machine Learning Engineer가 하는 일들을 나열해보면, 아래 4가지 정도를 꼽아볼 수 있습니다.
 
@@ -128,7 +127,7 @@ Machine Learning Engineer는 AI모델의 개발과 서비스에 더 무게를 �
 Machine Learning Engineer는 데이터셋 구성에서부터 모델 구현, 학습 효율화, 그리고 배포에 이르는 AI모델의 전 과정에 engage하여 효율성을 높히고, 더 나아가 AI조직의 생산성을 높히는 일을 수행합니다. Research Scientist, Applied Research Scientist 뿐만 아니라 software engineer, data engineer와 자주 커뮤니케이션하면서 효율이 낮은 부분을 찾고, 기술적인 문제를 진단하며, 그 문제를 해결할 수 있는 방법을 찾는 것이 Machine Learning Engineer의 주요한 role입니다.
 
 
-**Research Questions**
+#### Research Questions
 
 원활한 이해를 돕기 위해 Machine Learning Engineer가 고민해봄직한 질문들을 몇 개 가져왔습니다.
 
@@ -138,14 +137,14 @@ Machine Learning Engineer는 데이터셋 구성에서부터 모델 구현, 학�
 
 
 
-### 4) Data Scientist: 데이터를 기반으로 어떤 Action을 할 수 있을까?
+### Data Scientist: 데이터를 기반으로 어떤 Action을 할 수 있을까?
 
-**Concept**
+#### Concept
 
 마지막으로, Data Scientist는 비즈니스 도메인에서 발생한 다양한 데이터를 분석하는 포지션입니다. 비즈니스의 여러 실무자와 커뮤니케이션하며 문제를 해결하며, 그 과정에서 필요한 다양한 업무를 진행합니다. 이 때, 가장 중요한 것은 단순 Report가 아닌 Action을 위한 데이터 분석을 수행한다는 점입니다. 목적 없이 데이터를 분석하는 것이 아니라, 분석 결과를 기반으로 실무자가 실제 Action을 수행하기 위한 데이터 분석을 진행합니다.
 
 
-**Key Responsibility**
+#### Key Responsibility
 
 Data Scientist는 주로 비즈니스 도메인에서 발생하는 다양한 종류의 데이터를 다룹니다. 쏘카의 Data Scientist 포지션으로 예를 들어보겠습니다. 쏘카의 Data Scientist는 서비스의 앱, 웹 로그, 유저의 서비스 이용 데이터, 차량의 센서데이터 등 다양한 영역에서 비즈니스 문제 해결을 위한 문제 정의, 가설 설정, 실험 설계와 성과 측정을 진행합니다. 쏘카는 주로 분석하는 데이터를 기준으로 Business Data Scientist와 Product Data Scientist로 나누어 채용하고 있는데, 공통적으로 요구되는 역량은 아래와 같습니다.
 
@@ -154,7 +153,7 @@ Data Scientist는 주로 비즈니스 도메인에서 발생하는 다양한 종
 - 효과적인 데이터 분석을 위한 핵심 지표의 도출과 관리, 예측 모델링 능력
 
 
-**Research Questions**
+#### Research Questions
 
 원활한 이해를 돕기 위해 Data Scientist가 고민해봄직한 질문들을 정리해보았습니다. 이번에는 원활한 이해를 위해 Business Data Scientist와 Product Data Scientist로 나누어서 가져와 보았습니다.
 
@@ -169,7 +168,8 @@ Data Scientist는 주로 비즈니스 도메인에서 발생하는 다양한 종
 다시 한 번 강조드리고 싶은 점은, Research Scientist / Applied Research Scientist / Machine Learning Engineer / Data Scientist로 나누어진 포지션이 절대적인 기준이 아니라는 것입니다. AI에 관련된 일들이 칼로 무 자르듯이 나누기 어렵기 때문에, 조직마다 수행하는 역할이 겹치기도 하고 한 포지션에서 여러 역할을 수행하는 경우도 많습니다. 각 조직이 풀고있는 문제, 성향, 문화 등 여러가지 요인이 작용하여 포지션을 구성하기 때문에, JD를 보실 때 참조하는 용도로 이 글을 읽으시는 것을 추천합니다.
 
 ---
-## 2. 쏘카 AI팀은 어떤 일을 할까?
+
+## 쏘카 AI팀은 어떤 일을 할까?
 
 쏘카의 AI팀은 Human-Interactive AI System라는 목표 아래, Vision, NLP 기술을 활용해 카셰어링 서비스에서 발생하는 여러 문제를 해결하고 있습니다. “Human-Interactive”라는 말이 다소 생소하실텐데요, 저희 팀이  정의한 **Human-Interactive AI System이란 End User(사람)의 피드백을 기반으로 지속적으로 성장하는 시스템으로, 현실에서 Robust하게 동작하여 비즈니스 임팩트를 내는 AI 시스템을 뜻합니다.**
 
@@ -178,7 +178,7 @@ Data Scientist는 주로 비즈니스 도메인에서 발생하는 다양한 종
 [Human-Interactive AI(Human-In-The-Loop)](https://hai.stanford.edu/news/humans-loop-design-interactive-ai-systems)
 
 
-**1) Vision Domain**
+### Vision Domain
 
 
 현실에서 Robust한 AI 시스템을 디자인하기 위해서는 많은 고민들이 필요합니다. 먼저 Vision 도메인에서 간단한 예를 들어보겠습니다. 
@@ -197,7 +197,7 @@ Data Scientist는 주로 비즈니스 도메인에서 발생하는 다양한 종
 
 다른 관점에서 차종 분류 모델을 살펴보겠습니다. CNN 기반의 분류 모델은 이미지가 들어왔을 때, 해당 이미지에 대한 예측의 confidence를 갖습니다. 이 confidence가 특정 이미지가 Class에 속할 probability(확률)이라고 말할 수 있을까요? 일반적인 CNN들은 대부분의 판단에 대해 overly-confident한 예측을 수행하는 overconfidence problem을 가지고 있습니다. 이 때, 과도하게 높은 confidence를 갖는 문제를 어떻게 해결할 수 있을까요? **잘못된 예측을 수행했을 때는 less-confident하게 틀리고, 옳은 예측에 대해서는 more confident하게 맞추도록 할 수는 없을까요? (Calibration) 실무에서는 모델의 예측 결과 뿐만 아니라, 모델이 확실하게 예측한 건들을 먼저 검토하고자 하는데, 이 확신의 정도를 어떻게 잘 측정할 수 있을까요?**
 
-**2) NLP Domain**
+### NLP Domain
 
 AI 팀에서는 고객이 쏘카 이용 중 겪을 수 있는 문제를 빠르게 해결해줄 수 있는 채팅 AI (Dialogue Sytem)을 연구하고 있습니다. 예를 들어, 고객이 겪는 문제 상황을 이해하기 위해 간단한 Intent Classifier가 있다고 가정해보겠습니다. 고객의 여러 문제상황(Intent)들 중 “쏘카존에 반납이 불가능해요”라는 Intent가 있을 때, 아래와 같은 고객의 문의들은 어떻게 처리할 수 있을까요?
 
@@ -215,9 +215,9 @@ AI 팀에서는 고객이 쏘카 이용 중 겪을 수 있는 문제를 빠르�
 
 **고객이 필요로 하는 솔루션이 각기 다른데, 이 문의들을 하나의 Intent로 묶을 수 있을까요? 혹은 한 문장에 여러가지 문제가 섞여있을 때는 어떻게 처리할 수 있을까요? (Multi-Labeled Sample)** 뿐만 아니라, **사전에 정의해둔 Intent에서 벗어난 문의는 어떻게 응답해야 할까요? (Unknown Intent Detection)** Vision 도메인에서와 마찬가지로, 고객의 문의에 대해 **예측한 Intent에 대한 confidence를 어떻게 측정할 수 있을까요?**
 
-
 ---
-## 3. 마무리
+
+## 마무리
 
 쏘카의 AI팀은 이러한 고민들을 해결하기 위해 여러 분야의 논문을 스터디하고 구현하며, 실무에 적용하고 있습니다. 과거 논문에서 제안된 기법을 이용하는 것 뿐만 아니라, 비즈니스 도메인에서 최적의 성능을 달성하는 새로운 기법을 디자인하기도 합니다. 기술적인 문제를 해결한 후에는 다른 팀과 협업하며 현실에서 Business Impact을 달성합니다. 데이터사이언스 팀과 협업하여 개발한 AI가 가져올 임팩트를 산정하기도 하고, 엔지니어링 그룹과 협업하여 모델을 배포하고, 모델의 예측 결과를 모니터링합니다. 모델을 실무에 적용하고 프로젝트의 한 Cycle을 완수한 이후, End-User의 피드백을 기반으로 모델을 성장시키고 있습니다 (Human-in-the-Loop).
 
