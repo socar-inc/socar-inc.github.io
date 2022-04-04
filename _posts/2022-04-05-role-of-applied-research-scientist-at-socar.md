@@ -2,7 +2,7 @@
 layout: post
 title: "쏘카 AI팀의 Applied Research Scientist는 어떤 일을 하나요?"
 subtitle: "쏘카가 지향하는 AI"
-date: 2022-03-21 17:00:00 +0900
+date: 2022-04-05 09:00:00 +0900
 category: data
 background: '/assets/images/brain_background.jpg' 
 author: kp
