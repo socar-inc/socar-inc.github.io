@@ -1,91 +1,91 @@
 dorma:
-  name: dorma
+  name: 도마
   image: '/assets/authors/dorma.jpeg'
 
 issac:
-  name: issac
+  name: 이삭
   image: '/assets/authors/default.png'
 
 kyle:
-  name: kyle
+  name: 카일
   image: '/assets/authors/kyle.png'
 
 serena:
-  name: serena
+  name: 세레나
   image: '/assets/authors/default.png'
 
 thomas:
-  name: thomas
+  name: 토마스
   image: '/assets/authors/thomas.jpeg'
 
 gadi:
-  name: gadi
+  name: 가디
   image: '/assets/authors/gadi.jpeg'
 
 purin:
-  name: purin
+  name: 푸린
   image: '/assets/authors/default.png'
 
 sandy:
-  name: sandy
+  name: 샌디
   image: '/assets/authors/sandy.png'
 
 yamani:
-  name: yamani
+  name: 야마니
   image: '/assets/authors/yamani.png'
 
 spock:
-  name: spock
+  name: 스팍
   image: '/assets/authors/spock.jpeg'
 
 hardy:
-  name: hardy
+  name: 하디
   image: '/assets/authors/hardy.jpeg'
 
 charlie:
-  name: charlie
+  name: 찰리
   image: '/assets/authors/charlie.png'
 
 mignon:
-  name: mignon
+  name: 미뇽
   image: '/assets/authors/mignon.jpeg'
 
 ray:
-  name: ray
+  name: 레이
   image: '/assets/authors/ray.png'
 
 dini:
-  name: dini
+  name: 디니
   image: '/assets/authors/dini.jpeg'
 
 jian:
-  name: jian
+  name: 지안
   image: '/assets/authors/jian.png'
 
 bada:
-  name: bada
+  name: 바다
   image: '/assets/authors/bada.png'
 
 oliver:
-  name: oliver
+  name: 올리버
   image: '/assets/authors/oliver.png'
 
 juno:
-  name: juno
+  name: 주노
   image: '/assets/authors/juno.png'
   
 marie:
-  name: marie
+  name: 마리
   image: '/assets/authors/marie.png'
 
 camila:
-  name: camila
+  name: 카밀라
   image: '/assets/authors/camila.png'
 
 gigi:
-  name: gigi
+  name: 지지
   image: '/assets/authors/gigi.png'
 
 kp:
-  name: kp
+  name: 케이피
   image: '/assets/authors/kp.jpeg'
