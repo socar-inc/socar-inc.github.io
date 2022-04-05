@@ -28,7 +28,7 @@ tags:
   - Applied Research Scientist
   - Machine Learning Engineer
   - Data Scientist
-- 쏘카의 Applied Research Scientist는 어떤 일을 할까?
+- 쏘카 AI팀은 어떤 일을 할까?
   - Vision Domain
   - NLP Domain
 - 마무리
