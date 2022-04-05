@@ -85,3 +85,7 @@ camila:
 gigi:
   name: gigi
   image: '/assets/authors/gigi.png'
+
+kp:
+  name: kp
+  image: '/assets/authors/kp.jpeg'
