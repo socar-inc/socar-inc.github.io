@@ -226,4 +226,4 @@ AI 팀에서는 고객이 쏘카 이용 중 겪을 수 있는 문제를 빠르�
 
 다음 글에서 뵙겠습니다. 긴 글 읽어주셔서 감사합니다!
 
-> AI 팀에서는 Human-Interactive AI System을 함께 만들어갈 Applied Research Scientist를 채용하고 있습니다. AI 팀 채용에 관심이 있으시다면, 저희 [채용 페이지](https://www.notion.so/Applied-Research-Scientist-26dbb77965eb4cdaad4b84e6cb378e70)에 방문하셔서 공고를 확인해 주시면 감사드리겠습니다.
+> AI 팀에서는 Human-Interactive AI System을 함께 만들어갈 Applied Research Scientist를 채용하고 있습니다. AI 팀 채용에 관심이 있으시다면, 저희 [채용 페이지](https://www.notion.so/socarcorp/Applied-Research-Scientist-78d277441aba4b8e91b2f053abb8f2c0)에 방문하셔서 공고를 확인해 주시면 감사드리겠습니다.
