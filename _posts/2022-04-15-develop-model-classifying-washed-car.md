@@ -4,7 +4,7 @@ title: "세차 인증 자동화 모델 개발 이야기"
 subtitle: "Image Recognition + Rejection 모듈을 이용하여 세차 운영 자동화하기"
 date: 2022-04-15 09:00:00 +0900
 category: data
-background: '/assets/images/brain_background.jpg' 
+background: '/img/develop-model-classifying-washed-car/0.png' 
 author: esther
 comments: true
 tags:
