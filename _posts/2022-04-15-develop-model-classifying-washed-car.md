@@ -21,14 +21,14 @@ tags:
 
 목차는 다음과 같습니다
 
-- 1. 세차 인증 자동화는 왜 해야할까
-- 2. 세차를 위한 데이터 스킴을 어떻게 정할 수 있을까
-- 3. 모델 적용기
+1. 세차 인증 자동화는 왜 해야할까
+2. 세차를 위한 데이터 스킴을 어떻게 정할 수 있을까
+3. 모델 적용기
   - 3.1. 분류 모델 실험과정
   - 3.2. Rejection 모델 개발
   - 3.3. 실무 적용 위한 External validation
 4. 이 글을 마치며
-5. reference
+5. 참고
 
 --
 
@@ -174,7 +174,7 @@ tags:
 
 ![11](/img/develop-model-classifying-washed-car/11.png)
 
-## 5. Reference
+## 5. 참고
 
 - NetVLAD : [https://arxiv.org/abs/1511.07247](https://arxiv.org/abs/1511.07247)
 - Patch NetVLAD : [https://arxiv.org/abs/2103.01486](https://arxiv.org/abs/2103.01486)
