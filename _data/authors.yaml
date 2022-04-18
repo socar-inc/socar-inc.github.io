@@ -89,3 +89,7 @@ gigi:
 kp:
   name: 케이피
   image: '/assets/authors/kp.jpeg'
+
+esther:
+  name: 에스더
+  image: '/assets/authors/default.png'
