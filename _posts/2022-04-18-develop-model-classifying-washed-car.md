@@ -85,13 +85,13 @@ tags:
 
 ### 3.1. 모델 실험 과정
 
-세차 인증 모델을 만들기 위해 저희는 2가지 방법으로 접근했습니다. **첫 번째 접근은 기본적인 Supervised Classifier 모델이었고, 두 번째 접근은 Image Retreival 활용하는 방식이었습니다.**
+세차 인증 모델을 만들기 위해 저희는 2가지 방법으로 접근했습니다. **첫 번째 접근은 기본적인 Supervised Classifier 모델이었고, 두 번째 접근은 Image Retrieval 활용하는 방식이었습니다.**
 
-Image Retreival은 간단하게 생각하면, Training set의 이미지 Feature 들을 데이터베이스에 저장해두고, 입력으로 들어오는 이미지와 가장 비슷한 이미지 k개를 뽑아주는 방식의 접근입니다. 이 방식은 Place Recognition이나 Map Matching에서 많이 활용하는 접근 방법입니다. 세차 인증 시에도 결국 비슷한 차량의 부분들을 다른 View로 사진을 찍어 올라오게 되는 형태이므로 비슷한 접근으로 풀 수 있을 것이라고 생각했습니다.
+Image Retrieval은 간단하게 생각하면, Training set의 이미지 Feature 들을 데이터베이스에 저장해두고, 입력으로 들어오는 이미지와 가장 비슷한 이미지 k개를 뽑아주는 방식의 접근입니다. 이 방식은 Place Recognition이나 Map Matching에서 많이 활용하는 접근 방법입니다. 세차 인증 시에도 결국 비슷한 차량의 부분들을 다른 View로 사진을 찍어 올라오게 되는 형태이므로 비슷한 접근으로 풀 수 있을 것이라고 생각했습니다.
 
-또 Inference 시에 Data-shift에 좀 더 유리할 것이라고도 생각했습니다. 예를 들어 "세차 기계 안에서 차 내부를 찍은 사진"과 "비가 많이 오는 날 차 내부를 찍은 사진"을 생각해 보면, 후자의 경우 Training Set에 없었다면 기본 분류 모델은 이 사진을 세차 완료로 잘못 분류할 수 있습니다. Image Retreival로 이 문제를 풀게 되면 Feature Vector가 다르게 생성되기 때문에 다른 클래스로 분류하게 될 수 있을 거라고 생각했습니다.
+또 Inference 시에 Data-shift에 좀 더 유리할 것이라고도 생각했습니다. 예를 들어 "세차 기계 안에서 차 내부를 찍은 사진"과 "비가 많이 오는 날 차 내부를 찍은 사진"을 생각해 보면, 후자의 경우 Training Set에 없었다면 기본 분류 모델은 이 사진을 세차 완료로 잘못 분류할 수 있습니다. Image Retrieval로 이 문제를 풀게 되면 Feature Vector가 다르게 생성되기 때문에 다른 클래스로 분류하게 될 수 있을 거라고 생각했습니다.
 
-저희는 Image Retreival 모델 중에서 Place Recognition 문제에서 높은 성능을 보였던 NetVLAD 모델을 저희 데이터에 맞게 변형하여 사용했고 Classification 모델로는 Resnet50을 사용했습니다.
+저희는 Image Retrieval 모델 중에서 Place Recognition 문제에서 높은 성능을 보였던 NetVLAD 모델을 저희 데이터에 맞게 변형하여 사용했고 Classification 모델로는 Resnet50을 사용했습니다.
 
 그리고 실험 결과는 다음과 같았습니다.
 
@@ -104,7 +104,7 @@ Image Retreival은 간단하게 생각하면, Training set의 이미지 Feature 
 
 이 실험을 통해 저희는 Imagenet Pretrained Supervised Classifier를 Baseline으로 사용하기로 결정했고, 2가지 Takeaway도 같이 정리해 볼 수 있었습니다.
 
-#### (1) Retreival 보다 Supervised Classifier 사용했을 때가 성능이 더 좋다
+#### (1) Retrieval 보다 Supervised Classifier 사용했을 때가 성능이 더 좋다
 
 - 대부분 Retrieval로 푸는 문제들을 보면 공통된 픽셀 값을 가지는 곳, 즉 이미지 내에서 같은 객체가 있는 곳을 Landmark로 보고 같은 곳이라고 판단해 이 부분들을 매칭하는 방식을 사용합니다.
 
