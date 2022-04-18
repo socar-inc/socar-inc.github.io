@@ -18,14 +18,15 @@ background: '/assets/images/home-bg-main-1.png'
   <h1>글 목록</h1>
   <div class="posts">
     {% for author_hash in site.data.authors %}
-    {% assign author = author_hash[1] %}
-    <h2 id="{{ author.name }}">
-      <img src="{{ author.image }}" alt="">
-      {{ author.name }}
+    {% assign key = author_hash[0] %}
+    {% assign data = author_hash[1] %}
+    <h2 id="{{ data.name }}">
+      <img src="{{ data.image }}" alt="">
+      {{ data.name }}
     </h2>
     <ul class="post">
       {% for post in site.posts %}
-        {% if post.author contains author.name %}
+        {% if post.author contains key %}
           <li>
             {% if post.link %}
               <a href="{{ post.link }}">
