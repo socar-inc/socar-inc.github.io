@@ -104,7 +104,7 @@ Image Retreival은 간단하게 생각하면, training set의 이미지 feature 
 
 이 실험을 통해 저희는 Imagenet pretrained Supervised classifier를 baseline으로 사용하기로 결정했고, 2가지 takeaway도 같이 정리해 볼 수 있었습니다.
 
-#### (1) Retreival 보다 Supervised classifier 사용했을 때가 성능이 더 좋다**
+#### (1) Retreival 보다 Supervised classifier 사용했을 때가 성능이 더 좋다
 
 - 대부분 Retrieval로 푸는 문제들을 보면 공통된 픽셀 값을 가지는 곳, 즉 이미지 내에서 같은 객체가 있는 곳을 landmark로 보고 같은 곳이라고 판단해 이 부분들을 매칭하는 방식을 사용합니다.
 
