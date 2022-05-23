@@ -2,7 +2,7 @@
 layout: post
 title: "쏘카 예약을 효율적으로 - 최적화를 활용한 쏘카 예약 테트리스"
 subtitle: "최적화 알고리즘 with 쏘카"
-date: 2022-03-01 09:00:00 +0900
+date: 2022-05-20 09:00:00 +0900
 category: data
 background: '/assets/images/background.jpg'
 author: carrot, kyle
@@ -236,9 +236,8 @@ print(ray.get(futures))
 
 위에서 말씀드린 것처럼 연산을 실행하기 위해 많은 Computation Power가 필요하기 때문에, CPU 성능이 좋은 인스턴스를 선택해 사용하고 있습니다. 더 자세히 말씀드리면 Google Cloud Platform의 vCPU n2d-highcpu-224 인스턴스를 사용하고 있습니다. CPU가 224개를 사용한다고? 생각하실 수 있지만 선점형(Preemtible) 인스턴스를 사용할 경우 US 기준 1시간에 1.69 달러로 저렴합니다. 
 
-<img src="https://capture.dropbox.com/hyZG2AUrwRXTQCxE?raw=1">
 
-TODO : 이 이미지 asset으로 옮기기
+![img](/img/reservation-tetris/preemtible-price.png){: width="100%"}
 
 
 단, 선점형 인스턴스는 사용하던 도중 구글 클라우드 측에서 회수할 수 있는 단점을 가지고 있습니다. 이런 경우를 대비해 만약 선점형 인스턴스가 종료된다면 새로운 최적화 서버를 띄우는 방식으로 구현했습니다. 이 과정에서 [Shutdown Script](https://cloud.google.com/compute/docs/shutdownscript?hl=ko)를 사용했습니다.
@@ -293,7 +292,7 @@ AWS SQS와 GCP Pub/Sub의 큰 차이는 메세지를 저장하는 기간(리텐�
 
 최종 인프라는 다음과 같습니다.
 
-![img](/img/reservation-tetris/infra.png){: width="100%"}
+![img](/img/reservation-tetris/architecture.png){: width="100%"}
 
 
 인스턴스가 필요한 시점이 될 때 쏘카 서버에서 최적화 서버를 띄우는 메세지를 보내주고, 그 메세지 기반으로 인스턴스가 실행됩니다. 쏘카 서버는 인스턴스가 실행된 후 최적화 해야하는 메세지를 Push합니다. 최적화 서버는 메세지를 Pull하고 최적화를 실행합니다. 그 후, 다시 쏘카 서버에게 메세지를 반환합니다. 쏘카 서버는 해당 메세지를 받은 후 쏘카 서비스에 적용하고 해당 결과를 공유합니다.
