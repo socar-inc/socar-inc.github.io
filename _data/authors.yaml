@@ -98,10 +98,14 @@ carrot:
   name: 캐롯
   image: '/assets/authors/carrot.png'
 
-lucia:
-  name: 루시아
-  image: '/assets/authors/lucia.png'
-
 humphrey:
   name: 험프리
   image: '/assets/authors/humphrey.png'
+
+lucia:
+  name: 루시아
+  image: '/assets/authors/default.png'
+
+bucky:
+  name: 버키
+  image: '/assets/authors/default.png'
