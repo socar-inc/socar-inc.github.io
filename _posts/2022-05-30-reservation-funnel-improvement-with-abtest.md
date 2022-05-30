@@ -1,8 +1,8 @@
 ---
 layout: post
-title: "쏘카 PM의 차량 예약 퍼널 개선기(feat. AB Test)"
-subtitle: "데이터 기반 신규 UX 개선기"
-date: 2022-05-25 09:00:00 +0900
+title: "쏘카 PM의 차량 예약 퍼널 단계 개선기(feat. AB Test)"
+subtitle: "AB Test 기반 신규 UX 개선 프로세스"
+date: 2022-05-30 09:00:00 +0900
 category: data
 background: '/assets/images/cloud-bg.jpg' 
 author: lucia
@@ -19,7 +19,7 @@ tags:
 
 저는 평소에 프로젝트 안에서 매우 다양한 문제와 만나고 있습니다. 그리고 문제의 원인을 찾기 위해 노력합니다. 물론, 이 과정이 쉽지는 않습니다. 위로 보고 아래로 보고, 좌로 굴렀다 우로 굴렀다,... 쏘카 PM들은 사업, 운영, 프로덕트의 동료들과 셜록 홈즈 뺨치는 주도면밀한 관찰을 해야합니다. 이렇게 머리를 쥐어짠 🤯 끝에는, 문제해결 방법을 도출합니다. 즉 가설을 설정하게 됩니다.
 
-![Frame 17](/img/how-socar-pm-solves-problem/Frame_17.jpg)
+![Frame 17](/img/reservation-funnel-improvement-with-abtest/Frame_17.jpg)
 
 그런데 선택한 가설 즉 문제 해결 방법이 맞는지를 우리는 어떻게 사전에 판단할 수 있을까요? 이 제품 제안을 사용자들은 과연 좋아할까요? (무엇보다도) 과연 지표는 잘 나올까요? 가설을 도출한 후에는 그 가설이 올바른 문제해결 방법인지 확신을 얻는 과정이 필요합니다. 이렇게 확신을 얻기 위해 사용하는 방법 중 하나가 A/B TEST입니다.
 
@@ -56,7 +56,7 @@ tags:
 
 *“올해 부름은 예약량을 늘려야 해요. 지난 1년여 간 예약량 지표가 정체되어 있었습니다. 전사적으로 볼 때 올해는 부름 아니더라도, 예약량 부스팅 반드시 필요하고요. 그나저나 부름 참 좋은데... 말로 표현을 못하겠네...”*
 
-![Frame 12](/img/how-socar-pm-solves-problem/Frame_12.jpg)
+![Frame 12](/img/reservation-funnel-improvement-with-abtest/Frame_12.jpg)
 
 "예약량 지표 정체"라는 문제 상황은 명확합니다. 하지만 아직까지 사용자가 서비스를 잘 쓰지 않는 이유를 명확히 잡아내기 어려운 상태입니다. 문제를 조금 더 뾰족하게 만들어보기로 합니다. PM, BO가 머리를 맞대고 고민을 시작했습니다.
 
@@ -66,11 +66,11 @@ tags:
 
 과연 우리가 생각하는 것 처럼, 부름 서비스가 좋아서 고개를 끄덕여 주었을까요? 현재 사용자들이 보고있는 우리는 어떤 모습일까요? 서비스 현황을 확인합니다. 먼저 왕복, 부름 서비스가 각각 무엇인지 확인해 봅니다.
 
-![왕복](/img/how-socar-pm-solves-problem/round_trip.png)
+![왕복](/img/reservation-funnel-improvement-with-abtest/round_trip.png)
 
 **왕복 서비스**는, 정해진 “쏘카존”에 차량들이 주차되어 있고, 사용자가 직접 **쏘카존까지 이동하여** 예약한 차를 픽업합니다. 쏘카에서 제공중인 가장 일반적인 차량 대여 서비스입니다.
 
-![부름](/img/how-socar-pm-solves-problem/d2d.png)
+![부름](/img/reservation-funnel-improvement-with-abtest/d2d.png)
 
 **부름** 서비스는, 반대로 사용자가 집 앞으로 차를 부르고, 차량이 지정한 **장소로 호출됩니다.**
 
@@ -78,7 +78,7 @@ tags:
 
 그런데, 현재 부름은 왕복과 Flow, UX를 거의 똑같이 공유하고 있습니다.  왕복이 아닌 부름 상품을 원하는 사용자에게 이것이 최고의 경험일까요? 여기서 부터 뒤집어서 생각해보기로 했습니다.
 
-![Frame 11](/img/how-socar-pm-solves-problem/Frame_11.jpg)
+![Frame 11](/img/reservation-funnel-improvement-with-abtest/Frame_11.jpg)
 
 ### 1.3. 해결할 문제 뾰족하게 짚기
 
@@ -86,7 +86,7 @@ tags:
 * BO : ”왜요? 무슨 차이가 있어서요?”
 * PM : 현재 “여기로 쏘카 부르기”라고 적힌 `부름PIN` 을 통해서 뿐 아니라, `쏘카존` 버튼을 통해서도 동일한 ‘부름'차량을 예약할 수 있는데요, 결제CTA버튼이 있는 ‘결제정보 확인' 페이지 까지의 도달 전환율이 다음과 같이 차이를 보였습니다. (쏘카존 0.57% : 부름pin 6.19%)
 
-![Frame 13](/img/how-socar-pm-solves-problem/Frame_13.jpg)
+![Frame 13](/img/reservation-funnel-improvement-with-abtest/Frame_13.jpg)
 
 * BO : 똑같은 상품을 팔고 있는데도, 출발점에 따라서 결과가 다르다고요? 
 * PM : 네. 출발점이 부름PIN인 경우, “여기로 쏘카 부르기” 라고 말해주었기 때문에 사용자도 [**부름 차량을 빌려야지] 라고 명확히 결심한 상황이어서** 라고 해석돼요.  부름에 대한 이해, 결제 결심이 반영된 것 아닐까요?
@@ -98,7 +98,7 @@ tags:
 
 차량 예약 데이터를 확인했을 때, 부름 사용자는 왕복과 **나이, 대여시간에 차이**를 보인다는 점을 발견했습니다. (아래 데이터는 일정 기간 동안의 평균치입니다.)
 
-|![segment-1](/img/how-socar-pm-solves-problem/segment-1.png)|![segment-2](/img/how-socar-pm-solves-problem/segment-2.png)|
+|![segment-1](/img/reservation-funnel-improvement-with-abtest/segment-1.png)|![segment-2](/img/reservation-funnel-improvement-with-abtest/segment-2.png)|
 |부름 사용자의 3~40대 비중이 약 **`10%`** 높습니다.|부름 차량의 예약시간이 **`2.3배`** 더 깁니다.|
 
 그리고 실제 부름을 애용하는 사용자들에게 전화 인터뷰(In-depth interview)를 진행했습니다.
@@ -109,20 +109,20 @@ tags:
 
 **역시, 부름은 ‘사용자'가 달랐다는 점을 확인했습니다.** 사용자의 목소리를 들어본 뒤, 타겟에 맞춘 제품이 필요하다는 생각을 굳히게 됩니다.
 
-![user](/img/how-socar-pm-solves-problem/user-stock.png)*by [Mick Haupt](https://unsplash.com/@rocinante_11) on Unsplash*
+![user](/img/reservation-funnel-improvement-with-abtest/user-stock.png)*by [Mick Haupt](https://unsplash.com/@rocinante_11) on Unsplash*
 
 #### 1.4.2. 사용성 테스트
 
 사용자들이 보여주고 있던 예약 데이터의 현상과 더불어 제품에서도 사용자들이 허들로 느끼고 있는 명확한 UX를 짚어내기 위해, app **사용성 테스트를 진행**했습니다. 디자이너, PM, BO 모두 뛰어들어, 사용자 들이 어떻게 기존 앱을 사용하는지, 무슨 생각을 하는지 꼼꼼히 수집했습니다.
 
-![Frame 15](/img/how-socar-pm-solves-problem/Frame_15.jpg)
+![Frame 15](/img/reservation-funnel-improvement-with-abtest/Frame_15.jpg)
 
 - 부름 서비스를 한 번도 안 써본 사람들과 어느정도 익숙한 사람들로 **그룹을 분리해 진행**했습니다.
 - 부름을 한 번도 이용해보지 않은 사용자들에게서는, **처음에 둘러보기는 했으나 이해하기 어려워 사용하지 않았다**는 피드백을 다수 들었습니다.
 
 **더욱이, 사용자들이 제품 기획 의도와 다르게 받아들이고 있는 UI 화면들을 발견했습니다**.  그동안 부름을 써보지 않은 사용자들이 무엇을 불안해 하고 있었는지 구체적으로 근거를 찾아낼 수 있었습니다.
 
-![Frame 14](/img/how-socar-pm-solves-problem/Frame_14.jpg)
+![Frame 14](/img/reservation-funnel-improvement-with-abtest/Frame_14.jpg)
 
 *사용자의 목소리는, 생각의 전환점이었습니다.* 이제 팀원들은 부름 사용자들은 왕복과는 다른 니즈가 있다는 점에 동의했습니다. 그리고 부름 사용자들만이 느꼈던 아쉬운 점, 불편했던 경험을 귀로 생생하게 들으며 깜짝 놀랐습니다. 사용자의 시각은 예상과 다르며, 책상 앞에 가만히 앉아서는 느낄 수 없다는 것을 새삼 깨달을 수 있었습니다.
 
@@ -158,9 +158,9 @@ tags:
 
 가설에서 제안한 **[부름 사용자] 관점에서 설계한 부름전용 ‘신규 예약 페이지’** 를 고민하기 시작합니다. 디자이너와 PM이 사용성테스트에서 수집한 인사이트들을 바탕으로,  와이어프레임을 새롭게 스케치했습니다. 그리고 가벼운 프로토타입으로 만들어 주변 동료들에게 직접 써보게 하고, 이를 통해 우리가 생각한 UX가 기존 사용자의 문제를 해결하는지 확인하며 스케치를 진행했습니다.
 
-![prototype-1](/img/how-socar-pm-solves-problem/prototype-1.png)
+![prototype-1](/img/reservation-funnel-improvement-with-abtest/prototype-1.png)
 
-![prototype-2](/img/how-socar-pm-solves-problem/prototype-2.png)
+![prototype-2](/img/reservation-funnel-improvement-with-abtest/prototype-2.png)
 
 #### 2.2.2. 실행 방법 고르기
 
@@ -190,7 +190,7 @@ PM과 데이터사이언스팀은 아래와 같이 A/B TEST 실험을 설정하�
 
 > 이 부분 아래 <배포> 에서도 나오는데, 아래로 합치는 게 낫지 않을까? 
 
-![Frame 21](/img/how-socar-pm-solves-problem/Frame_21.jpg)
+![Frame 21](/img/reservation-funnel-improvement-with-abtest/Frame_21.jpg)
 
 #### 2.2.4. 개발 착수하기
 
@@ -210,7 +210,7 @@ PM과 데이터사이언스팀은 아래와 같이 A/B TEST 실험을 설정하�
 
 (2022-01-24~ 2022-04~24 총 기간)
 
-![Frame 22.jpg](/img/how-socar-pm-solves-problem/Frame_22.jpg)
+![Frame 22.jpg](/img/reservation-funnel-improvement-with-abtest/Frame_22.jpg)
 
 1. 예약페이지 입장 후, **[결제 확인] 페이지에 도달한 방문전환율**
    * 기존 화면을 본 그룹에 비해, 신규 페이지 그룹의 방문전환율이 **-6%p 적다.**
@@ -230,11 +230,11 @@ PM과 데이터사이언스팀은 아래와 같이 A/B TEST 실험을 설정하�
 
 더불어, 처음에 문제 확인을 위해 진행했던 기존 UX에 대한 사용성 테스트를 새로운 UX를 가지고 다시 진행해 보았습니다. 새로 개발한 `부름홈`을 보여주면서, 기존과 동일한 질문을, 새로운 사람들에게 던져보았습니다.
 
-![Frame 18](/img/how-socar-pm-solves-problem/Frame_18.jpg)
+![Frame 18](/img/reservation-funnel-improvement-with-abtest/Frame_18.jpg)
 
 부름 사용자의 가장 큰 페인포인트였던 “서비스를 이해하기 어렵다"는 문제가 크게 해결되었다는걸 확인할 수 있었습니다.
 
-![Frame 23](/img/how-socar-pm-solves-problem/Frame_23.jpg)
+![Frame 23](/img/reservation-funnel-improvement-with-abtest/Frame_23.jpg)
 
 ## 3. 부름을 새로운 모습으로 소개합니다.
 
@@ -244,11 +244,11 @@ PM과 데이터사이언스팀은 아래와 같이 A/B TEST 실험을 설정하�
 
 결제 가능성과 UX이해도를 높인 파워풀 한 새로운 [부름 홈]은 더 많은 사용자에게 배포해도 되는 제품으로 결론을 내렸습니다. 50% 배포 후 사업지표 및 CS지표에 이슈없는 걸 확인한 뒤 4월 25일을 기준으로 100% 사용자에게 모두 배포할 수 있었습니다.
 
-![Frame 16](/img/how-socar-pm-solves-problem/Frame_16.jpg)
+![Frame 16](/img/reservation-funnel-improvement-with-abtest/Frame_16.jpg)
 
 #### 3.1.2. TPO 재정의
 
-![tpo.png](/img/how-socar-pm-solves-problem/tpo.png)
+![tpo.png](/img/reservation-funnel-improvement-with-abtest/tpo.png)
 
 부름 서비스는 사용자들에게 `왕복과 다른 TPO로 설명될 수 있다`는 것을 확인한 프로젝트인 만큼 새로 출시될 메인화면에서 “여기로 부르기”라는 버튼으로 부름을 나타내는 입구를 신설하기로 했습니다. 이제 사용자들이 기존 왕복 예약과 부름 서비스를 분리해서 이해할 수 있게 되었습니다. 
 
