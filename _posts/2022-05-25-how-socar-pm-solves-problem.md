@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "쏘카 PM의 차량 예약 퍼널 개선기(feat. AB Test)"
-subtitle: "데이터 기반 신규 UX 개선기T"
+subtitle: "데이터 기반 신규 UX 개선기"
 date: 2022-05-25 09:00:00 +0900
 category: data
 background: '/assets/images/cloud-bg.jpg' 
