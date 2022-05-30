@@ -2,7 +2,7 @@
 layout: post
 title: "쏘카 PM의 차량 예약 퍼널 단계 개선기(feat. AB Test)"
 subtitle: "AB Test 기반 신규 UX 개선 프로세스"
-date: 2022-05-30 09:00:00 +0900
+date: 2022-05-31 09:00:00 +0900
 category: data
 background: '/assets/images/cloud-bg.jpg' 
 author: lucia
