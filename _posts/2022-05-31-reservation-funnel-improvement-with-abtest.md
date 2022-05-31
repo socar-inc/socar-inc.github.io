@@ -2,7 +2,7 @@
 layout: post
 title: "쏘카 PM의 차량 예약 퍼널 단계 개선기(feat. AB Test)"
 subtitle: "AB Test 기반 신규 UX 개선 프로세스"
-date: 2022-05-30 09:00:00 +0900
+date: 2022-05-31 09:00:00 +0900
 category: product
 background: '/img/reservation-funnel-improvement-with-abtest/background-2.jpg' 
 author: lucia
@@ -96,9 +96,9 @@ tags:
 
 * PM : ”이 문제를 해결하는 우리들은, 쏘카 전체가 아닌, 1인칭 부름 사용자 중심으로 생각하도록 시선을 바꾸어야 해요! 부름 사용자들이 특히 어려워하는 것을 찾아 해결해 주어야 해요.”
 * BO : ”왜요? 무슨 차이가 있어서요?”
-* PM : 현재 “여기로 쏘카 부르기”라고 적힌 `부름 PIN` 을 통해서 분 아니라, `쏘카존` 버튼을 통해서도 동일한 ‘부름' 차량을 예약할 수 있는데요, 결제 CTA 버튼이 있는 ‘결제정보 확인' 페이지까지의 도달 전환율이 다음과 같이 차이를 보였습니다. (쏘카존 0.57% : 부름 pin 6.19%)
+* PM : 현재 “여기로 쏘카 부르기”라고 적힌 `부름 PIN` 을 통해서 분 아니라, `쏘카존` 버튼을 통해서도 동일한 ‘부름' 차량을 예약할 수 있는데요, 결제 CTA 버튼이 있는 ‘결제정보 확인' 페이지까지의 도달 전환율이 다음과 같이 차이를 보였습니다. (쏘카존 20% : 부름 pin 70% - 표기된 숫자는 실제 지표가 아닌 경향을 느낄 수 있을 정도의 비율 지표입니다.)
 
-![Frame 13](/img/reservation-funnel-improvement-with-abtest/Frame_13.jpg)
+![Frame 13](/img/reservation-funnel-improvement-with-abtest/Frame_13.jpg) 
 
 * BO : 똑같은 상품을 팔고 있는데도, 출발점에 따라서 결과가 다르다고요? 
 * PM : 네. 출발점이 부름 PIN인 경우, “여기로 쏘카 부르기”라고 말해주었기 때문에 사용자도 [**부름 차량을 빌려야지]라고 명확히 결심한 상황**이라고 생각할 수 있을 것 같아요. 부름에 대한 이해, 결제 결심이 반영된 것 아닐까요?
