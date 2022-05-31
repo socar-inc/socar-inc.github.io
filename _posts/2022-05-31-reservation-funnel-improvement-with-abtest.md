@@ -226,7 +226,9 @@ PM과 데이터 사이언스팀은 아래와 같이 A/B TEST 실험을 설정하
 
 (2022-01-24~ 2022-04~24 총 기간)
 
-|![실험 결과 1.jpg](/img/reservation-funnel-improvement-with-abtest/exp_result_1.jpg)|![실험 결과 2.jpg](/img/reservation-funnel-improvement-with-abtest/exp_result_2.jpg)|![실험 결과 2.jpg](/img/reservation-funnel-improvement-with-abtest/exp_result_3.jpg)|
+|![실험 결과 1.jpg](/img/reservation-funnel-improvement-with-abtest/exp_result_1.jpg)|![실험 결과 2.jpg](/img/reservation-funnel-improvement-with-abtest/exp_result_2.jpg)|
+|![실험 결과 3.jpg](/img/reservation-funnel-improvement-with-abtest/exp_result_3.jpg){: width="50%" height="50%" style="display: block; margin: 0 auto"}|
+
 
 1. 예약 페이지 입장 후, **[결제 확인] 페이지에 도달한 방문 전환율**
    * 기존 화면을 본 그룹에 비해, 신규 페이지 그룹의 방문 전환율이 **-6% p 적다.**
