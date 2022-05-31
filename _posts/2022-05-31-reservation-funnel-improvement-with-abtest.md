@@ -4,7 +4,7 @@ title: "쏘카 PM의 차량 예약 퍼널 단계 개선기(feat. AB Test)"
 subtitle: "AB Test 기반 신규 UX 개선 프로세스"
 date: 2022-05-31 09:00:00 +0900
 category: product
-background: '/img/reservation-funnel-improvement-with-abtest/background-2.jpg' 
+background: '/img/reservation-funnel-improvement-with-abtest/background-3.png' 
 author: lucia
 comments: true
 tags:
@@ -170,9 +170,13 @@ tags:
 
 가설에서 제안한 **[부름 사용자] 관점에서 설계한 부름 전용 ‘신규 예약 페이지’**를 고민하기 시작합니다. 디자이너와 PM이 사용성 테스트에서 수집한 인사이트들을 바탕으로  와이어 프레임을 새롭게 스케치했습니다. 그리고 가벼운 프로토타입으로 만들어 주변 동료들에게 직접 써보게 하고, 이를 통해 우리가 생각한 UX가 기존 사용자의 문제를 해결하는지 확인하며 스케치를 진행했습니다.
 
-![prototype-1](/img/reservation-funnel-improvement-with-abtest/prototype-1.png)
+![prototype-1](/img/reservation-funnel-improvement-with-abtest/prototype-1.png)*와이어프레임 스케치*
 
-![prototype-2](/img/reservation-funnel-improvement-with-abtest/prototype-2.png)
+![prototype-before](/img/reservation-funnel-improvement-with-abtest/prototype-before.jpg) *UX 변경 전, 기존 사용자 관점의 문제*
+
+![prototype-after](/img/reservation-funnel-improvement-with-abtest/prototype-after.jpg)*프로토타입 구상*
+
+
 
 #### 2.2.2. 실행 방법 고르기
 
@@ -222,14 +226,12 @@ PM과 데이터 사이언스팀은 아래와 같이 A/B TEST 실험을 설정하
 
 (2022-01-24~ 2022-04~24 총 기간)
 
-![Frame 22.jpg](/img/reservation-funnel-improvement-with-abtest/Frame_22.jpg)
+|![실험 결과 1.jpg](/img/reservation-funnel-improvement-with-abtest/exp_result_1.jpg)|![실험 결과 2.jpg](/img/reservation-funnel-improvement-with-abtest/exp_result_2.jpg)|![실험 결과 2.jpg](/img/reservation-funnel-improvement-with-abtest/exp_result_3.jpg)|
 
 1. 예약 페이지 입장 후, **[결제 확인] 페이지에 도달한 방문 전환율**
    * 기존 화면을 본 그룹에 비해, 신규 페이지 그룹의 방문 전환율이 **-6% p 적다.**
-   * 기존과는 달리 첫 페이지에서 부름에 서비스에 대해서 명확하게 설명했기 때문이라고 생각했습니다.
-
-결제 직전 페이지에는 결국, 진짜 부름에 관심 있는 사용자만 남았습니다.
-
+   * 기존과는 달리 첫 페이지에서 부름에 서비스에 대해서 명확하게 설명했기 때문이라고 생각했습니다. 
+   * 결제 직전 페이지에는 결국, 진짜 부름에 관심 있는 사용자만 남았습니다.
 
 2. [결제 확인] 페이지에서 **[차량 예약]한 예약 전환율**
    * 기존 화면을 본 그룹에 비해, 신규 페이지 그룹의 예약 전환율이 **+21.8% p 많다.**
