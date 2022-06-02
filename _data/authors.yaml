@@ -93,3 +93,7 @@ kp:
 esther:
   name: 에스더
   image: '/assets/authors/default.png'
+
+lucia:
+  name: 루시아
+  image: '/assets/authors/lucia.png'
