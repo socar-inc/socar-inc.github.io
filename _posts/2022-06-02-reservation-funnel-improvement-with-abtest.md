@@ -110,9 +110,7 @@ tags:
 
 차량 예약 데이터를 확인했을 때, 부름 사용자는 왕복과 **나이, 대여 시간에 차이**를 보인다는 점을 발견했습니다. (아래 데이터는 일정 기간 동안의 평균치입니다.)
 
-|![segment-1](/img/reservation-funnel-improvement-with-abtest/segment-1.png)|![segment-2](/img/reservation-funnel-improvement-with-abtest/segment-2.png)|
-|부름 사용자의 3~40대 비중이 약 **`10%`** 높습니다.|부름 차량의 예약시간이 **`2.3배`** 더 깁니다.|
-
+![segments](/img/reservation-funnel-improvement-with-abtest/segments.jpg)
 그리고 실제 부름을 애용하는 사용자들에게 전화 인터뷰(In-depth interview)를 진행했습니다.
 
 * **차에 실어야 할 짐이 있거나, 승차할 동행이 많은 경우, 야간에 대여를 시작하는 경우 등 특정한 TPO에 차를 부름으로 불러서 이용한다**는 패턴이 있었습니다.
