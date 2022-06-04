@@ -4,7 +4,7 @@ title: "쏘카 데이터 그룹 - 데이터 사이언티스트 인턴 9개월 �
 subtitle: "데이터 사이언티스트 인턴기"
 date: 2020-08-20 05:00:00 +0900
 category: data
-background: '/assets/images/andrea-enriquez-cousino-4hBCxfrlpoM-unsplash.jpg'
+background: '/img/big_wheel.jpg'
 author: yamani
 comments: true
 tags:

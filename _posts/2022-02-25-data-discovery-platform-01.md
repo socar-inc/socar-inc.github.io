@@ -4,7 +4,7 @@ title:  "데이터 디스커버리 플랫폼 도입기 - 1편. 데이터 디스�
 subtitle: Datahub 도입기
 date: 2022-02-25 11:00:00 +0900
 category: data
-background : "/assets/images/discovery-bg.jpg"
+background : /img/data-discovery-platform-01/discovery-bg.jpg"
 author: dini
 comments: true
 tags:

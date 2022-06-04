@@ -4,7 +4,7 @@ title: "쏘카의 관제 장치(Telematics Device)가 하는 일"
 subtitle: "쏘카 차량에 장착된 IoT 장비 소개"
 date: 2022-02-15 16:00:00 +0900
 category: mobility
-background: '/assets/images/control-device-with-car-sharing.jpg'
+background: '/img/control-device-with-car-sharing/control-device-with-car-sharing.jpg'
 author: juno
 comments: true
 tags:
