@@ -4,7 +4,7 @@ title: 데이터 디스커버리 플랫폼 도입기 - 2편. GKE에 Datahub 구�
 subtitle: feat. 메타데이터 플랫폼이 실제로 배포되기까지 
 date: 2022-03-16 16:00:00 +0900
 category: data
-background : "/assets/images/cloud-bg.jpg"
+background : "/img/data-discovery-platform-02/cloud-bg.jpg"
 author: dini
 comments: true
 tags:

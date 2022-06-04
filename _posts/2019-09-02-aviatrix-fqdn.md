@@ -4,7 +4,7 @@ title: "AWS VPC에서 FQDN Outbound Control"
 subtitle: "Aviatrix Gateway를 이용한 FQDN Outbound Control"
 date: 2019-09-02 20:00:00 +0900
 category: security
-background: '/assets/images/andrea-enriquez-cousino-4hBCxfrlpoM-unsplash.jpg'
+background: '/img/big_wheel.jpg'
 author: issac
 comments: true
 tags:

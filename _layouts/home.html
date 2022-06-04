@@ -44,7 +44,7 @@ layout: default
             {% assign post_authors = post.author | split: ", " %}
             {% for post_author in post_authors %}
               {% assign author = site.data.authors[post_author] %}
-              <span class="author"><a href="/authors#{{ author.name }}"><img src="{{ author.image }}">{{ author.name | }}</a></span>
+              <span class="author"><a href="/authors#{{ author.name }}"><img src="{{ author.image }}">{{ author.name }}</a></span>
             {% endfor %}
               <span class="date">{{ post.date | date: '%Y-%m-%d' }}</span>
               <span class="category"><a href="/categories#{{ post.category }}">{{ post.category }}</a></span> 
