@@ -4,7 +4,7 @@ title: "수요일엔 수요미식회, 금요일은 개발밋업회"
 subtitle: "커져가는 개발 조직을 한 몸으로 유지하기 위한 작은 노력"
 date: 2021-11-01 09:00:00 +0900
 category: dev
-background: '/assets/images/socar-developer-meetup.jpg'
+background: '/img/socar-dev-meetup/socar-developer-meetup.jpg'
 author: spock
 comments: true
 tags:

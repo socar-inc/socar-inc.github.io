@@ -4,7 +4,7 @@ title: "쏘카 안드로이드 팀 신입 개발자 미뇽의 입사기"
 subtitle: "쏘카의 입사 전부터 후까지"
 date: 2021-08-19 09:00:00 +0900
 category: dev
-background: "/assets/images/join-in-socar-android.jpg"
+background: "/img/join-in-socar-android/join-in-socar-android.jpg"
 author: mignon
 comments: true
 tags:

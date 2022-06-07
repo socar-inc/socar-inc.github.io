@@ -4,7 +4,7 @@ title: "Semantic Segmentation을 활용한 차량 파손 탐지 딥러닝 모델
 subtitle: "Developing Car Damage Detection Model using Semantic Segmentation"
 date: 2020-02-14 01:00:00 +0900
 category: data
-background: '/assets/images/andrea-enriquez-cousino-4hBCxfrlpoM-unsplash.jpg'
+background: '/img/big_wheel.jpg'
 author: serena
 comments: true
 tags:

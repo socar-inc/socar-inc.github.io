@@ -21,7 +21,7 @@ layout: default
               {% assign page_authors = page.author | split: ", " %}
               {% for page_author in page_authors %}
                 {% assign author = site.data.authors[page_author] %}
-                <span class="author"><a href="/authors#{{ author.name }}"><img src="{{ author.image }}">{{ author.name | }}</a></span>
+                <span class="author"><a href="/authors#{{ author.name }}"><img src="{{ author.image }}">{{ author.name }}</a></span>
               {% endfor %}
                 <br>
                 <span class="date">{{ page.date | date: '%Y-%m-%d' }}</span>

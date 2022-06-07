@@ -4,7 +4,7 @@ title: "Android Studio 플러그인으로 코드 자동 리팩토링하기"
 subtitle: "IntelliJ platform plugin을 활용한 대량의 Kotlin 코드 수정"
 date: 2022-02-03 17:00:00 +0900
 category: dev
-background: '/assets/images/intellij-plugin/plugin.png'
+background: '/img/intellij-plugin/plugin.png'
 author: jian
 comments: true
 tags:
@@ -143,7 +143,7 @@ Kotlin Compiler를 써서 Parsing 하거나, LSP를 사용해서 수정하는 �
 
 [설명](https://github.com/JetBrains/intellij-platform-plugin-template/tree/v1.1.0#plugin-configuration-file)에도 나와있듯이 `/src/main/resources/META-INF/plugin.xml` 파일에 `applicationService`로 지정된 `MyApplicationService.kt`, `projectService`로 지정된 `MyProjectService.kt`가 Sandbox IDE의 로드 시점에 수행되며, `println`으로 출력하는 메시지가 바깥쪽 IDE의 Run 탭에 출력되는 것을 확인할 수 있었습니다.
 
-![기본 예제 확인](/assets/images/intellij-plugin/sample.png)
+![기본 예제 확인](/img/intellij-plugin/sample.png)
 
 ### Kotlin 코드 다루기
 하지만 우리가 플러그인을 통해 최종적으로 이름 변경을 하기 위해서는 Kotlin 코드를 인식하고 분석하는 기능이 필요합니다.
@@ -197,7 +197,7 @@ fun printKtClassNames(project: Project) {
 
 아래의 스크린샷은 기본 예제 프로젝트의 `MyProjectService.kt`파일을 수정한 뒤에 `Run Plugin`을 통해 실행된 테스트용 Sandbox IDE에서 동일한 프로젝트를 열었을 때 바깥쪽 IDE에 값들이 출력되는 모습입니다.
 
-![KtClass 이름 출력](/assets/images/intellij-plugin/ktclass.png)
+![KtClass 이름 출력](/img/intellij-plugin/ktclass.png)
 
 Sandbox IDE에서 열린 프로젝트의 `KtClass` 이름들이 아래쪽의 콘솔 창에 찍힌 것을 확인해 볼 수 있습니다.
 다만 프로젝트가 열리는 시점에는 Indexing이 끝나지 않아 모듈이나 파일 목록들이 아직 구성되지 않은 상태일 수도 있기 때문에 위와 같이 `DumbService.getInstance(project).runWhenSmart()`를 사용해서 Indexing이 완료된 후에 실행될 수 있도록 했습니다.
@@ -209,7 +209,7 @@ Sandbox IDE에서 열린 프로젝트의 `KtClass` 이름들이 아래쪽의 콘
 현재 활성화된 파일의 PSI tree가 어떤 식으로 구성되어 있는지 간단하게 확인해 보기 위해 [이 문서](https://plugins.jetbrains.com/docs/intellij/explore-api.html#31-use-internal-mode-and-psiviewer)에 나와 있는 것처럼 IntelliJ Plugins Marketplace에 있는 *PsiViewer* 플러그인을 사용했습니다.
 
 해당 플러그인을 사용하면 아래와 같이 현재 커서가 있는 곳의 PSI element가 전체 트리의 어떤 위치에 있는지 파악하는 것이 가능합니다.
-![PsiViewer plugin](/assets/images/intellij-plugin/psi-viewer.png)
+![PsiViewer plugin](/img/intellij-plugin/psi-viewer.png)
 
 이러한 기능을 바탕으로 PSI tree를 확인해서 우리가 수정할 대상인 `bindView` Delegate를 사용하는 프로퍼티 목록을 가져올 수 있습니다.
 가져오는 방법은 여러 가지가 있겠지만, 저는 아래와 같은 코드로 접근했습니다.
@@ -315,7 +315,7 @@ class BindViewRefactoring : AnAction() {
 ---
 ## 마무리하며
 이러한 과정을 거쳐서 작성한 플러그인 코드를 빌드 하여 Android Studio에 설치하고, 리팩토링에 빠르게 사용해 볼 수 있었습니다.
-![Android Studio에 설치한 쏘카 플러그인](/assets/images/intellij-plugin/plugin.png)
+![Android Studio에 설치한 쏘카 플러그인](/img/intellij-plugin/plugin.png)
 
 또한 작성한 플러그인의 기능에는 전처리/후처리를 좀 더 편하게 할 수 있도록 위에서 언급했던 프로퍼티 변경 기능 외에도 아래와 같은 기능들을 추가했습니다.
 - View Binding Migration 페이지에 있는 것처럼 레이아웃을 `R.layout.~` Resource 대신 `...Binding` 클래스로부터 받아와서 초기화하는 코드 삽입 기능
