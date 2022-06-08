@@ -4,7 +4,7 @@ title: "차량용 단말을 위한 IoT 파이프라인 구축기 #1"
 subtitle: "더 빨리, 더 많이, 더 믿을 수 있게"
 date: 2022-01-06 09:00:00 +0900
 category: mobility
-background: '/assets/images/mike-benna-X-NAMq6uP3Q-unsplash.jpg'
+background: '/img/iot-pipeline-1/mike-benna-X-NAMq6uP3Q-unsplash.jpg'
 author: spock
 comments: true
 tags:

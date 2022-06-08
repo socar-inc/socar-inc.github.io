@@ -4,7 +4,7 @@ title: "딥러닝 모델 Serving 간단 구축기"
 subtitle: "(feat. AWS SQS + Python Application + Kubernetes + Git & Rancher)"
 date: 2020-03-10 17:00:00 +0900
 category: data
-background: '/assets/images/fabrizio-magoni-boaDpmC-_Xo-unsplash.jpg'
+background: '/img/posts_dl_serving/fabrizio-magoni-boaDpmC-_Xo-unsplash.jpg'
 author: thomas
 comments: true
 tags:

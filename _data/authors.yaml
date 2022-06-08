@@ -97,3 +97,7 @@ esther:
 carrot:
   name: 캐롯
   image: '/assets/authors/carrot.png'
+
+lucia:
+  name: 루시아
+  image: '/assets/authors/lucia.png'
