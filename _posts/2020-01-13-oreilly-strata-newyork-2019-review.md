@@ -4,7 +4,7 @@ title: "O'reilly Strata Data Conference New York 2019 후기"
 subtitle: "O'reilly Strata Data Conference New York 2019 후기"
 date: 2020-01-13 00:00:00 +0900
 category: data
-background: '/assets/images/andrea-enriquez-cousino-4hBCxfrlpoM-unsplash.jpg'
+background: '/img/big_wheel.jpg'
 author: kyle
 comments: true
 tags:

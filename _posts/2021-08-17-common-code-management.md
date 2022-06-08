@@ -4,7 +4,7 @@ title: "쏘카 백오피스 팀 내 공통 코드(Common Code) 관리 변천사"
 subtitle: "공통 코드 관리 설계, 공통 코드 테이블 꼭 필요한가요? (Feat. Gradle Plugin & Kotlin PSI)"
 date: 2021-08-17 15:10:00 +0900
 category: dev
-background: '/assets/images/yan-ots-FF14FKgecyM-unsplash.jpg'
+background: '/img/common-code-management/bookshelf.jpg'
 author: dorma
 comments: true
 tags:
@@ -52,7 +52,7 @@ tags:
 ## (1차) 공통 코드 구조 설계 및 초기 구현
 
 
-![공통코드-1차](/assets/images/common-code1.png)
+![공통코드-1차](/img/common-code-management/common-code1.png)
 
 ### 팀에서 결정한 내용
 
@@ -166,7 +166,7 @@ getCodeLabel = (codes, value) => {
 ## (2차) 불편함 개선 작업(DB를 빼버리자!)
 
 
-![공통코드-2차](/assets/images/common-code2.png)
+![공통코드-2차](/img/common-code-management/common-code2.png)
 
 ### 공통 코드를 변경할 때마다 DB와 코드를 Sync 시키는 작업을 없애봅시다
 * DB에서 직접 데이터를 확인할 때 공통 코드 테이블을 join해서 `공통 코드 -> 라벨`로 변경해서 쿼리하는 경우가 생각보다 없었습니다.
@@ -196,7 +196,7 @@ getCodeLabel = (codes, value) => {
 
 
 
-![공통코드-3차](/assets/images/common-code3.png)
+![공통코드-3차](/img/common-code-management/common-code3.png)
 
 ### DB가 사라졌으니 Kotlin 코드를 분석해서 JavaScript 코드를 생성해 봅시다.
 * 팀 내에 프로젝트가 한 개가 아니니 여러 프로젝트에서 공통으로 쓸 수 있었으면 합니다.
