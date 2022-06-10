@@ -3,7 +3,7 @@ dorma:
   image: '/assets/authors/dorma.jpeg'
 
 issac:
-  name: 이삭
+  name: 아이작
   image: '/assets/authors/default.png'
 
 kyle:
@@ -93,6 +93,10 @@ kp:
 esther:
   name: 에스더
   image: '/assets/authors/default.png'
+
+carrot:
+  name: 캐롯
+  image: '/assets/authors/carrot.png'
 
 lucia:
   name: 루시아
