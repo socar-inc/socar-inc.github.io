@@ -106,18 +106,25 @@ A와 B라는 서로 다른 두 고객이 각각 08시 ~ 12시와 20시 ~ 24시 �
 ### 2.1 최적화 문제(Optimization Problem)의 접근법
 
 최적화 문제(Optimization Problem)는 어떤 목적 함수(Objective Function)의 함수 값을 최대화 또는 최소화하는 변수의 해 값을 찾는 유형의 문제를 뜻합니다.
+
 최적화 문제를 푸는 방법으로는 크게 두 가지가 있는데, 첫 번째는 알고리즘을 사용하는 것이고, 두 번째는 해찾기 도구인 솔버(Solver)를 활용하는 것입니다.
 
-알고리즘으로 최적화 문제를 접근하는 방법도 두 가지로 나눌 수 있는데 먼저 해당 문제에 특정된 알고리즘을 사용 또는 개발하는 방법이 있습니다. 특정 문제를 풀기 위한 알고리즘의 대표적 예시로는 최단거리경로를 구하는 [다익스트라 알고리즘 \(Dijkstra's Algorithm\)](https://ko.wikipedia.org/wiki/%EB%8D%B0%EC%9D%B4%ED%81%AC%EC%8A%A4%ED%8A%B8%EB%9D%BC_%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98) 을 들 수 있습니다. 문제에 딱 맞는 알고리즘을 개발하면 알고리즘으로 도출된 해가 최적임을 보장할 수 있다는 큰 장점이 존재합니다. 하지만 그런 알고리즘을 개발하는 데까지 시간과 노력이 매우 많이 필요하기 때문에 단점 또한 명확합니다.
+알고리즘으로 최적화 문제를 접근하는 방법도 두 가지로 나눌 수 있는데 먼저 **해당 문제에 특정된 알고리즘을 사용 또는 개발**하는 방법이 있습니다. 특정 문제를 풀기 위한 알고리즘의 대표적 예시로는 최단거리경로를 구하는 [다익스트라 알고리즘 \(Dijkstra's Algorithm\)](https://ko.wikipedia.org/wiki/%EB%8D%B0%EC%9D%B4%ED%81%AC%EC%8A%A4%ED%8A%B8%EB%9D%BC_%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98) 을 들 수 있습니다. 문제에 딱 맞는 알고리즘을 개발하면 알고리즘으로 도출된 해가 최적임을 보장할 수 있다는 큰 장점이 존재합니다. 하지만 그런 알고리즘을 개발하는 데까지 시간과 노력이 매우 많이 필요하기 때문에 단점 또한 명확합니다.
 
-최적화 문제를 알고리즘으로 접근하는 방식의 두 번재 갈래로는 휴리스틱 알고리즘이 있습니다. 
+최적화 문제를 알고리즘으로 접근하는 방식의 두 번재 갈래로는 **휴리스틱 알고리즘**이 있습니다. 
+
 휴리스틱 알고리즘은 정확한 최적해를 효율적으로 찾을 수 있는 방법이 없을 때 해의 최적성을 희생해 더 빠르고 효율적으로 해를 찾는 알고리즘을 의미하고, 유전 알고리즘(Genetic Algorithm), 개미 집단 알고리즘(Ant Colony Optimization Algorithm) 등이 잘 알려진 예시입니다. 
-문제 유형과 관계없이 쉽고 빠르게 근사최적해를 구할 수 있다는 이점이 있지만 휴리스틱적 접근은 계산보다는 탐색에 더 가깝기 때문에 찾은 해가 최적임을 보장할 수 없다는 단점이 있습니다.
 
-알고리즘을 직접 구현하지 않고 Solver를 활용하여 모델링을 통해 최적화 문제를 푸는 방법도 존재합니다. 
+**문제 유형과 관계없이 쉽고 빠르게 근사최적해를 구할 수 있다는 이점이 있지만 휴리스틱적 접근은 계산보다는 탐색에 더 가깝기 때문에 찾은 해가 최적임을 보장할 수 없다는 단점**이 있습니다.
+
+알고리즘을 직접 구현하지 않고 **Solver를 활용하여 모델링을 통해 최적화 문제를 푸는 방법**도 존재합니다. 
+
 Solver는 수학적으로 표현된 최적화 문제의 해를 구하는 최적해 탐색 도구로, 그 종류로는 [Gurobi](https://www.gurobi.com/), [CPLEX](https://www.ibm.com/kr-ko/analytics/cplex-optimizer) 등이 상업적 Solver와 [Pyomo](http://www.pyomo.org/), [OR-Tools](https://developers.google.com/optimization) 등의 오픈 소스 Solver 등이 있습니다. 
-Solver로 최적화 문제를 풀기 위해서는 문제를 수식으로 모델링해야 하는데 이 과정을 [수학적 모델링(Mathematical Programming)](https://en.wikipedia.org/wiki/Mathematical_model) 이라고 부릅니다. 
+
+Solver로 최적화 문제를 풀기 위해서는 문제를 수식으로 모델링해야 하는데 이 과정을 [수학적 모델링(Mathematical Programming)](https://en.wikipedia.org/wiki/Mathematical_model)이라고 부릅니다. 
+
 문제의 성격이 선형 또는 비선형인지에 따라 [선형 계획법(Linear Programming)](https://en.wikipedia.org/wiki/Linear_programming) 과 [비선형 계획법(Nonlinear Programming)](https://en.wikipedia.org/wiki/Nonlinear_programming) 으로 나뉘고, 구하고자 하는 해가 정수로 한정되는 경우는 [정수 계획법(Integer Programming)](https://en.wikipedia.org/wiki/Integer_programming) 으로 정의할 수 있습니다. 
+
 수학적 모델링을 통해 수식화된 문제를 풀기위해 Solver를 사용하면 매우 빠른 속도로 최적해 또는 최적해에 매우 근접한 해를 도출할 수 있다는 매우 큰 장점이 존재합니다. 
 하지만 문제가 복잡할수록 시간이나 컴퓨팅 파워 같은 연산을 위한 리소스가 많이 요구되어 비용적인 측면을 고려해야한다는 단점이 있습니다.
 
