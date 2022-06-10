@@ -103,27 +103,46 @@ A와 B라는 서로 다른 두 고객이 각각 08시 ~ 12시와 20시 ~ 24시 �
 
 ## 2. 예약 테트리스 최적화 모델링
 
-### 2.1 제약조건 계획법(Constraint Programming)
+### 2.1 최적화 문제(Optimization Problem)의 접근법
 
-예약 테트리스 프로젝트는 차량 배정 최적화 모델링을 위해 **제약조건 계획법(Constraint Programming)**을 사용합니다. 이 방법론은 산업공학과에서 주로 배우는 최적화 방법론입니다.
+최적화 문제(Optimization Problem)는 어떤 목적 함수(Objective Function)의 함수 값을 최대화 또는 최소화하는 변수의 해 값을 찾는 유형의 문제를 뜻합니다.
+최적화 문제를 푸는 방법으로는 크게 두 가지가 있는데, 첫 번째는 알고리즘을 사용하는 것이고, 두 번째는 해찾기 도구인 솔버(Solver)를 활용하는 것입니다.
 
-최적화 문제란(Optimization Problem) 어떤 목적 함수(Objective Function)의 함수 값을 최대화 또는 최소화하는 변수 조합을 찾는 문제입니다.
+알고리즘으로 최적화 문제를 접근하는 방법도 두 가지로 나눌 수 있는데 먼저 해당 문제에 특정된 알고리즘을 사용 또는 개발하는 방법이 있습니다. 특정 문제를 풀기 위한 알고리즘의 대표적 예시로는 최단거리경로를 구하는 [다익스트라 알고리즘 \(Dijkstra's Algorithm\)](https://ko.wikipedia.org/wiki/%EB%8D%B0%EC%9D%B4%ED%81%AC%EC%8A%A4%ED%8A%B8%EB%9D%BC_%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98) 을 들 수 있습니다. 문제에 딱 맞는 알고리즘을 개발하면 알고리즘으로 도출된 해가 최적임을 보장할 수 있다는 큰 장점이 존재합니다. 하지만 그런 알고리즘을 개발하는 데까지 시간과 노력이 매우 많이 필요하기 때문에 단점 또한 명확합니다.
+
+최적화 문제를 알고리즘으로 접근하는 방식의 두 번재 갈래로는 휴리스틱 알고리즘이 있습니다. 
+휴리스틱 알고리즘은 정확한 최적해를 효율적으로 찾을 수 있는 방법이 없을 때 해의 최적성을 희생해 더 빠르고 효율적으로 해를 찾는 알고리즘을 의미하고, 유전 알고리즘(Genetic Algorithm), 개미 집단 알고리즘(Ant Colony Optimization Algorithm) 등이 잘 알려진 예시입니다. 
+문제 유형과 관계없이 쉽고 빠르게 근사최적해를 구할 수 있다는 이점이 있지만 휴리스틱적 접근은 계산보다는 탐색에 더 가깝기 때문에 찾은 해가 최적임을 보장할 수 없다는 단점이 있습니다.
+
+알고리즘을 직접 구현하지 않고 Solver를 활용하여 모델링을 통해 최적화 문제를 푸는 방법도 존재합니다. 
+Solver는 수학적으로 표현된 최적화 문제의 해를 구하는 최적해 탐색 도구로, 그 종류로는 [Gurobi](https://www.gurobi.com/), [CPLEX](https://www.ibm.com/kr-ko/analytics/cplex-optimizer) 등이 상업적 Solver와 [Pyomo](http://www.pyomo.org/), [OR-Tools](https://developers.google.com/optimization) 등의 오픈 소스 Solver 등이 있습니다. 
+Solver로 최적화 문제를 풀기 위해서는 문제를 수식으로 모델링해야 하는데 이 과정을 [수학적 모델링(Mathematical Programming)](https://en.wikipedia.org/wiki/Mathematical_model) 이라고 부릅니다. 
+문제의 성격이 선형 또는 비선형인지에 따라 [선형 계획법(Linear Programming)](https://en.wikipedia.org/wiki/Linear_programming) 과 [비선형 계획법(Nonlinear Programming)](https://en.wikipedia.org/wiki/Nonlinear_programming) 으로 나뉘고, 구하고자 하는 해가 정수로 한정되는 경우는 [정수 계획법(Integer Programming)](https://en.wikipedia.org/wiki/Integer_programming) 으로 정의할 수 있습니다. 
+수학적 모델링을 통해 수식화된 문제를 풀기위해 Solver를 사용하면 매우 빠른 속도로 최적해 또는 최적해에 매우 근접한 해를 도출할 수 있다는 매우 큰 장점이 존재합니다. 
+하지만 문제가 복잡할수록 시간이나 컴퓨팅 파워 같은 연산을 위한 리소스가 많이 요구되어 비용적인 측면을 고려해야한다는 단점이 있습니다.
+
+위에서 다룬 방법론은 다음과 같이 정리할 수 있습니다.
+
+![](/img/reservation-tetris/optimization-methods.png){: width="100%"}
+
+**예약 테트리스 프로젝트에서는 Solver를 사용하여 최적화 문제를 해결하고 있습니다.** 직접 서비스에 사용하는 서비스인만큼 최대한 최적에 가까운 해를 도출하는 것이 필요했고, 알고리즘을 직접 개발하는 것 대비 훨씬 짧은 시간 안에 좋은 결과를 도출할 수 있었기 때문입니다. 연산에 필요한 컴퓨팅 파워는 후술할 GCP(Google Cloud Platform)의 힘을 빌려 단점으로 꼽히는 리소스 측면도 충분히 해결할 수 있었기 때문에 최적화 문제의 접근법 중 가장 적합한 방법론이라고 판단했습니다.
 
 
-최적화 문제를 푸는 다양한 방법 중 저희가 선택한 제약조건 계획법(Constraint Programming)이 무엇인지 짚고 넘어가겠습니다.
+### 2.2 정수 계획법(Integer Programming)
 
-[제약조건 계획법(Constraint Programming)](https://en.wikipedia.org/wiki/Constraint_programming)은 제약조건으로 표현된 해 공간에서 조합 최적화(Combinatorial Optimization) 문제를 푸는 최적화 기법입니다.
+예약 테트리스 프로젝트는 차량 배정 최적화 모델링을 위해 **정수 계획법**을 사용합니다.
 
-생소한 단어들이 많아 처음 접하는 개념처럼 느낄 수도 있지만 일차 부등식을 활용한 문제를 풀어본 경험이 있다면 낯설지 않다고 느낄 것입니다.
+구체적인 모델을 다루기 전 먼저 정수 계획법이 무엇인지 짚고 넘어가겠습니다.
 
-- "0보다 큰 정수 x와 y가 아래와 같은 조건을 만족할 때, k값을 최대화하는 x, y를 찾으면?" 
+[정수 계획법(Integer Programming)](https://en.wikipedia.org/wiki/Integer_programming) 은 주로 선형 제약조건으로 표현된 해 공간에서 조합 최적화(Combinatorial Optimization) 문제를 푸는 최적화 기법입니다.
 
+생소한 단어들이 많아 처음 접하는 개념처럼 느낄 수도 있지만 다음과 유사한 일차 부등식 문제를 풀어본 경험이 있다면 낯설지 않다고 느낄 것입니다.
+
+- "0보다 큰 정수 x와 y가 아래와 같은 조건을 만족할 때, k값을 최대화하는 x, y를 찾으면?"
 
 ![](/img/reservation-tetris/cp-example.png){: width="100%"}
 
-
-이런 유형의 문제가 바로 제약조건 계획법을 사용할 수 있는 간단한 예라고 할 수 있습니다.
-
+이런 유형의 문제가 바로 정수 계획법을 사용할 수 있는 간단한 예라고 할 수 있습니다.
 
 우리에게 익숙한 이 문제를 최적화 모델의 3요소라 할 수 있는 **제약조건, 결정변수, 목적함수**로 설명하겠습니다.
 
@@ -131,24 +150,21 @@ A와 B라는 서로 다른 두 고객이 각각 08시 ~ 12시와 20시 ~ 24시 �
 	- 특정 제약을 거는 조건입니다. 예를 들어 x는 0 보다 큰 값이다, -x와 y를 더하면 2보다 작다입니다.
 	- x, y축과 부등식으로 표현된 두 직선이 x와 y가 가질 수 있는 값을 한정하는 **제약조건**이 됩니다
 - 결정변수(Decision Variable)
-	- 우리가 알고자하는 변수인 x, y는 k값을 결정하는 **결정변수**로 정의할 수 있습니다
-	- 모든 제약조건을 만족하는 결정변수 값의 집합을 **해 공간(Solution Space)**라고 합니다
+    - 우리가 알고자하는 변수인 x, y는 k값을 결정하는 **결정변수**로 정의할 수 있습니다
+    - 모든 제약조건을 만족하는 결정변수 값의 집합을 **해 공간(Solution Space)**라고 합니다
+    - 해 공간이 정수로만 이루어져 있기 때문에 정수 계획법을 사용하게 됩니다
 - 목적 함수(Objective Function)
-	- 최대화하고자 하는 값 k는 이 문제의 목적이 되는 함수로 **목적함수**라고 부릅니다
+    - 최대화하고자 하는 값 k는 이 문제의 목적이 되는 함수로 **목적함수**라고 부릅니다
+    - 목적함수가 결정변수에 대해 선형 관계를 가지면 선형 계획법, 제곱 등의 비선형 관계를 가지면 비선형 계획법이 됩니다
+    - 이 문제는 k가 x와 y에 대해 일차식의 형식을 띄고 있기 때문에 **정수 선형 계획법(Integer Linear Programming)** 의 예시로 볼 수 있습니다
 
 위 문제에서 각 요소들을 표시하자면 다음처럼 표현할 수 있습니다.
 
 ![](/img/reservation-tetris/cp-example-explained.png){: width="100%"}
 
-제약조건 계획법은 정의된 조합 최적화 문제에서 제약조건을 만족하는 해 공간을 구하고, 목적 함수가 있는 경우 그 값을 최대화/최소화하는 결정변수의 조합을 탐색하는 최적화 기법이라고 할 수 있습니다.
-
-제약조건 계획법 외에도 다양한 방법을 고려할 수 있습니다.
-
-
-
 <br>
 
-### 2.2 최적화 지표 정의하기 : 어떤 상태가 더 '최적'일까?
+### 2.3 최적화 지표 정의하기 : 어떤 상태가 더 '최적'일까?
 
 예약 테트리스 모델링에서 가장 어려운 부분은 **어떤 차량 배정 상태가 더 "최적"인지를 수치적으로 판단할 수 있는 지표를 정의**하는 것이었습니다.
 
@@ -172,7 +188,7 @@ A와 B라는 서로 다른 두 고객이 각각 08시 ~ 12시와 20시 ~ 24시 �
 
 <br>
 
-### 2.3 최적화 모델 정의하기
+### 2.4 최적화 모델 정의하기
 
 예약 테트리스의 최적화 모델은 다음과 같이 정의됩니다.
 
@@ -188,13 +204,13 @@ A와 B라는 서로 다른 두 고객이 각각 08시 ~ 12시와 20시 ~ 24시 �
 
 ![](/img/reservation-tetris/formulation.png){: width="100%"}
 
-### 2.4 최적화 모델 구현하기 : Google OR-Tools
+### 2.5 최적화 모델 구현하기 : Google OR-Tools
 
 수식화한 모델을 코드로 구현하고 최적해를 찾기 위해서는 Solver가 필요합니다.
 
 예약 테트리스의 최적화 모델은 구글의 오픈소스 Solver인 [Google OR-Tools](https://developers.google.com/optimization)의 파이썬 패키지로 구현하였습니다.
 
-Google OR-Tools가 지원하는 Solver 중 조합 최적화 문제를 위한 [CP-SAT](https://developers.google.com/optimization/cp/cp_solver) Solver는 무료로 사용할 수 있는 오픈소스임에도 [뛰어난 성능](https://www.minizinc.org/challenge2021/results2021.html)을 가지고 있고, 사용자의 입맛에 맞는 커스텀 설정들을 지원하기 때문에 이번 프로젝트에 적합하다고 판단했습니다.
+Google OR-Tools가 지원하는 Solver 중 조합 최적화 문제를 위한 [CP-SAT](https://developers.google.com/optimization/cp/cp_solver) Solver는 무료로 사용할 수 있는 오픈소스임에도 [뛰어난 성능](https://www.minizinc.org/challenge2021/results2021.html) 을 가지고 있고, 사용자의 입맛에 맞는 커스텀 설정들을 지원하기 때문에 이번 프로젝트에 적합하다고 판단했습니다.
 
 제약조건을 수식화하는 것도 직관적이기 때문에 개발 난이도도 높지 않은 편입니다. 최적화 문제를 푸는 분이 계시다면 Google Or-Tools Solver를 추천드립니다.
 
