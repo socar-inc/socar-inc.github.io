@@ -1,10 +1,10 @@
 ---
 layout: post
-title: "쏘카 예약을 효율적으로 - 최적화 알고리즘을 활용한 쏘카 예약 테트리스"
-subtitle: "최적화 알고리즘 with 쏘카"
+title: "쏘카 예약을 효율적으로 - 수학적 모델링을 활용한 쏘카 예약 테트리스"
+subtitle: "최적화 문제를 해결하는 과정"
 date: 2022-05-20 09:00:00 +0900
 category: data
-background: '/assets/images/background.jpg'
+background: '/img/reservation-tetris/background.jpg'
 author: carrot, kyle
 comments: true
 tags:
@@ -42,7 +42,7 @@ tags:
 
 - 예약 테트리스 프로젝트 소개
 - 예약 테트리스 최적화 모델링
-- 예약 테트리스 아키텍처
+- 예약 테트리스 모델 배포
 - 예약 테트리스 적용 성과
 - 마무리
 
