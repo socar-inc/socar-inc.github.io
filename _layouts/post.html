@@ -63,9 +63,16 @@ layout: default
       </div>
     </div>
     <!-- disqus comments -->
-    {% if page.comments %}
+    <!-- {% if page.comments %}
       {% include comments.html %}
-    {% endif %}
+    {% endif %} -->
+    <script src="https://utteranc.es/client.js"
+        repo="socar-inc/techblog-comments"
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
   </div>
 
 <script>
