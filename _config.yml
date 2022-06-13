@@ -34,6 +34,3 @@ kramdown:
   input: GFM
   auto_ids: true
   syntax_highlighter: rouge
-
-disqus_url: https://tech.socarcorp.kr
-disqus_id: socar-tech
