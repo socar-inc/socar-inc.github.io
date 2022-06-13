@@ -119,11 +119,11 @@ A와 B라는 서로 다른 두 고객이 각각 08시 ~ 12시와 20시 ~ 24시 �
 
 알고리즘을 직접 구현하지 않고 **Solver를 활용하여 모델링을 통해 최적화 문제를 푸는 방법**도 존재합니다. 
 
-Solver는 수학적으로 표현된 최적화 문제의 해를 구하는 최적해 탐색 도구로, 그 종류로는 [Gurobi](https://www.gurobi.com/), [CPLEX](https://www.ibm.com/kr-ko/analytics/cplex-optimizer) 등이 상업적 Solver와 [Pyomo](http://www.pyomo.org/), [OR-Tools](https://developers.google.com/optimization) 등의 오픈 소스 Solver 등이 있습니다. 
+Solver는 수학적으로 표현된 최적화 문제의 해를 구하는 최적해 탐색 도구로 [Gurobi](https://www.gurobi.com/), [CPLEX](https://www.ibm.com/kr-ko/analytics/cplex-optimizer) 등이 상업적 Solver와 [Pyomo](http://www.pyomo.org/), [OR-Tools](https://developers.google.com/optimization) 등의 오픈 소스 Solver 등이 있습니다. 
 
 Solver로 최적화 문제를 풀기 위해서는 문제를 수식으로 모델링 해야 하는데 이 과정을 [수학적 모델링(Mathematical Programming)](https://en.wikipedia.org/wiki/Mathematical_model)이라고 부릅니다. 
 
-문제의 성격이 선형 또는 비선형인지에 따라 [선형 계획법(Linear Programming)](https://en.wikipedia.org/wiki/Linear_programming) 과 [비선형 계획법(Nonlinear Programming)](https://en.wikipedia.org/wiki/Nonlinear_programming) 으로 나뉘고, 구하고자 하는 해가 정수로 한정되는 경우는 [정수 계획법(Integer Programming)](https://en.wikipedia.org/wiki/Integer_programming) 으로 정의할 수 있습니다. 
+문제의 성격이 선형 또는 비선형인지에 따라 [선형 계획법(Linear Programming)](https://en.wikipedia.org/wiki/Linear_programming)과 [비선형 계획법(Nonlinear Programming)](https://en.wikipedia.org/wiki/Nonlinear_programming)으로 나뉘고, 구하고자 하는 해가 정수로 한정되는 경우는 [정수 계획법(Integer Programming)](https://en.wikipedia.org/wiki/Integer_programming)으로 정의할 수 있습니다. 
 
 수학적 모델링을 통해 수식화된 문제를 풀기 위해 Solver를 사용하면 매우 빠른 속도로 최적해 또는 최적해에 매우 근접한 해를 도출할 수 있다는 매우 큰 장점이 존재합니다. 
 하지만 문제가 복잡할수록 시간이나 컴퓨팅 파워 같은 연산을 위한 리소스가 많이 요구되어 비용적인 측면을 고려해야 한다는 단점이 있습니다.
@@ -138,7 +138,7 @@ Solver로 최적화 문제를 풀기 위해서는 문제를 수식으로 모델�
 
 구체적인 모델을 다루기 전 먼저 정수 계획법이 무엇인지 짚고 넘어가겠습니다.
 
-[정수 계획법(Integer Programming)](https://en.wikipedia.org/wiki/Integer_programming) 은 주로 선형 제약조건으로 표현된 해 공간에서 조합 최적화(Combinatorial Optimization) 문제를 푸는 최적화 기법입니다.
+[정수 계획법(Integer Programming)](https://en.wikipedia.org/wiki/Integer_programming)은 주로 선형 제약조건으로 표현된 해 공간에서 조합 최적화(Combinatorial Optimization) 문제를 푸는 최적화 기법입니다.
 
 생소한 단어들이 많아 처음 접하는 개념처럼 느낄 수도 있지만 다음과 유사한 일차 부등식 문제를 풀어본 경험이 있다면 낯설지 않다고 느낄 것입니다.
 
@@ -148,18 +148,18 @@ Solver로 최적화 문제를 풀기 위해서는 문제를 수식으로 모델�
 
 이런 유형의 문제가 바로 정수 계획법을 사용할 수 있는 간단한 예라고 할 수 있습니다.
 
-우리에게 익숙한 이 문제를 최적화 모델의 3요소라 할 수 있는 **제약조건, 결정변수, 목적함수**로 설명하겠습니다.
+우리에게 익숙한 이 문제를 최적화 모델의 3요소라 할 수 있는 **제약조건, 결정 변수, 목적 함수**로 설명하겠습니다.
 
-- 제약조건(Contraints)
+- 제약조건(Constraints)
 	- 특정 제약을 거는 조건입니다. 예를 들어 x는 0 보다 큰 값이다, -x와 y를 더하면 2보다 작다입니다.
 	- x, y 축과 부등식으로 표현된 두 직선이 x와 y가 가질 수 있는 값을 한정하는 **제약조건**이 됩니다
-- 결정변수(Decision Variable)
-    - 우리가 알고자 하는 변수인 x, y는 k 값을 결정하는 **결정변수**로 정의할 수 있습니다
-    - 모든 제약조건을 만족하는 결정변수 값의 집합을 **해 공간(Solution Space)**라고 합니다
+- 결정 변수(Decision Variable)
+    - 우리가 알고자 하는 변수인 x, y는 k 값을 결정하는 **결정 변수**로 정의할 수 있습니다
+    - 모든 제약조건을 만족하는 결정 변수 값의 집합을 **해 공간(Solution Space)**라고 합니다
     - 해 공간이 정수로만 이루어져 있기 때문에 정수 계획법을 사용하게 됩니다
 - 목적 함수(Objective Function)
-    - 최대화하고자 하는 값 k는 이 문제의 목적이 되는 함수로 **목적함수**라고 부릅니다
-    - 목적함수가 결정변수에 대해 선형 관계를 가지면 선형 계획법, 제곱 등의 비선형 관계를 가지면 비선형 계획법이 됩니다
+    - 최대화하고자 하는 값 k는 이 문제의 목적이 되는 함수로 **목적 함수**라고 부릅니다
+    - 목적 함수가 결정 변수에 대해 선형 관계를 가지면 선형 계획법, 제곱 등의 비선형 관계를 가지면 비선형 계획법이 됩니다
     - 이 문제는 k가 x와 y에 대해 일차식의 형식을 띄고 있기 때문에 **정수 선형 계획법(Integer Linear Programming)**의 예시로 볼 수 있습니다
 
 위 문제에서 각 요소들을 표시하자면 다음처럼 표현할 수 있습니다.
@@ -197,7 +197,7 @@ Solver로 최적화 문제를 풀기 위해서는 문제를 수식으로 모델�
 
 예약 테트리스의 최적화 모델은 다음과 같이 정의됩니다.
 
-- 결정변수: 실제 또는 가상의 예약에 차량의 배정 여부(0 또는 1)
+- 결정 변수: 실제 또는 가상의 예약에 차량의 배정 여부(0 또는 1)
 - 목적 함수: 예약 가능한 가상 예약건수의 최대화
 - 제약조건
 	- 모든 예약은 단 하나의 차량에 배정되어야 한다
@@ -323,7 +323,7 @@ AWS SQS와 GCP Pub/Sub의 큰 차이는 메시지를 저장하는 기간(리텐�
 - 최적화 결과를 쏘카 서비스 서버에게 보냅니다(Push)
 - 쏘카 서비스 서버에선 최적화 결과를 데이터베이스에 반영하고 성공 여부를 다시 최적화 결과 Pub/Sub에 보냅니다(Push)
 - 실행된 최적화 서버는 서버의 CPU, Memory 사용량이 특정 조건이 될 경우(예 : 일정 시간 이상 CPU Usage가 5% 이하인 경우) 최적화 서버를 종료합니다
-- 이 과정에서 선점형 인스턴스가 구글에게 회수된다면, Shutdown Script가 다시 최적화 서버를 실행시킵니다
+- 위 과정에서 선점형 인스턴스가 구글에게 회수된다면, Shutdown Script가 다시 최적화 서버를 실행시킵니다
 
 
 
