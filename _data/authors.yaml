@@ -73,7 +73,7 @@ oliver:
 juno:
   name: 주노
   image: '/assets/authors/juno.png'
-  
+
 marie:
   name: 마리
   image: '/assets/authors/marie.png'
@@ -101,3 +101,11 @@ carrot:
 lucia:
   name: 루시아
   image: '/assets/authors/lucia.png'
+
+sienna:
+  name: 시에나
+  image: '/assets/authors/sienna.png'
+
+blanc:
+  name: 블랑
+  image: '/assets/authors/blanc.jpg'
