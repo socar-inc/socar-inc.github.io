@@ -2,7 +2,10 @@
 layout: post 
 title: "데이터에 신뢰성과 재사용성까지, Analytics Engineering with dbt"
 subtitle: "dbt enterprise usecase"
-date: 2022-07-13 09:00:00 +0900 category: data background: '/img/reservation-tetris/background.jpg' author: humphrey
+date: 2022-07-13 09:00:00 +0900 
+category: data 
+background: '/img/reservation-tetris/background.jpg' 
+author: humphrey
 comments: true 
 tags:
 - data 
