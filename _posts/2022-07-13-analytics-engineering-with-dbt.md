@@ -6,11 +6,12 @@ date: 2022-07-13 09:00:00 +0900
 category: data 
 background: '/img/reservation-tetris/background.jpg' 
 author: humphrey
-comments: true 
+comments: true
 tags:
-- data 
-- analytics-engineering 
-- data-engineering
+    - data
+    - analytics-engineering 
+    - data-engineering
+
 ---
 
 
