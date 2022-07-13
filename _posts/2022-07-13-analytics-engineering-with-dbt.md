@@ -524,6 +524,7 @@ ODS 레이어를 추가하게 된 가장 큰 이유 중 하나는, 소다 스토
 Macro를 통해서 쿼리를 이용해서 아래와 같이 검증하도록 만들었습니다.
 
 ```sql
+
 {% test compare_v1_and_v2(model, model_name) %}
 {% set v1_soda_store_dataset_ref = 'v1_table' %}
 
@@ -540,6 +541,7 @@ union all
 )
 
 {% endtest %}
+
 ```
 
 ```yaml
