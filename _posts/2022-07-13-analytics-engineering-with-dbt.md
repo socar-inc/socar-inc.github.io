@@ -9,9 +9,8 @@ author: humphrey
 comments: true
 tags:
     - data
-	- analytics_engineering
-	- data_engineering
-
+	- analytics-engineering
+	- data-engineering
 ---
 
 
