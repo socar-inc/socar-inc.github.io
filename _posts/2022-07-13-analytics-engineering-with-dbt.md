@@ -1,21 +1,3 @@
----
-layout: post 
-title: "데이터에 신뢰성과 재사용성까지, Analytics Engineering with dbt"
-subtitle: "dbt enterprise usecase"
-date: 2022-07-13 09:00:00 +0900 
-category: data 
-background: '/img/reservation-tetris/background.jpg' 
-author: humphrey
-comments: true
-tags:
-    - data
-    - analytics-engineering 
-    - data-engineering
-
----
-
-
-<br>
 안녕하세요, 데이터엔지니어링그룹 데이터플랫폼팀 험프리입니다.
 
 데이터엔지니어링그룹은 플랫폼, 웨어하우스, 솔루션 팀으로 나누어 쏘카의 구성원들 누구나 쏘카의 데이터를 쉽고 빠르게 조회할 수록 최적의 방안을 마련하고 지원하는 일을 수행하고 있습니다. 그 중 플랫폼 팀은 엔지니어링
@@ -547,13 +529,13 @@ union all
 ```yaml
 version: 2
 models:
-- name: mart_model
-	tests:
-		compare_v1_and_v2:
-			model_name: "table_from_v1"
-  columns:
-  - name: column1
-    description: 컬럼1
+  - name: mart_model
+  tests:
+    compare_v1_and_v2:
+      model_name: "table_from_v1"
+    columns:
+      - name: column1
+        description: 컬럼1
 ```
 
 **기존 데이터에서 논리적 및 통계적인 오류가 없어야 한다**
@@ -569,7 +551,8 @@ models:
 예를 들어 다음과 같은 테스트를 추가해보겠습니다.
 
 ```sql
-version: 2
+version
+: 2
 sources:
 - name: <your-database>
   database: <your-schema>
@@ -585,16 +568,17 @@ dbt run을 통해서 아래와 같은 SQL로 변환됩니다.
 
 ```sql
 with validation_errors as (
-    select
-        col1, col2, col3
+    select col1,
+           col2,
+           col3
     from `your-database`.`your-schema`.`your-table`
-    where 1=1
-    
-    group by
-        col1, col2, col3
+    where 1 = 1
+
+    group by col1, col2, col3
     having count(*) > 1
 )
-select * from validation_errors # HERE
+select *
+from validation_errors # HERE
 ```
 
 dbt로 만들어진 테스트들은 마지막 SELECT 문에서 0개 이상의 로우가 리턴 되면 Fail, 아닌 경우에는 Pass하도록 기본 설정 되어있습니다. 자세한 설명은 dbt test 공식 문서를 참고해주세요.
@@ -628,7 +612,7 @@ jobs:
   check_pr:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
     ...
     - name: Incremental CI
       run: |
@@ -655,13 +639,13 @@ jobs:
     runs-on: ubuntu-latest
     if: "!startsWith(github.ref, 'refs/tags/v') && !startsWith(github.event.head_commit.message, 'bump:')"
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
     ...
     - name: Full CI
       run: |
         bash scripts/ci.sh full
-		...
-		- name: GitOps Update Dev
+  ...
+  - name: GitOps Update Dev
       id: gitops-update-dev
       continue-on-error: true
       run: |
