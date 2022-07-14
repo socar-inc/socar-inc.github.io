@@ -1,3 +1,19 @@
+---
+layout: post
+title: "데이터에 신뢰성과 재사용성까지, Analytics Engineering with dbt"
+subtitle: "dbt를 현업에서 사용하는 유즈케이스"
+date: 2022-07-14 09:00:00 +0900
+category: data
+background: '/img/reservation-tetris/background.jpg'
+author: humphrey
+comments: true
+tags:
+- data
+- data-engineering
+- analytics-engineering
+
+---
+
 안녕하세요, 데이터엔지니어링그룹 데이터플랫폼팀 험프리입니다.
 
 데이터엔지니어링그룹은 플랫폼, 웨어하우스, 솔루션 팀으로 나누어 쏘카의 구성원들 누구나 쏘카의 데이터를 쉽고 빠르게 조회할 수록 최적의 방안을 마련하고 지원하는 일을 수행하고 있습니다. 그 중 플랫폼 팀은 엔지니어링
