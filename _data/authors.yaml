@@ -101,3 +101,7 @@ carrot:
 lucia:
   name: 루시아
   image: '/assets/authors/lucia.png'
+
+humphrey:
+  name: 험프리
+  image: '/assets/authors/humphrey.png'
