@@ -88,22 +88,17 @@
   $ git clone git@github.com:{본인 Github 계정}/{본인 Github 계정}.github.io.git
   ```
 
-<br>
 
-### 2.2. 글 작성하기
+
+### 2.3. 글 작성 및 확인하기
+> **사전 작업 : settings > pages > source 의 branch 를 `gh-pages` 로 설정해줍니다.**
 - `master` branch 에서 작업합니다.
 - `_posts` 디렉토리에 post를 생성 합니다.
   - 파일명은 `YYYY-MM-DD-<post-name>.md`로 합니다.
   - 본문을 html로 작성할 경우 `.html`도 사용 할 수 있습니다.
-
-<br>
-
-### 2.3. 글 확인하기
-
-- **사전 작업 : settings > pages > source 의 branch 를 `gh-pages` 로 설정해줍니다.**
 - master branch에 변경사항이 push 되면 1~2분 이내에 수정사항이 반영 됩니다. `socar-{닉네임}.github.io` 에서 확인할 수 있습니다.
 
-> Jekyll 설치 시, 전체적인 글 작성 및 확인 흐름은 다음과 같습니다. 
+> 전체적인 글 작성 및 확인 흐름은 다음과 같습니다. 
 >
 > ```bash
 > # 레포지토리 클론 및 브랜치 생성
@@ -125,8 +120,8 @@
 * PR(Pull Request)를 생성할때 from / to는 아래와 같이 설정 합니다.
 
   ```
-  - base repository: socar-inc/socar-inc.github.io
-  	- base: master
+  - base repository: socar-inc/socar-inc.github.io 
+    - base: master
   - head repository: {본인 GitHub 계정}/{본인 GitHub 계정}.github.io
     - compare: master
   ```
