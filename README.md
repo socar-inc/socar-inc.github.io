@@ -54,7 +54,14 @@
 
 ## 2. 글쓰기 방법
 
-### 2.1. GitHub Repo Fork 하고 Clone 받기
+### 2.1 노션 페이지에 글감 등록하기
+* [쏘카 기술블로그 노션 페이지](https://www.notion.so/socarcorp/4489985f6d9e4958befc9479483e3e40?v=6534b64114bc46c09d990e6d863529e8)에 글감을 등록합니다.
+* #tech_blog 채널에서 블로그 관리자에게 글감 리뷰 요청을 해주세요. 
+* 글감 리뷰가 끝난 뒤, 본격적으로 글을 작성합니다.
+  * 일반적으로, 작성자가 직접 아래 과정 (2.2~) 을 따라가면서 PR 을 생성합니다.
+  * 예외 : 작성자가 github 계정이 없는 경우, 먼저 노션 페이지에 글을 작성하고 블로그 관리자가 최종 퍼블리싱 전에 PR을 생성합니다. 
+
+### 2.2. GitHub Repo Fork 하고 Clone 받기
 
 - 이 [GitHub Repository](https://github.com/socar-inc/socar-inc.github.io)를 본인의 계정으로 Fork 합니다.
 
@@ -275,3 +282,9 @@ $ git push
 	5. 또 어떤 것을 고민해보면 좋을까요?
 	6. 참고 자료(Reference)
 	```
+
+## 4. 글 리뷰 과정
+- 일반적으로 테크블로그 담당자와 작성자 소속 팀장이 리뷰를 진행합니다.
+- PR 요청 시 소속 팀장을 Reviewer 로 지정해주세요.
+- 글의 리뷰는 글의 아키텍쳐, 내용, 맞춤법, 기승전결 등을 중점적으로 리뷰합니다.
+- 자세한 내용은 [글쓰기 가이드](https://www.notion.so/socarcorp/WIP-de0ed32c501f4d59bfcc8a0a103802c5) 및 [피드백함](https://www.notion.so/socarcorp/2806434bf09d417a98c10fbf775b7f9f)을 참고해주세요. 지금까지 진행된 글 리뷰를 보실 수 있습니다.
