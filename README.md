@@ -1,6 +1,15 @@
-# socar-inc.github.io
+# SOCAR Tech Blog 
 
 [SOCAR Tech Blog](https://tech.socarcorp.kr/) 를 위한 Github Repository입니다.
+
+담당자 : @socar-dini
+
+**목차**
+1. [블로그의 목적](#1-블로그의-목적)
+2. [글쓰기 방법](#2-글쓰기-방법) 
+3. [글 작성 팁](#3-글-작성-팁) 
+4. [글 리뷰 과정](#4-글-리뷰-과정)
+
 
 <br>
 
