@@ -1,5 +1,7 @@
 # SOCAR Tech Blog 
 
+[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fsocar-inc%2Fsocar-inc.github.io&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://hits.seeyoufarm.com)
+
 [SOCAR Tech Blog](https://tech.socarcorp.kr/) 를 위한 Github Repository입니다.
 
 담당자 : @socar-dini
@@ -293,7 +295,7 @@ $ git push
 	```
 
 ## 4. 글 리뷰 과정
-- 일반적으로 테크블로그 담당자와 작성자 소속 팀장이 리뷰를 진행합니다.
-- PR 요청 시 소속 팀장을 Reviewer 로 지정해주세요.
+- 일반적으로 테크블로그 담당자와 작성자의 상급자가 리뷰를 진행합니다.
+- PR 요청 시 해당 상급자 Reviewer 로 지정해주세요.
 - 글의 리뷰는 글의 아키텍쳐, 내용, 맞춤법, 기승전결 등을 중점적으로 리뷰합니다.
 - 자세한 내용은 [글쓰기 가이드](https://www.notion.so/socarcorp/WIP-de0ed32c501f4d59bfcc8a0a103802c5) 및 [피드백함](https://www.notion.so/socarcorp/2806434bf09d417a98c10fbf775b7f9f)을 참고해주세요. 지금까지 진행된 글 리뷰를 보실 수 있습니다.
