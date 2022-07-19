@@ -91,7 +91,7 @@
 <br>
 
 ### 2.2. 글 작성하기
-
+- `master` branch 에서 작업합니다.
 - `_posts` 디렉토리에 post를 생성 합니다.
   - 파일명은 `YYYY-MM-DD-<post-name>.md`로 합니다.
   - 본문을 html로 작성할 경우 `.html`도 사용 할 수 있습니다.
@@ -100,58 +100,8 @@
 
 ### 2.3. 글 확인하기
 
-내가 쓰고 있는 글이 실제 블로그에서는 어떤 형태인지 직접 확인하고 싶을 때, 다음처럼 2가지 방법으로 확인하실 수 있습니다.
-
-- 로컬에 직접 [Jekyll](https://jekyllrb.com/docs/)를 설치해서 확인하는 방법
-- 로컬에 직접 Jekyll을 설치하지 않고 확인하는 방법
-
-#### 2.3.1. 로컬에 직접 [Jekyll](https://jekyllrb.com/docs/)를 설치해서 확인하는 방법
-
-- 먼저, Jekyll과 필요한 의존성을 설치합니다.
-
-  * MacOS
-
-    ```shell
-    /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" #homebrew 설치
-    brew install ruby # ruby 설치
-    gem install --user-install bundler jekyll # jekyll , bundler 설치
-    ```
-
-
-  * Window
-
-    * https://rubyinstaller.org/ 에서 ruby 를 다운받습니다.
-
-    ```shell
-    gem update
-    gem install jekyll bundler # jekyll, bundler 설치
-    ```
-
-
-- 이제 `bundle exec jekyll serve`  명령어로 로컬 ( http://127.0.0.1:4000/) 에서 확인할 수 있습니다.
-
-> Jekyll 설치 시, 전체적인 글 작성 및 확인 흐름은 다음과 같습니다. 
->
-> ```shell
-> # 레포지토리 클론 및 브랜치 생성
-> $ git clone https://github.com/socar-{닉네임}/socar-{닉네암}.github.io.git
-> $ cd socar-{닉네임}.github.io
-> $ git checkout -b feature/{닉네임}-{주제}
-> 
-> # 글 작성 중 로컬에서 확인
-> $ bundle exec jekyll serve 
-> 
-> # 수정 사항을 레포지토리에 반영
-> $ git add .
-> $ git commit -m '초안을 작성합니다'
-> $ git push 
-> ```
-
-
-#### 2.3.2. 로컬에 직접 Jekyll을 설치하지 않고 확인하는 방법
-
-- fork 한 레포지토리에서 글을 작성하고 있는 feature branch 를 master branch에 merge 하여 확인합니다.  
-- master branch에 변경사항이 push 되면 1~2분 이내에 수정사항이 반영 됩니다. socar-{닉네임}.github.io 에서 확인할 수 있습니다.
+- **사전 작업 : settings > pages > source 의 branch 를 `gh-pages` 로 설정해줍니다.**
+- master branch에 변경사항이 push 되면 1~2분 이내에 수정사항이 반영 됩니다. `socar-{닉네임}.github.io` 에서 확인할 수 있습니다.
 
 > Jekyll 설치 시, 전체적인 글 작성 및 확인 흐름은 다음과 같습니다. 
 >
@@ -159,16 +109,10 @@
 > # 레포지토리 클론 및 브랜치 생성
 > $ git clone https://github.com/socar-{닉네임}/socar-{닉네암}.github.io.git
 > $ cd socar-{닉네임}.github.io
-> $ git checkout -b feature/{닉네임}-{주제}
 > 
 > # 글 작성 후 레포지토리 반영
 > $ git add .
 > $ git commit -m '초안을 작성합니다'
-> $ git push
-> 
-> # feature 브랜치를 master로 머지하여 확인
-> $ git checkout master
-> $ git merge feature/{닉네임}-{주제} 
 > $ git push
 > ```
 
@@ -187,7 +131,7 @@
     - compare: master
   ```
 
-* PR 생성시 default 리뷰어는 카일 (@socar-kyle), 하디(@socar-hardy)입니다. 추가적으로 팀에서 리뷰어를 지정해주세요 :) 
+* PR 생성시 default 리뷰어는 디니(@socar-dini)입니다. 추가적으로 작성자의 상급자를 리뷰어를 지정해주세요 :) 
 
 > 현재 Merge 조건 및 권한은 다음과 같습니다.
 >
