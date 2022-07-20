@@ -4,7 +4,7 @@ title: "데이터에 신뢰성과 재사용성까지, Analytics Engineering with
 subtitle: "dbt를 현업에서 사용하는 유즈케이스"
 date: 2022-07-14 09:00:00 +0900
 category: data
-background: '/img/reservation-tetris/background.jpg'
+background: '/img/analytics-engineering-with-dbt/whatisananalyticsengineer_FB.jpeg'
 author: humphrey
 comments: true
 tags:
@@ -39,7 +39,7 @@ tags:
 
 ### 쏘카의 데이터 인프라
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/6db8a5fd-fc18-45d7-963a-57cf62ebae8c/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/6db8a5fd-fc18-45d7-963a-57cf62ebae8c/Untitled.png)
+![socar data infra](/img/analytics-engineering-with-dbt/dbt1.png)
 
 쏘카 데이터의 가장 큰 축은 빅쿼리입니다.
 
@@ -77,7 +77,7 @@ tags:
 
 마치 소프트웨어 엔지니어링에서 이야기 하는 “**a big ball of mud**” 처럼요.
 
-![A big ball of mud in Data](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/cf6c76a6-28aa-4394-a407-da5850db6da9/Untitled.png)
+![A big ball of mud in Data](/img/analytics-engineering-with-dbt/dbt2.png)
 
 A big ball of mud in Data
 
@@ -111,7 +111,7 @@ Analytics Engineer의 대표적인 role은 아래와 같습니다.
 Analytics Engineering의 등장에서 얻을 수 있는 교훈은 1) **“중요한"** 데이터들을 오너쉽을 갖고 관리하고 발전시켜 나가는 시스템의 필요성, 2) 일반적인 조회 뿐만 아니라 **재사용**
 가능하게 만드는 노력, 그리고 3) 데이터간의 의존성 및 메타데이터 관리의 중요성 이었습니다.
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/fb7b425c-5976-470e-9332-6d3bd9ed4d66/Untitled.png)
+![analytics engineering comparison](/img/analytics-engineering-with-dbt/dbt3.png)
 
 하지만 어떤 기술이던 그러하듯, 다른 회사에서 working 했던 개념과 기술들이 우리 조직에서도 잘 도입되고 활용되려면 많은 노력과 고려가 필요하다고 생각했습니다. 큰 회사에서 처럼 당장 Analytics
 Engineering만 담당하는 인원을 채용해서 발전시키는 게 현실적으로 어렵기도 하고, 또한 이러한 분야의 발전이 조직에서 필요하다는 컨센서스를 만드는 과정도 시간이 많이 들 수 있는 일이었습니다.
@@ -121,7 +121,7 @@ Engineering만 담당하는 인원을 채용해서 발전시키는 게 현실적
 dbt는 데이터 엔지니어링의 큰 요소 중 하나인 ETL or ELT (Extract, Transform, Load) 중 **변형(Transform)에 집중합니다**. 어디서 데이터를 추출해내고 적재하는 지에 대한
 관심보다는 “어떻게" 존재하는 데이터를 변형해서, 재사용할지에 대해 고민합니다.
 
-![출처: [https://www.getdbt.com/](https://www.getdbt.com/)](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/3f12b5b8-0a9c-4275-bcc7-d831e3d179d6/Untitled.png)
+![출처: [https://www.getdbt.com/](https://www.getdbt.com/)](/img/analytics-engineering-with-dbt/dbt4.png)
 
 출처: [https://www.getdbt.com/](https://www.getdbt.com/)
 
@@ -158,7 +158,7 @@ dbt의 대안으로 생각되는 기술들로는 다음과 같은 기술들이 �
     - 👍 : 데이터 테스팅 및 분포 UI, 테스팅 preset
     - 👎 : 무겁다. 어렵다.
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/678220ef-0676-4d01-b024-1ec4525e18d7/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/678220ef-0676-4d01-b024-1ec4525e18d7/Untitled.png)
+![](/img/analytics-engineering-with-dbt/dbt5.png)
 
 dbt는 다른 툴들이 각자 가지고 있는 장점들을 (그 만큼 뾰족하지는 않더라도) 전반적으로 시도해 볼 수 있는 툴이고 Analytics Engineering을 빠르게 도입하고 구현하는 데 저희 조직에 가장 알맞은
 툴이라고 생각했습니다.
@@ -185,7 +185,7 @@ cost가 더 크다고 생각했습니다. 그래서 dbt CLI를 기반으로 여�
 
 SODA Store는 2020년 부터 유지되어왔던 쏘카의 비즈니스와 맞닿아 있는 지표들을 모아놓은 데이터셋을 부르는 별칭입니다. (SOCAR + Data Store = SODA)
 
-![SODA Store ICON](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/c0774a2e-04ef-4690-9b65-988bc585d6ee/Untitled.png)
+![SODA Store ICON](/img/analytics-engineering-with-dbt/dbt6.png)
 
 SODA Store ICON
 
@@ -479,7 +479,7 @@ dbt 공식 문서에서는 fishtown analytics(dbt labs의 전신)의 모델링 �
             └── staging
         ```
 
-      ![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/da37e77f-58c5-4961-91e6-abe336915dc8/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/da37e77f-58c5-4961-91e6-abe336915dc8/Untitled.png)
+      ![](/img/analytics-engineering-with-dbt/dbt7.png)
 
 Gitlab에서는 위와 같은 Fishtown Analytics의 모델링 패턴을 참고해서 팀 고유의 모델링 패턴들을 만들어 나가고 있습니다. (놀랍게도, SQL을 포함한 모든 소스 코드가 public입니다)
 
@@ -752,15 +752,14 @@ dbt 서버에 요청을 보내서 작업을 수행하게 하는 인터페이스�
 
 **Seamless Change**
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/6a305607-6024-4bdb-8011-f257436b81d2/Untitled.png)
+![](/img/analytics-engineering-with-dbt/dbt8.png)
 
 v1 데이터와 v2 데이터가 정확하게 일치하는 것을 확인하고, v1 로직을 v2로 100% 교체해 데이터 사용자분들이 어떤 쿼리 수정이 없이도, 더 신뢰할 수 있고 더 많은 마트 테이블들을 사용하실 수 있게 매끄럽게
 교체 작업이 이울어졌습니다.
 
 **Data Lineage Graph**
 
-![소다스토어 v2 Data Lineage ~~(흐린
-눈)~~](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/1a8cfef7-853f-481d-9cc6-88883680338d/Untitled.png)
+![소다스토어 v2 Data Lineage ~~(흐린 눈)~~](/img/analytics-engineering-with-dbt/dbt9.png)
 
 소다스토어 v2 Data Lineage ~~(흐린 눈)~~
 
@@ -769,11 +768,11 @@ dbt로 이관 후, 소다스토어를 구성하기 위해 필요한 수 많은 �
 
 **New SODA Store DAG**
 
-![Airflow DAG (부제: 일했다 dbt)](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/7652fadf-fdc2-48af-bcfd-80f72596595d/Untitled.png)
+![Airflow DAG (부제: 일했다 dbt)](/img/analytics-engineering-with-dbt/dbt_10.png)
 
 Airflow DAG (부제: 일했다 dbt)
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/3ed82de4-19df-4280-b143-e1aac8b56f98/Untitled.png)
+![](/img/analytics-engineering-with-dbt/dbt_11.png)
 
 소다스토어 v2 작업을 하면서 데이터 오류를 잡아놓은 덕인지, 소다스토어 v2가 2022년 4월 마무리 되고 3개월 뒤인 7월까지 에러를 한 번도 낸 적이 없었습니다 (…) 다행히 이 글을 쓰고 있는 와중에 dbt가
 제 역할을 해주었네요.
