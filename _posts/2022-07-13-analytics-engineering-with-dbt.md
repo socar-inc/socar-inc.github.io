@@ -638,9 +638,10 @@ jobs:
 
 **Slim CI**
 
-Slim CI는 쉽게 말해서 dbt의 실행 결과를 캐싱해서 필요한 부분만 재실행할 수 있도록 하는 테크닉입니다. dbt cloud에서는 쉽게 사용할 수 있도록 설정이 되어있지만, dbt cli 유저라면 직접 구현을 해줘야하는 부분입니다.  
+![Setup a Slim CI for dbt with BigQuery and Docker](https://miro.medium.com/max/1400/1*OnGT6eelEiLpu2q7bE0OEA.jpeg)
+*출처: [Setup a Slim CI for dbt with BigQuery and Docker](Setup a Slim CI for dbt with BigQuery and Docker)*
 
-[//]: # (<SLIM CI Diagram>)
+Slim CI는 쉽게 말해서 dbt의 실행 결과를 캐싱해서 필요한 부분만 재실행할 수 있도록 하는 테크닉입니다. dbt cloud에서는 쉽게 사용할 수 있도록 설정이 되어있지만, dbt cli 유저라면 직접 구현을 해줘야하는 부분입니다.  
 
 간단한 원리를 설명하자면, dbt run을 했을 때 dbt는 local state를 `manifest.json`에 저장을 해둡니다. 이 `manifest.json`이 정상적으로 저장된 정보를 불러 올 수 있으면 Graph selector(`state:modified+`)로 변경된 사항들만 run을 할 수 있습니다.  
 
@@ -650,6 +651,8 @@ Slim CI는 쉽게 말해서 dbt의 실행 결과를 캐싱해서 필요한 부�
 
 다른 방법은 dbt rpc를 이용하는 방법이었습니다. [Remote Procedure Call (RPC)](https://en.wikipedia.org/wiki/Remote_procedure_call) 방식으로 dbt 서버에 요청을 보내서 작업을 수행하게 하는 인터페이스를 dbt cli에서는 제공을 하고 있습니다 ([Github Repo](https://github.com/dbt-labs/dbt-rpc)). 하지만 이 방식은 현재 deprecated된 상태로, dbt Server라는 기능으로 대체되어 2022년 이후에 완전히 지원을 중단할 예정입니다. 때문에 지속가능하지 않은 방법이라고 생각해서 이 방법도 (시도는 했으나) 선택하지 않았습니다.  
 최종적으로 선택한 방법은 CI/CD 파이프라인을 최대한 이용해서 도커 이미지에 `manifest.json`을 포함시키는 방법이었습니다.
+
+![dbt ci](/img/analytics-engineering-with-dbt/dbt%20ci.png)
 
 동작시키기 위해서는 두 개의 Dockerfile이 필요합니다. 1) `Dockerfile.full.ci`, 2) `Dockerfile.incremental.ci`
 
