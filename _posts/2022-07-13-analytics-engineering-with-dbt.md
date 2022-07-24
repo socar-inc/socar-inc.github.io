@@ -699,13 +699,11 @@ dbt로 이관 후, 소다 스토어를 구성하기 위해 필요한 수많은 �
 
 **New SODA Store DAG**
 
-![Airflow DAG (부제: 일했다 dbt)](/img/analytics-engineering-with-dbt/dbt_10.png)
+![Airflow DAG (부제: 일했다 dbt)](/img/analytics-engineering-with-dbt/dbt_10.png)  
+![](/img/analytics-engineering-with-dbt/dbt_11.png)  
+*Airflow DAG (부제: 일했다 dbt)*
 
-Airflow DAG (부제: 일했다 dbt)
-
-![](/img/analytics-engineering-with-dbt/dbt_11.png)
-
-소다 스토어 v2 작업을 하면서 데이터 오류를 잡아놓은 덕인지, 소다 스토어 v2가 2022년 4월 마무리되고 3개월 뒤인 7월까지 에러를 한 번도 낸 적이 없었습니다. 다행히 이 글을 쓰고 있는 와중에 dbt가 제 역할을 해주었습니다.  
+소다 스토어 v2가 2022년 4월 마무리되고 3개월 뒤인 7월까지 에러를 한 번도 낸 적이 없어 아쉬웠습니다. 다행히(?) 이 글을 쓰고 있는 와중에 해당 테이블에 새로운 서비스 관련 데이터가 추가 되어 한 컬럼에 기존에 정의되지 않았던 값이 들어오자 dbt가 제 역할을 해주었습니다.  
 
 ### 2.7. 그 밖에 시도했던 것들
 
