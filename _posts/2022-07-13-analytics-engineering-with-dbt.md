@@ -175,7 +175,7 @@ SODA Store는 2020년 부터 유지되어왔던 쏘카의 비즈니스와 맞닿
 
 SODA Store에 `Analytics Engineering`을 적용하며 가진 목표는 다음과 같았습니다.
 
-SODA Store v2 주요 목표
+**SODA Store v2 주요 목표**
 
 - 기존 테이블의 사용성 검토 및 정비
 - 신규 서비스 및 요구사항에 따른 마트 테이블 추가 작성
