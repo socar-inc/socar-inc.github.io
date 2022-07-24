@@ -658,8 +658,8 @@ Slim CI는 쉽게 말해서 dbt의 실행 결과를 캐싱해서 필요한 부�
 
 과정은 다음과 같습니다.
 
-1. (on PR create) → Incremental CI에서 Full CI 이미지 기반으로 도커 이미지를 빌드하고 레지스트리에 저장합니다.
-    1. Full CI 이미지의 `manifest.json` 파일이 있으면, 아래와 같은 코드로 현재 코드의 변경 사항만 dbt run을 할 수 있습니다.
+1. (on PR create) → Incremental CI에서 Full CI 이미지 기반으로 도커 이미지를 빌드하고 레지스트리에 저장합니다.  
+    1-1. Full CI 이미지의 `manifest.json` 파일이 있으면, 아래와 같은 코드로 현재 코드의 변경 사항만 dbt run을 적용할 수 있습니다.
 
         ```bash
         #!/bin/bash
@@ -669,8 +669,8 @@ Slim CI는 쉽게 말해서 dbt의 실행 결과를 캐싱해서 필요한 부�
         dbt test --target=ci -s "state:modified+1 1+exposure:*,+state:modified+"  --defer --state <your-state-directory> -x
         ```
 
-    2. 이 시점에 빌드를 하고 있는 컨테이너 안에는 이전 Full CI가 실행될 때의 코드 + 현재 PR에서의 변경 사항이 합쳐진 `manifest.json` 이 저장됩니다.
-    3. 해당 이미지를 빌드 완료 후 push 합니다.
+    1-2. 이 시점에 빌드를 하고 있는 컨테이너 안에는 이전 Full CI가 실행될 때의 코드 + 현재 PR에서의 변경 사항이 합쳐진 `manifest.json` 이 저장됩니다.  
+    1-3. 해당 이미지를 빌드 완료 후 push 합니다.
 2. (on main branch merge) → Full CI에서 개발(dev) 환경으로 전체 dbt 모델들을 실행하고, 도커 이미지를 만든 뒤 결과물을 레지스트리에 저장합니다. (실패 시, 운영 배포할 수
    없습니다.)
 3. (on release) → 운영(live) 환경으로 dbt 모델들을 실행하지 않고, 이미지만 빌드하고 푸시 합니다.
