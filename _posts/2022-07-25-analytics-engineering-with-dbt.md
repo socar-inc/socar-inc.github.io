@@ -4,7 +4,7 @@ title: "데이터에 신뢰성과 재사용성까지, Analytics Engineering with
 subtitle: "사내 dbt(data build tool) 도입 및 운영기"
 date: 2022-07-25 09:00:00 +0900
 category: data
-background: '/img/analytics-engineering-with-dbt/maximalfocus-HakTxidk36I-unsplash.jpg'
+background: '/img/analytics-engineering-with-dbt/mathew-schwartz-sb7RUrRMaC4-unsplash.jpg'
 author: humphrey
 comments: true
 tags:
