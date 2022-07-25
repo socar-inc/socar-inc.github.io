@@ -2,7 +2,7 @@
 layout: post
 title: "데이터에 신뢰성과 재사용성까지, Analytics Engineering with dbt"
 subtitle: "dbt를 현업에서 사용하는 유즈케이스"
-date: 2022-07-14 09:00:00 +0900
+date: 2022-07-25 09:00:00 +0900
 category: data
 background: '/img/analytics-engineering-with-dbt/analytics.png'
 author: humphrey
@@ -13,6 +13,9 @@ tags:
 - analytics-engineering
 
 ---
+
+
+<br>
 
 안녕하세요. 데이터 비즈니스 본부 - 데이터 엔지니어링 그룹의 험프리입니다.
 
