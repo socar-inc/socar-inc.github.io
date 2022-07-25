@@ -261,7 +261,8 @@ jaffle_shop:
 
 위는 profiles.yml 파일의 예제입니다. 파일을 보시면 직접 host, user, pw 등 데이터웨어하우스에 대한 credential 정보를 직접 입력할 수 있게 됩니다. 작업자가 혼자라면, 위와 같이 관리해도 되지만 공동으로 작업을 하고 빠르게 CI/CD 파이프라인을 통해서 배포하게 되려면 인프라 레벨에서 환경 변수를 통해서 오버라이딩하기 쉽게 만들어주는 과정이 필요하다고 생각했습니다.
 
-```bash
+```bash 
+{% raw %}
 soda_store:
   target: dev
   outputs:
@@ -293,10 +294,11 @@ soda_store:
       threads: 5
       timeout_seconds: 300
       priority: interactive
-      keyfile: "{{ env_var('GOOGLE_APPLICATION_CREDENTIALS', '') }}"
+      keyfile: "{{ env_var('GOOGLE_APPLICATION_CREDENTIALS', '') }}"   
+{% endraw %}
 ```
 
-dbt에서는  `{{ env_var('ENV_VAR', 'default') }}` 와 같이 Yaml 상에 환경 변수를 런타임에서 치환할 수 있게 하는 편의 기능을 제공할 수 있어, 쿠버네티스 환경에서 Configmap과 Secret을 활용해서 Volume Mount 및 Env를 애플리케이션에 적용해 각기 다른 환경에도 쉽게 배포를 할 수 있도록 만들 수 있습니다.  
+dbt에서는  `{% raw %}{{ env_var('ENV_VAR', 'default') }}{% endraw %}` 와 같이 Yaml 상에 환경 변수를 런타임에서 치환할 수 있게 하는 편의 기능을 제공할 수 있어, 쿠버네티스 환경에서 Configmap과 Secret을 활용해서 Volume Mount 및 Env를 애플리케이션에 적용해 각기 다른 환경에도 쉽게 배포를 할 수 있도록 만들 수 있습니다.  
 
 #### 환경별 셋업 (dbt Profile + Infra)
 
@@ -586,6 +588,7 @@ CI 테스트가 통과된 PR만 main 브랜치로 머지 할 수 있도록 Branc
 이렇게 PR 테스트를 하고 main 브랜치로 머지되고 나면, 개발 환경에 배포를 하기 위해 dbt의 개발 Target에 모든 파이프라인을 run 합니다. (Full CI)
 
 ```yaml
+{% raw %}
 name: Dev Publish
 
 on:
@@ -627,6 +630,7 @@ jobs:
         GITHUB_ORGANIZATION: ${{ secrets.GH_ORGANIZATION }}
         GITHUB_REPOSITORY_NAME: ${{ secrets.GH_REPOSITORY_NAME }}
         VALUES_FILE: "<your-values.yaml>"
+{% endraw %}
 ```
 
 이 단계가 통과되면, 개발 환경 데이터웨어하우스에 dbt로 메인 로직을 전부 테스트한 상황이 되고, 운영 배포로 Airflow를 통해서 주기적으로 배포할 수 있는 환경이 됩니다.
