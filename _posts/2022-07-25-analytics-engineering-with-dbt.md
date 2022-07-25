@@ -58,6 +58,8 @@ tags:
     - 쉽게 넣을 수 있다 보니, 데이터 검증에 대한 고려를 하지 않는 경우가 많습니다.
     - 데이터(데이터셋, 테이블) 히스토리와 오너쉽 등을 파악하기 어렵습니다. 
     - 데이터 간 의존성, 삭제 영향도 또한 파악하기 어렵습니다.
+    
+    <br>
 
 	사내 빅쿼리 사용 유저만 해도 전체 300여 명 중 100명이 훨씬 넘는 분들이 빅쿼리를 통해 쏘카의 데이터에 접근하게 되었습니다. 시간이 지나면서 정말 많은 데이터가 빅쿼리에 쌓이게 되었고, 이를 모두 제어하려 하는 일은 여러 조직의 속도를 늦추는 일이 될 수도 있었습니다.  
 
@@ -65,10 +67,9 @@ tags:
 
 	테이블을 지우는 일도 신경을 써야 했습니다. 지우려는 테이블이 어떤 곳에 얽혀있는 지도 모르는 채, 테이블을 삭제하면 어떤 사이드 이펙트를 불러올지 몰랐습니다. 혹여나 매우 중요한 데이터 마트 테이블에 엮여있는 테이블들을 삭제한다면, 매출과 같은 중요한 데이터에 이슈가 생길 수도 있습니다.  
 
-위와 같은 단점들은 시간이 지나면 지날수록 발목을 잡았고, 문제들을 해결하기 위한 비용도 급속도로 커져만 갔습니다. 마치 소프트웨어 엔지니어링에서 이야기하는 “**a big ball of mud**”처럼요.
+    위와 같은 단점들은 시간이 지나면 지날수록 발목을 잡았고, 문제들을 해결하기 위한 비용도 급속도로 커져만 갔습니다. 마치 소프트웨어 엔지니어링에서 이야기하는 “**a big ball of mud**”처럼요.
 
-![A big ball of mud in Data](/img/analytics-engineering-with-dbt/dbt2.png)  
-*출처: [Big Ball of Mud - DevIQ](https://deviq.com/antipatterns/big-ball-of-mud/)*
+![A big ball of mud in Data](/img/analytics-engineering-with-dbt/dbt2.png)*출처: [Big Ball of Mud - DevIQ](https://deviq.com/antipatterns/big-ball-of-mud/)*
 
 ### 1.3. Analytics Engineer의 등장
 
@@ -130,11 +131,11 @@ dbt의 대안으로 생각되는 기술들로는 다음과 같은 기술들이 �
 > ⚠️ 아래 다른 기술과의 비교는 지극히 개인적인 저의 판단입니다.
 
 
-|                                      이름                                       |                           장점                           |                                             단점                                              | 비고  |
-|:-----------------------------------------------------------------------------:|:------------------------------------------------------:|:-------------------------------------------------------------------------------------------:|:---:|
-|              [Dataform](https://github.com/dataform-co/dataform)              |  BigQuery에 집중. SQL 기반. SaaS 기반 웹 IDE 무료 제공, Looker 연동  | Self Hosting 불가 (as opposed to dbt), 비싼 가격 (당시 월간 유저 당 $95, 지금은 수정된 것 같습니다), Typescript 기반  |     |
-|               [Soda SQL](https://github.com/sodadata/soda-sql)                |     오픈 소스, 직관적인 yaml 활용법 (sql in yaml), Python 기반      |                             유저풀이 적음. yaml 관련 오퍼레이션이 많아서 더 복잡함.                              |최근에는 yaml + SQL 기반에서 자체적인 DSL(SodaCL)을 만들어 사용 |
-| [Great Expectation](https://github.com/great-expectations/great_expectations) |                            데이터 테스팅 및 분포 UI, 테스팅 preset                            |                                          무겁다. 어렵다.                                          |     |
+|                                      이름                                       |                                 장점                                  |                                                  단점                                                  | 비고  |
+|:-----------------------------------------------------------------------------:|:-------------------------------------------------------------------:|:----------------------------------------------------------------------------------------------------:|:---:|
+|              [Dataform](https://github.com/dataform-co/dataform)              | BigQuery에 집중. <br> SQL 기반. <br> SaaS 기반 웹 IDE 무료 제공. <br> Looker 연동 | Self Hosting 불가 (as opposed to dbt), <br> 비싼 가격 (당시 월간 유저 당 $95), <br> Typescript 기반 |     |
+|               [Soda SQL](https://github.com/sodadata/soda-sql)                |       오픈 소스, <br> 직관적인 yaml 활용법 (sql in yaml), <br> Python 기반       |                               유저풀이 적음. <br> yaml 관련 오퍼레이션이 많아서 더 복잡함.                                |최근에는 yaml + SQL 기반에서 자체적인 DSL(SodaCL)을 만들어 사용 |
+| [Great Expectation](https://github.com/great-expectations/great_expectations) |                     데이터 테스팅 및 분포 UI, 테스팅 preset                     |                                              무겁다. 어렵다.                                               |     |
 
 
 ![dbt-to-be](/img/analytics-engineering-with-dbt/dbt5.png)
@@ -315,23 +316,16 @@ CI 환경에서는 PR 단계에서 만든 유저의 변경 사항들을 적용�
 
 **운영 환경 (live)**
 
-운영 환경에서는 여러 가지 시행착오가 있었습니다.
+운영 환경에서는 여러 가지 시행착오가 있었습니다. 운영을 위한 dbt 이미지를 만드는 과정은 개발 환경과 다르지 않지만, 해당 이미지를 사용하기 위한 런타임 환경을 만드는 과정이 다양했습니다.
 
-운영을 위한 dbt 이미지를 만드는 과정은 개발 환경과 다르지 않지만, 해당 이미지를 사용하기 위한 런타임 환경을 만드는 과정이 다양했습니다.
+고려 및 테스트했던 환경은 1) 일반 도커 이미지 실행 2) dbt RPC, 3) Python 웹서버 4) 도커 이미지 실행 + Object Storage 등이 있습니다. 이에 대한 시행착오와 문제 상황은 아래 [3.4 검증]()을 참고 부탁드립니다.
 
-고려 및 테스트했던 환경은 1) 일반 도커 이미지 실행 2) dbt RPC, 3) Python 웹서버 4) 도커 이미지 실행 + Object Storage 등이 있습니다. 이에 대한 시행착오와 문제 상황은 아래 **Step #4tep #2 - 모델링 & 테스팅
+다음은 기존의 쿼리를 재사용하기 좋은 방법으로 모델링하고, 테스트 가능하게 만드는 과정이 필요했습니다. 기존의 쿼리가 100개 이상의 테이블들을 조인해서 데이터 마트를 만들어내야 했기에 “적절하게" 쿼리를 리팩토링하고 나누는 과정은 매우 어려웠는데요.
 
-다음은 기존의 쿼리를 재사용하기 좋은 방법으로 모델링하고, 테스트 가능하게 만드는 과정이 필요했습니다.
+dbt 공식 문서에서는 이 문제를 해결하기 위해 fishtown analytics(dbt labs의 전신)의 모델링 패턴을 소개합니다. (최근엔 공식 문서로 들어갔으며, 다음 링크에서 확인할 수 있습니다)
 
-기존의 쿼리가 100개 이상의 테이블들을 조인해서 데이터 마트를 만들어내야 했기에 “적절하게" 쿼리를 리팩토링하고 나누는 과정은 매우 어려웠는데요.
-
-dbt 공식 문서에서는 fishtown analytics(dbt labs의 전신)의 모델링 패턴을 소개합니다.
-
-[How we structure our dbt projects](https://discourse.getdbt.com/t/how-we-structure-our-dbt-projects/355)
-
+[How we structure our dbt projects](https://discourse.getdbt.com/t/how-we-structure-our-dbt-projects/355) <br />
 [How we structure our dbt projects - dbt Docs](https://docs.getdbt.com/guides/best-practices/how-we-structure/1-guide-overview)
-
-최근에 공식 문서 안으로 들어갔네요!
 
 - **Source**: 원천 테이블 또는 서드파티 데이터. 소스 테이블 스키마를 따릅니다.
 - **Staging Models**: 데이터 모델링의 가장 작은 단위. 각 모델은 소스 테이블과 1:1 관계를 갖습니다.
@@ -412,10 +406,10 @@ dbt 공식 문서에서는 fishtown analytics(dbt labs의 전신)의 모델링 �
 
       Mart 모델에서 유용한 패턴
 
-        - 쿼리 퍼포먼스를 위해 fact와 dimension 테이블들은 table로 materialize 한다
-        - 중간 변환 과정의 테이블들을 Mart 모델 안에서 남겨둔다.
-        - 각 모델의 테스트 yaml을 추가한다
-        - md 파일로 문서화
+        - 쿼리 퍼포먼스를 위해 fact와 dimension 테이블들은 table로 materialize 합니다.
+        - 중간 변환 과정의 테이블들을 Mart 모델 안에서 남겨둡니다.
+        - 각 모델의 테스트 yaml을 추가합니다.
+        - md 파일로 문서화합니다.
 
         ```bash
         ├── dbt_project.yml
@@ -697,17 +691,14 @@ v1 데이터와 v2 데이터가 정확하게 일치하는 것을 확인하고, v
 
 **Data Lineage Graph**
 
-![소다 스토어 v2 Data Lineage ~~(흐린 눈)~~](/img/analytics-engineering-with-dbt/dbt9.png)
-
-소다 스토어 v2 Data Lineage ~~(흐린 눈)~~
+![소다 스토어 v2 Data Lineage ~~(흐린 눈)~~](/img/analytics-engineering-with-dbt/dbt9.png)*소다 스토어 v2 Data Lineage ~~(흐린 눈)~~*
 
 dbt로 이관 후, 소다 스토어를 구성하기 위해 필요한 수많은 테이블들, 그리고 의존관계가 어떻게 흐르는지를 확인할 수 있는 방법이 생겼습니다. 이로 인해 유사시에 어떤 테이블의 오류가 다른 마트 테이블들에 영향을 주는지 시각적으로 알 수 있습니다.  
 
 **New SODA Store DAG**
 
 ![Airflow DAG (부제: 일했다 dbt)](/img/analytics-engineering-with-dbt/dbt_10.png)  
-![](/img/analytics-engineering-with-dbt/dbt_11.png)  
-*Airflow DAG (부제: 일했다 dbt)*
+![](/img/analytics-engineering-with-dbt/dbt_11.png)*Airflow DAG (부제: 일했다 dbt)*
 
 소다 스토어 v2가 2022년 4월 마무리되고 3개월 뒤인 7월까지 에러를 한 번도 낸 적이 없어 아쉬웠습니다. 다행히(?) 이 글을 쓰고 있는 와중에 해당 테이블에 새로운 서비스 관련 데이터가 추가 되어 한 컬럼에 기존에 정의되지 않았던 값이 들어오자 dbt가 제 역할을 해주었습니다.  
 
