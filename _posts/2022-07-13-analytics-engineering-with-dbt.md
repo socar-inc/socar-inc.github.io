@@ -4,7 +4,7 @@ title: "데이터에 신뢰성과 재사용성까지, Analytics Engineering with
 subtitle: "dbt를 현업에서 사용하는 유즈케이스"
 date: 2022-07-14 09:00:00 +0900
 category: data
-background: '/img/analytics-engineering-with-dbt/analytics.jpg'
+background: '/img/analytics-engineering-with-dbt/analytics.png'
 author: humphrey
 comments: true
 tags:
@@ -145,7 +145,7 @@ dbt는 두 가지 방법으로 서비스를 제공하고 있습니다. dbt Cloud
 
 SODA Store는 2020년 부터 유지되어왔던 쏘카의 비즈니스와 맞닿아 있는 지표들을 모아놓은 데이터셋을 부르는 별칭입니다. (SOCAR + Data Store = SODA)
 
-![SODA Store ICON](/img/analytics-engineering-with-dbt/dbt6.png)
+![SODA Store ICON](/img/analytics-engineering-with-dbt/soda-store.png)
 
 소다스토어에는 사고 집계 데이터, 예약 당시 차량 상태, 분석을 위한 일간 차량 데이터, 사용자 기본 정보 및 예약 누적 데이터 등 쏘카 내의 여러 개의 MSA에 걸쳐서 나눠져 있는 데이터를 집계해 관리하고 있습니다.
 
