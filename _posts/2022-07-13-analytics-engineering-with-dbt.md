@@ -4,7 +4,7 @@ title: "데이터에 신뢰성과 재사용성까지, Analytics Engineering with
 subtitle: "dbt를 현업에서 사용하는 유즈케이스"
 date: 2022-07-14 09:00:00 +0900
 category: data
-background: '/img/analytics-engineering-with-dbt/whatisananalyticsengineer_FB.jpeg'
+background: '/img/analytics-engineering-with-dbt/analytics.jpg'
 author: humphrey
 comments: true
 tags:
