@@ -81,9 +81,9 @@ Snowflake, Delta Lake 등 최근 부상하고 있는 모던 데이터 웨어하�
 
 Analytics Engineer의 대표적인 role은 아래와 같습니다.
 - Data Modeling: 데이터 모델링을 통해 유즈케이스에 맞게 데이터를 관리할 수 있도록 모델링 합니다.
-- Data warehouse management: 데이터 웨어하우스를 관리해서 사용자들이 쉽게 데이터를 조회하고 히스토리 등을 확인할 수 있게 합니다.
-- Data orchestration: 스케줄링 도구 등을 사용해서 데이터가 정상적으로 업데이트 되도록 관리합니다.
-- Setting best practices: 모델링과 데이터를 관리하는 사내의 Best Practice를 정의하고 구현하도록 돕습니다.
+- Data Warehouse Management: 데이터 웨어하우스를 관리해서 사용자들이 쉽게 데이터를 조회하고 히스토리 등을 확인할 수 있게 합니다.
+- Data Orchestration: 스케줄링 도구 등을 사용해서 데이터가 정상적으로 업데이트 되도록 관리합니다.
+- Setting Best Practices: 모델링과 데이터를 관리하는 사내의 Best Practice를 정의하고 구현하도록 돕습니다.
 - Cross-collaboration: 분석가나 엔지니어와 소통하며 비즈니스 요구 사항을 수집하고, 성공적인 분석 결과를 만들어 내고, 모델링에 다른 조직의 요구 사항을 반영합니다. 또한 소프트웨어 엔지니어링의  실천 방법을 분석에서도 유용하게 사용할 수 있도록 돕습니다 (Version Control, Testing, … )
 
 > 해외의 다양한 회사에서 Analytics Engineer를 채용하고 있습니다.
