@@ -98,18 +98,15 @@ carrot:
   name: 캐롯
   image: '/assets/authors/carrot.png'
 
+bucky:
+  name: 버키
+  image: '/assets/authors/default.png'
+
+lucia:
+  name: 루시아
+  image: '/assets/authors/lucia.png'
+
 humphrey:
   name: 험프리
   image: '/assets/authors/humphrey.png'
 
-lucia:
-  name: 루시아
-<<<<<<< HEAD
-  image: '/assets/authors/default.png'
-
-bucky:
-  name: 버키
-  image: '/assets/authors/default.png'
-=======
-  image: '/assets/authors/lucia.png'
->>>>>>> 7ff6af7 (fix: 디렉토리명을 바꾸고 author image 를 추가한다)
