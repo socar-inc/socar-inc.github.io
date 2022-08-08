@@ -44,7 +44,7 @@ tags:
   - [3.2 아이콘 등록 방식을 자동화 해보자](#3.2-아이콘-등록-방식을-자동화-해보자)
 - [4. 무엇이 달라졌을까?](#4.-무엇이-달라졌을까?)
 - [5. 더 개선할 부분이 있을까?](#5.-더-개선할-부분이-있을까?)
-- [6. 마무리해볼까?](#5.-마무리해볼까?)
+- [6. 마무리해볼까?](#6.-마무리해볼까?)
 
 ---
 
@@ -208,7 +208,7 @@ icon 이름, icon 색상, style, className 을 Parameter로 받고 SVG Path로�
 
 <br>
 
-```
+```jsx
 import svgPaths from 'iconDist/svgIcons.json'
 
 const Icon = ({icon, iconColor, style, className}) => {
@@ -275,7 +275,7 @@ Icon Component를 사용하려고 보니 IDE가 제공해주는 자동완성이 
 <br>
 
 
-```
+```jsx
 import React, { CSSProperties } from 'react'
 import svgPaths from 'src/iconDist/svgIcons.json'
 import iconPalette from 'src/iconDist/iconPalette.json'
@@ -342,7 +342,7 @@ Node.js의 패키지를 관리하는 NPM을 이용하여 스크립트를 명령�
 
 <br>
 
-```
+```json
 "scripts": {
   "build-icon": "node build/convertSvgPath.js && npm run build-icon-palette && npm run build-icon-type",
 }
