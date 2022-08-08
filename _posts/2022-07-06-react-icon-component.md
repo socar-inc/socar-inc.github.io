@@ -134,7 +134,7 @@ _[<U>쏘카의 디자인 시스템 맛보기</U>](/design/2020/06/23/socar-desig
 
 ---
 
-## 2. **아이콘 컴포넌트, 어떻게 만들어졌을까?** <a name="2.-아이콘-컴포넌트,-어떻게-만들어졌을까?" />
+## 2. 아이콘 컴포넌트, 어떻게 만들어졌을까? <a name="2.-아이콘-컴포넌트,-어떻게-만들어졌을까?" />
 
 ### 2.1 아이콘 파일로 사용되는 SVG를 알아보자 <a name="2.1-아이콘-파일로-사용되는-SVG를-알아보자" />
 
@@ -165,7 +165,7 @@ SVG를 이루는 기본적인 도형의 종류로는 Path, Rect, Circle, Ellipse
 
 Path Element로 바꾸는 원리를 Rect Element로 작성된 아이콘으로 설명해드리겠습니다.
 
-```
+```html
 <rect x="8" y="8" width="2" height="2" fill="#374553"/>
 ```
 
@@ -173,7 +173,7 @@ Path Element로 바꾸는 원리를 Rect Element로 작성된 아이콘으로 �
 
 Path Element로 나타내면 아래와 같은 코드가 됩니다.
 
-```
+```html
 <path d="M8,8 H10 V10 H8 z">
 ```
 
@@ -182,7 +182,7 @@ M은 시작점, H는 수평선, V는 수직선을 뜻합니다. 마지막 z는 "
 
 <p align="center">
   <img src="/img/icon-component/iconExample.jpg" width="200">
-<p>
+</p>
 
 
 이런 원리를 식으로 계산하여 circle, rectangle element를 path element로 변환하는 스크립트 파일을 작성하였고, 이 결과물로 아이콘 이름을 key 값으로 갖는 JSON 파일이 만들어집니다.
@@ -197,6 +197,7 @@ M은 시작점, H는 수평선, V는 수직선을 뜻합니다. 마지막 z는 "
   }
 ```
 
+<br>
 
 ### 2.3 컴포넌트를 만들어서 적용해보자 <a name="2.3-컴포넌트를-만들어서-적용해보자" />
 
@@ -242,7 +243,7 @@ Icon Component를 사용하려고 보니 IDE가 제공해주는 자동완성이 
 
 <p align="center">
   <img src="/img/icon-component/iconNameJson.png" width="600">
-<p>
+</p>
 
 아이콘 이름이 key 값으로 정의되어있기 때문에 key 값만 가져온다면 손쉽게 타입 정의를 할 수 있을 것이라 생각했습니다.
 `Object.key()`를 활용해 아이콘 이름을 가져오는 스트립트를 작성하였고, 실행시키면 아래와 같은 파일이 만들어집니다. 
@@ -256,7 +257,7 @@ Icon Component를 사용하려고 보니 IDE가 제공해주는 자동완성이 
 <p align="center">
   <img src="/img/icon-component/iconPaletteCss.png" width="300">
   <img src="/img/icon-component/iconPalette.png" width="310" height="190">
-<p>
+</p>
 
 ![image](/img/icon-component/iconPaletteType.png)
 
@@ -265,10 +266,10 @@ Icon Component를 사용하려고 보니 IDE가 제공해주는 자동완성이 
 
 <p align="center">
   <img src="/img/icon-component/iconName.png" >
-<p>
+</p>
 <p align="center">
   <img src="/img/icon-component/iconColor.png">
-<p>
+</p>
 
 타입까지 적용된 최종 아이콘 컴포넌트는 다음과 같습니다. 
 
@@ -322,7 +323,7 @@ export default Icon
 ![image](/img/icon-component/storybookTest.png)
 ![image](/img/icon-component/storybookDocs.png)
 
-## 3. **아이콘 등록은 어떻게 하는걸까?** <a name="3.-아이콘-등록은-어떻게-하는걸까?" />
+## 3. 아이콘 등록은 어떻게 하는걸까? <a name="3.-아이콘-등록은-어떻게-하는걸까?" />
 
 ### 3.1 아이콘 등록을 해보자 <a name="3.1-아이콘-등록을-해보자" />
 아이콘 컴포넌트를 사용하기 위해서는 SVG 파일의 아이콘이 필요합니다. 피그마에서 아이콘을 SVG 형태로 받아 지정된 폴더에 넣어줍니다.
@@ -352,7 +353,7 @@ Node.js의 패키지를 관리하는 NPM을 이용하여 스크립트를 명령�
 
 
 
-## 4. **문제점이 해결됐을까?** <a name="4.-문제점이-해결됐을까?" />
+## 4. 문제점이 해결됐을까? <a name="4.-문제점이-해결됐을까?" />
 
 매번 기존에 있던 아이콘부터 새로운 아이콘까지 전부 넣고 외부 서비스를 사용하여 아이콘 폰트 파일로 만들어야 했었습니다.
 아이콘 폰트 파일을 만들면 추가해야할 파일도 여러개이고, 아이콘 색상을 모든 파일에 직접 추가했어야 했었습니다. 
