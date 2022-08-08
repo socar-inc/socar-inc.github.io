@@ -44,7 +44,7 @@ tags:
   - [3.2 아이콘 등록 방식을 자동화 해보자](#3.2-아이콘-등록-방식을-자동화-해보자)
 - [4. 무엇이 달라졌을까?](#4.-무엇이-달라졌을까?)
 - [5. 더 개선할 부분이 있을까?](#5.-더-개선할-부분이-있을까?)
-- [6. 마무리해볼까?](#5.-마무리해볼끼?)
+- [6. 마무리해볼까?](#5.-마무리해볼까?)
 
 ---
 
@@ -144,7 +144,7 @@ SVG는 2차원 벡터 그래픽을 표현하는 XML 기반의 마크업 언어�
 
 흔히 알고있는 또 다른 그래픽 파일 포맷으로는 래스터 그래픽, 즉 비트맵으로 PNG, JPEG가 있는데요, 이것은 픽셀로 구성된 이미지로 작은 컬러 사각형인 픽셀이 무수히 많이 모여 만들어지는 그래픽입니다.
 
-<img src="../img/icon-component/vector&bitmap.png">
+<img src="/img/icon-component/vector&bitmap.png">
 
   _[벡터 그래픽과 래스터 그래픽의 차이 ](https://www.selfmadedesigner.com/what-are-vector-graphics/)_
 
@@ -181,7 +181,7 @@ M은 시작점, H는 수평선, V는 수직선을 뜻합니다. 마지막 z는 "
 이대로 위 path를 해석해보면 (8,8)에서 (10,8), (10,10), (8,10)을 찍고 마지막으로 z를 통해 첫 시작 점 (8,8)으로 그리면 2x2인 정사각형 아이콘이 그려집니다. 
 
 <p align="center">
-  <img src="../img/icon-component/iconExample.jpg" width="200">
+  <img src="/img/icon-component/iconExample.jpg" width="200">
 <p>
 
 
@@ -235,7 +235,7 @@ Icon Component를 사용하려고 보니 IDE가 제공해주는 자동완성이 
 아이콘의 이름을 유니온 타입으로 정의하기 위해서 2.1에서 만든 svgPaths JSON 파일에서 아이콘 이름만 추출하는 작업이 필요합니다.
 
 <p align="center">
-  <img src="../img/icon-component/iconNameJson.png" width="600">
+  <img src="/img/icon-component/iconNameJson.png" width="600">
 <p>
 
 아이콘 이름이 key 값으로 정의되어있기 때문에 key 값만 가져온다면 손쉽게 타입 정의를 할 수 있을 것이라 생각했습니다.
@@ -248,8 +248,8 @@ Icon Component를 사용하려고 보니 IDE가 제공해주는 자동완성이 
 색상코드가 적힌 CSS 파일을 문자열 메소드를 이용하여 색상 이름만 가져와 JSON 파일을 만들어 주고, JSON 파일에 특정 부분만 읽어 색상 이름만 타입으로 정의하는 스크립트를 작성합니다. 
 
 <p align="center">
-  <img src="../img/icon-component/iconPaletteCss.png" width="300">
-  <img src="../img/icon-component/iconPalette.png" width="310" height="190">
+  <img src="/img/icon-component/iconPaletteCss.png" width="300">
+  <img src="/img/icon-component/iconPalette.png" width="310" height="190">
 <p>
 
 ![image](/img/icon-component/iconPaletteType.png)
@@ -258,10 +258,10 @@ Icon Component를 사용하려고 보니 IDE가 제공해주는 자동완성이 
 아이콘 이름과 색상을 Type으로 정의하여 적용하니 컴포넌트를 사용할 때 IDE의 자동완성이 뜨는 것을 확인할 수 있었습니다.
 
 <p align="center">
-  <img src="../img/icon-component/iconName.png" >
+  <img src="/img/icon-component/iconName.png" >
 <p>
 <p align="center">
-  <img src="../img/icon-component/iconColor.png">
+  <img src="/img/icon-component/iconColor.png">
 <p>
 
 타입까지 적용된 최종 아이콘 컴포넌트는 다음과 같습니다. 
@@ -368,7 +368,7 @@ Node.js의 패키지를 관리하는 NPM을 이용하여 스크립트를 명령�
 
 ---
 
-## 6. 마무리해볼끼? <a name="6.-마무리해볼끼?" />
+## 6. 마무리해볼까? <a name="6.-마무리해볼까?" />
 
 쏘카 웹 프론트엔드 팀에서 React Icon Component를 개발한 과정에 대해 알아보았습니다. 외부 서비스는 사용자 경험을 중요시하는 것처럼, 회사 내 개발자들이 사용하는 서비스는 개발자 경험이 중요합니다.
 
