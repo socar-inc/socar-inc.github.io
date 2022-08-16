@@ -1,6 +1,17 @@
-# socar-inc.github.io
+# SOCAR Tech Blog 
+
+[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fsocar-inc%2Fsocar-inc.github.io&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://hits.seeyoufarm.com)
 
 [SOCAR Tech Blog](https://tech.socarcorp.kr/) 를 위한 Github Repository입니다.
+
+담당자 : @socar-dini
+
+**목차**
+1. [블로그의 목적](#1-블로그의-목적)
+2. [글쓰기 방법](#2-글쓰기-방법) 
+3. [글 작성 팁](#3-글-작성-팁) 
+4. [글 리뷰 과정](#4-글-리뷰-과정)
+
 
 <br>
 
@@ -23,7 +34,7 @@
 ### 1.2. 어떤 사람이 글을 쓸 수 있나요?
 - `개발자`, `기획자`, `디자이너`, `QA`, `데이터 분석가` 등 CTO 산하의 모든 분들이 글을 작성할 수 있습니다
 - 개발 블로그라고 개발자만 글을 작성할 수 있다는 생각보다, `기획자 관점에서 개발자와 협업하기`, `디자이너가 데이터 분석을 만날 경우`, `효율적으로 QA하는 방법` 등 다양한 직군들이 글을 작성하면 좋을 것 같습니다
-- 고민되시면 언제든 카일(@socar-kyle)과 하디(@socar-hardy)를 찾아주세요
+- 고민되시면 언제든 디니(@socar-dini)를 찾아주세요. 
 
 <br>
 
@@ -54,7 +65,14 @@
 
 ## 2. 글쓰기 방법
 
-### 2.1. GitHub Repo Fork 하고 Clone 받기
+### 2.1 노션 페이지에 글감 등록하기
+* [쏘카 기술블로그 노션 페이지](https://www.notion.so/socarcorp/4489985f6d9e4958befc9479483e3e40?v=6534b64114bc46c09d990e6d863529e8)에 글감을 등록합니다.
+* #tech_blog 채널에서 블로그 관리자에게 글감 리뷰 요청을 해주세요. 
+* 글감 리뷰가 끝난 뒤, 본격적으로 글을 작성합니다.
+  * 일반적으로, 작성자가 직접 아래 과정 (2.2~) 을 따라가면서 PR 을 생성합니다.
+  * 예외 : 작성자가 github 계정이 없는 경우, 먼저 노션 페이지에 글을 작성하고 블로그 관리자가 최종 퍼블리싱 전에 PR을 생성합니다. 
+
+### 2.2. GitHub Repo Fork 하고 Clone 받기
 
 - 이 [GitHub Repository](https://github.com/socar-inc/socar-inc.github.io)를 본인의 계정으로 Fork 합니다.
 
@@ -70,87 +88,26 @@
   $ git clone git@github.com:{본인 Github 계정}/{본인 Github 계정}.github.io.git
   ```
 
-<br>
 
-### 2.2. 글 작성하기
 
+### 2.3. 글 작성 및 확인하기
+> **사전 작업 : settings > pages > source 의 branch 를 `gh-pages` 로 설정해줍니다.**
+- `master` branch 에서 작업합니다.
 - `_posts` 디렉토리에 post를 생성 합니다.
   - 파일명은 `YYYY-MM-DD-<post-name>.md`로 합니다.
   - 본문을 html로 작성할 경우 `.html`도 사용 할 수 있습니다.
+- master branch에 변경사항이 push 되면 1~2분 이내에 수정사항이 반영 됩니다. `socar-{닉네임}.github.io` 에서 확인할 수 있습니다.
 
-<br>
-
-### 2.3. 글 확인하기
-
-내가 쓰고 있는 글이 실제 블로그에서는 어떤 형태인지 직접 확인하고 싶을 때, 다음처럼 2가지 방법으로 확인하실 수 있습니다.
-
-- 로컬에 직접 [Jekyll](https://jekyllrb.com/docs/)를 설치해서 확인하는 방법
-- 로컬에 직접 Jekyll을 설치하지 않고 확인하는 방법
-
-#### 2.3.1. 로컬에 직접 [Jekyll](https://jekyllrb.com/docs/)를 설치해서 확인하는 방법
-
-- 먼저, Jekyll과 필요한 의존성을 설치합니다.
-
-  * MacOS
-
-    ```shell
-    /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" #homebrew 설치
-    brew install ruby # ruby 설치
-    gem install --user-install bundler jekyll # jekyll , bundler 설치
-    ```
-
-
-  * Window
-
-    * https://rubyinstaller.org/ 에서 ruby 를 다운받습니다.
-
-    ```shell
-    gem update
-    gem install jekyll bundler # jekyll, bundler 설치
-    ```
-
-
-- 이제 `bundle exec jekyll serve`  명령어로 로컬 ( http://127.0.0.1:4000/) 에서 확인할 수 있습니다.
-
-> Jekyll 설치 시, 전체적인 글 작성 및 확인 흐름은 다음과 같습니다. 
->
-> ```shell
-> # 레포지토리 클론 및 브랜치 생성
-> $ git clone https://github.com/socar-{닉네임}/socar-{닉네암}.github.io.git
-> $ cd socar-{닉네임}.github.io
-> $ git checkout -b feature/{닉네임}-{주제}
-> 
-> # 글 작성 중 로컬에서 확인
-> $ bundle exec jekyll serve 
-> 
-> # 수정 사항을 레포지토리에 반영
-> $ git add .
-> $ git commit -m '초안을 작성합니다'
-> $ git push 
-> ```
-
-
-#### 2.3.2. 로컬에 직접 Jekyll을 설치하지 않고 확인하는 방법
-
-- fork 한 레포지토리에서 글을 작성하고 있는 feature branch 를 master branch에 merge 하여 확인합니다.  
-- master branch에 변경사항이 push 되면 1~2분 이내에 수정사항이 반영 됩니다. socar-{닉네임}.github.io 에서 확인할 수 있습니다.
-
-> Jekyll 설치 시, 전체적인 글 작성 및 확인 흐름은 다음과 같습니다. 
+> 전체적인 글 작성 및 확인 흐름은 다음과 같습니다. 
 >
 > ```bash
 > # 레포지토리 클론 및 브랜치 생성
 > $ git clone https://github.com/socar-{닉네임}/socar-{닉네암}.github.io.git
 > $ cd socar-{닉네임}.github.io
-> $ git checkout -b feature/{닉네임}-{주제}
 > 
 > # 글 작성 후 레포지토리 반영
 > $ git add .
 > $ git commit -m '초안을 작성합니다'
-> $ git push
-> 
-> # feature 브랜치를 master로 머지하여 확인
-> $ git checkout master
-> $ git merge feature/{닉네임}-{주제} 
 > $ git push
 > ```
 
@@ -163,20 +120,19 @@
 * PR(Pull Request)를 생성할때 from / to는 아래와 같이 설정 합니다.
 
   ```
-  - base repository: socar-inc/socar-inc.github.io
-  	- base: master
+  - base repository: socar-inc/socar-inc.github.io 
+    - base: master
   - head repository: {본인 GitHub 계정}/{본인 GitHub 계정}.github.io
     - compare: master
   ```
 
-* PR 생성시 default 리뷰어는 카일 (@socar-kyle), 하디(@socar-hardy)입니다. 추가적으로 팀에서 리뷰어를 지정해주세요 :) 
+* PR 생성시 default 리뷰어는 디니(@socar-dini)입니다. 추가적으로 작성자의 상급자를 리뷰어를 지정해주세요 :) 
 
 > 현재 Merge 조건 및 권한은 다음과 같습니다.
 >
-> * Merge 조건으로 Approve 2명 이상 필요
+> * Merge 조건으로 Approve 1명 이상 필요
 > * `Squash and merge` 를 원칙으로 함
-> * master push 권한은 하디와 카일에게만 있음 
-> * resolve 되지 않은 conversation 이 있으면 merge 불가
+> * Resolve 되지 않은 Conversation 이 있으면 Merge 불가
 
 <br>
 
@@ -275,3 +231,9 @@ $ git push
 	5. 또 어떤 것을 고민해보면 좋을까요?
 	6. 참고 자료(Reference)
 	```
+
+## 4. 글 리뷰 과정
+- 일반적으로 테크블로그 담당자와 작성자의 상급자가 리뷰를 진행합니다.
+- PR 요청 시 해당 상급자 Reviewer 로 지정해주세요.
+- 글의 리뷰는 글의 아키텍쳐, 내용, 맞춤법, 기승전결 등을 중점적으로 리뷰합니다.
+- 자세한 내용은 [글쓰기 가이드](https://www.notion.so/socarcorp/WIP-de0ed32c501f4d59bfcc8a0a103802c5) 및 [피드백함](https://www.notion.so/socarcorp/2806434bf09d417a98c10fbf775b7f9f)을 참고해주세요. 지금까지 진행된 글 리뷰를 보실 수 있습니다.

@@ -109,3 +109,8 @@ sienna:
 blanc:
   name: 블랑
   image: '/assets/authors/blanc.jpg'
+
+humphrey:
+  name: 험프리
+  image: '/assets/authors/humphrey.png'
+
