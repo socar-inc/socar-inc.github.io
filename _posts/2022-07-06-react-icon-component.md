@@ -142,9 +142,8 @@ SVG는 2차원 벡터 그래픽을 표현하는 XML 기반의 마크업 언어�
 
 벡터 그래픽이란 수학적 표현을 통해 점, 직선, 곡선을 사용하여 이미지를 만드는 그래픽을 말합니다. 흔히 알고있는 또 다른 그래픽 파일 포맷으로는 래스터 그래픽, 즉 비트맵으로 PNG, JPEG가 있는데요, 이것은 픽셀로 구성된 이미지로 작은 컬러 사각형인 픽셀이 무수히 많이 모여 만들어지는 그래픽입니다.
 
-<img src="/img/icon-component/vector&bitmap.png">
+![image](/img/icon-component/vector&bitmap.png)*출처: [벡터 그래픽과 래스터 그래픽의 차이 ](https://www.selfmadedesigner.com/what-are-vector-graphics/)*
 
-  _[참고 링크: 벡터 그래픽과 래스터 그래픽의 차이 ](https://www.selfmadedesigner.com/what-are-vector-graphics/)_
 
 
 
@@ -157,9 +156,7 @@ SVG는 2차원 벡터 그래픽을 표현하는 XML 기반의 마크업 언어�
 
 ### 3.2 다양한 Element 도형을 Path Element로 변경해보자 <a name="3.2-다양한-Element-도형을-Path-Element로-변경해보자" />
 
-SVG를 이루는 기본적인 도형의 종류로는 Path, Rect, Circle, Ellipse, Line, Polyline, Polygon Element가 있습니다.
-
-그 중에서 Path Element는 **d** Attribute 하나로 정의되고, 선과 곡선, 호 등 다양한 형태를 그릴 수 있는 Element입니다. 여러 개의 직선과 곡선을 합쳐서
+SVG를 이루는 기본적인 도형의 종류로는 Path, Rect, Circle, Ellipse, Line, Polyline, Polygon Element가 있습니다. 그 중에서 Path Element는 **d** Attribute 하나로 정의되고, 선과 곡선, 호 등 다양한 형태를 그릴 수 있는 Element입니다. 여러 개의 직선과 곡선을 합쳐서
 **복잡한 도형을 그릴 수 있다는 큰 장점**을 갖고 있습니다.
 
 가장 먼저 Path Element의 장점을 이용해 쏘카가 가진 다양한 형태의 아이콘을 하나의 형태로 바꾸는 스크립트를 작성하였습니다. 
@@ -188,8 +185,6 @@ M은 시작점, H는 수평선, V는 수직선을 뜻합니다. 마지막 z는 "
 
 이런 원리를 식으로 계산하여 Circle, Rectangle Element를 Path Element로 변환하는 스크립트 파일을 작성하였고, 이 결과물로 아이콘 이름을 Key 값으로 갖는 JSON 파일이 만들어집니다.
 
-<br>
-
 ```json
   "ic18_description_dash2": {
     "width": 18,
@@ -198,17 +193,12 @@ M은 시작점, H는 수평선, V는 수직선을 뜻합니다. 마지막 z는 "
   }
 ```
 
-<br>
-
 ### 3.3 컴포넌트를 만들어서 적용해보자 <a name="3.3-컴포넌트를-만들어서-적용해보자" />
 
 아이콘의 형태를 동일하게 만들어 하나의 JSON 파일에 모아두었으니 이걸 활용하여 컴포넌트를 만들어 적용해보겠습니다.
 
-2.1에서 만든 svgPaths JSON 파일을 활용하여 컴포넌트를 만들었습니다. 
+3.2에서 만든 svgPaths JSON 파일을 활용하여 컴포넌트를 만들었습니다. icon 이름, icon 색상, style, className 을 Parameter로 받고 SVG Path로만 이루어진 컴포넌트입니다. 
 
-icon 이름, icon 색상, style, className 을 Parameter로 받고 SVG Path로만 이루어진 컴포넌트입니다. 
-
-<br>
 
 ```jsx
 import svgPaths from 'iconDist/svgIcons.json'
@@ -231,8 +221,6 @@ const Icon = ({icon, iconColor, style, className}) => {
   )
 }
 ```
-
-<br>
 
 Icon Component를 사용하려고 보니 IDE가 제공해주는 자동완성이 되지 않는 문제점이 있었습니다. 
 아이콘 갯수와 색상이 수백개인데 사용할 때마다 일일이 적는 것이 번거로웠습니다.
@@ -271,7 +259,7 @@ Icon Component를 사용하려고 보니 IDE가 제공해주는 자동완성이 
 `Object.key()`를 활용해 아이콘 이름을 가져오는 스크립트를 작성하였고, 실행시키면 아래와 같은 파일이 만들어집니다. 
 
 
-```json
+```jsx
 export const ICON_NAME = {
   "gr_icon_credit": "gr_icon_credit",
   "ic12_24_chevron_right2": "ic12_24_chevron_right2",
@@ -287,13 +275,28 @@ export type IconName = typeof ICON_NAME[keyof typeof ICON_NAME];
 
 색상코드가 적힌 CSS 파일을 문자열 메소드를 이용하여 색상 이름만 가져와 JSON 파일을 만들어 주고, JSON 파일에 특정 부분만 읽어 색상 이름만 타입으로 정의하는 스크립트를 작성합니다. 
 
-<p align="center">
-  <img src="/img/icon-component/iconPaletteCss.png" width="300">
-  <img src="/img/icon-component/iconPalette.png" width="310" height="190">
-</p>
+```json
+{
+  "grey005": "#fefefe",
+  "grey010": "#fdfdfd",
+  "grey020": "#f8f9fb",
+  "grey025": "#f2f4f6",
+  "grey030": "#e9ebee",
+  "grey040": "#c5c8ce",
+}
+```
+```jsx
+export const ICON_COLOR = {
+  "grey005": "grey005",
+  "grey010": "grey010",
+  "grey020": "grey020",
+  "grey025": "grey025",
+  "grey030": "grey030",
+  "grey040": "grey040",
+} as const;
 
-![image](/img/icon-component/iconPaletteType.png)
-
+export type IconColor = typeof ICON_COLOR[keyof typeof ICON_COLOR];
+```
 
 아이콘 이름과 색상을 Type으로 정의하여 적용하니 컴포넌트를 사용할 때 IDE의 자동완성이 뜨는 것을 확인할 수 있었습니다.
 
@@ -305,9 +308,6 @@ export type IconName = typeof ICON_NAME[keyof typeof ICON_NAME];
 </p>
 
 타입까지 적용된 최종 아이콘 컴포넌트는 다음과 같습니다. 
-
-<br>
-
 
 ```jsx
 import React, { CSSProperties } from 'react'
@@ -353,7 +353,7 @@ export default Icon
 
 이렇게 아이콘과 색을 지정해서 출력해볼 수 있으며, Docs를 확인하여 아이콘 컴포넌트의 사용 방법을 알 수 있으며, 디자이너가 원하는 아이콘이 맞는지 QA도 진행할 수 있습니다.
 
-![image](/img/icon-component/storybookTest.png)
+![image](/img/icon-component/StorybookTest.png)
 ![image](/img/icon-component/storybookDocs.png)
 
 ## 4. Icon Component 등록 과정 <a name="4.-Icon-Component-등록-과정" />
@@ -362,9 +362,7 @@ export default Icon
 아이콘 컴포넌트를 사용하기 위해서는 SVG 파일의 아이콘이 필요합니다. 피그마에서 아이콘을 SVG 형태로 받아 지정된 폴더에 넣어줍니다.
 추가한 아이콘의 형식을 통일시키기 위해 [Path Element로 전환하는 스크립트](#3.2-다양한-Element-도형을-Path-Element로-변경해보자)를 실행합니다. 
 아이콘에 색상을 넣어주기 위해 형식에 맞게 아이콘 색상 코드를 적어 지정된 폴더에 넣어줍니다. 
-아이콘 컴포넌트를 IDE의 도움을 받아 사용하려면 타입 정의도 필요하기 때문에 아이콘 이름과 색상 값의 [타입을 추출해주는 스크립트](#3.4-타입을-적용해보자)도 실행합니다.
-
-이렇게 하면 원하는 아이콘을 아이콘 컴포넌트를 사용하여 화면에 나타낼 수 있습니다. 
+아이콘 컴포넌트를 IDE의 도움을 받아 사용하려면 타입 정의도 필요하기 때문에 아이콘 이름과 색상 값의 [타입을 추출해주는 스크립트](#3.4-타입을-적용해보자)도 실행합니다. 이렇게 하면 원하는 아이콘을 아이콘 컴포넌트를 사용하여 화면에 나타낼 수 있습니다. 
 
 정리하면, 새로운 아이콘 파일과 색상 코드가 적힌 CSS 파일을 지정된 폴더에 넣고 스크립트만 돌리면 등록이 손쉽게 완료됩니다.
 
@@ -373,8 +371,6 @@ export default Icon
 ### 4.2 아이콘 등록 방식을 자동화 해보자 <a name="4.2-아이콘-등록-방식을-자동화-해보자" />
 아이콘을 등록할 때마다 스크립트를 실행해야합니다. 매번 스크립트 파일을 찾아보면서 실행하기엔 불편한 점이 많아 스크립트 자동화를 진행했습니다.
 Node.js의 패키지를 관리하는 NPM을 이용하여 스크립트를 명령어 한 줄로 실행할 수 있도록 package.json 파일에 `scripts`를 작성했습니다.
-
-<br>
 
 ```json
 "scripts": {
