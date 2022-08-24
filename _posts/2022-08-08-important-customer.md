@@ -4,7 +4,7 @@ title: "쏘카 주니어 PM의 장기적으로 ‘가장' 중요한 고객 찾�
 subtitle: "쏘카 주니어 PM의 장기적으로 ‘가장' 중요한 고객 찾기"
 date: 2022-08-08 09:00:00 +0900
 category: product
-background: '/img/develop-model-classifying-washed-car/0.png' 
+background: '/img/important-customer/socar-background.png' 
 author: bucky
 comments: true
 tags: 
