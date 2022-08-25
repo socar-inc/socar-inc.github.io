@@ -1,8 +1,8 @@
 ---
 layout: post
-title: "주니어 PM의 '중요한 고객' 분석기"
-subtitle: "북극성 지표부터 코호트 분석까지"
-date: 2022-08-08 09:00:00 +0900
+title: "주니어 PM의 '중요한 고객' 발굴하기"
+subtitle: "북극성 지표부터 고객 & 비즈니스 관점 분석까지"
+date: 2022-08-25 09:00:00 +0900
 category: product
 background: '/img/important-customer/socar-background.png' 
 author: bucky
