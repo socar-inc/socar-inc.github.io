@@ -105,3 +105,7 @@ lucia:
 humphrey:
   name: 험프리
   image: '/assets/authors/humphrey.png'
+
+bucky:
+  name: 버키
+  image: '/assets/authors/bucky.png'
