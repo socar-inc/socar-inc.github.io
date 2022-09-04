@@ -1,7 +1,7 @@
 ---
 layout: post
-title: "React Icon Component 개발기"
-subtitle: "아이콘 등록 프로세스의 효율화"
+title: "React Custom Icon Component 개발기"
+subtitle: "아이콘 등록 프로세스 효율화를 통한 개발자 경험(Developer Experience) 개선"
 date: 2022-07-06 09:00:00 +0900
 category: dev
 background: "/img/icon-component/icons.png"
