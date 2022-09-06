@@ -73,7 +73,7 @@ oliver:
 juno:
   name: 주노
   image: '/assets/authors/juno.png'
-  
+
 marie:
   name: 마리
   image: '/assets/authors/marie.png'
@@ -102,6 +102,14 @@ lucia:
   name: 루시아
   image: '/assets/authors/lucia.png'
 
+sienna:
+  name: 시에나
+  image: '/assets/authors/sienna.png'
+
+blanc:
+  name: 블랑
+  image: '/assets/authors/blanc.jpg'
+
 humphrey:
   name: 험프리
   image: '/assets/authors/humphrey.png'
@@ -109,3 +117,4 @@ humphrey:
 bucky:
   name: 버키
   image: '/assets/authors/bucky.png'
+
