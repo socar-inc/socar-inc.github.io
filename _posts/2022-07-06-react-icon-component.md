@@ -183,7 +183,7 @@ M은 시작점, H는 수평선, V는 수직선을 뜻합니다. 마지막 z는 "
 </p>
 
 
-이런 원리를 식으로 계산하여 Circle, Rectangle Element를 Path Element로 변환하는 스크립트 파일을 작성하였고, 이 결과물로 아이콘 이름을 Key 값으로 갖는 JSON 파일이 만들어집니다.
+이런 원리를 식으로 계산하여 Circle, Rectangle Element를 Path Element로 변환하는 스크립트 파일을 작성하였고, 이 결과물로 아이콘 이름을 Key 값으로 갖는 Path JSON 파일이 만들어집니다.
 
 ```json
   "ic18_description_dash2": {
@@ -197,7 +197,7 @@ M은 시작점, H는 수평선, V는 수직선을 뜻합니다. 마지막 z는 "
 
 아이콘의 형태를 동일하게 만들어 하나의 JSON 파일에 모아두었으니 이걸 활용하여 컴포넌트를 만들어 적용해 보겠습니다.
 
-3.2에서 만든 svgPaths JSON 파일을 활용하여 컴포넌트를 만들었습니다. icon 이름, icon 색상, style, className 을 Parameter로 받고 SVG Path로만 이루어진 컴포넌트입니다. 
+3.2에서 만든 Path JSON 파일을 활용하여 컴포넌트를 만들었습니다. Icon 이름, Icon 색상, Style, ClassName 을 Parameter로 받고 SVG Path로만 이루어진 컴포넌트입니다. 
 
 
 ```jsx
@@ -228,7 +228,7 @@ Icon Component를 사용하려고 보니 IDE가 제공해 주는 자동완성이
 
 ### 3.4 타입을 적용해 보자 <a name="3.4-타입을-적용해 보자" />
 
-아이콘의 이름을 리터럴 타입으로 정의하기 위해서 3.2에서 만든 svgPaths JSON 파일에서 아이콘 이름만 추출하는 작업이 필요합니다.
+아이콘의 이름을 리터럴 타입으로 정의하기 위해서 3.2에서 만든 Path JSON 파일에서 아이콘 이름만 추출하는 작업이 필요합니다.
 
 ```json
 {
