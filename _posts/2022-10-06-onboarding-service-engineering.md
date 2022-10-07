@@ -147,24 +147,22 @@ tags:
 
 이전까지는 그저 시키는 업무와 주어진 범위까지만 생각하며 일해왔었는데, 작성한 planning을 가지고 TL 미팅을 하면서 **‘이번 분기에는 내가 어떠한 업무를 왜 하는지, 어디까지 하고싶은지’** 를 객관적으로, 명확하게 파악할 수 있었습니다. 덕분에 플래닝한 업무의 우선순위를 부여하고, 저의 일정과 능력에 맞게 스케줄링(Scheduling) 하는 주도적인 자세로 일할 수 있었습니다. 이에 더해, **‘Personal Growth’** 를 작성하며 **‘제 자신, 제 역량을 성장시키기 위해’** 무엇을 하면 좋을지 고민해볼 수 있었습니다. 그렇게 작성한 목표 달성을 위해 업무 시간 중 일부를 사용하도록 TL이 장려해서 입사후부터 걱정했었던 개인의 성장을 해결하고 있습니다.
 
-<p style="text-align: center;">
+<figure align="center">
     <img src="../img/onboarding-service-engineering/5.png" alt="저(코기)의 3Q 90 Days Planning 작성한 내용">
-    <em>저(코기)의 3Q 90 Days Planning 작성한 내용</em>
-</p>
+    <figcaption><em>저(코기)의 3Q 90 Days Planning 작성한 내용</em></figcaption>
+</figure>
 
 <!-- ![저(코기)의 3Q 90 Days Planning 작성한 내용](/img/onboarding-service-engineering/5.png "저(코기)의 3Q 90 Days Planning 작성한 내용") -->
 <!-- {: width="75%" height="75%" style="display: block; margin: 0 auto"} -->
-
-저(코기)의 3Q 90 Days Planning 작성한 내용
 
 (현재 저의 3분기 90 Days Planning 입니다. TL과 미팅하면서 확정짓고, 이를 실천하기위해 노력하고 있습니다!)
 
 가장 인상깊었던 강의는 람다의 **‘프로그래머로 산다는 것'** 입니다. 제가 지금까지 컴퓨터를 전공하고, 개발을 해오면서 단순히 ‘잘하는 프로그래머' 가 되고 싶었는데, 이 강의를 통해 **‘좋은 프로그래머’** 로 성장해나가는 명확한 목표를 설정할 수 있었습니다. 덧붙여서, 단순히 개발만 잘하는 것 뿐 아니라 **지식 공유 및 협업** 을 위해 고민하고 실천해나가는 자세를 가지고 쏘카에서 열심히 해야겠다는 열의도 생기게 되었습니다. 
 
-<p style="text-align: center;">
+<figure align="center">
     <img src="../img/onboarding-service-engineering/6.png" alt="람다가 생각하는 '좋은 프로그래머'">
-    <em>람다가 생각하는 '좋은 프로그래머'</em>
-</p>
+    <figcaption><em>람다가 생각하는 '좋은 프로그래머'</em></figcaption>
+</figure>
 (위 슬라이드와 같은 능력들을 갖추면, ’좋은 프로그래머’ 가 될 수 있습니다?!)
 
 
@@ -188,17 +186,17 @@ tags:
 
 가장 흥미로웠던 강의는 **‘Backend - Datadog & Monitoring’** 과 **‘Backend - Performance Testing’**, 마지막으로 **‘Backend - Tests and testable code’** 였습니다. 
 
-<p style="text-align: center;">
+<figure align="center">
     <img src="../img/onboarding-service-engineering/7.png" alt="Socar의 Datadog Profiling 일부 화면">
-    <em>Socar의 Datadog Profiling 일부 화면</em>
-</p>
+    <figcaption><em>Socar의 Datadog Profiling 일부 화면</em></figcaption>
+</figure>
 
 지금까지 `Datadog` 이란 모니터링 도구를 알아두기만 했고 실제 활용했던 경험은 전무했었는데, 쏘카에 와서 직접 경험해볼 수 있는 좋은 기회였다고 생각합니다. 그래서인지, 도가가 해주신 Datadog 강의를 통해 쏘카 서버 전체를 관망하는 대시보드, Error 발생 시 Slack / opsgenie 툴과 연동해서 alert을 받을 수 있는 Monitor, 그 외 쿠버네티스의 POD도 확인할 수 있는 기능 등 다양한 datadog 사용법을 알게 되었다는 점이 무척 뜻깊었습니다.
 
-<p style="text-align: center;">
+<figure align="center">
     <img src="../img/onboarding-service-engineering/8.png" alt="Locust를 활용해 테스트했던 결과 지표">
-    <em>Locust를 활용해 테스트했던 결과 지표</em>
-</p>
+    <figcaption><em>Locust를 활용해 테스트했던 결과 지표</em></figcaption>
+</figure>
 
 다음으로, 저는 이전까지 Unit test & Integration test 만 해봤었는데, `Locust` 를 이용한 Performance testing을 통해 실제 내가 만든 서비스가 쏘카 서버에서 버틸 수 있는지, 트래픽을 얼마까지 받아낼 수 있는지 등 성능을 측정해볼 수 있어 흥미로웠습니다. 특히, 배운 원리와 기능을 직접 눈으로 확인할 수 있어 무척이나 좋았던 시간이었습니다.
 
@@ -253,10 +251,10 @@ tags:
 - As-Is : 현재 외부로의 노출 또는 제공이 필요한 디지털 에셋(이미지, PDF파일 등)을 제공하는 일관된 방식이 존재하지 않은 상황입니다.
 - To-Be : **디지털 에셋을 관리하는 독립적인 시스템을 구축**하여 정해진 규칙과 규격에 맞게 관리할 수 있습니다.
 
-<p style="text-align: center;">
+<figure align="center">
     <img src="../img/onboarding-service-engineering/9.png" alt="‘RFC103 - CDN 및 업로드 관리’ 프로젝트 목표">
-    <em>‘RFC103 - CDN 및 업로드 관리’ 프로젝트 목표</em>
-</p>
+    <figcaption><em>‘RFC103 - CDN 및 업로드 관리’ 프로젝트 목표</em></figcaption>
+</figure>
 
 **애자일 방식으로 1주 단위의 스프린트 3회에 걸쳐 총 3주 간 진행**된 이 프로젝트의 결과부터 말씀드리자면, **최종 데모까지 성공적으로 마무리했습니다.** 👏👏👏
 
@@ -331,10 +329,10 @@ Jira에서 스프린트를 생성했고, 각자 맡은 업무를 티켓으로 �
 
 첫 데모 당시에는 처음이다보니 많이 긴장했고 떨렸지만, 시연 뿐 아니라 서비스 추가 및 개선 관련 질문을 받고 대답하는 QnA 시간까지 무사히 마칠 수 있었습니다.
 
-<p style="text-align: center;">
+<figure align="center">
     <img src="../img/onboarding-service-engineering/10.png" alt="스프린트 데모 시연 중 일부 스크린샷">
-    <em>스프린트 데모 시연 중 일부 스크린샷</em>
-</p>
+    <figcaption><em>스프린트 데모 시연 중 일부 스크린샷</em></figcaption>
+</figure>
 
 ### 3.5. 회고 및 플래닝
 
@@ -350,10 +348,10 @@ Jira에서 스프린트를 생성했고, 각자 맡은 업무를 티켓으로 �
 - Try - 잘하고 있는 것을 유지하기 위한 방법 또는 문제를 해결하기 위한 방법
 </aside>
 
-<p style="text-align: center;">
+<figure align="center">
     <img src="../img/onboarding-service-engineering/11.png" alt="자체적으로 수행한 KPT 회고">
-    <em>자체적으로 수행한 KPT 회고</em>
-</p>
+    <figcaption><em>자체적으로 수행한 KPT 회고</em></figcaption>
+</figure>
 
 이처럼 스프린트를 진행하면서 느꼈던 Keep, Problem, Try 를 스프린트 참여자들이 포스트잇에 작성하고 이를 공유하며 토론을 통해 내용을 개선했습니다. 이후 투표를 통해 다음 스프린트에 수행할 **Action Item을 선정**하는데, 회고의 사회자가 다음 스프린트 기간동안 Action Item을 잘 수행하는지 감독하게 됩니다.
 
@@ -363,10 +361,10 @@ Jira에서 스프린트를 생성했고, 각자 맡은 업무를 티켓으로 �
 
 이렇게 이전 스프린트 회고를 마치고, 바로 다음 스프린트를 위한 플래닝을 진행했습니다.
 
-<p style="text-align: center;">
+<figure align="center">
     <img src="../img/onboarding-service-engineering/12.png" alt="Jira에서 sprint 보드를 만들어 함께 티켓 생성하고 협의하는 플래닝 모습">
-    <em>Jira에서 sprint 보드를 만들어 함께 티켓 생성하고 협의하는 플래닝 모습</em>
-</p>
+    <figcaption><em>Jira에서 sprint 보드를 만들어 함께 티켓 생성하고 협의하는 플래닝 모습</em></figcaption>
+</figure>
 
 
 처음 작성했던 유저 스토리를 바탕으로 스프린트 업무 범위를 구체화한 후, 티켓을 함께 생성하며 업무 분배를 했습니다. 이 때, 각 티켓 별로 Story Point 를 산정합니다. 지라 티켓에서의 Story Point는 **‘해당 티켓을 완료하는데까지 걸리는 노력(시간, 난이도 등)의 총합’** 을 의미합니다. 각자 생각하는 Story Point를 공유하고, 최종 Story Point를 확정합니다.
@@ -383,10 +381,10 @@ Jira에서 스프린트를 생성했고, 각자 맡은 업무를 티켓으로 �
 
 서비스 엔지니어링 본부에서는 매 달 말일에 한 시간 정도 모두가 모여 서로 인사하고 정보 / 기술 / 성과도 공유하는 자리가 있습니다. 이를 **‘서비스 엔지니어링 본부 타운홀미팅'** 이라고 부르는데요. 매 회차마다 정해진 첫 세션이 있습니다. 바로! **‘신규 동료 소개’** 세션입니다. 간단하게 저에 대한 소개 자료를 PPT 1페이지 분량으로 준비해서 ‘**자기PR’** 하는 시간입니다.
 
-<p style="text-align: center;">
+<figure align="center">
     <img src="../img/onboarding-service-engineering/13.png" alt="‘코기’ 는 이런 사람입니다.">
-    <em>‘코기’ 는 이런 사람입니다.</em>
-</p>
+    <figcaption><em>‘코기’ 는 이런 사람입니다.</em></figcaption>
+</figure>
 
 이렇게 마련해주신 세션 덕분에 서비스 엔지니어링 본부 동료분들에게 **‘코기’** 에 대해 알릴 수 있는 기회가 되었고, 다들 뜨거운 박수와 환호로 맞이해주셨습니다. (질문도 엄청 해주셔서 QnA 타임이 되었습니다..)
 
@@ -402,10 +400,10 @@ Jira에서 스프린트를 생성했고, 각자 맡은 업무를 티켓으로 �
 
 (다른 조는 양평 두물머리 드라이브, 강원도 바다멍 여행, 남양주 물의정원, 낙산공원과 연극 등 다양한 활동을 했다고 합니다.)
 
-<p style="text-align: center;">
+<figure align="center">
     <img src="../img/onboarding-service-engineering/14.png" alt="쏘풍데이 중 볼링치는 모습">
-    <em>쏘풍데이 중 볼링치는 모습</em>
-</p>
+    <figcaption><em>쏘풍데이 중 볼링치는 모습</em></figcaption>
+</figure>
 
 볼링을 처음 친다는 걱정 없이 모두가 편하고 즐겁게 시간을 보낼 수 있었습니다.
 
@@ -415,10 +413,10 @@ Jira에서 스프린트를 생성했고, 각자 맡은 업무를 티켓으로 �
 
 쏘카에서는 다양한 주제로 자유롭게 스터디를 만들어 진행할 수 있습니다. 저는 온보딩 기간에 개인적으로 `kotlin in action` 책을 혼자서 공부하다가, 버킷에 배정받은 이후에는 MSA 스터디에 참여하여 동료들과 함께 `마이크로서비스 도입, 이렇게 한다.` 책으로 공부하고 있습니다. 
 
-<p style="text-align: center;">
+<figure align="center">
     <img src="../img/onboarding-service-engineering/15.png" alt="노션 문서에 작성한 온보딩팀 스터디 진행 리스트">
-    <em>노션 문서에 작성한 온보딩팀 스터디 진행 리스트</em>
-</p>
+    <figcaption><em>노션 문서에 작성한 온보딩팀 스터디 진행 리스트</em></figcaption>
+</figure>
 
 ## 5. 온보딩 졸업 후 각자 버킷으로.
 
@@ -515,10 +513,10 @@ Jira에서 스프린트를 생성했고, 각자 맡은 업무를 티켓으로 �
 
 같이 협업하고, 퇴근 후에는 교류하며 매일이 행복하게 만들어준 동기들에게 감사인사를 드리며, 고마움의 표시로 함께 카페에서 추억을 나눴던 사진을 첨부하며 글을 마무리하겠습니다.
 
-<p style="text-align: center;">
+<figure align="center">
     <img src="../img/onboarding-service-engineering/16.png" alt="(왼쪽부터 도시, 이누, 코기(저), 키이라)">
-    <em>(왼쪽부터 도시, 이누, 코기(저), 키이라)</em>
-</p>
+    <figcaption><em>(왼쪽부터 도시, 이누, 코기(저), 키이라)</em></figcaption>
+</figure>
 
 함께 우당탕탕한 동기들끼리 온보딩 이후에도 사이좋게 만나서 밥먹고 카페가고 음주도 즐기곤 합니다 😝
 
