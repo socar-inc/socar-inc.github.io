@@ -99,8 +99,8 @@ tags:
 
 현재 신규 사업 또는 서비스의 확장에 힘을 실어주기 위해 버킷이 계속해서 만들어지고 있습니다. 게시글 작성 시점을 기준으로 운영되는 11개의 버킷은 다음과 같습니다.
 
-| 버킷명                     | 업무                                                |
-| -------------------------- | --------------------------------------------------- |
+| <center>버킷명</center>    | <center>업무</center>                               |
+| :------------------------- | :-------------------------------------------------- |
 | Core Platform Bucket       | 예약 및 성능개선                                    |
 | Car Sharing Bucket(B2C)    | 카셰어링 서비스(왕복, 존편도, 부름, 페어링)         |
 | Core Experience Bucket     | 쏘카 앱/웹(AOS/iOS, Web)                            |
@@ -140,15 +140,15 @@ tags:
 
 시작하는 첫 주이니만큼, 매 강의마다 긴장한 채로 들었습니다. **전사 재택근무 기간** 이어서 모든 강의는 비대면으로 진행되었습니다. 당시 설명해주시는 부분들을 하나라도 놓치기 싫어서 집중하며 메모했었는데, 별도로 녹화해서 녹화본을 공유하기 때문에 언제든 다시 들으며 공부할 수 있었습니다.
 
-| 주제                                     | 내용                                                                           | 소속           | 강사     |
-| ---------------------------------------- | ------------------------------------------------------------------------------ | -------------- | -------- |
-| 쏘카 Business Introduction               | 쏘카는 어떤 일들을 하고 있을까요?                                              | EM유닛         | 케이제이 |
-| 프로그래머로 산다는 것                   | 좋은 개발자가 무엇인지 함께 고민해보아요.                                      | CTO            | 람다     |
-| Service Engineering - How to work        | 서비스 엔지니어링 본부에서 어떻게 일하고 있을까요?                             | EM유닛         | 케이제이 |
-| 90 Days Planning 작성 가이드             | 90 Days Planning이란 무엇이고, 어떻게 작성하면 될까요?                         | EM유닛         | 케이제이 |
-| Service Architecting Model               | 현재 서비스의 Architecture 및 추후 지향하는 방향을 소개합니다.                 | SE 본부장      | 아나킨   |
-| Service Engineering - How to work (Jira) | 쏘카가 사용중인 Jira의 기초 / 심화 기능 사용에 대해 설명합니다.                | QA팀           | 딕키     |
-| Service Architecture AS-IS               | 쏘카의 카셰어링 사례를 통해 현재와 미래의 쏘카 Architecture에 대해 공유합니다. | Sharing 그룹장 | 브래드   |
+| <center>주제</center>                    | <center>내용</center>                                                          |      소속      |   강사   |
+| :--------------------------------------- | :----------------------------------------------------------------------------- | :------------: | :------: |
+| 쏘카 Business Introduction               | 쏘카는 어떤 일들을 하고 있을까요?                                              |     EM유닛     | 케이제이 |
+| 프로그래머로 산다는 것                   | 좋은 개발자가 무엇인지 함께 고민해보아요.                                      |      CTO       |   람다   |
+| Service Engineering - How to work        | 서비스 엔지니어링 본부에서 어떻게 일하고 있을까요?                             |     EM유닛     | 케이제이 |
+| 90 Days Planning 작성 가이드             | 90 Days Planning이란 무엇이고, 어떻게 작성하면 될까요?                         |     EM유닛     | 케이제이 |
+| Service Architecting Model               | 현재 서비스의 Architecture 및 추후 지향하는 방향을 소개합니다.                 |   SE 본부장    |  아나킨  |
+| Service Engineering - How to work (Jira) | 쏘카가 사용중인 Jira의 기초 / 심화 기능 사용에 대해 설명합니다.                |      QA팀      |   딕키   |
+| Service Architecture AS-IS               | 쏘카의 카셰어링 사례를 통해 현재와 미래의 쏘카 Architecture에 대해 공유합니다. | Sharing 그룹장 |  브래드  |
 
 1주 차는 **프로그래머의 기본과 쏘카 서비스 아키텍쳐** 가 중점이었습니다. 강의 중 `90 Days Planning 작성 가이드` 는 서비스 엔지니어링 본부에서 시행하고 있는 개개인 별 분기 단위 마일스톤을 작성하는 것으로, 자기발전을 위한 업무, 개인활동 등 정량적 목표를 자유롭게 적을 수 있습니다. 또한, 단지 작성만 하는 것이 아니라 작성했던 계획의 실천을 위해 TL에게 공유하고 미팅하면서 업무 일정을 조율할 수 있습니다. **‘주도적으로 일하고 성장하기’** 의 목표를 지닌 ‘90 Days Planning’ 덕분에 작성했던 마일스톤을 자유의지로 실천하려는 노력이 있었고, 현재의 저는 작성하기 이전보다 한 층 더 성장한 것을 체감하고 있습니다. 
 
@@ -175,17 +175,17 @@ tags:
 #
 ### 2.2. 2 Week : Backend 강의 & 쏘카의 개발 문화
 
-| 주제                                    | 내용                                                                                                          | 소속        | 강사         |
-| --------------------------------------- | ------------------------------------------------------------------------------------------------------------- | ----------- | ------------ |
-| Service Development Introduction        | 쏘카의 Service Repository 구조, 개발 환경(dev, qa/stage, production), 개발부터 배포까지의 과정을 소개합니다.  | Car Sharing | 믈브         |
-| Backend - Running services in the local | 실제 운영중인 쏘카 서버의 repository를 받아 local 환경에서 실행하기 위한 과정을 환경설정과 함께 실습해봅니다. | Car Sharing | 믈브         |
-| Github and PR and Reviewing             | 쏘카의 Github 관리 및 협업(PR / Code Review / Merge) 방식을 듣고 실습하는 시간입니다.                         | Car Sharing | 믈브         |
-| Backend - Coding: convention and styles | Kotlin 기본 코딩 가이드 및 intelliJ plugin(+ gradle) 활용 방법을 설명합니다.                                  | Car Sharing | 믈브         |
-| Backend - Tests and testable code       | 테스팅에 대해 배우고, 실습을 통해 테스트 코드를 작성해봅니다.                                                 | B2B         | 카이         |
+| <center>주제</center>                   | <center>내용</center>                                                                                         |    소속     |     강사     |
+| :-------------------------------------- | :------------------------------------------------------------------------------------------------------------ | :---------: | :----------: |
+| Service Development Introduction        | 쏘카의 Service Repository 구조, 개발 환경(dev, qa/stage, production), 개발부터 배포까지의 과정을 소개합니다.  | Car Sharing |     믈브     |
+| Backend - Running services in the local | 실제 운영중인 쏘카 서버의 repository를 받아 local 환경에서 실행하기 위한 과정을 환경설정과 함께 실습해봅니다. | Car Sharing |     믈브     |
+| Github and PR and Reviewing             | 쏘카의 Github 관리 및 협업(PR / Code Review / Merge) 방식을 듣고 실습하는 시간입니다.                         | Car Sharing |     믈브     |
+| Backend - Coding: convention and styles | Kotlin 기본 코딩 가이드 및 intelliJ plugin(+ gradle) 활용 방법을 설명합니다.                                  | Car Sharing |     믈브     |
+| Backend - Tests and testable code       | 테스팅에 대해 배우고, 실습을 통해 테스트 코드를 작성해봅니다.                                                 |     B2B     |     카이     |
 | Homework                                | 쏘카 서버의 Repository에서 서비스 하나를 선택해서 Test code 작성 / PR / Code Review 해보기.                   |             |              |
-| Backend - CI/CD                         | 품질관리 및 배포/운영까지 함께하는 CI/CD와 쏘카는 어떤 방식인지 설명합니다.                                   | Marketing   | 도가, 브루스 |
-| Backend - Datadog & Monitoring          | 쏘카 서버를 모니터링하고 관리할 수 있는 Datadog, 그 외 모니터링 도구에 대해 설명합니다.                       | Marketing   | 도가, 브루스 |
-| Backend - Performance testing           | 내가 만든 서비스가 얼마까지 버틸 수 있는지 알기 위해 수행하는 Performance Testing을 배웁니다.                 | Marketing   | 도가, 브루스 |
+| Backend - CI/CD                         | 품질관리 및 배포/운영까지 함께하는 CI/CD와 쏘카는 어떤 방식인지 설명합니다.                                   |  Marketing  | 도가, 브루스 |
+| Backend - Datadog & Monitoring          | 쏘카 서버를 모니터링하고 관리할 수 있는 Datadog, 그 외 모니터링 도구에 대해 설명합니다.                       |  Marketing  | 도가, 브루스 |
+| Backend - Performance testing           | 내가 만든 서비스가 얼마까지 버틸 수 있는지 알기 위해 수행하는 Performance Testing을 배웁니다.                 |  Marketing  | 도가, 브루스 |
 
 일주일이 지나고, 2주 차 교육이 시작되었습니다.
 
@@ -212,17 +212,18 @@ tags:
 #
 ### 2.3. 3 Week : Frontend 강의 & 쏘카 Infra / DB 
 
-| 주제                                     | 내용                                                                                         | 소속          | 강사   |
-| ---------------------------------------- | -------------------------------------------------------------------------------------------- | ------------- | ------ |
-| Frontend - Coding: convention and styles | Backoffice 개발 역량을 위한 FrontEnd 기본 코딩에 대해 설명합니다.                            | Web팀         | 라파엘 |
-| Frontend - Package management            | npm이 무엇인지 설명하고, FrontEnd의 공통 npm module 사용법을 실습합니다.                     | B2B           | 블랑   |
-| Frontend - Running services in the local | local 환경에서 Backend 서비스와 직접 실행해 연동하고, 결과를 확인해보는 실습하는 시간입니다. | Car Sharing   | 리스본 |
-| Frontend - CI/CD                         | FrontEnd의 CI/CD에 대해 설명을 듣고, 개발부터 코드리뷰 / 배포까지 직접 실습하는 시간입니다.  | Marketing     | 버틀러 |
-| AWS and GCP in SOCAR                     | AWS와 GCP를 쏘카에서는 어떻게 활용하는지 소개합니다.                                         |               | 에코   |
+
+| <center>주제</center>                    | <center>내용</center>                                                                        |     소속      |  강사  |
+| :--------------------------------------- | :------------------------------------------------------------------------------------------- | :-----------: | :----: |
+| Frontend - Coding: convention and styles | Backoffice 개발 역량을 위한 FrontEnd 기본 코딩에 대해 설명합니다.                            |     Web팀     | 라파엘 |
+| Frontend - Package management            | npm이 무엇인지 설명하고, FrontEnd의 공통 npm module 사용법을 실습합니다.                     |      B2B      |  블랑  |
+| Frontend - Running services in the local | local 환경에서 Backend 서비스와 직접 실행해 연동하고, 결과를 확인해보는 실습하는 시간입니다. |  Car Sharing  | 리스본 |
+| Frontend - CI/CD                         | FrontEnd의 CI/CD에 대해 설명을 듣고, 개발부터 코드리뷰 / 배포까지 직접 실습하는 시간입니다.  |   Marketing   | 버틀러 |
+| AWS and GCP in SOCAR                     | AWS와 GCP를 쏘카에서는 어떻게 활용하는지 소개합니다.                                         |               |  에코  |
 | (Kubernetes) How to use in SOCAR         | Kubernetes(K8S) 의 기본 개념과 원리에 대해 설명을 듣고, 실습을 통해 명령어를 익힙니다.       | Core Platform | 코알라 |
-| SOCAR Network                            | 쏘카 서버의 Network Architecture에 대해 소개합니다.                                          | Cloud Infra팀 | 로원   |
-| SOCAR Database structure                 | AWS RDS를 활용하는 쏘카의 Database Architecture에 대해 소개합니다.                           | Cloud DB팀    | 제이든 |
-| DB - SQL Basic Grammar                   | 실제 쏘카에서 활용하는 SQL 문법을 보고 작성해보는 시간입니다.                                | Cloud DB팀    | 알티   |
+| SOCAR Network                            | 쏘카 서버의 Network Architecture에 대해 소개합니다.                                          | Cloud Infra팀 |  로원  |
+| SOCAR Database structure                 | AWS RDS를 활용하는 쏘카의 Database Architecture에 대해 소개합니다.                           |  Cloud DB팀   | 제이든 |
+| DB - SQL Basic Grammar                   | 실제 쏘카에서 활용하는 SQL 문법을 보고 작성해보는 시간입니다.                                |  Cloud DB팀   |  알티  |
 
 마지막 3주 차 교육은 FrontEnd 관련 강의가 절반을 차지했는데, 서버 개발자라고 해서 BackEnd 만 알고 있는 것보다 쏘카에서의 FrontEnd 개발 문화도 알아두는 것이 이후 협업에 있어 큰 도움이 될 것이라고 판단해서 전부 수강했습니다. 쏘카에서 FrontEnd 개발은 주로 `react`, `typescript` 를 사용하는데, 이전에 Vue.js를 사용해본 경험이 있어 이해하기 한결 수월했고 관심있게 수강했습니다.
 
@@ -458,12 +459,12 @@ Jira에서 스프린트를 생성했고, 각자 맡은 업무를 티켓으로 �
 
 이 글을 작성하면서 EM유닛의 케이제이, 티타임을 가지며 가까워진 신규 입사자분들에게 자문을 구하기도 했습니다. ~~특히 기간적인 측면에서 개인적으로 Dogfooding Project 수행기간이 짧다고 느꼈었는데,~~  그러면서, 쏘카의 온보딩 커리큘럼은 피드백을 통해 지속적으로 개선되고 있다고 들었습니다. 그 중 Dogfooding Project 수행기간이 짧다는 피드백을 반영하여 현재는 **Dogfooding Project를 2달 가까이 진행**하고 있으며, 기존의 강의 퀄리티 개선과 함께 아래 표로 작성한 강의들이 추가되었다고 합니다.
 
-| 주제                                | 내용                                                                           | 소속               | 강사   |
-| ----------------------------------- | ------------------------------------------------------------------------------ | ------------------ | ------ |
+| <center>주제</center>               | <center>내용</center>                                                          |        소속        |  강사  |
+| :---------------------------------- | :----------------------------------------------------------------------------- | :----------------: | :----: |
 | CITY DILEMMA : 쏘카 다큐멘터리 시청 | 쏘카가 추구하는 방향과 지금까지 달려온 여정을 담은 다큐멘터리를 시청합니다.    |                    |        |
-| 차량 시뮬레이터 온보딩              | 본부 별 차량 시뮬레이터 체험 & 교육                                            | 커넥티드디바이스팀 | 라네   |
-| Modern Architecture 1, 2            | 아키텍트의 역할과 아키텍트는 어떻게 만들어지는지에 대한 이야기를 전해드립니다. | SE 본부장          | 아나킨 |
-| 당신이 모르던 코틀린                | 코틀린에 대한 기초 및 심화 교육                                                | 외부강사           | 오현석 |
+| 차량 시뮬레이터 온보딩              | 본부 별 차량 시뮬레이터 체험 & 교육                                            | 커넥티드디바이스팀 |  라네  |
+| Modern Architecture 1, 2            | 아키텍트의 역할과 아키텍트는 어떻게 만들어지는지에 대한 이야기를 전해드립니다. |     SE 본부장      | 아나킨 |
+| 당신이 모르던 코틀린                | 코틀린에 대한 기초 및 심화 교육                                                |      외부강사      | 오현석 |
 
 #
 #
