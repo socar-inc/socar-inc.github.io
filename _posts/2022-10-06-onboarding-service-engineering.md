@@ -25,14 +25,15 @@ tags:
 
 (저를 포함한) 소중한 3월 신규입사자 4명을 간단하게 소개합니다 🎉
 <figure class="introduction-image">
-    <img src="../img/onboarding-service-engineering/1.png" width="23%" height="23%">
-    <img src="../img/onboarding-service-engineering/2.png" width="23%" height="23%">
-    <img src="../img/onboarding-service-engineering/3.png" width="23%" height="23%">
-    <img src="../img/onboarding-service-engineering/4.png" width="23%" height="23%">
-<figure>
+    <img src="/img/onboarding-service-engineering/1.png" width="23%" height="23%">
+    <img src="/img/onboarding-service-engineering/2.png" width="23%" height="23%">
+    <img src="/img/onboarding-service-engineering/3.png" width="23%" height="23%">
+    <img src="/img/onboarding-service-engineering/4.png" width="23%" height="23%">
+</figure>
 
 - Web Frontend Engineer - 도시
 - Backend Engineer - 코기(저), 이누, 키이라
+
 
 이 글을 작성하는 가장 큰 이유는 두 가지 입니다. 첫 째는 **쏘카에서 온보딩 교육을 어떻게 진행**하는지, 두 번째는 **온보딩 교육을 통해 무엇을 배우고 얼마나 더 성장할 수 있었는지** 알리고자 작성하게 되었습니다.
 
@@ -173,7 +174,7 @@ tags:
 1주 차 강의 중 가장 인상깊었던 강의는 람다의 **‘프로그래머로 산다는 것'** 입니다. 제가 지금까지 컴퓨터를 전공하고, 개발을 해오면서 단순히 ‘잘하는 프로그래머' 가 되고 싶었는데, 이 강의를 통해 **‘좋은 프로그래머’** 로 성장해나가는 명확한 목표를 설정할 수 있었습니다. 덧붙여서, 단순히 개발만 잘하는 것 뿐 아니라 **지식 공유 및 협업** 을 위해 고민하고 실천해나가는 자세를 가지고 쏘카에서 열심히 해야겠다는 열의도 생기게 되었습니다. 
 
 <figure align="center">
-    <img src="../img/onboarding-service-engineering/6.png" alt="람다가 생각하는 '좋은 프로그래머'">
+    <img src="/img/onboarding-service-engineering/6.png" alt="람다가 생각하는 '좋은 프로그래머'">
     <figcaption><em>람다가 생각하는 '좋은 프로그래머'</em></figcaption>
 </figure>
 
@@ -203,7 +204,7 @@ tags:
 가장 흥미로웠던 강의는 **‘Backend - Datadog & Monitoring’** 과 **‘Backend - Performance Testing’**, 마지막으로 **‘Backend - Tests and testable code’** 였습니다. 
 
 <figure align="center">
-    <img src="../img/onboarding-service-engineering/7.png" alt="Socar의 Datadog Profiling 일부 화면">
+    <img src="/img/onboarding-service-engineering/7.png" alt="Socar의 Datadog Profiling 일부 화면">
     <figcaption><em>Socar의 Datadog Profiling 일부 화면</em></figcaption>
 </figure>
 
@@ -212,7 +213,7 @@ tags:
 <br />
 
 <figure align="center">
-    <img src="../img/onboarding-service-engineering/8.png" alt="Locust를 활용해 테스트했던 결과 지표">
+    <img src="/img/onboarding-service-engineering/8.png" alt="Locust를 활용해 테스트했던 결과 지표">
     <figcaption><em>Locust를 활용해 테스트했던 결과 지표</em></figcaption>
 </figure>
 
@@ -278,7 +279,7 @@ in which a company uses its own product to test and promote the product.
 - To-Be : **디지털 에셋을 관리하는 독립적인 시스템을 구축**하여 정해진 규칙과 규격에 맞게 관리할 수 있습니다.
 
 <figure align="center">
-    <img src="../img/onboarding-service-engineering/9.png" alt="‘RFC103 - CDN 및 업로드 관리’ 프로젝트 목표">
+    <img src="/img/onboarding-service-engineering/9.png" alt="‘RFC103 - CDN 및 업로드 관리’ 프로젝트 목표">
     <figcaption><em>‘RFC103 - CDN 및 업로드 관리’ 프로젝트 목표</em></figcaption>
 </figure>
 
@@ -362,7 +363,7 @@ Jira에서 스프린트를 생성했고, 각자 맡은 업무를 티켓으로 �
 첫 데모 당시에는 처음이다보니 많이 긴장했고 떨렸지만, 시연 뿐 아니라 서비스 추가 및 개선 관련 질문을 받고 대답하는 QnA 시간까지 무사히 마칠 수 있었습니다.
 
 <figure align="center">
-    <img src="../img/onboarding-service-engineering/10.png" alt="스프린트 데모 시연 중 일부 스크린샷">
+    <img src="/img/onboarding-service-engineering/10.png" alt="스프린트 데모 시연 중 일부 스크린샷">
     <figcaption><em>스프린트 데모 시연 중 일부 스크린샷</em></figcaption>
 </figure>
 
@@ -384,7 +385,7 @@ Keep / Problem / Try 의 세 가지 관점으로 분류하여 회고를 진행�
 <br />
 
 <figure align="center">
-    <img src="../img/onboarding-service-engineering/11.png" alt="자체적으로 수행한 KPT 회고">
+    <img src="/img/onboarding-service-engineering/11.png" alt="자체적으로 수행한 KPT 회고">
     <figcaption><em>자체적으로 수행한 KPT 회고</em></figcaption>
 </figure>
 
@@ -399,7 +400,7 @@ Keep / Problem / Try 의 세 가지 관점으로 분류하여 회고를 진행�
 <br />
 
 <figure align="center">
-    <img src="../img/onboarding-service-engineering/12.png" alt="Jira에서 sprint 보드를 만들어 함께 티켓 생성하고 협의하는 플래닝 모습">
+    <img src="/img/onboarding-service-engineering/12.png" alt="Jira에서 sprint 보드를 만들어 함께 티켓 생성하고 협의하는 플래닝 모습">
     <figcaption><em>Jira에서 sprint 보드를 만들어 함께 티켓 생성하고 협의하는 플래닝 모습</em></figcaption>
 </figure>
 
@@ -422,7 +423,7 @@ Keep / Problem / Try 의 세 가지 관점으로 분류하여 회고를 진행�
 서비스 엔지니어링 본부에서는 매 달 말일에 한 시간 정도 모두가 모여 서로 인사하고 정보 / 기술 / 성과도 공유하는 자리가 있습니다. 이를 **‘서비스 엔지니어링 본부 타운홀미팅'** 이라고 부르는데요. 매 회차마다 정해진 첫 세션이 있습니다. 바로! **‘신규 동료 소개’** 세션입니다. 간단하게 저에 대한 소개 자료를 PPT 1페이지 분량으로 준비해서 ‘**자기PR’** 하는 시간입니다.
 
 <figure align="center">
-    <img src="../img/onboarding-service-engineering/13.png" alt="‘코기’ 는 이런 사람입니다.">
+    <img src="/img/onboarding-service-engineering/13.png" alt="‘코기’ 는 이런 사람입니다.">
     <figcaption><em>‘코기’ 는 이런 사람입니다.</em></figcaption>
 </figure>
 
@@ -444,7 +445,7 @@ Keep / Problem / Try 의 세 가지 관점으로 분류하여 회고를 진행�
 <br />
 
 <figure align="center">
-    <img src="../img/onboarding-service-engineering/14.png" alt="쏘풍데이 중 볼링치는 모습">
+    <img src="/img/onboarding-service-engineering/14.png" alt="쏘풍데이 중 볼링치는 모습">
     <figcaption><em>쏘풍데이 중 볼링치는 모습</em></figcaption>
 </figure>
 
@@ -458,7 +459,7 @@ Keep / Problem / Try 의 세 가지 관점으로 분류하여 회고를 진행�
 쏘카에서는 다양한 주제로 자유롭게 스터디를 만들어 진행할 수 있습니다. 저는 온보딩 기간에 개인적으로 `kotlin in action` 책을 혼자서 공부하다가, 버킷에 배정받은 이후에는 MSA 스터디에 참여하여 동료들과 함께 `마이크로서비스 도입, 이렇게 한다.` 책으로 공부하고 있습니다. 
 
 <figure align="center">
-    <img src="../img/onboarding-service-engineering/15.png" alt="노션 문서에 작성한 온보딩팀 스터디 진행 리스트">
+    <img src="/img/onboarding-service-engineering/15.png" alt="노션 문서에 작성한 온보딩팀 스터디 진행 리스트">
     <figcaption><em>노션 문서에 작성한 온보딩팀 스터디 진행 리스트</em></figcaption>
 </figure>
 
@@ -576,7 +577,7 @@ Keep / Problem / Try 의 세 가지 관점으로 분류하여 회고를 진행�
 같이 협업하고, 퇴근 후에는 교류하며 매일이 행복하게 만들어준 동기들에게 감사인사를 드리며, 고마움의 표시로 함께 카페에서 추억을 나눴던 사진을 첨부하며 글을 마무리하겠습니다.
 
 <figure align="center">
-    <img src="../img/onboarding-service-engineering/16.png" alt="(왼쪽부터 도시, 이누, 코기(저), 키이라)">
+    <img src="/img/onboarding-service-engineering/16.png" alt="(왼쪽부터 도시, 이누, 코기(저), 키이라)">
     <figcaption><em>(왼쪽부터 도시, 이누, 코기(저), 키이라)</em></figcaption>
 </figure>
 
