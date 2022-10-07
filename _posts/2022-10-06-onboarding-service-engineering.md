@@ -24,11 +24,10 @@ tags:
 쏘카 서비스 엔지니어링(Service Engineering) 본부에 입사하면 엔지니어링 온보딩팀으로 소속되어 온보딩 일정을 진행합니다. 이 때, 같은 달에 입사한 분들과 함께 온보딩 교육을 받습니다. 그 덕분에 (한 배를 탄) 저의 입사동기들이 생겼습니다!
 
 (저를 포함한) 소중한 3월 신규입사자 4명을 간단하게 소개합니다 🎉
-<figure class="introduction-image">
-    <img src="/img/onboarding-service-engineering/1.png" width="23%" height="23%">
-    <img src="/img/onboarding-service-engineering/2.png" width="23%" height="23%">
-    <img src="/img/onboarding-service-engineering/3.png" width="23%" height="23%">
-    <img src="/img/onboarding-service-engineering/4.png" width="23%" height="23%">
+
+<figure align="center">
+    <img src="/img/onboarding-service-engineering/1-4.png" alt="신규입사자 4명 프로필">
+    <figcaption><em>저마다 개성있는 프로필 이미지를 사용하고 있습니다.</em></figcaption>
 </figure>
 
 - Web Frontend Engineer - 도시
@@ -316,24 +315,19 @@ Jira에서 스프린트를 생성했고, 각자 맡은 업무를 티켓으로 �
 이후에는 각자 주어진 서비스를 개발해나갔습니다. 책임진 서비스는 다음과 같습니다.
 
 - 코기 - Backend
-    - AmazonS3 생성 / Configuration, Component 구현 및 Amazon S3 연동
-    - 에셋 파일 S3 임시 버킷에 업로드, 임시 버킷 → 에셋 버킷으로 파일 COPY
+    - Amazon S3 연동 환경 구축 / 에셋 파일 S3 버킷 업로드
     - git action / husky / ktfmt 설정
 - 이누 - Backend
-    - 초기 프로젝트 설정 / 인터페이스 구현 / Exception Handling
-    - Controller, DTO 구현
     - 에셋 파일 삭제
-    - 로그 조회
+    - 에셋 파일 로그 조회
 - 키이라 - Backend
-    - DynamoDB / CloudFront 생성 및 연동
+    - DynamoDB, CloudFront 생성 및 연동 / DynamoDB 활용해서 에셋 파일 로그 저장
     - 에셋 파일 조회
-    - DynamoDB 활용해서 로그 저장
     - Testcontainer, Localstack 모듈 구현
 - 도시 - Frontend
-    - Wireframe 작성
-    - FrontEnd 개발환경 구현
+    - Wireframe 작성 / FrontEnd 개발환경 구현
     - 디자인 토큰 정의 및 설정
-    - UI 단위 컴포넌트(Button, Typography, FlexBox, Divider, Modal 등) 및 관련 기능 구현
+    - UI 단위 컴포넌트 및 관련 기능 구현
 
 저희 모두 테스트코드 작성에 진심이었기 때문에, 작업 기간 중 절반은 거의 테스트코드 작성에 할애했습니다. Unit test 관련해서 Service는 `kotest` 의  `AnnotationSpec` 을, Controller는 `MockMvc` 를 사용했습니다. 이에 더해 AmazonS3 Integration Test를 위해서 `Testcontainer` 로  `Localstack` 모듈을 사용하기도 했습니다.
 
@@ -354,7 +348,7 @@ Jira에서 스프린트를 생성했고, 각자 맡은 업무를 티켓으로 �
     - 에셋 파일을 검색할 수 있어야 한다.
     - 에셋 파일을 삭제할 수 있어야 한다.
     - 에셋 파일을 담는 폴더(디렉토리)를 생성할 수 있어야 한다.
-- 쏘카 운영자는 파일의 history를 저장한 log를 보고싶어한다.
+- 쏘카 운영자는 에셋 파일의 history를 저장한 log를 보고싶어한다.
     - 운영자는 에셋 파일의 변경(생성, 삭제) 이력과 변경한 사람 / 변경일자 / 변경사유 에 대해 알 수 있다.
     - 운영자는 전체 log에 대해 날짜 기준으로 조회할 수 있다.
 
