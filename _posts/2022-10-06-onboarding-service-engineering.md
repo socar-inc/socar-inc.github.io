@@ -161,7 +161,7 @@ tags:
 지금까지 `Datadog` 이란 모니터링 도구를 알아두기만 했고 실제 활용했던 경험은 전무했었는데, 쏘카에 와서 직접 경험해볼 수 있는 좋은 기회였다고 생각합니다. 그래서인지, 도가가 해주신 Datadog 강의를 통해 쏘카 서버 전체를 관망하는 대시보드, Error 발생 시 Slack / opsgenie 툴과 연동해서 alert을 받을 수 있는 Monitor, 그 외 쿠버네티스의 POD도 확인할 수 있는 기능 등 다양한 datadog 사용법을 알게 되었다는 점이 무척 뜻깊었습니다.
 
 
-![Locust를 활용한 Performance Testing 결과 지표<(/img/onboarding-service-engineering/8.png)*Locust를 활용한 Performance Testing 결과 지표<*
+![Locust를 활용한 Performance Testing 결과 지표](/img/onboarding-service-engineering/8.png)*Locust를 활용한 Performance Testing 결과 지표<*
 
 
 다음으로, 저는 이전까지 Unit Test & Integration Test 만 해봤었는데, `Locust` 를 이용한 Performance Testing을 통해 실제 내가 만든 서비스가 쏘카 서버에서 버틸 수 있는지, 트래픽을 얼마까지 받아낼 수 있는지 등 성능을 측정해볼 수 있어 흥미로웠습니다.
@@ -201,7 +201,7 @@ tags:
 
 저희가 수행하게 된 Dogfooding Project의 명칭은 ‘**RFC103 - CDN 및 업로드 관리’** 입니다.
 
-> RFC(Request for Comments)란?
+> RFC(Request for Comments)란? <br> 
 > 새로운 연구 / 기술 / 서비스를 작성하고 동료들에게 공유하며 의견을 받기위한 문서를 뜻합니다. 이렇게 받은 의견을 바탕으로 문서를 발전시키며, 최종 승인된 문서는 더이상의 수정이 불가능하고 공식적인 표준 가이드로 활용됩니다.)
 
 이 프로젝트의 목적은 다음과 같습니다.
@@ -234,7 +234,7 @@ Jira에서 스프린트를 생성했고, 각자 맡은 업무를 티켓으로 �
 
 대표적으로 코딩 컨벤션, 프로젝트 구조 설계, 유저 시나리오, API 명세, CI/CD 환경설정이 있었습니다. 스크럼 이후 미팅할 시간을 정한 후, 미팅 때 각자 가지고 있는 지식과 경험을 자유롭게 공유하며 가장 효율적이고 최적의 방안을 도출해냅니다. 물론, 미팅마다 회의록 및 협의 결과를 노션 문서에 기록합니다.
 
-이후에는 각자 주어진 서비스를 개발해나갔습니다. 책임진 서비스는 다음과 같습니다.
+각자 책임진 서비스는 다음과 같습니다.
 
 - 코기 - Backend
     - Amazon S3 연동 환경 구축 / 에셋 파일 S3 버킷 업로드
