@@ -16,9 +16,12 @@ tags:
 ---
 
 <style scoped>
-table {
-  font-size: 13px;
-}
+    thead {
+    font-size: 15px;
+    }
+    tbody {
+    font-size: 13px;
+    }
 </style>
 
 안녕하세요! 올 해 3월부로 쏘카에 백엔드 엔지니어로 합류한 코기(이해원) 입니다. 
