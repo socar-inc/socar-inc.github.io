@@ -4,7 +4,7 @@ title:  "우당탕탕 3월 신입 개발자 4인의 SE 온보딩 교육 도전�
 subtitle: 서비스 엔지니어링 본부의 온보딩 교육 회고
 date: 2022-10-06 00:00:00 +0900
 category: dev
-background : "/assets/images/onboarding-bg.jpg"
+background : "/img/bg-post.jpg"
 author: corgi
 comments: true
 tags:
@@ -14,6 +14,12 @@ tags:
     - service-engineering
     - onboarding
 ---
+
+<style scoped>
+table {
+  font-size: 13px;
+}
+</style>
 
 안녕하세요! 올 해 3월부로 쏘카에 백엔드 엔지니어로 합류한 코기(이해원) 입니다. 
 
@@ -79,8 +85,8 @@ tags:
 
 현재 신규 사업 또는 서비스의 확장에 힘을 실어주기 위해 버킷이 계속해서 만들어지고 있습니다. 게시글 작성 시점을 기준으로 운영되는 11개의 버킷은 다음과 같습니다.
 
-| <center>버킷명</center>    | <center>업무</center>                               |
-| :------------------------- | :-------------------------------------------------- |
+| <center>버킷명</center>       | <center>업무</center>                               |
+|:---------------------------| :-------------------------------------------------- |
 | Core Platform Bucket       | 예약 및 성능개선                                    |
 | Car Sharing Bucket(B2C)    | 카셰어링 서비스(왕복, 존편도, 부름, 페어링)         |
 | Core Experience Bucket     | 쏘카 앱/웹(AOS/iOS, Web)                            |
@@ -91,7 +97,7 @@ tags:
 | Marketing Bucket           | 패스포트 / 마케팅(이벤트, 알림, 쿠폰, 타게팅)       |
 | B2B Bucket                 | 쏘카 비즈니스(웹, 맴버십, 플랜)                     |
 | FMS Bucket                 | FMS(차량 관제 시스템)                               |
-| 유레카 Bucket              | SOCAR 통합차량관리 서비스(세차관리, 소모품 교체 등) |
+| 유레카 Bucket                 | SOCAR 통합차량관리 서비스(세차관리, 소모품 교체 등) |
 
 
 본부 내에는 버킷 외에도 **EM유닛,** **QA팀, Cloud DB/Infra 팀, iOS/Android 팀, Web팀, 정보보안팀, LiveOps팀, 엔지니어링 온보딩팀**이 속해있고, 본부의 미션을 위해 각자 담당하는 업무를 열심히 수행하고 있습니다.
