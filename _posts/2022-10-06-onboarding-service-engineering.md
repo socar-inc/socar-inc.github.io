@@ -4,7 +4,7 @@ title:  "우당탕탕 3월 신입 개발자 4인의 SE 온보딩 교육 도전�
 subtitle: 서비스 엔지니어링 본부의 온보딩 교육 회고
 date: 2022-10-06 00:00:00 +0900
 category: dev
-background : "/img/bg-post.jpg"
+background : "/img/onboarding-service-engineering/0_background.jpg"
 author: corgi
 comments: true
 tags:
