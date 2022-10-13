@@ -121,11 +121,11 @@ tags:
 | <center>주제</center>                    | <center>내용</center>                                                          |      소속      |   강사   |
 | :-- | :-- | :--: | :--: |
 | 쏘카 Business Introduction               | 쏘카는 어떤 일들을 하고 있을까요?                                              |     EM 유닛     | 케이제이 |
-| 프로그래머로 산다는 것                   | 좋은 개발자가 무엇인지 함께 고민해 보아요.                                      |      CTO       |   람다   |
+| 프로그래머로 산다는 것                   | 어떤 개발자가 좋은 개발자인지 함께 고민해 보아요.                                      |      CTO       |   람다   |
 | Service Engineering - How to work        | 서비스 엔지니어링 본부에서 어떻게 일하고 있을까요?                             |     EM 유닛     | 케이제이 |
 | 90 Days Planning 작성 가이드             | 90 Days Planning 이란 무엇이고, 어떻게 작성하면 될까요?                         |     EM 유닛     | 케이제이 |
-| Service Architecting Model               | 현재 서비스의 Architecture 및 추후 지향하는 방향을 소개합니다.                 |   SE 본부장    |  아나킨  |
-| Service Engineering - How to work (Jira) | 쏘카가 사용 중인 Jira의 기초 / 심화 기능 사용에 대해 설명합니다.                |      QA 팀      |   딕키   |
+| Service Architecting Model               | 현재 서비스의 Architecture와 추후 지향하는 방향을 소개합니다.                 |   SE 본부장    |  아나킨  |
+| Service Engineering - How to work (Jira) | 쏘카가 사용하고 있는 Jira의 기초 / 심화 기능 사용법에 대해 설명합니다.                |      QA 팀      |   딕키   |
 | Service Architecture AS-IS               | 쏘카의 카셰어링 사례를 통해 현재와 미래의 쏘카 Architecture를 공유합니다. | Sharing 그룹장 |  브래드  |
  
 강의 중 **`90 Days Planning 작성 가이드`** 는 서비스 엔지니어링 본부에서 시행하고 있는 개개인 별 분기 단위 마일스톤을 작성하는 것으로, 자기발전을 위한 업무, 개인 활동 등 정량적 목표를 자유롭게 적을 수 있습니다. 
@@ -136,7 +136,8 @@ tags:
 이전까지는 그저 시키는 업무와 주어진 범위까지만 생각하며 일해왔었는데, 작성한 planning을 가지고 TL 미팅을 하면서 **‘이번 분기에는 내가 어떠한 업무를 왜 하는지, 어디까지 하고 싶은지’**를 객관적으로, 명확하게 파악할 수 있었습니다. 덕분에 플래닝 한 업무의 우선순위를 부여하고, 저의 일정과 능력에 맞게 스케줄링(Scheduling) 하는 주도적인 자세로 일할 수 있었습니다. 이에 더해, **‘Personal Growth’**를 작성하며 **‘제 자신, 제 역량을 성장시키기 위해’** 무엇을 하면 좋을지 고민해 볼 수 있었습니다. 그렇게 작성한 목표 달성을 위해 업무 시간 중 일부를 사용하도록 TL이 장려해서 입사 후부터 걱정했었던 개인의 성장을 해결하고 있습니다.
 
 ![람다가 생각하는 '좋은 프로그래머'](/img/onboarding-service-engineering/6.png)*람다가 생각하는 '좋은 프로그래머'*
-1주 차 강의 중 가장 인상 깊었던 강의는 람다의 **`프로그래머로 산다는 것`** 입니다. 제가 지금까지 컴퓨터를 전공하고, 개발해오면서 단순히 개발만 잘하는 프로그래머가 되고 싶었는데, 이 강의를 통해 **좋은 프로그래머**로 성장해나가는 명확한 목표를 설정할 수 있었습니다. 덧붙여서, 단순히 개발만 잘하는 것뿐 아니라 **지식 공유 및 협업** 을 위해 고민하고 실천해나가는 자세를 가지고 쏘카에서 열심히 해야겠다는 열의도 생기게 되었습니다.
+
+1주 차 강의 중 가장 인상 깊었던 강의는 람다의 **`프로그래머로 산다는 것`** 입니다. 제가 지금까지 컴퓨터를 전공하고, 실력을 쌓으면서 단순히 개발만 잘하는 프로그래머가 되고 싶었는데, 이 강의를 통해 **좋은 프로그래머**로 성장해나가는 명확한 목표를 설정할 수 있었습니다. 덧붙여서, 단순히 개발만 잘하는 것뿐 아니라 **지식 공유 및 협업** 을 위해 고민하고 실천해나가는 자세를 가지고 쏘카에서 열심히 해야겠다는 열의도 생기게 되었습니다.
 
 ### 2.2. BackEnd 강의 & 쏘카의 개발 문화
 
@@ -156,15 +157,14 @@ tags:
 2주 차에는 BackEnd 기술 관련 강의가 많았습니다. 쏘카에서 어떻게 협업하는지, 어떠한 방식으로 개발 및 배포까지 이뤄지는지 쏘카의 개발 문화도 알게 되었습니다. 이와 더불어 개발 환경 설정까지 진행했는데 그 덕분에 이론으로 배운 것을 실제로 연습해 볼 수 있었습니다.
 
 가장 흥미로웠던 강의는 **`BackEnd - Datadog & Monitoring`** 과 **`BackEnd - Performance Testing`**, 마지막으로 **`BackEnd - Tests and testable code`** 였습니다.
-![쏘카의 Datadog Profiling 일부 화면](/img/onboarding-service-engineering/7.png)*쏘카의 Datadog Profiling 일부 화면'*
+![쏘카의 Datadog Profiling 일부 화면](/img/onboarding-service-engineering/7.png)*쏘카의 Datadog Profiling 일부 화면*
 
-도가가 해주신 Datadog 강의를 통해 쏘카 서버 전체를 관망하는 대시보드, Error 발생 시 Slack / opsgenie 툴과 연동해서 alert을 받을 수 있는 Monitor, 그 외 쿠버네티스의 POD도 확인할 수 있는 기능 등 다양한 datadog 사용법을 알게 되었다는 점이 무척 뜻깊었습니다.
-
-
-![Locust를 활용한 Performance Testing 결과 지표](/img/onboarding-service-engineering/8.png)*Locust를 활용한 Performance Testing 결과 지표<*
+도가와 브루스가 해주신 Datadog 강의를 통해 쏘카 서버 전체를 관망하는 대시보드, Error 발생 시 Slack / opsgenie 툴과 연동해서 alert을 받을 수 있는 Monitors(APM / Metric 등), 그 외 Kubernetes의 Container / POD / Cluster도 확인할 수 있는 기능 등 다양한 `datadog` 사용법을 알게 되었다는 점이 무척 뜻깊었습니다.
 
 
-저는 이전까지 Unit Test & Integration Test만 해봤었는데 `Locust`를 이용한 Performance Testing을 통해 실제 내가 만든 서비스가 쏘카 서버에서 버틸 수 있는지, 트래픽을 얼마까지 받아낼 수 있는지 등 성능을 측정해 볼 수 있어 흥미로웠습니다.
+![Locust를 활용한 Performance Testing 결과 지표](/img/onboarding-service-engineering/8.png)*Locust를 활용한 Performance Testing 결과 지표*
+
+그리고 저는 이전까지 Unit Test & Integration Test만 해봤었는데 `Locust`를 이용한 Performance Testing을 통해 실제 내가 만든 서비스가 쏘카 서버에서 버틸 수 있는지, 트래픽을 얼마까지 받아낼 수 있는지 등 성능을 측정해 볼 수 있어 흥미로웠습니다.
 
 마지막으로, **`BackEnd - Tests and testable code`** 강의는 TDD 방식 및 테스트 코드 작성의 중요성을 다시금 상기시키게 해준 강의였습니다. 
 특히 JUnit의 변천사도 설명해 주시고 실제 쏘카에서 사용하는 컨벤션에 맞게 Unit Test와 Integration Test를 만들어볼 수 있었습니다.
@@ -185,7 +185,8 @@ tags:
 | DB - SQL Basic Grammar                   | 실제 쏘카에서 활용하는 SQL 문법을 보고 작성해 보는 시간입니다.                                |  Cloud DB 팀   |  알티  |
 
 
-마지막 3주 차 교육은 FrontEnd 관련 강의가 절반을 차지했는데, 서버 개발자라고 해서 BackEnd만 알고 있는 것보다 쏘카에서의 FrontEnd 개발 문화도 알아두는 것이 이후 협업에 있어 큰 도움이 될 것이라고 판단해서 전부 수강했습니다. 쏘카에서 FrontEnd 개발은 주로 `react`, `typescript` 를 사용하는데, 저는 개인적으로 `Vue.js` 를 사용해 본 경험이 있어 강의를 이해하기 한결 수월했고 관심 있게 수강했습니다.
+마지막 3주 차 교육은 FrontEnd 관련 강의가 절반을 차지했는데, 서버 개발자라고 해서 BackEnd만 알고 있는 것보다 쏘카에서의 FrontEnd 개발 문화도 알아두는 것이 이후 협업에 있어 큰 도움이 될 것이라고 판단해서 전부 수강했습니다. 쏘카에서 FrontEnd 개발은 주로 `react`, `typescript` 를 사용하는데, 저는 개인적으로 `Vue.js` 를 사용해 본 경험이 있어 강의를 이해하기 한결 수월했고 관심 있게 수강했습니다.  
+그리고 인프라 네트워크 구조와 `AWS RDS` 를 사용하는 쏘카의 DB 구조도를 보며 쏘카 전체 DB 구조에 대해 설명을 들었지만, 관련 지식이 부족하다보니 이해하지 못하고 놓친 부분이 있었습니다. 그래서 강의가 끝나고, 개인적으로 공부하며 DB와 인프라 구조를 이해하려고 노력했었던 기억이 생각납니다.
 
 이렇게 총 3주간의 온보딩 교육 수강이 끝나고, ~~(쉴 틈 없이)~~ 다음 온보딩 과정인 **‘Dogfooding Project’**를 시작하게 되었습니다! 
 
@@ -237,7 +238,7 @@ BackEnd는 현재 쏘카 전반적으로 사용하고 있는 언어인 `Kotlin` 
 
 `Jira`에서 스프린트를 생성하고 각자 맡은 업무를 티켓으로 만들어 주도적으로 개발했습니다. 그리고 매일 정해진 시간에 데일리 스크럼을 하면서 그날의 업무와 개발 관련 협의가 필요한 사항을 공유했습니다. 
 
-대표적으로 코딩 컨벤션, 프로젝트 구조 설계, 유저 시나리오, API 명세, CI/CD 환경설정이 있었습니다. 스크럼 이후 미팅할 시간을 정한 후, 미팅 때 각자 가지고 있는 지식과 경험을 자유롭게 공유하며 가장 효율적이고 최적의 방안을 도출해냅니다. 물론, 미팅마다 회의록 및 협의 결과를 노션 문서에 기록합니다.
+대표적으로 **코딩 컨벤션, 프로젝트 구조 설계, 유저 시나리오, API 명세, CI/CD 환경설정**이 있었습니다. 스크럼 이후 미팅할 시간을 정한 후, 미팅 때 각자 가지고 있는 지식과 경험을 자유롭게 공유하며 가장 효율적이고 최적의 방안을 도출해냅니다. 물론, 미팅마다 회의록 및 협의 결과를 노션 문서에 기록합니다.
 
 각자 책임진 서비스는 다음과 같습니다.
 
