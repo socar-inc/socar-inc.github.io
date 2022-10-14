@@ -118,3 +118,6 @@ bucky:
   name: 버키
   image: '/assets/authors/bucky.png'
 
+corgi:
+  name: 코기
+  image: '/assets/authors/corgi.png'
