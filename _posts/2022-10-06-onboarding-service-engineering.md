@@ -8,8 +8,8 @@ background : "/img/onboarding-service-engineering/0_background.jpg"
 author: corgi
 comments: true
 tags:
-    - BackEnd
-    - FrontEnd
+    - backend
+    - frontend
     - developer
     - service-engineering
     - onboarding
@@ -30,7 +30,7 @@ tags:
 그 이유를 크게 **세 가지**로 함축해 봤습니다.
 
 - 쏘카에서 사용 중인 `Kotlin, Spring Boot, AWS` 와 같은 언어 / 기술과 `Datadog, BuddyWorks, ArgoCD, Rancher` 등 여러 개발 도구에 대해 교육받고 실습하며 학습할 기회를 제공받았습니다.
-- 실제로 상용화하는 프로젝트를 동기끼리 0(zero)부터 시작해서 만들어보고, 이에 대한 피드백을 받으며 학습하고 성장할 수 있었습니다.
+- 실제로 상용화하는 프로젝트를 동기끼리 0(Zero)부터 시작해서 만들어보고, 이에 대한 피드백을 받으며 학습하고 성장할 수 있었습니다.
 - 서비스 엔지니어링 본부의 동료들과 친해지고 쏘카에 더욱 빠르게 적응할 수 있었습니다.
 
 **쏘카에서 온보딩 교육을 어떻게 진행**하는지, 또 **온보딩 교육을 통해 무엇을 배우고 얼마나 더 성장할 수 있었는지** 알리고자 이 글을 작성하게 되었습니다. 
@@ -107,7 +107,7 @@ tags:
 온보딩 강의는 1주 단위로 총 3개의 파트가 진행되고 이후 Dogfooding Project를 2~3주간 수행합니다. 온보딩 당시 전사 재택 기간이라 강의는 모두 비대면으로 진행되었고 추후 녹화본이 공유되었습니다.
 
 이때, "FrontEnd 개발 직무와 BackEnd 개발 직무 별로 교육의 차이가 있을까?"라는 의문점이 생길 수 있습니다. 정답은 **‘공통 교육은 필수이고, 다른 직무의 교육은 선택’**입니다. 
-동기 중 BackEnd 개발하는 분들은 FrontEnd 교육도 수강했는데 이후 dogfooding 프로젝트 진행에 있어 BackEnd ↔️ FrontEnd 간 원활한 협업에 도움이 되었다고 합니다.
+동기 중 BackEnd 개발하는 분들은 FrontEnd 교육도 수강했는데 이후 Dogfooding 프로젝트 진행에 있어 BackEnd ↔️ FrontEnd 간 원활한 협업에 도움이 되었다고 합니다.
 
 이후 작성한 내용은 주 단위로 나눠서 작성했습니다.
 
@@ -119,10 +119,10 @@ tags:
 | :-- | :-- | :--: | :--: |
 | 쏘카 Business Introduction               | 쏘카는 어떤 일들을 하고 있을까요?                                              |     EM 유닛     | 케이제이 |
 | 프로그래머로 산다는 것                   | 어떤 개발자가 좋은 개발자인지 함께 고민해 보아요.                                      |      CTO       |   람다   |
-| Service Engineering - How to work        | 서비스 엔지니어링 본부에서 어떻게 일하고 있을까요?                             |     EM 유닛     | 케이제이 |
+| Service Engineering - How To Work        | 서비스 엔지니어링 본부에서 어떻게 일하고 있을까요?                             |     EM 유닛     | 케이제이 |
 | 90 Days Planning 작성 가이드             | 90 Days Planning 이란 무엇이고, 어떻게 작성하면 될까요?                         |     EM 유닛     | 케이제이 |
 | Service Architecting Model               | 현재 서비스의 Architecture와 추후 지향하는 방향을 소개합니다.                 |   SE 본부장    |  아나킨  |
-| Service Engineering - How to work (Jira) | 쏘카가 사용하고 있는 Jira의 기초 / 심화 기능 사용법에 대해 설명합니다.                |      QA 팀      |   딕키   |
+| Service Engineering - How To Work (Jira) | 쏘카가 사용하고 있는 Jira의 기초 / 심화 기능 사용법에 대해 설명합니다.                |      QA 팀      |   딕키   |
 | Service Architecture AS-IS               | 쏘카의 카셰어링 사례를 통해 현재와 미래의 쏘카 Architecture를 공유합니다. | Sharing 그룹장 |  브래드  |
 
 ![람다가 생각하는 '좋은 프로그래머'](/img/onboarding-service-engineering/6.png)*람다가 생각하는 '좋은 프로그래머'*
@@ -142,33 +142,33 @@ tags:
 
 | <center>주제</center>                   | <center>내용</center>                                                                                         |    소속     |     강사     |
 | :-- | :-- | :--: | :--: |
-| Service Development Introduction        | 쏘카의 Service Repository 구조, 개발 환경(dev, qa/stage, production), 개발부터 배포까지의 과정을 소개합니다.  | Car Sharing |     믈브     |
-| BackEnd  Running services in the local | 실제 운영 중인 쏘카 서버의 repository를 받아 local 환경에서 실행하기 위한 과정을 환경설정과 함께 실습해 봅니다. | Car Sharing |     믈브     |
+| Service Development Introduction        | 쏘카의 Service Repository 구조, 개발 환경(Dev, QA/Stage, Production), 개발부터 배포까지의 과정을 소개합니다.  | Car Sharing |     믈브     |
+| BackEnd  Running Services In The Local | 실제 운영 중인 쏘카 서버의 Repository를 받아 Local 환경에서 실행하기 위한 과정을 환경설정과 함께 실습해 봅니다. | Car Sharing |     믈브     |
 | Github and PR and Reviewing             | 쏘카의 Github 관리 및 협업(PR / Code Review / Merge) 방식을 듣고 실습하는 시간입니다.                         | Car Sharing |     믈브     |
-| BackEnd - Coding: convention and styles | Kotlin 기본 코딩 가이드 및 intelliJ plugin(+ gradle) 활용 방법을 설명합니다.                                  | Car Sharing |     믈브     |
-| BackEnd - Tests and testable code       | 테스팅에 대해 배우고, 실습을 통해 테스트 코드를 작성해봅니다.                                                 |     B2B     |     카이     |
-| Homework                                | 쏘카 서버의 Repository에서 서비스 하나를 선택해서 Test code 작성 / PR / Code Review 해보기.                   |             |              |
+| BackEnd - Coding: Convention and Styles | Kotlin 기본 코딩 가이드 및 IntelliJ Plugin(+ Gradle) 활용 방법을 설명합니다.                                  | Car Sharing |     믈브     |
+| BackEnd - Tests And Testable Code       | 테스팅에 대해 배우고, 실습을 통해 테스트 코드를 작성해봅니다.                                                 |     B2B     |     카이     |
+| Homework                                | 쏘카 서버의 Repository에서 서비스 하나를 선택해서 Test Code 작성 / PR / Code Review 해보기.                   |             |              |
 | BackEnd - CI/CD                         | 품질관리 및 배포/운영까지 함께하는 CI/CD와 쏘카는 어떤 방식인지 설명합니다.                                   |  Marketing  | 도가, 브루스 |
 | BackEnd - Datadog & Monitoring          | 쏘카 서버를 모니터링하고 관리할 수 있는 Datadog, 그 외 모니터링 도구에 대해 설명합니다.                       |  Marketing  | 도가, 브루스 |
-| BackEnd - Performance testing           | 내가 만든 서비스가 얼마까지 버틸 수 있는지 알기 위해 수행하는 Performance Testing을 배웁니다.                 |  Marketing  | 도가, 브루스 |
+| BackEnd - Performance Testing           | 내가 만든 서비스가 얼마까지 버틸 수 있는지 알기 위해 수행하는 Performance Testing을 배웁니다.                 |  Marketing  | 도가, 브루스 |
 
 
 2주 차에는 BackEnd 기술 관련 강의와 함께 쏘카의 협업 문화와 개발 문화를 배울 수 있었습니다. 이와 더불어 개발 환경 설정까지 진행했는데 그 덕분에 이론으로 배운 것을 실제로 연습해 볼 수 있었습니다.
 
-가장 흥미로웠던 강의는 **`BackEnd - Datadog & Monitoring`** 과 **`BackEnd - Performance Testing`**, 마지막으로 **`BackEnd - Tests and testable code`** 였습니다.
+가장 흥미로웠던 강의는 **`BackEnd - Datadog & Monitoring`** 과 **`BackEnd - Performance Testing`**, 마지막으로 **`BackEnd - Tests And Testable Code`** 였습니다.
 ![쏘카의 Datadog Profiling 일부 화면](/img/onboarding-service-engineering/7.png)*쏘카의 Datadog Profiling 일부 화면*
 
 도가와 브루스가 해주신 **Datadog** 강의를 통해 다음과 같은 다양한 Datadog 활용 사례를 배울 수 있었습니다. 
 - 쏘카 서버 대시보드
-- Error 발생 시 Slack / opsgenie 툴과 연동해서 alert을 받을 수 있는 Monitors(APM / Metric 등) 
-- Kubernetes Container / POD / Cluster Monitoring
+- Error 발생 시 Slack / Opsgenie 툴과 연동해서 alert을 받을 수 있는 Monitors(APM / Metric 등) 
+- Kubernetes Container / Pod / Cluster Monitoring
 
 
 ![Locust를 활용한 Performance Testing 결과 지표](/img/onboarding-service-engineering/8.png)*Locust를 활용한 Performance Testing 결과 지표*
 
  `Locust`를 이용한 Performance Testing을 통해 실제 내가 만든 서비스가 쏘카 서버에서 버틸 수 있는지, 트래픽을 얼마까지 받아낼 수 있는지 등 성능을 측정해 볼 수 있어 흥미로웠습니다.
 
-마지막으로 **`BackEnd - Tests and testable code`** 강의는 TDD 방식 및 테스트 코드 작성의 중요성을 다시금 상기시키게 해준 강의였습니다. 
+마지막으로 **`BackEnd - Tests And Testable Code`** 강의는 TDD 방식 및 테스트 코드 작성의 중요성을 다시금 상기시키게 해준 강의였습니다. 
 특히 JUnit의 변천사도 설명해 주시고 실제 쏘카에서 사용하는 컨벤션에 맞게 Unit Test와 Integration Test를 만들어볼 수 있었습니다.
 
 ### 2.3. FrontEnd 강의 & 쏘카의 Infra와 DB 
@@ -176,14 +176,14 @@ tags:
 
 | <center>주제</center>                    | <center>내용</center>                                                                        |     소속      |  강사  |
 | :-- | :-- | :--: | :--: |
-| FrontEnd  Coding: convention and styles | Backoffice 개발 역량을 위한 FrontEnd 기본 코딩에 대해 설명합니다.                            |     Web 팀     | 라파엘 |
-| FrontEnd - Package management            | npm이 무엇인지 설명하고, FrontEnd의 공통 npm module 사용법을 실습합니다.                     |      B2B      |  블랑  |
-| FrontEnd - Running services in the local | local 환경에서 BackEnd 서비스와 직접 실행해 연동하고, 결과를 확인해 보는 실습하는 시간입니다. |  Car Sharing  | 리스본 |
+| FrontEnd  Coding: Convention And Styles | Backoffice 개발 역량을 위한 FrontEnd 기본 코딩에 대해 설명합니다.                            |     Web 팀     | 라파엘 |
+| FrontEnd - Package Management            | npm이 무엇인지 설명하고, FrontEnd의 공통 npm module 사용법을 실습합니다.                     |      B2B      |  블랑  |
+| FrontEnd - Running Services In The Local | local 환경에서 BackEnd 서비스와 직접 실행해 연동하고, 결과를 확인해 보는 실습하는 시간입니다. |  Car Sharing  | 리스본 |
 | FrontEnd - CI/CD                         | FrontEnd의 CI/CD에 대해 설명을 듣고, 개발부터 코드 리뷰 / 배포까지 직접 실습하는 시간입니다.  |   Marketing   | 버틀러 |
-| AWS and GCP in SOCAR                     | AWS와 GCP를 쏘카에서는 어떻게 활용하는지 소개합니다.                                         |               |  에코  |
-| (Kubernetes) How to use in SOCAR         | Kubernetes(K8S)의 기본 개념과 원리에 대해 설명을 듣고, 실습을 통해 명령어를 익힙니다.       | Core Platform | 코알라 |
+| AWS And GCP In SOCAR                     | AWS와 GCP를 쏘카에서는 어떻게 활용하는지 소개합니다.                                         |               |  에코  |
+| (Kubernetes) How To Use In SOCAR         | Kubernetes(K8S)의 기본 개념과 원리에 대해 설명을 듣고, 실습을 통해 명령어를 익힙니다.       | Core Platform | 코알라 |
 | SOCAR Network                            | 쏘카 서버의 Network Architecture에 대해 소개합니다.                                          | Cloud Infra 팀 |  로원  |
-| SOCAR Database structure                 | AWS RDS를 활용하는 쏘카의 Database Architecture에 대해 소개합니다.                           |  Cloud DB 팀   | 제이든 |
+| SOCAR Database Structure                 | AWS RDS를 활용하는 쏘카의 Database Architecture에 대해 소개합니다.                           |  Cloud DB 팀   | 제이든 |
 | DB - SQL Basic Grammar                   | 실제 쏘카에서 활용하는 SQL 문법을 보고 작성해 보는 시간입니다.                                |  Cloud DB 팀   |  알티  |
 
 
@@ -191,7 +191,7 @@ tags:
 
 그리고 인프라 네트워크 구조와 `AWS RDS` 를 사용하는 쏘카의 DB 구조도를 보며 쏘카 전체 DB 구조에 대해 설명을 들었지만, 관련 지식이 부족하다보니 이해하지 못하고 놓친 부분이 있었습니다. 그래서 강의가 끝나고 개인적으로 공부하며 DB와 인프라 구조를 이해하려고 노력했습니다.
 
-이렇게 총 3주간의 온보딩 강의 수강이 끝나고, ~~(쉴 틈 없이)~~ 다음 온보딩 과정인 **‘Dogfooding Project’**를 시작하게 되었습니다! 
+이렇게 총 3주간의 온보딩 강의 수강이 끝나고 ~~(쉴 틈 없이)~~ 다음 온보딩 과정인 **‘Dogfooding Project’**를 시작하게 되었습니다! 
 
 <br />
 
@@ -242,7 +242,7 @@ BackEnd는 현재 쏘카 전반적으로 사용하고 있는 언어인 `Kotlin` 
 
 - BackEnd - 코기, 이누, 키이라
     - Amazon S3 연동 환경 구축 / 에셋 파일 S3 버킷 업로드
-    - git action / husky / ktfmt 설정
+    - Git Action / Husky / Ktfmt 설정
     - 에셋 파일 삭제
     - 에셋 파일 로그 조회
     - DynamoDB, CloudFront 생성 및 연동 / DynamoDB 활용해서 에셋 파일 로그 저장
@@ -402,9 +402,9 @@ BackEnd는 현재 쏘카 전반적으로 사용하고 있는 언어인 `Kotlin` 
 
 **도시** : 쏘카의 개발 문화와 추구하는 가치를 체계적으로 알 수 있었고 여러 분야의 전문가분들에게 직접 관련 지식과 경험을 배울 수 있던 점이 저에게 많은 도움이 되었습니다.
 
-**이누** : 체계적인 개발 수업을 들으며 개발자로서의 기반을 닦을 수 있었습니다. dogfooding 프로젝트를 하며 쏘카 내에서의 협업은 어떻게 이뤄지는지, 이슈가 발생했을 땐 어떻게 핸들링해야 하는지, 개발 및 업무 진행에 있어 도움은 어떻게 받을 수 있는지 등 을 배울 수 있었습니다. 가장 큰 건 무엇보다 소중한 동기들을 얻은 것입니다.
+**이누** : 체계적인 개발 수업을 들으며 개발자로서의 기반을 닦을 수 있었습니다. Dogfooding 프로젝트를 하며 쏘카 내에서의 협업은 어떻게 이뤄지는지, 이슈가 발생했을 땐 어떻게 핸들링해야 하는지, 개발 및 업무 진행에 있어 도움은 어떻게 받을 수 있는지 등 을 배울 수 있었습니다. 가장 큰 건 무엇보다 소중한 동기들을 얻은 것입니다.
 
-**키이라** : 쏘카가 추구하는 개발 방향에 대해 전반적으로 파악할 수 있었고 무엇보다 dogfooding 프로젝트를 진행하면서 협업 방식과 의사소통 방식을 배울 수 있었습니다. 이는 각자 버킷에 배정된 이후에도 빠르게 적응할 수 있는 기반이 되었다고 생각이 듭니다.
+**키이라** : 쏘카가 추구하는 개발 방향에 대해 전반적으로 파악할 수 있었고 무엇보다 Dogfooding 프로젝트를 진행하면서 협업 방식과 의사소통 방식을 배울 수 있었습니다. 이는 각자 버킷에 배정된 이후에도 빠르게 적응할 수 있는 기반이 되었다고 생각이 듭니다.
 
 <br />
 
@@ -412,13 +412,13 @@ BackEnd는 현재 쏘카 전반적으로 사용하고 있는 언어인 `Kotlin` 
 
 **코기** : 교육받는 모든 순간이 전부 기억에 남았고 인상깊었습니다.
 
-**도시** : 함께 3월에 입사한 동기들과 함께 진행한 **`dogfooding 프로젝트`** 가 가장 기억에 남습니다. 이 프로젝트를 진행하면서 온보딩 강의로 배웠던 쏘카의 애자일 문화를 실제로 사용해 볼 수 있었고, 이후에는 실제 쏘카에서 사용하기 위한 목적이었어서 쏘카와 관련된 도메인 지식을 익힐 수 있었습니다.
+**도시** : 함께 3월에 입사한 동기들과 함께 진행한 **`Dogfooding 프로젝트`** 가 가장 기억에 남습니다. 이 프로젝트를 진행하면서 온보딩 강의로 배웠던 쏘카의 애자일 문화를 실제로 사용해 볼 수 있었고, 이후에는 실제 쏘카에서 사용하기 위한 목적이었어서 쏘카와 관련된 도메인 지식을 익힐 수 있었습니다.
 
 **이누** : 모든 교육이 개성 있고 유익했습니다.
 
-**키이라** : 음.. 온보딩 기간 동안 협업 방법, Architecturing Model, CI/CD, 서버 모니터링, Test code 등 다양한 강의를 수강했고, dogfooding 프로젝트를 진행했었습니다. 사실 이러한 온보딩 프로세스가 존재하고, 체계적으로 구성되어 있다는 점에 굉장히 만족했었습니다. 또한, 실제로도 교육받은 내용들이 온보딩 이후 팀에서의 적응을 수월하게 해주었습니다.
+**키이라** : 음.. 온보딩 기간 동안 협업 방법, Architecturing Model, CI/CD, 서버 모니터링, Test Code 등 다양한 강의를 수강했고 Dogfooding 프로젝트를 진행했습니다. 사실 이러한 온보딩 프로세스가 체계적으로 구성되어 있다는 점에 굉장히 만족했습니다. 또한실제로도 교육받은 내용들이 온보딩 이후 팀에서의 적응을 수월하게 해주었습니다.
 
-이 중 가장 인상 깊었던 온보딩 교육을 꼽자면 **`dogfooding 프로젝트`** 인 것 같습니다. 직접 경험해 보는 것만큼 이해가 잘 되는 것은 없으니까요. 프로젝트 과정을 통해서 실제로 쏘카에서 쓰이는 기술들을 미리 찾아보고 적용해 볼 수 있었던 시간이어서 많은 도움이 되었습니다. 마지막으로, 동기들과 같이 진행했던 프로젝트가 현재 저희 Marketing bucket으로 넘어왔는데, 고도화 후 쏘카 서비스에 얼른 적용시켜보고 싶습니다.
+이 중 가장 인상 깊었던 온보딩 교육을 꼽자면 **`Dogfooding 프로젝트`** 인 것 같습니다. 직접 경험해 보는 것만큼 이해가 잘 되는 것은 없으니까요. 프로젝트 과정을 통해서 실제로 쏘카에서 쓰이는 기술들을 미리 찾아보고 적용해 볼 수 있었던 시간이어서 많은 도움이 되었습니다. 마지막으로 동기들과 같이 진행했던 프로젝트가 현재 저희 Marketing Bucket으로 넘어왔는데, 고도화 후 쏘카 서비스에 얼른 적용시켜보고 싶습니다.
 
 <br />
 
@@ -433,8 +433,8 @@ BackEnd는 현재 쏘카 전반적으로 사용하고 있는 언어인 `Kotlin` 
 
 **키이라** : 현재 속한 버킷에서 업무를 하는데 많은 도움이 되었던 강의는 대표적으로 2개가 있습니다. (한 가지만 선택하라고 하셨지만..)
 
- 첫 번째는, **`BackEnd - Runnning services in the local`** 강의입니다. 이 강의에서 git 관련 설정부터 로컬에서 서버 띄워보는 작업까지 전부 진행했는데, 처음 슬라이드를 보고 설명을 들었을 때만 해도 간단해 보였습니다. 하지만, 처음 Mac 환경 설정부터 시작해서 로컬에서 쏘카 서버를 띄울 수 있는 환경을 구축하기까지 함께 실습해 보면서 만약 이걸 혼자 했다면 무조건 헤맸을 거라는 생각이 들었고, 그와 함께 이 강의에 대한 고마움이 계속 기억에 남아있습니다.  
- 두 번째는, **`BackEnd - Tests and testable code`** 강의입니다. 이 강의에서는 테스트 코드 종류부터 왜 테스트 코드가 필요한지, TDD 등에 대한 설명과 실습을 수행했습니다. 입사하기 전 따로 프로젝트를 진행해 본 경험은 있었지만 프로젝트에 테스트 코드를 활용해 보지는 않았어서 해당 강의가 도움이 되었습니다. 또한, 현재 버킷에서 진행하는 업무의 대부분은 테스트 코드 작성이 필수여서 이 강의를 통해 얻은 지식과 기술을 지금도 계속 사용하고 있기 때문입니다.
+ 첫 번째는, **`BackEnd - Runnning Services In The local`** 강의입니다. 이 강의에서 Git 관련 설정부터 로컬에서 서버 띄워보는 작업까지 전부 진행했는데, 처음 슬라이드를 보고 설명을 들었을 때만 해도 간단해 보였습니다. 하지만, 처음 Mac 환경 설정부터 시작해서 로컬에서 쏘카 서버를 띄울 수 있는 환경을 구축하기까지 함께 실습해 보면서 만약 이걸 혼자 했다면 무조건 헤맸을 거라는 생각이 들었고, 그와 함께 이 강의에 대한 고마움이 계속 기억에 남아있습니다.  
+ 두 번째는, **`BackEnd - Tests and Testable Code`** 강의입니다. 이 강의에서는 테스트 코드 종류부터 왜 테스트 코드가 필요한지, TDD 등에 대한 설명과 실습을 수행했습니다. 입사하기 전 따로 프로젝트를 진행해 본 경험은 있었지만 프로젝트에 테스트 코드를 활용해 보지는 않았어서 해당 강의가 도움이 되었습니다. 또한, 현재 버킷에서 진행하는 업무의 대부분은 테스트 코드 작성이 필수여서 이 강의를 통해 얻은 지식과 기술을 지금도 계속 사용하고 있기 때문입니다.
 
 제가 백엔드 직무여서 그런지 직무와 관련된 강의들이 조금 더 인상 깊었던 것 같습니다. 하지만, 돌이켜보면 온 보딩 강의 중에 저에게 도움이 되지 않았던 강의는 하나도 없다고 생각합니다. 강의해 주신 분들 모두 감사합니다! 
 
