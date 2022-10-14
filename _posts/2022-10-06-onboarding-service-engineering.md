@@ -1,7 +1,7 @@
 ---
 layout: post
-title:  "우당탕탕 신입 개발자의 서비스 엔지니어링 온보딩 교육 도전기"
-subtitle: 서비스 엔지니어링 본부의 온보딩 교육 회고
+title:  "신입 백엔드 개발자의 우당탕탕 엔지니어링 온보딩팀 교육 후기"
+subtitle: 온보딩 강의부터 Dogfooding 프로젝트까지
 date: 2022-10-06 00:00:00 +0900
 category: dev
 background : "/img/onboarding-service-engineering/0_background.jpg"
