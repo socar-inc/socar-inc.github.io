@@ -82,7 +82,7 @@ tags:
 | :------------------------- |:--------------------------------|
 | Core Platform Bucket       | 예약 및 성능 개선                      |
 | Car Sharing Bucket(B2C)    | 카셰어링 서비스(왕복, 존편도, 부름, 페어링)      |
-| Core Experience Bucket     | 쏘카 앱/웹(AOS/iOS, Web)            |
+| Core Experience Bucket     | 쏘카 앱/웹(Android/iOS, Web)        |
 | Accounts Bucket            | 회원 관련(가입, 탈퇴, 로그인, 휴면, 인증 등)    |
 | Payment Bucket             | 결제 / 정산 / 크레딧                   |
 | Operation Framework Bucket | 백오피스                            |
