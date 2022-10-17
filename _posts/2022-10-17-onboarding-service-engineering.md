@@ -2,7 +2,7 @@
 layout: post
 title:  "신입 백엔드 개발자의 우당탕탕 엔지니어링 온보딩팀 교육 후기"
 subtitle: 온보딩 강의부터 Dogfooding 프로젝트까지
-date: 2022-10-06 00:00:00 +0900
+date: 2022-10-17 09:00:00 +0900
 category: dev
 background : "/img/onboarding-service-engineering/0_background.jpg"
 author: corgi
