@@ -75,12 +75,12 @@
 ### 2.2. GitHub Repo Fork 하고 Clone 받기
 
 - 이 [GitHub Repository](https://github.com/socar-inc/socar-inc.github.io)를 본인의 계정으로 Fork 합니다.
+    - 이 때, Repository name 을 `{본인 Github 계정}.github.io` 으로 바꿔줍니다. 
+    - Copy the master branch only 를 `체크 해제` 해줍니다.
+  ![레포지토리 Fork 하고 Rename하기](/img/readme/fork.png)
 
-  ![레포지토리 Fork 하기](/img/readme/fork.png)
-
-- Fork 한 본인 계정의 Repository의 `Settings` - `General` 페이지에 들어가 `Repository name`을 `{본인 Github 계정}.github.io`로 변경합니다.
-
-  ![Fork한 레포지토리 이름 변경하기](/img/readme/rename.png)
+- Fork 한 레포지토리의 Settings > Pages에서 Branch를 `gh-pages` 로 설정해줍니다.
+  ![Fork한 레포지토리 이름 변경하기](/img/readme/branch-setting.png)
 
 - Fork 받은 본인의 Repository를 clone 합니다.
 
@@ -91,7 +91,6 @@
 
 
 ### 2.3. 글 작성 및 확인하기
-> **사전 작업 : settings > pages > source 의 branch 를 `gh-pages` 로 설정해줍니다.**
 - `master` branch 에서 작업합니다.
 - `_posts` 디렉토리에 post를 생성 합니다.
   - 파일명은 `YYYY-MM-DD-<post-name>.md`로 합니다.
