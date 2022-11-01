@@ -46,7 +46,7 @@ tags:
 현재 데이터 분석가, 데이터 사이언티스트, AI 엔지니어 등 다양한 사용자들이 Airflow Dag을 통하여 파이프라인을 직접 구축할 수 있습니다. 대신 이를 위해 Airflow를 사용하기 전에 Airflow의 사용 범주와 개발 방식을 잘 파악하는 것이 중요합니다.
 
 쏘카에서는 데이터 통합 저장소(데이터 레이크, 웨어하우스)로 `BigQuery`를 사용하고 있습니다. 기본적으로 외부 데이터 소스(Open API, AWS Data Source, BigQuery 타 테이블 등)에서 데이터를 목적지로 옮기는 작업에만 Airflow를 사용하도록 권장하고 있습니다. 현재 Dag Repo의 디렉토리 구조를 보면 Data Lake, Data Mart, Monitoring, Crawling 등 각 용도에 맞게 분류하여 관리되고 있습니다. 
-(단순 스케줄링을 필요로 하는 작업은 Airflow의 사용을 지양하고 K8s Cronjob이나 Github Action 등을 활용하는 것을 권장하고 있습니다)
+(단순 스케줄링을 필요로 하는 작업은 Airflow의 사용을 지양하고 K8s(Kubernetes) Cronjob이나 Github Action 등을 활용하는 것을 권장하고 있습니다)
 
 ![airflow-k8s-workflow.png](/img/advanced-airflow-for-databiz/airflow-k8s-workflow.png)
 
@@ -60,7 +60,7 @@ tags:
 
 ### 1.2. 문제점
 
-위와 같이 Airflow를 운영하면서 사용자들에게 독립된 개발환경을 구성해준 것은 큰 장점이었습니다. 운영과 분리하여 테스트가 가능하였으며 Github을 SoT(source of truth)로 삼아 코드에 대한 퀄리티 관리가 용이하였습니다. 
+위와 같이 Airflow를 운영하면서 사용자들에게 독립된 개발환경을 구성해준 것은 큰 장점이었습니다. 운영과 분리하여 테스트가 가능하였으며 Github을 SoT(Source of Truth)로 삼아 코드에 대한 퀄리티 관리가 용이하였습니다. 
 
 다만 기존 방식의 Airflow는 크게 아래와 같은 문제점들이 있었습니다.
 
@@ -68,9 +68,9 @@ tags:
 
 ![argocd-many-airflows.png](/img/advanced-airflow-for-databiz/argocd-many-airflows.png)
 
-위에서 말씀 드렸다시피 개발 환경의 Airflow는 Github Branch를 기반으로 생애주기가 결정됩니다. 따라서 사용자가 작업을 완료하고 Branch를 삭제하면 개발 환경의 Airflow는 함께 내려가게 됩니다. 그러나 사용자는 Branch를 만들고 작업하다가 중간에 다른 작업을 하는 경우들이 많았고, 이에 Airflow는 계속 유휴 상태로 남아있어 K8s 노드의 자원을 차지하였습니다.
+위에서 말씀 드렸다시피 개발 환경의 Airflow는 Github Branch를 기반으로 생애주기가 결정됩니다. 따라서 사용자가 작업을 완료하고 Branch를 삭제하면 개발 환경의 Airflow는 함께 내려가게 됩니다. 그러나 사용자는 Branch를 만들고 작업하다가 중간에 다른 작업을 하는 경우들이 많았고, 이에 Airflow는 계속 유휴 상태로 남아있어 K8s Node의 자원을 차지하였습니다.
 
-더불어 그때 당시 Airflow를 K8s에 배포하기 위해 사용한 Helm Chart(Community)도 간헐적으로 원인 모를 에러를 발생하였습니다. 이에 따라 관리자는 Airflow 에러를 수정하고 사용자와 커뮤니케이션하는 데 꽤 높은 피로도가 있었습니다.  
+더불어 그때 당시 Airflow를 K8s에 배포하기 위해 사용한 Helm Chart(Community 버전)도 간헐적으로 원인 모를 에러를 발생하였습니다. 이에 따라 관리자는 Airflow 에러를 수정하고 사용자와 커뮤니케이션하는 데 꽤 높은 피로도가 있었습니다.  
 
 #### 많은 사용자들이 사용하기엔 불친절한 개발 환경, 긴 피드백 루프
 
@@ -78,25 +78,25 @@ tags:
 
 개발 환경의 Airflow는 Git Sync를 통해 Github Repository의 코드를 동기화하였습니다. 하지만 운영하는 Dag의 갯수들이 많다 보니(700여개), 동기화 시간이 1분 이상 걸리는 경우들이 많았습니다. 만약 사용자가 코드를 작성하면서 계속해서 동작 확인을 하기 위해선 매번 1분 이상의 지연 시간을 가지며 개발을 해야했습니다. 이는 피드백 루프가 길다는 것을 의미하며, 사용자의 개발 시간이 길어진다는 것을 의미합니다. 
 
-또한 개인 노트북 환경에서 코드를 작성하기 위해선 Airflow 관련 구성 의존성들을 설치해야 하고 기본 개발 환경을 설정해야 합니다. 하지만 이에 관한 가이드 문서들이 부족하였으며 일부 mac os 버전에서는 의존성이 제대로 설치되지 않는 문제들도 있었습니다. 
+또한 개인 노트북 환경에서 코드를 작성하기 위해선 Airflow 관련 구성 의존성들을 설치해야 하고 기본 개발 환경을 설정해야 합니다. 하지만 이에 관한 가이드 문서들이 부족하였으며 일부 Mac OS 버전에서는 의존성이 제대로 설치되지 않는 문제들도 있었습니다. 
 
 #### Airflow 1버전의 고질적인 문제들
 
-현재 Airflow 2가 나온지 꽤 시간이 흘렀습니다(2020년 12월). 기존 1 버전대 Airflow는 Dag 갯수가 늘어나면 Dag Parsing 시간이 꽤 오래 걸리는 치명적인 문제가 있었습니다. 그때 당시 쏘카에서 운영하는 Dag은 수백 개였고 점점 Dag이 늘어날 때마다 Task Instance들의 스케줄링이 점점 밀리게 되었습니다. 그리고 webserver는 Dag Parsing 프로세스가 백그라운드에서 동작하고 있다보니 웹에 접근했을 때 속도가 느린 편이었습니다.
+현재 Airflow 2가 나온지 꽤 시간이 흘렀습니다.(2020년 12월) 기존 1 버전대 Airflow는 Dag 갯수가 늘어나면 Dag Parsing 시간이 꽤 오래 걸리는 치명적인 문제가 있었습니다. 그때 당시 쏘카에서 운영하는 Dag은 수백 개였고 점점 Dag이 늘어날 때마다 Task Instance들의 스케줄링이 점점 밀리게 되었습니다. 그리고 Webserver는 Dag Parsing 프로세스가 백그라운드에서 동작하고 있다보니 웹에 접근했을 때 속도가 느린 편이었습니다.
 
-그때 당시 K8s 노드의 자원을 스케일 업해봤지만 크게 개선되는 부분은 없었고 스케일 업만 하는 건 올바른 선택지가 아니었습니다.
+그때 당시 K8s Node의 자원을 스케일 업해봤지만 크게 개선되는 부분은 없었고 스케일 업만 하는 건 올바른 선택지가 아니었습니다.
 
 #### 코드 보안에 취약하고, 사용자 개인에 대한 권한 체계 부족
 
 다수의 사용자들이 Airflow를 사용하면서 Api Key나 Secret 정보들을 그대로 하드코딩하는 경우들이 있습니다. 특히 Airflow 사용 목적 상 외부 데이터 소스/저장소와 통신해야 하는 경우들이 많아 위 문제들이 빈번하게 발생하는 편입니다. 
 
-또한 Airflow 사용자들에게 팀 별로 사용할 수 있는 공용 계정을 제공하였습니다. 그렇기에 간혹 Connection, Variable이 지워지거나 실행되던 Task가 갑자기 종료되는 문제들이 발생했었으며, 히스토리를 추적할 때 사용자에 대한 auditing이 힘들어지는 문제가 있었습니다.
+또한 Airflow 사용자들에게 팀 별로 사용할 수 있는 공용 계정을 제공하였습니다. 그렇기에 간혹 Connection, Variable이 지워지거나 실행되던 Task가 갑자기 종료되는 문제들이 발생했었으며, 히스토리를 추적할 때 사용자에 대한 Auditing이 힘들어지는 문제가 있었습니다.
 
 #### 오류 대응 프로세스 및 모니터링 환경
 
 쏘카에서는 Task가 실패했을 때 알림을 보내는 슬랙 채널이 존재합니다. 보통 메시지가 오면 관리자 혹은 히스토리를 잘 알고 있는 사용자가 해당 Dag의 책임자에게 라우팅을 해주는 방식이었습니다. 하지만 담당자를 제대로 파악하고 대응하기까지 시간이 걸리는 경우들이 있었고, 담당자를 제때 파악하지 못하는 경우들도 있었습니다.
 
-또한 관리자는 기본 Airflow 상태에 대한 모니터링을 위해선 쿠버네티스 환경도 함께 모니터링 해야하지만 체계화된 모니터링 환경을 구축하고 있지는 못했습니다. 
+또한 관리자는 기본 Airflow 상태에 대한 모니터링을 위해선 K8s 환경도 함께 모니터링 해야하지만 체계화된 모니터링 환경을 구축하고 있지는 못했습니다. 
 
 ### 1.3. 해결 방안 모색
 
@@ -134,7 +134,7 @@ Airflow를 운영하면서 시간이 지날수록 위와 같은 문제들이 드
 
 - Airflow 서버를 띄우는 시간 단축 : **5분 -> 1분**
 - 개발 피드백 루프 시간 단축 : **1분(Commit -> Sync) -> 5초**
-- 개발 클러스터에서 유휴 Airflow들이 노드를 점유하였던 문제 해결 : **2개 이상의 VM 절약**
+- 개발 클러스터에서 유휴 Airflow들이 Node를 점유하였던 문제 해결 : **2개 이상의 VM 절약**
 - Docker라는 표준 환경을 통해 Airflow 서버의 불안정성을 낮추고 관리 비용을 줄임
 
 ![local-airflow.png](/img/advanced-airflow-for-databiz/local-airflow.png)
@@ -151,10 +151,10 @@ x-airflow-common: &airflow-common
   image: apache/airflow:2.3.2
   environment: &airflow-common-env
     EXECUTOR: Local # LocalExecutor로 실행합니다 
-		_PIP_ADDITIONAL_REQUIREMENTS: ... # 추가 의존성을 설치합니다
-		GOOGLE_APPLICATION_CREDENTIALS: ... # 사용자 인증 파일(GCP Service Account) 경로를 넣어줍니다
-		AIRFLOW__SCHEDULER__DAG_DIR_LIST_INTERVAL: 5  # Dag 코드의 변화를 빠르게 감지하여 metadb에 반영한다. 
-		...
+        _PIP_ADDITIONAL_REQUIREMENTS: ... # 추가 의존성을 설치합니다
+        GOOGLE_APPLICATION_CREDENTIALS: ... # 사용자 인증 파일(GCP Service Account) 경로를 넣어줍니다
+        AIRFLOW__SCHEDULER__DAG_DIR_LIST_INTERVAL: 5  # Dag 코드의 변화를 빠르게 감지하여 metadb에 반영한다. 
+      ...
 services:
   init: # Airflow user를 생성하고 .airflowignore를 적용하는 등의 script를 실행합니다
     <<: *airflow-common
@@ -194,7 +194,7 @@ services:
 
 현재 Airflow는 `KubernetesExecutor`를 사용하고 있으며, 쏘카에서는 `KubernetesPodOperator`로 Task를 띄우는 경우가 많습니다. 초반에 로컬 환경에서 KubernetesPodOperator 실행시 Kubernetes API Server를 Mocking 하는 경우를 생각했으나 개발 비용이 비싸다고 판단하였습니다. 결국 개발 환경의 Kubernetes Cluster에 직접 연결해서 Pod을 띄우는 방식으로 문제를 해결하였습니다.
 
-로컬에서는 기본적으로 KubernetesPodOperator를 실행하게 되면, K8s 인증을 한 후 미리 생성한 Namespace(Local 전용 Namespace)에 Pod을 띄울 수 있도록 하였습니다. 이때 핵심은 사용자가 쿠버네티스를 알지 못해도 동작할 수 있도록 추상화를 하는 것입니다. 이를 위해 아래와 같은 작업들을 진행하였습니다. 
+로컬에서는 기본적으로 KubernetesPodOperator를 실행하게 되면, K8s 인증을 한 후 미리 생성한 Namespace(Local 전용 Namespace)에 Pod을 띄울 수 있도록 하였습니다. 이때 핵심은 사용자가 K8s를 알지 못해도 동작할 수 있도록 추상화를 하는 것입니다. 이를 위해 아래와 같은 작업들을 진행하였습니다. 
 
 - OAuth 인증이 아닌 GCP Service Account 기반의 인증을 할 수 있도록 Service Account를 발급하고 이를 기반으로 .kubeconfig 파일을 생성하여 Docker Image에 Mount 합니다. 
 ([Kubernetes API 서버에 인증](https://cloud.google.com/kubernetes-engine/docs/how-to/api-server-authentication?hl=ko#environments-without-gcloud) 글에서 더 자세한 내용을 확인할 수 있습니다)
@@ -335,7 +335,7 @@ Dag 갯수가 늘어나게 되면 Scheduler는 모든 Dag을 파싱하기까지 
     ```
     
 
-이 외에도 팀에서 직접 만든 Operator나 helper 코드에 대한 테스트를 작성중에 있습니다.
+이 외에도 팀에서 직접 만든 Operator나 Helper 코드에 대한 테스트를 작성중에 있습니다.
 
 #### Github Action을 통한 테스트 자동화
 
@@ -452,7 +452,7 @@ Airflow 2에서는 Scheduler HA 설정이 가능합니다. 복수개의 Schedule
 
 ### 3.4. Kubernetes 환경 개선
 
-저희는 K8s 환경에서 Airflow를 운영하기 때문에 kubernetes의 자원 관리도 함께 고려해야 합니다. 현재 운영중인 Dag이 700개가 넘기 때문에 많은 Task Pod들이 각각 리소스를 점유하게 됩니다. 만약 특정 시간대에 Dag들이 몰려있는 경우 K8s Node의 리소스가 부족해지고 해당 노드에 떠있는 Pod들의 성능이 저하될 수 있습니다.
+저희는 K8s 환경에서 Airflow를 운영하기 때문에 kubernetes의 자원 관리도 함께 고려해야 합니다. 현재 운영중인 Dag이 700개가 넘기 때문에 많은 Task Pod들이 각각 리소스를 점유하게 됩니다. 만약 특정 시간대에 Dag들이 몰려있는 경우 K8s Node의 리소스가 부족해지고 해당 Node에 떠있는 Pod들의 성능이 저하될 수 있습니다.
 
 #### Node Pool 분리 및 Auto Scaling 적용
 
@@ -462,7 +462,7 @@ Airflow 2에서는 Scheduler HA 설정이 가능합니다. 복수개의 Schedule
 
 #### 사용자의 Task 리소스 직접 할당
 
-K8s 환경의 장점은 Task 별로 자원 할당을 할 수 있다는 점입니다. Cpu Bound한 Task의 경우 Cpu 리소스를 높게 할당하고, I/O Bound한 Task는 Cpu 리소스를 낮게 관리하여 K8s Node의 자원 관리를 더 효율적으로 할 수 있습니다. 아래와 같이 Operator의 K8s 리소스 설정을 patch하는 `assign_operator_resources` 라는 helper 함수를 만들어서 관리하고 있습니다. 
+K8s 환경의 장점은 Task 별로 자원 할당을 할 수 있다는 점입니다. Cpu Bound한 Task의 경우 Cpu 리소스를 높게 할당하고, I/O Bound한 Task는 Cpu 리소스를 낮게 관리하여 K8s Node의 자원 관리를 더 효율적으로 할 수 있습니다. 아래와 같이 Operator의 K8s 리소스 설정을 Patch하는 `assign_operator_resources` 라는 Helper 함수를 만들어서 관리하고 있습니다. 
 
 ```python
 @dataclass
@@ -696,7 +696,7 @@ Airflow는 내부적으로 `statsd` 를 통해 Metric을 외부로 전송이 가
 Datadog에서 수집한 Metric들을 통해 저희가 집중해서 봐야 할 대상(e.g., 너무 오래 실행중인 Dag)을 알림으로 만들어 슬랙에서 확인이 가능하도록 진행하고 있습니다.
 
 Kuberentes의 경우도 동일하게 Datadog을 활용하여 모니터링하고 있습니다. Kubernetes 전용 대시보드를 통해 기본 상태를 확인하고 있으며, Task의 Log(Remote Logging)가 제대로 남지 않는 문제가 발생했을 때 Pod Log를 보고 있습니다.
-현재 Kubernetes를 Managed Service인 GKE(Google Kubernetes Engine)로 사용하고 있는데, 간혹 Node가 갑자기 내려가서 Task가 실패하는 경우들도 발생하고 있습니다. 이 경우 Task의 로그가 제대로 남지 않아서 쿠버네티스 노드의 상태와 기타 인프라 상황을 종합적으로 검토하여 문제를 해결하려고 시도중입니다.
+현재 Kubernetes를 Managed Service인 GKE(Google Kubernetes Engine)로 사용하고 있는데, 간혹 Node가 갑자기 내려가서 Task가 실패하는 경우들도 발생하고 있습니다. 이 경우 Task의 로그가 제대로 남지 않아서 K8s Node의 상태와 기타 인프라 상황을 종합적으로 검토하여 문제를 해결하려고 시도중입니다.
 
 ## 6. 되돌아보기
 
