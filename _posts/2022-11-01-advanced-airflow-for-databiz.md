@@ -428,7 +428,7 @@ Airflow 2에서 대표적으로 개선된 부분들은 아래와 같습니다. �
     
 - Scheduler HA(High Availability)를 지원해서 스케줄러의 Scale Out이 용이합니다.
     
-    Active-Active 클러스터 형태로 Scheduler의 HA를 지원합니다. 이때 Meta DB는 `SELECT ... FOR UPDATE`로 Row Level Rock이 걸리게 됩니다.
+    Active-Active 클러스터 형태로 Scheduler의 HA를 지원합니다. 이때 Meta DB는 `SELECT ... FOR UPDATE`로 Row Level Lock이 걸리게 됩니다.
     
 - 웹 서버 사용성이 개선되었습니다.
     
@@ -448,7 +448,7 @@ Airflow 2로 마이그레이션하면서 1버전과 호환성이 깨지는 부�
 
 Airflow 2에서는 Scheduler HA 설정이 가능합니다. 복수개의 Scheduler를 통해 Dag 스케줄링 지연을 개선할 수 있습니다. 저희는 [공식 Helm Chart](https://github.com/apache/airflow/tree/main/chart) 를 사용하고 있기에 손쉽게 HA 설정을 하였습니다.
 
-이때 한가지 주의할 점은 Scheduler가 증가하는 만큼 Meta DB의 부하도 증가하게 됩니다. Scheduler들은 Row Level Rocking(SELECT … FOR UPDATE) 방식으로 Dag, Task 등 자원에 접근하게 됩니다. 따라서 Scheduler가 늘어나면 자연스럽게 Meta DB의 자원 사용량도 높아집니다. 그래서 데이터베이스의 메트릭을 보면서 스케일 업을 해주거나 다중화를 설정하는 것도 하나의 옵션일 것 같습니다. 
+이때 한가지 주의할 점은 Scheduler가 증가하는 만큼 Meta DB의 부하도 증가하게 됩니다. Scheduler들은 Row Level Locking(SELECT … FOR UPDATE) 방식으로 Dag, Task 등 자원에 접근하게 됩니다. 따라서 Scheduler가 늘어나면 자연스럽게 Meta DB의 자원 사용량도 높아집니다. 그래서 데이터베이스의 메트릭을 보면서 스케일 업을 해주거나 다중화를 설정하는 것도 하나의 옵션일 것 같습니다. 
 
 ### 3.4. Kubernetes 환경 개선
 
