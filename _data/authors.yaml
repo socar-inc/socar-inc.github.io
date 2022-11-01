@@ -121,3 +121,7 @@ bucky:
 corgi:
   name: 코기
   image: '/assets/authors/corgi.png'
+
+grab:
+  name: 그랩
+  image: '/assets/authors/grab.png'
