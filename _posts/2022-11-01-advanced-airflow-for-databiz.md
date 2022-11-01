@@ -46,7 +46,7 @@ tags:
 쏘카에서는 데이터 통합 저장소(데이터 레이크, 웨어하우스)로 `BigQuery`를 사용하고 있습니다. 기본적으로 외부 데이터 소스(Open API, AWS Data Source, BigQuery의 다른 테이블 등)에서 데이터를 목적지로 옮기는 작업에만 Airflow를 사용하도록 권장하고 있습니다. 현재 Dag Repo의 디렉토리 구조를 보면 Data Lake, Data Mart, Monitoring, Crawling 등 각 용도에 맞게 분류하여 관리되고 있습니다. 
 (단순 스케줄링을 필요로 하는 작업은 Airflow의 사용을 지양하고 K8s(Kubernetes) Cronjob이나 Github Action 등을 활용하는 것을 권장하고 있습니다)
 
-![airflow-k8s-workflow.png](/img/advanced-airflow-for-databiz/airflow-k8s-workflow.png)
+![airflow-k8s-workflow.png](/img/advanced-airflow-for-databiz/airflow-k8s-workflow.png)*Airflow on Kubernetes Workflow*
 
 쏘카의 데이터 플랫폼/애플리케이션들은 대부분 GKE(Google Kubernetes Engine) 환경에서 동작하고 있습니다. 개발 편의성을 위해서 운영/개발 환경을 각각 클러스터를 분리하여 사용하고 있으며, Airflow도 운영 환경과 개발 환경이 분리되어 있습니다. 
 과거 개발 환경은 Branch 이름의 특정 조건을 만족하면 CI/CD 파이프라인을 거쳐서 Airflow 서비스가 독립적으로 생성되었습니다.
@@ -68,7 +68,7 @@ tags:
 
 **문제점 1 - 개발 환경의 Airflow의 에러 발생 및 관리자/컴퓨팅 리소스 낭비**
 
-![argocd-many-airflows.png](/img/advanced-airflow-for-databiz/argocd-many-airflows.png)
+![argocd-many-airflows.png](/img/advanced-airflow-for-databiz/argocd-many-airflows.png)*다수의 사용자가 개발 환경에서 만든 Airflow가 ArgoCD에 생성된 모습*
 
 위에서 말씀 드렸다시피 개발 환경의 Airflow는 Github Branch를 기반으로 생애주기가 결정됩니다. 따라서 사용자가 작업을 완료하고 Branch를 삭제하면 개발 환경의 Airflow는 함께 내려가게 됩니다. 그러나 사용자는 Branch를 만들고 작업하다가 중간에 다른 작업을 하는 경우들이 많았고, 이에 Airflow는 계속 유휴 상태로 남아있어 K8s Node의 자원을 차지하였습니다.
 
@@ -76,7 +76,7 @@ tags:
 
 **문제점 2 - 많은 사용자들이 사용하기엔 불친절한 개발 환경, 긴 피드백 루프**
 
-![git-sync-many-commits.png](/img/advanced-airflow-for-databiz/git-sync-many-commits.png)
+![git-sync-many-commits.png](/img/advanced-airflow-for-databiz/git-sync-many-commits.png)*Airflow 커밋 히스토리*
 
 개발 환경의 Airflow는 Git Sync를 통해 Github Repository의 코드를 동기화하였습니다. 하지만 운영하는 Dag의 갯수들이 많다 보니(700여개), 동기화 시간이 1분 이상 걸리는 경우들이 많았습니다. 만약 사용자가 코드를 작성하면서 계속해서 동작 확인을 하기 위해선 매번 1분 이상의 지연 시간을 가지며 개발을 해야했습니다. 이는 피드백 루프가 길다는 것을 의미하며, 사용자의 개발 시간이 길어진다는 것을 의미합니다. 
 
@@ -141,7 +141,7 @@ Airflow를 운영하면서 시간이 지날수록 위와 같은 문제들이 드
 - 개발 클러스터에서 유휴 Airflow들이 Node를 점유하였던 문제 해결 : **2개 이상의 VM 절약**
 - Docker라는 표준 환경을 통해 Airflow 서버의 불안정성을 낮추고 관리 비용을 줄임
 
-![local-airflow.png](/img/advanced-airflow-for-databiz/local-airflow.png)
+![local-airflow.png](/img/advanced-airflow-for-databiz/local-airflow.png)*Local Airflow의 구조*
 
 #### Docker Compose로 각 컴포넌트 띄우기
 
@@ -185,7 +185,7 @@ services:
 
 #### GCP Service Account를 통합 인증 수단으로 활용하기
 
-![service-account-one-key.png](/img/advanced-airflow-for-databiz/service-account-one-key.png)
+![service-account-one-key.png](/img/advanced-airflow-for-databiz/service-account-one-key.png)*Service Account 활용 구조*
 
 기본적으로 Airflow는 GCP 리소스(BigQuery, Secret Manager, GKE 등)에 접근하는 경우가 많기에, 로컬에서 개발할 때 권한 관리를 필요로 합니다. 따라서 개인 별 Service Account 발급을 통해 인증을 해결하였습니다. 
 
@@ -258,7 +258,7 @@ Dag 갯수가 늘어나게 되면 Scheduler는 모든 Dag을 파싱하기까지 
 ^((?!_development).)*$
 ```
 
-(`.airflowignore`에 대한 내용은 [해당 문서](https://airflow.apache.org/docs/apache-airflow/stable/concepts/dags.html#airflowignore) 를 참고해주세요)
+(`.airflowignore`에 대한 내용은 [Airflow 공식 문서](https://airflow.apache.org/docs/apache-airflow/stable/concepts/dags.html#airflowignore) 를 참고해주세요)
 
 ### 2.3. 테스트 환경 구축
 
@@ -344,7 +344,7 @@ Dag 갯수가 늘어나게 되면 Scheduler는 모든 Dag을 파싱하기까지 
 
 쏘카에서는 현재 대부분의 CI 파이프라인으로 `github action`을 사용하고 있습니다. Github Action을 활용하면 `workflow` 파일을 통해 간단하게 테스트 자동화가 가능합니다. 
 
-![github-action.png](/img/advanced-airflow-for-databiz/github-action.png)
+![github-action.png](/img/advanced-airflow-for-databiz/github-action.png)*쏘카에서 사용하는 Airflow Repo의 Github Action*
 
 현재 CI 워크플로우는 아래와 같이 동작합니다
 
@@ -365,7 +365,7 @@ Dag 갯수가 늘어나게 되면 Scheduler는 모든 Dag을 파싱하기까지 
 
 Airflow 로컬 환경 구축 가이드(Docker, Python 환경 등)을 시작으로 트러블슈팅, 개발 가이드 등을 문서화하여 기존 사용자와 신규 입사자가 더 빠르게 Airflow에 온보딩할 수 있도록 하였습니다.
 
-![airflow-user-guide.png](/img/advanced-airflow-for-databiz/airflow-user-guide.png)
+![airflow-user-guide.png](/img/advanced-airflow-for-databiz/airflow-user-guide.png)*사내 Airflow 이용자를 위해 만든 가이드*
 
 #### 사내 Airflow 교육 진행
 
@@ -375,13 +375,13 @@ Airflow를 사용하고 싶은 사람들을 대상으로 Airflow 세미나를 �
 
 
 
-![semina-survey.png](/img/advanced-airflow-for-databiz/semina-survey.png)
+![semina-survey.png](/img/advanced-airflow-for-databiz/semina-survey.png)*Airflow 사내 세미나 후기*
 
 #### 오피스아워, 슬랙 문의 채널 운영 등을 통해 개발 서포트
 
 데이터 플랫폼 팀에서는 격주 오피스아워를 통해 Airflow, MLOps Platform 등 데이터 플랫폼을 사용하면서 생기는 문제들을 자유롭게 질문할 수 있도록 하고 있습니다. 또한 슬랙 문의 채널을 통해 데이터 플랫폼 이용 관련 질문들을 할 수 있도록 하여 사용하는데 불편함이 없도록 최대한 서포트하고 있습니다
 
-![dp-office-hour.png](/img/advanced-airflow-for-databiz/dp-office-hour.png)
+![dp-office-hour.png](/img/advanced-airflow-for-databiz/dp-office-hour.png)*데이터 플랫폼팀 오피스 아워 페이지*
 
 #### makefile 활용해서 쉽게 명령어들 사용할 수 있도록 구성
 
@@ -404,7 +404,7 @@ clean-up: ## 🌬 Airflow 환경을 초기화합니다.
 ...
 ```
 
-![make-script.png](/img/advanced-airflow-for-databiz/make-script.png)
+![make-script.png](/img/advanced-airflow-for-databiz/make-script.png)*make install 로 간단히 로컬 Airflow 의존성을 설정하는 모습*
 
 ---
 
@@ -441,13 +441,13 @@ Airflow 2에서 대표적으로 개선된 부분들은 아래와 같습니다. �
     
 
 
-![logo-anim.gif](/img/advanced-airflow-for-databiz/logo-anim.gif)
+![logo-anim.gif](/img/advanced-airflow-for-databiz/logo-anim.gif)*Airflow 로고를 커스텀 해보았습니다.*
 
 Airflow 2로 마이그레이션하면서 1버전과 호환성이 깨지는 부분들이 꽤 있었고 이를 해결하는데 시간이 꽤 소요됐습니다. 하지만 마이그레이션 한 후 Airflow의 스케줄링 퍼포먼스가 올라갔으며 Task/Dag 간의 의존관계가 복잡하거나 코드가 복잡한 경우도 제공되는 API를 잘 활용하여 코드 퀄리티를 높일 수 있었습니다.
 
 ### 3.3. 고가용성 설정
 
-![scheduler-ha.png](/img/advanced-airflow-for-databiz/scheduler-ha.png)
+![scheduler-ha.png](/img/advanced-airflow-for-databiz/scheduler-ha.png)*Airflow Scheduler HA 설정*
 
 Airflow 2에서는 Scheduler HA 설정이 가능합니다. 복수개의 Scheduler를 통해 Dag 스케줄링 지연을 개선할 수 있습니다. 저희는 [공식 Helm Chart](https://github.com/apache/airflow/tree/main/chart) 를 사용하고 있기에 손쉽게 HA 설정을 하였습니다.
 
@@ -534,7 +534,7 @@ t1 = assign_operator_resources(
 
 따라서 주기적으로 오래된 Dag과 Task 등 Historical Record들을 지워주게 되면 쿼리 속도를 향상시킬 수 있습니다. 저희는 [해당 레포](https://github.com/teamclairvoyant/airflow-maintenance-dags) 를 참조하여 특정 기간 내에 Dag, Task Instance 등을 지워주는 Dag을 스케줄링했습니다.
 
-![cleanup-dag.png](/img/advanced-airflow-for-databiz/cleanup-dag.png)
+![cleanup-dag.png](/img/advanced-airflow-for-databiz/cleanup-dag.png)*Clean Up Dag 의 Task 목록*
 
 실제로 Clean Up Dag이 스케줄링되면서 Database의 리소스 사용량이 상당량 줄었으며, Airflow의 스케줄러 및 웹 서버의 성능 향상을 체감하였습니다.
 
@@ -557,7 +557,7 @@ t1 = assign_operator_resources(
 
 #### gcp Secret Manager 적용
 
-![airflow-secret-manager.png](/img/advanced-airflow-for-databiz/airflow-secret-manager.png)
+![airflow-secret-manager.png](/img/advanced-airflow-for-databiz/airflow-secret-manager.png)*Secret Manager 목록*
 
 [GCP Secret Manager](https://cloud.google.com/secret-manager) 는 GCP에서 제공해주는 보안 정보 관리 툴입니다. 기본적으로 IAM을 통해 세부 권한 조정이 가능하며, 다양한 클라이언트에서 접근할 수 있도록 API를 제공합니다. GCP Secret Manager를 사용하면 손쉽게 보안 정보들과 코드를 분리할 수 있습니다.
 
@@ -603,7 +603,7 @@ Airflow의 [auth_backend](https://airflow.apache.org/docs/apache-airflow/stable/
 데이터 파이프라인을 직접 개발하기 위해 Airflow를 사용하는 경우들이 늘어났고, 현재 700개 이상의 Dag이 운영되고 있습니다. 이에 관리자는 모든 Dag을 관리하고 문맥을 파악하는 것이 힘들어졌습니다. 
 따라서 1차적으로 Dag 개발/동작에 대한 책임은 Dag 사용자(개발자)가 질 수 있도록 기반 모니터링 환경을 구축하였습니다(기본적인 Airflow 개발/관리 교육과 지원을 가정합니다)
 
-![user-slack-mention.png](/img/advanced-airflow-for-databiz/user-slack-mention.png)
+![user-slack-mention.png](/img/advanced-airflow-for-databiz/user-slack-mention.png)*실패한 Dag의 담당자를 태그하는 알람*
 
 정상적으로 스케줄되지 않은 Dag을 모아서 10분에 한 번씩 슬랙 채널에 알림을 주고 있습니다. 이때 즉각적으로 대응할 수 있도록 담당자를 멘션할 수 있도록 구현하였습니다. 이를 통해 실패한 Dag을 대응하는 속도가 빨라졌으며 관리자도 담당자를 찾고 대응하지 않아도 되기에 관리 비용을 줄일 수 있었습니다.
 
@@ -693,7 +693,7 @@ class DAGAlertPayload:
 
 Airflow는 내부적으로 `statsd` 를 통해 Metric을 외부로 전송이 가능합니다. 대표적인 Metric으로는 Task Instance의 성공/실패 갯수, Dag Run의 Task 실행 시간, Dag Run의 스케줄 딜레이 시간 등이 있습니다. 더 자세한 내용은 [Airflow 공식 문서](https://airflow.apache.org/docs/apache-airflow/stable/logging-monitoring/metrics.html) 를 참고해주세요.
 
-![airflow-dashboard.png](/img/advanced-airflow-for-databiz/airflow-dashboard.png)
+![airflow-dashboard.png](/img/advanced-airflow-for-databiz/airflow-dashboard.png)*Datadog의 Airflow Dashboard*
 
 쏘카는 전사 모니터링 툴로 Datadog을 사용하고 있습니다. Datadog에서 [Airflow Integration](https://docs.datadoghq.com/integrations/airflow/?tab=host) 을 제공하므로 손쉽게 주요 Airflow Metric을 대시보드로 확인할 수 있습니다. 저희는 Airflow 공식 차트를 통해 statsd 설정을 통해 Datadog과 연결하여 사용하고 있습니다. 
 Datadog에서 수집한 Metric들을 통해 저희가 집중해서 봐야 할 대상(e.g., 너무 오래 실행중인 Dag)을 알림으로 만들어 슬랙에서 확인이 가능하도록 하고 있습니다.
