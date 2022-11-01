@@ -51,9 +51,9 @@ tags:
 ![airflow-k8s-workflow.png](/img/advanced-airflow-for-databiz/airflow-k8s-workflow.png)
 
 쏘카의 데이터 플랫폼/애플리케이션들은 대부분 GKE(Google Kubernetes Engine) 환경에서 동작하고 있습니다. 개발 편의성을 위해서 운영/개발 환경을 각각 클러스터를 분리하여 사용하고 있으며, Airflow도 운영 환경과 개발 환경이 분리되어 있습니다. 
-밑에서 더 이야기하겠지만, 과거 개발 환경은 브랜치 이름의 특정 조건을 만족하면 CI/CD 파이프라인을 거쳐서 Airflow 서비스가 독립적으로 생성되었습니다.
+밑에서 더 이야기하겠지만, 과거 개발 환경은 Branch 이름의 특정 조건을 만족하면 CI/CD 파이프라인을 거쳐서 Airflow 서비스가 독립적으로 생성되었습니다.
 
-과거 Airflow 사용자는 Dag을 생성/변경하기 위해서는 기본적으로 `feature` 브랜치를 생성하였고, 변경 커밋을 원격 브랜치에 푸시하였습니다. 그러면 Git Sync를 통해 Airflow에 Dag이 동기화되어 테스트가 가능해졌죠. 
+과거 Airflow 사용자는 Dag을 생성/변경하기 위해서는 기본적으로 `feature` Branch를 생성하였고, 변경 커밋을 원격 Branch에 푸시하였습니다. 그러면 Git Sync를 통해 Airflow에 Dag이 동기화되어 테스트가 가능해졌죠. 
 
 쏘카의 Airflow On K8s 운영에 대해 더 궁금하시다면 [이 글](https://tech.socarcorp.kr/data/2021/06/01/data-engineering-with-airflow.html) 을 읽어보세요.
 
