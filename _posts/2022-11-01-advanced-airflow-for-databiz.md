@@ -692,8 +692,8 @@ Airflow는 내부적으로 `statsd` 를 통해 Metric을 외부로 전송이 가
 
 ![airflow-dashboard.png](/img/advanced-airflow-for-databiz/airflow-dashboard.png)
 
-쏘카는 전사에서 모니터링 환경으로 Datadog을 사용하고 있습니다. Datadog에서 [Airflow Integration](https://docs.datadoghq.com/integrations/airflow/?tab=host) 을 제공하므로 손쉽게 주요 Airflow Metric을 대시보드로 확인할 수 있습니다. 저희는 Airflow 공식 차트를 통해 statsd 설정을 통해 Datadog과 연결하여 사용하고 있습니다. 
-Datadog에서 수집한 Metric들을 통해 저희가 집중해서 봐야 할 대상(e.g., 너무 오래 실행중인 Dag)을 알림으로 만들어 슬랙에서 확인이 가능하도록 진행하고 있습니다.
+쏘카는 전사 모니터링 툴로 Datadog을 사용하고 있습니다. Datadog에서 [Airflow Integration](https://docs.datadoghq.com/integrations/airflow/?tab=host) 을 제공하므로 손쉽게 주요 Airflow Metric을 대시보드로 확인할 수 있습니다. 저희는 Airflow 공식 차트를 통해 statsd 설정을 통해 Datadog과 연결하여 사용하고 있습니다. 
+Datadog에서 수집한 Metric들을 통해 저희가 집중해서 봐야 할 대상(e.g., 너무 오래 실행중인 Dag)을 알림으로 만들어 슬랙에서 확인이 가능하도록 하고 있습니다.
 
 Kuberentes의 경우도 동일하게 Datadog을 활용하여 모니터링하고 있습니다. Kubernetes 전용 대시보드를 통해 기본 상태를 확인하고 있으며, Task의 Log(Remote Logging)가 제대로 남지 않는 문제가 발생했을 때 Pod Log를 보고 있습니다.
 현재 Kubernetes를 Managed Service인 GKE(Google Kubernetes Engine)로 사용하고 있는데, 간혹 Node가 갑자기 내려가서 Task가 실패하는 경우들도 발생하고 있습니다. 이 경우 Task의 로그가 제대로 남지 않아서 K8s Node의 상태와 기타 인프라 상황을 종합적으로 검토하여 문제를 해결하려고 시도중입니다.
