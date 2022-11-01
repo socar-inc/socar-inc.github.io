@@ -1,7 +1,3 @@
-제목: 50명 규모의 데이터 본부가 사용하는 Airflow 플랫폼 구축하기
-
-부제: 사내 Airflow 고도화…
-
 ---
 layout: post
 title:  "50명 규모의 데이터 본부가 사용하는 Airflow 플랫폼 구축하기"
