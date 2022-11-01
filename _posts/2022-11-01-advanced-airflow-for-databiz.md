@@ -126,7 +126,7 @@ Airflow를 운영하면서 시간이 지날수록 위와 같은 문제들이 드
 
 ### 2.2. 로컬 개발 환경 구축
 
-위에서 언급한대로 기존 Airflow 개발 환경은 몇가지 문제점들이 있었습니다. Airflow의 생애주기가 Branch에 의존적이기 때문에 Branch가 남아있다면 자원을 유휴상태로 낭비하는 경우들이 많았습니다. 또한 Branch가 삭제되었을 때 CI/CD 파이프라인의 이슈로 Airflow가 제대로 삭제되지 않는 문제들이 있었습니다. 그리고 K8s + Git Sync 조합의 문제는 Dag이 많을수록 동기화 속도가 느려지는 문제가 있습니다. 이는 피드백 루프가 길어지고 개발 속도가 느려지는 것을 의미합니다.
+위에서 언급한대로 기존 Airflow 개발 환경은 몇가지 문제점들이 있었습니다. Airflow의 생애주기가 Branch에 의존적이기 때문에 Branch가 남아있다면 자원을 유휴상태로 낭비하는 경우들이 많았습니다. 또한 Branch가 삭제되었을 때 CI/CD 파이프라인의 이슈로 Airflow가 제대로 삭제되지 않는 문제들이 있었습니다. 그리고 K8s + Git Sync 조합은 Dag이 많을수록 동기화 속도가 느려지는 문제가 있습니다. 이는 피드백 루프가 길어지고 개발 속도가 느려지는 것을 의미합니다.
 
 그래서 저희는 **개발 환경을 노트북(로컬 환경)에서 쉽게 구축할 수 있다면 생산성이 더 높아질 것이라고 판단하였습니다.** 기본적으로 Docker는 OS에 크게 상관없이 표준을 따르기 때문에 로컬 환경에 **Docker compose**를 띄워서 개발 환경을 개선하는 작업을 진행했습니다. 
 
@@ -188,7 +188,7 @@ services:
 
 현재 GCP의 전체적 운영은 데이터 플랫폼 팀에서 담당하고 있습니다. GCP IAM은 팀 단위의 역할에 맞게 Custom Role을 만들어 관리하고 있으며, 사용자 별 Service Account는 해당 팀의 Role에 바인딩되어 있습니다. 사용자가 Airflow 개발을 필요로할 때 데이터 플랫폼 팀에서 Service Account 발급을 해줍니다. 
 
-이를 잘 활용하면 Secret(Connection, Variable 등)도 GCP Secret Manager로 옮긴 후 Service Account로 인증하여 로컬에 보안 정보를 전부 제외할 수 있었습니다 (아래에서 더 자세하게 다루겠습니다)
+이를 잘 활용하면 Secret(Connection, Variable 등)도 GCP Secret Manager로 옮긴 후 Service Account로 인증하여 로컬에 보안 정보를 전부 제외할 수 있었습니다.(아래에서 더 자세하게 다루겠습니다.)
 
 #### KubernetesPodOperator를 테스트할 수 있는 환경 구축
 
@@ -374,9 +374,9 @@ Airflow를 사용하고 싶은 사람들을 대상으로 Airflow 세미나를 �
 
 ![semina-survey.png](/img/advanced-airflow-for-databiz/semina-survey.png)
 
-#### 오피스아워, 슬랙 ask 채널 운영 등을 통해 개발 서포트
+#### 오피스아워, 슬랙 문의 채널 운영 등을 통해 개발 서포트
 
-데이터 플랫폼 팀에서는 매주 오피스아워를 통해 Airflow, MLOps Platform 등 데이터 플랫폼을 사용하면서 생기는 문제들을 자유롭게 질문할 수 있도록 하고 있습니다. 또한 Ask 채널을 통해 데이터 플랫폼 이용 관련 질문들을 할 수 있도록 하여 사용하는데 불편함이 없도록 최대한 서포트하고 있습니다
+데이터 플랫폼 팀에서는 격주 오피스아워를 통해 Airflow, MLOps Platform 등 데이터 플랫폼을 사용하면서 생기는 문제들을 자유롭게 질문할 수 있도록 하고 있습니다. 또한 슬랙 문의 채널을 통해 데이터 플랫폼 이용 관련 질문들을 할 수 있도록 하여 사용하는데 불편함이 없도록 최대한 서포트하고 있습니다
 
 ![dp-office-hour.png](/img/advanced-airflow-for-databiz/dp-office-hour.png)
 
@@ -416,7 +416,7 @@ clean-up: ## 🌬 Airflow 환경을 초기화합니다.
 
 ### 3.2. Airflow 2 마이그레이션
 
-입사해서 처음 진행했던 작업은 Airflow 2로 마이그레이션하는 작업이었습니다. 기존 Airflow 1 버전은 Dag 갯수가 늘어나면서 연속적인 Task Instance 스케줄링 간 Lag이 길었고, 기타 자잘한 버그들도 많이 보였습니다. 
+기존 Airflow 1 버전은 Dag 갯수가 늘어나면서 연속적인 Task Instance 스케줄링 간 Lag이 길었고, 기타 자잘한 버그들도 많이 보였습니다. 
 
 Airflow 2에서 대표적으로 개선된 부분들은 아래와 같습니다. 이 외에도 TaskFlow API 도입, Airflow Core Component에서 Provider 분리, Task Group, Smart Sensor 도입 등등 꽤 많은 변화가 있습니다. 더 궁금하신 분들은 [해당 글](https://www.astronomer.io/blog/airflow-2-scheduler) 을 읽어보시면 도움이 될 것 같습니다.
 
@@ -533,7 +533,7 @@ t1 = assign_operator_resources(
 
 ![cleanup-dag.png](/img/advanced-airflow-for-databiz/cleanup-dag.png)
 
-실제로 Clean Up Dag이 스케줄링되면서 Database의 리소스 사용량이 꽤 줄었으며, Airflow의 스케줄러, 웹 서버의 성능 향상을 체감하였습니다.
+실제로 Clean Up Dag이 스케줄링되면서 Database의 리소스 사용량이 상당량 줄었으며, Airflow의 스케줄러 및 웹 서버의 성능 향상을 체감하였습니다.
 
 ## 4. 보안 강화하기
 
