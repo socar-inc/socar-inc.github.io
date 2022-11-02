@@ -53,11 +53,11 @@ tags:
 ![airflow-k8s-workflow.png](/img/advanced-airflow-for-databiz/airflow-k8s-workflow.png)*Airflow on Kubernetes Workflow*
 
 쏘카의 데이터 플랫폼/애플리케이션들은 대부분 GKE(Google Kubernetes Engine) 환경에서 동작하고 있습니다. 개발 편의성을 위해서 운영/개발 환경 별로 클러스터를 분리하여 사용하고 있으며, Airflow도 운영 환경과 개발 환경이 분리되어 있습니다. 
-Airflow Github Repository의 Branch 이름이 특정 조건을 만족하면 CI/CD 파이프라인을 거쳐서 개발 클러스터에 Airflow 서비스가 독립적으로 생성됩니다.
+Airflow Github Repository의 Branch 이름이 특정 조건을 만족하면 CI/CD 파이프라인을 거쳐서 개발 클러스터에 Branch 별로 Airflow 서비스가 독립적으로 생성됩니다.
 
 과거 Airflow 사용자는 Dag을 생성/변경하기 위해서 기본적으로 `feature` Branch를 생성하여 변경 커밋을 원격 Branch에 푸시하였습니다. 그러면 Git Sync를 통해 Airflow에 Dag이 동기화되어 테스트가 가능했습니다.
 
-쏘카의 Airflow On K8s 운영에 대해 더 궁금하시다면 [쏘카 데이터 그룹 - Airflow와 함께한 데이터 환경 구축기](https://tech.socarcorp.kr/data/2021/06/01/data-engineering-with-airflow.html)를 읽어보세요.
+> 쏘카의 Airflow On K8s 운영에 대해 더 궁금하시다면 [쏘카 데이터 그룹 - Airflow와 함께한 데이터 환경 구축기](https://tech.socarcorp.kr/data/2021/06/01/data-engineering-with-airflow.html)를 읽어보세요.
 
 
 ### 1.2. 문제점
@@ -72,24 +72,26 @@ Airflow Github Repository의 Branch 이름이 특정 조건을 만족하면 CI/C
 
 **문제점 1 - 개발 환경의 Airflow의 에러 발생 및 관리자/컴퓨팅 리소스 낭비**
 
-![argocd-many-airflows.png](/img/advanced-airflow-for-databiz/argocd-many-airflows.png)*다수의 사용자가 개발 환경에서 만든 Airflow가 ArgoCD에 생성된 모습*
-
 개발 환경의 Airflow는 Github Branch를 기반으로 생애주기가 결정됩니다. 따라서 사용자가 작업을 완료하고 Branch를 삭제하면 개발 환경의 Airflow는 함께 내려가게 됩니다. 그러나 사용자는 Branch를 만들고 작업하다가 중간에 다른 작업을 하는 경우들이 많았고, 이에 Airflow는 계속 유휴 상태로 남아있어 K8s Node의 자원을 차지하였습니다.
+
+![argocd-many-airflows.png](/img/advanced-airflow-for-databiz/argocd-many-airflows.png)*다수의 사용자가 개발 환경에서 만든 Airflow가 남아있는 모습*
 
 더불어 그때 당시 Airflow를 K8s에 배포하기 위해 사용한 Helm Chart(Community 버전)도 간헐적으로 원인 모를 에러를 발생하였습니다. 이에 따라 관리자는 Airflow 에러를 수정하고 사용자와 커뮤니케이션하는 데 높은 피로도가 있었습니다.  
 
 **문제점 2 - 많은 사용자들이 사용하기엔 불친절한 개발 환경, 긴 피드백 루프**
 
-![git-sync-many-commits.png](/img/advanced-airflow-for-databiz/git-sync-many-commits.png)*Airflow 커밋 히스토리*
+개발 환경의 Airflow는 Git Sync를 통해 Github Repository의 코드를 동기화합니다. 
+사용자가 Dag 를 수정할 때마다 Push 를 해야 하는데, 운영하는 Dag의 갯수들이 많다 보니(700여개) 동기화 시간이 1분 이상 걸리는 경우들이 많았습니다. 
+이런 상황에서 사용자가 코드를 작성하면서 계속해서 동작 확인을 하기 위해선 매번 1분 이상 기다려야 했습니다. 이는 피드백 루프와 개발 시간이 길어진다는 것을 의미합니다. 
 
-개발 환경의 Airflow는 Git Sync를 통해 Github Repository의 코드를 동기화하였습니다. 하지만 운영하는 Dag의 갯수들이 많다 보니(700여개), 동기화 시간이 1분 이상 걸리는 경우들이 많았습니다. 만약 사용자가 코드를 작성하면서 계속해서 동작 확인을 하기 위해선 매번 1분 이상의 지연 시간을 가지며 개발을 해야했습니다. 이는 피드백 루프가 길다는 것을 의미하며, 사용자의 개발 시간이 길어진다는 것을 의미합니다. 
+![git-sync-many-commits.png](/img/advanced-airflow-for-databiz/git-sync-many-commits.png)*Airflow 커밋 히스토리가 불필요하게 길어지기도 합니다.*
 
 또한 개인 노트북 환경에서 코드를 작성하기 위해선 Airflow 관련 구성 의존성들을 설치해야 하고 기본 개발 환경을 설정해야 합니다. 하지만 이에 관한 가이드 문서들이 부족하였으며 일부 Mac OS 버전에서는 의존성이 제대로 설치되지 않는 문제들도 있었습니다. 
 
 **문제점 3 - Airflow 1 버전의 고질적인 문제들**
 
 기존 1 버전대 Airflow는 Dag 갯수가 늘어나면 Dag Parsing 시간이 오래 걸리는 치명적인 문제가 있었습니다. 그때 당시 쏘카에서 운영하는 Dag은 수백 개였고 점점 Dag이 늘어날 때마다 Task Instance들의 스케줄링이 점점 밀리게 되었습니다. 그리고 Webserver는 Dag Parsing 프로세스가 백그라운드에서 동작하고 있다보니 웹에 접근했을 때 속도가 느린 편이었습니다.
-그때 당시 K8s Node의 자원을 스케일 업해봤지만 크게 개선되는 부분은 없었고 조금 더 근본적인 해결책이 필요했습니다.
+그때 당시 K8s Node의 자원을 스케일 업해봤지만 크게 개선되는 부분은 없었고 단순 스케일 업보다는 조금 더 근본적인 해결책이 필요했습니다.
 
 **문제점 4 - 코드 보안에 취약하고, 사용자 개인에 대한 권한 체계 부족**
 
@@ -134,7 +136,8 @@ Airflow를 운영하면서 드러난 문제들을 개선하기 위해 아래와 
 
 ### 2.2. 로컬 개발 환경 구축
 
-기존 Airflow 개발 환경은 Airflow의 생애주기가 Branch에 의존적이기 때문에 Branch가 남아있다면 자원을 유휴상태로 낭비하는 경우들이 많았습니다. 또한 Branch가 삭제되었을 때 CI/CD 파이프라인의 이슈로 Airflow가 제대로 삭제되지 않는 문제들이 있었습니다. 그리고 K8s + Git Sync 조합의 문제는 Dag이 많을수록 동기화 속도가 느려지는 문제가 있습니다. 이는 피드백 루프가 길어지고 개발 속도가 느려지는 것을 의미합니다.
+기존 Airflow 개발 환경은 Airflow의 생애주기가 Branch에 의존적이기 때문에 Branch가 남아있다면 자원을 유휴상태로 낭비하는 경우들이 많았습니다. 또한 Branch가 삭제되었을 때 CI/CD 파이프라인의 이슈로 Airflow가 제대로 삭제되지 않는 문제들이 있었습니다. 
+그리고 K8s + Git Sync 조합은 Dag이 많을수록 동기화 속도가 느려져서 피드백 루프와 개발 속도의 저하를 유발했습니다.
 
 그래서 **개발 환경을 노트북(로컬 환경)에서 쉽게 구축할 수 있다면 생산성이 더 높아질 것이라고 판단하였습니다.** 기본적으로 Docker는 OS에 크게 상관없이 표준을 따르기 때문에 로컬 환경에 **Docker Compose**를 띄워서 개발 환경을 개선하는 작업을 진행했습니다. 
 
@@ -189,17 +192,17 @@ services:
 
 #### GCP Service Account를 통합 인증 수단으로 활용하기
 
-![service-account-one-key.png](/img/advanced-airflow-for-databiz/service-account-one-key.png)*Service Account 활용 구조*
-
 기본적으로 Airflow는 GCP 리소스(BigQuery, Secret Manager, GKE 등)에 접근하는 경우가 많기에, 로컬에서 개발할 때 권한 관리를 필요로 합니다. 따라서 개인 별 Service Account 발급을 통해 인증을 해결하였습니다. 
 
 현재 GCP의 전체적 운영은 데이터 플랫폼 팀에서 담당하고 있습니다. GCP IAM은 팀 단위의 역할에 맞게 Custom Role을 만들어 관리하고 있으며, 사용자 별 Service Account는 해당 팀의 Role에 바인딩되어 있습니다. 사용자가 Airflow 개발을 필요로할 때 데이터 플랫폼 팀에서 Service Account 발급을 해줍니다. 
+
+![service-account-one-key.png](/img/advanced-airflow-for-databiz/service-account-one-key.png)*Service Account 활용 구조*
 
 이를 잘 활용하여 Secret(Connection, Variable 등)도 GCP Secret Manager로 옮긴 후 Service Account로 인증하여 로컬에 보안 정보를 전부 제외할 수 있었습니다.
 
 #### KubernetesPodOperator를 테스트할 수 있는 환경 구축
 
-현재 Airflow는 `KubernetesExecutor`를 사용하고 있으며, 쏘카에서는 `KubernetesPodOperator`로 Task를 띄우는 경우가 많습니다. 초반에 로컬 환경에서 KubernetesPodOperator 실행시 Kubernetes API Server를 Mocking 하는 경우를 생각했으나 개발 비용이 비싸다고 판단하였습니다. 결국 개발 환경의 Kubernetes Cluster에 직접 연결해서 Pod을 띄우는 방식으로 문제를 해결하였습니다.
+쏘카에서는 Airflow의 `KubernetesPodOperator`로 Task를 띄우는 경우가 많습니다. 초반에 로컬 환경에서 KubernetesPodOperator 실행시 Kubernetes API Server를 Mocking 하는 경우를 생각했으나 개발 비용이 비싸다고 판단하였습니다. 결국 개발 환경의 Kubernetes Cluster에 직접 연결해서 Pod을 띄우는 방식으로 문제를 해결하였습니다.
 
 로컬에서는 기본적으로 KubernetesPodOperator를 실행하게 되면, K8s 인증을 한 후 미리 생성한 Namespace(Local 전용 Namespace)에 Pod을 띄울 수 있도록 하였습니다. 이때 핵심은 사용자가 K8s를 알지 못해도 동작할 수 있도록 추상화를 하는 것입니다. 이를 위해 아래와 같은 작업들을 진행하였습니다. 
 
@@ -270,7 +273,7 @@ Dag 갯수가 늘어나게 되면 Scheduler는 모든 Dag을 파싱하기까지 
 
 #### 테스트 코드 작성
 
-저희는 수많은 Dag에 대해 테스트 코드를 작성하기 보단, 변경된 Dag 파일을 대상으로 Dag 문법 검사 및 일부 포맷 검사를 하는 방식으로 테스트 코드를 작성했습니다. 이를 위해선 커밋에서 변경된 Dag들을 대상으로 문법에 맞게 잘 작성되었는지 `dagbag`을 활용했습니다. 
+수많은 Dag에 대해 모두 테스트 코드를 작성하기 보다는 변경된 Dag 파일을 대상으로 Dag 문법 검사 및 일부 포맷 검사를 하는 방식으로 테스트 코드를 작성했습니다. 이를 위해선 커밋에서 변경된 Dag들을 대상으로 문법에 맞게 잘 작성되었는지 `dagbag`을 활용했습니다. 
 
 - 변경되는 파일을 추출하여 테스트를 실행하는 스크립트
     
@@ -426,9 +429,7 @@ Data Freshness는 데이터가 얼마나 최신 상태인가를 나타냅니다.
 
 - 스케줄링 퍼포먼스가 개선되었습니다.
     
-    Airflow 2는 Dag Serialization과 Fast-Follow를 도입하여 Scheduler의 반복적인 Dag 파싱 작업을 줄이고 Task Scheduling 과정을 개선하였습니다. [astronomer 블로그](https://www.astronomer.io/blog/airflow-2-scheduler) 에서 벤치마크 테스트를 했을 때 10배 이상의 성능 개선이 있었다고 합니다.
-    
-    저희 쪽에서 문제였던 Task instance 스케줄링 간 Lag 현상도 많이 줄었습니다. 
+    Airflow 2는 Dag Serialization과 Fast-Follow를 도입하여 Scheduler의 반복적인 Dag 파싱 작업을 줄이고 Task Scheduling 과정을 개선하였습니다. [astronomer 블로그](https://www.astronomer.io/blog/airflow-2-scheduler) 에서 벤치마크 테스트를 했을 때 10배 이상의 성능 개선이 있었다고 합니다. 팀에서 경험하는 문제였던 Task instance 스케줄링 간 Lag 현상도 많이 줄었습니다. 
     
 - Scheduler HA(High Availability)를 지원해서 스케줄러의 Scale Out이 용이합니다.
     
@@ -436,9 +437,7 @@ Data Freshness는 데이터가 얼마나 최신 상태인가를 나타냅니다.
     
 - 웹 서버 사용성이 개선되었습니다.
     
-    Dag Serialization을 통해 더 빠르게 웹 UI에서 더 빠르게 Dag 정보를 불러올 수 있으며 Auto Refresh 기능 등 사용성이 개선되었습니다. 
-    
-    저희 쪽에서도 사용자의 Airflow 사용성을 위해 지속적으로 하위호환성을 고려하며 버전을 업그레이드 하고 있습니다. 글을 쓰는 시점인 2.3 버전은 더 직관적인 UI를 제공해주어 저희 팀에서도 2.3 버전으로 업그레이드를 완료하였습니다. 
+    Dag Serialization을 통해 더 빠르게 웹 UI에서 더 빠르게 Dag 정보를 불러올 수 있으며 Auto Refresh 기능 등 사용성이 개선되었습니다. 저희 팀에서도 사용자의 Airflow 사용성을 위해 지속적으로 하위호환성을 고려하며 버전을 업그레이드 하고 있습니다. 글을 쓰는 시점인 2.3 버전은 더 직관적인 UI를 제공해주어 저희 팀에서도 2.3 버전으로 업그레이드를 완료하였습니다. 
     
 이 외에도 TaskFlow API 도입, Airflow Core Component에서 Provider 분리, Task Group, Smart Sensor 도입 등등 많은 변화가 있습니다. 더 궁금하신 분들은 [해당 글](https://www.astronomer.io/blog/airflow-2-scheduler) 을 읽어보시면 도움이 될 것 같습니다.
 
@@ -453,7 +452,8 @@ Airflow 2에서는 Scheduler HA 설정이 가능합니다. 즉 복수개의 Sche
 
 ![scheduler-ha.png](/img/advanced-airflow-for-databiz/scheduler-ha.png)*Airflow Scheduler HA 설정*
 
-이때 한가지 주의할 점은 Scheduler가 증가하는 만큼 Meta DB의 부하도 증가하게 됩니다. Scheduler들은 Row Level Locking(SELECT … FOR UPDATE) 방식으로 Dag, Task 등 자원에 접근하게 됩니다. 따라서 Scheduler가 늘어나면 자연스럽게 Meta DB의 자원 사용량도 높아집니다. 그래서 데이터베이스의 메트릭을 보면서 스케일 업을 해주거나 다중화를 설정하는 것도 하나의 옵션일 것 같습니다. 
+이때 한가지 주의할 점은 Scheduler가 증가하는 만큼 Meta DB의 부하도 증가하게 된다는 것입니다. 
+Scheduler들은 Row Level Locking(SELECT … FOR UPDATE) 방식으로 Dag, Task 등 자원에 접근하므로 Scheduler가 늘어나면 자연스럽게 Meta DB의 자원 사용량도 높아집니다. 그래서 데이터베이스의 메트릭을 보면서 스케일 업을 해주거나 다중화를 설정하는 것도 하나의 옵션일 것 같습니다. 
 
 ### 3.4. Kubernetes 환경 개선
 
@@ -554,7 +554,7 @@ t1 = assign_operator_resources(
 
 ### 4.2. 보안 강화
 
-기존 Airflow는 소스 코드에 보안정보들이 포함되어 있었습니다. Dag 코드에 보안 정보들(API Key, Password 등)이 포함되는 경우들이 종종 있었고, Airflow 배포를 위한 Helm Chart에서도 Connection, Variable, 보안이 필요한 환경 변수 등을 그대로 노출하고 있었습니다. 따라서 아래와 같이 보안 정보들은 별도의 저장소로 분리하는 작업을 진행했습니다. 
+기존 Airflow는 소스 코드에 보안정보들이 포함되어 있었습니다. Dag 코드에 보안 정보들(API Key, Password 등)이 포함되는 경우들이 종종 있었고, Airflow 배포를 위한 Helm Chart에서도 Connection, Variable, 보안이 필요한 환경 변수 등을 그대로 노출하고 있었습니다. 따라서 보안 정보들은 별도의 저장소로 분리하는 작업을 진행했습니다. 
 
 #### GCP Secret Manager 적용
 
