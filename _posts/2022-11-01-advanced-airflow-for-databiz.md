@@ -17,7 +17,9 @@ tags:
 
 데이터 플랫폼팀은 **“쏘카 내부의 데이터 이용자가 비즈니스에 임팩트를 낼 수 있도록 소프트웨어 엔지니어링에 기반하여 문제를 해결합니다”** 라는 미션을 기반으로 인프라, 데이터 파이프라인 개발, 운영, 모니터링, 데이터 애플리케이션 개발, MLOps 등의 업무를 맡고 있습니다. 팀 구성원들은 모두가 소프트웨어 엔지니어라는 사명감을 가지고 개발 뿐만 아니라 Ops에 대한 이해와 책임감을 가지고 업무에 임하고 있습니다.
 
-본 글에서는 데이터 플랫폼 팀에서 운영하는 Airflow에 대해 소개하려고 합니다. 데이터 엔지니어 위주로 사용하던 초기와 달리 현재는 데이터 비즈니스 본부 구성원 모두가 직접 파이프라인을 구축할 수 있습니다. 이런 변화에 따른 문제들과 어떻게 해결하였는지 풀어보도록 하겠습니다. 
+본 글에서는 데이터 플랫폼 팀에서 운영하는 Airflow에 대해 소개하려고 합니다. 
+데이터 엔지니어 위주로 사용하던 초기와 달리 현재는 데이터 비즈니스 본부 구성원 모두가 Airflow를 활용하여 직접 파이프라인을 구축할 수 있습니다. 
+이런 변화에 따른 문제들과 어떻게 해결하였는지 풀어보도록 하겠습니다. 
 
 다음과 같은 분들이 읽으면 좋습니다. 
 - 운영하고 있는 Airflow를 고도화하고 싶은 소프트웨어 엔지니어
@@ -28,7 +30,7 @@ tags:
 목차는 아래와 같습니다. (Airflow에 대한 히스토리가 길고 다루는 내용들이 많다 보니 모든 과정을 상세하게 적지는 못했습니다. 댓글로 질문 편하게 남겨주시면 답변 드리겠습니다.)
 
 1. 쏘카의 Airflow 현황과 문제점
-2. 개발 환경 개선 및 사용자의 개발/피드백 주기 단축하기
+2. 개발 환경 개선 및 개발 주기 단축하기
 3. 지속적으로 Airflow 안정화하기
 4. 보안 강화하기
 5. 모니터링 고도화
@@ -41,25 +43,27 @@ tags:
 
 ### 1.1. Airflow in Socar
 
-현재 데이터 분석가, 데이터 사이언티스트, AI 엔지니어 등 다양한 사용자들이 Airflow Dag을 통하여 파이프라인을 직접 구축할 수 있습니다. 대신 이를 위해 Airflow를 사용하기 전에 Airflow의 사용 범주와 개발 방식을 잘 파악하는 것이 중요합니다.
+쏘카에서는 데이터 분석가, 데이터 사이언티스트, AI 엔지니어 등 다양한 사용자들이 Airflow Dag을 통하여 파이프라인을 직접 구축할 수 있습니다. 대신 이를 위해 Airflow를 사용하기 전에 Airflow의 사용 범주와 개발 방식을 잘 파악하는 것이 중요합니다.
 
-쏘카에서는 데이터 통합 저장소(데이터 레이크, 웨어하우스)로 `BigQuery`를 사용하고 있습니다. 기본적으로 외부 데이터 소스(Open API, AWS Data Source, BigQuery의 다른 테이블 등)에서 데이터를 목적지로 옮기는 작업에만 Airflow를 사용하도록 권장하고 있습니다. 현재 Dag Repo의 디렉토리 구조를 보면 Data Lake, Data Mart, Monitoring, Crawling 등 각 용도에 맞게 분류하여 관리되고 있습니다. 
+쏘카에서는 데이터 통합 저장소(데이터 레이크, 웨어하우스)로 `BigQuery`를 사용하고 있습니다. 
+기본적으로 외부 데이터 소스(Open API, AWS Data Source, BigQuery의 다른 테이블 등)에서 데이터를 BigQuery로 옮기는 작업에만 Airflow를 사용하도록 권장하고 있습니다. 
+또한 Dag는 Data Lake, Data Mart, Monitoring, Crawling 등 각 용도에 맞게 분류하여 관리되고 있습니다. 
 (단순 스케줄링을 필요로 하는 작업은 Airflow의 사용을 지양하고 K8s(Kubernetes) Cronjob이나 Github Action 등을 활용하는 것을 권장하고 있습니다)
 
 ![airflow-k8s-workflow.png](/img/advanced-airflow-for-databiz/airflow-k8s-workflow.png)*Airflow on Kubernetes Workflow*
 
-쏘카의 데이터 플랫폼/애플리케이션들은 대부분 GKE(Google Kubernetes Engine) 환경에서 동작하고 있습니다. 개발 편의성을 위해서 운영/개발 환경을 각각 클러스터를 분리하여 사용하고 있으며, Airflow도 운영 환경과 개발 환경이 분리되어 있습니다. 
-과거 개발 환경은 Branch 이름의 특정 조건을 만족하면 CI/CD 파이프라인을 거쳐서 Airflow 서비스가 독립적으로 생성되었습니다.
+쏘카의 데이터 플랫폼/애플리케이션들은 대부분 GKE(Google Kubernetes Engine) 환경에서 동작하고 있습니다. 개발 편의성을 위해서 운영/개발 환경 별로 클러스터를 분리하여 사용하고 있으며, Airflow도 운영 환경과 개발 환경이 분리되어 있습니다. 
+Airflow Github Repository의 Branch 이름이 특정 조건을 만족하면 CI/CD 파이프라인을 거쳐서 개발 클러스터에 Airflow 서비스가 독립적으로 생성됩니다.
 
-과거 Airflow 사용자는 Dag을 생성/변경하기 위해서는 기본적으로 `feature` Branch를 생성하였고, 변경 커밋을 원격 Branch에 푸시하였습니다. 그러면 Git Sync를 통해 Airflow에 Dag이 동기화되어 테스트가 가능했습니다.
-사용자들에게 독립된 Airflow 개발환경을 구성해준 것은 큰 장점이었습니다. 운영과 분리하여 테스트가 가능하였으며 Github을 SoT(Source of Truth)로 삼아 코드에 대한 퀄리티 관리가 용이하였습니다.
+과거 Airflow 사용자는 Dag을 생성/변경하기 위해서 기본적으로 `feature` Branch를 생성하여 변경 커밋을 원격 Branch에 푸시하였습니다. 그러면 Git Sync를 통해 Airflow에 Dag이 동기화되어 테스트가 가능했습니다.
 
 쏘카의 Airflow On K8s 운영에 대해 더 궁금하시다면 [쏘카 데이터 그룹 - Airflow와 함께한 데이터 환경 구축기](https://tech.socarcorp.kr/data/2021/06/01/data-engineering-with-airflow.html)를 읽어보세요.
 
 
 ### 1.2. 문제점
 
-기존 방식의 Airflow는 아래와 같은 문제점들이 있었습니다.
+사용자들에게 독립된 Airflow 개발환경을 구성해준 것은 큰 장점이었습니다. 운영과 분리하여 테스트가 가능하였으며 Github을 SoT(Source of Truth)로 삼아 코드에 대한 퀄리티 관리가 용이하였습니다.
+하지만 기존 방식의 Airflow는 아래와 같은 문제점들이 있었습니다.
 1. 개발 환경의 Airflow의 에러 발생 및 관리자/컴퓨팅 리소스 낭비
 2. 많은 사용자들이 사용하기엔 불친절한 개발 환경, 긴 피드백 루프
 3. Airflow 1 버전의 고질적인 문제들
@@ -70,9 +74,9 @@ tags:
 
 ![argocd-many-airflows.png](/img/advanced-airflow-for-databiz/argocd-many-airflows.png)*다수의 사용자가 개발 환경에서 만든 Airflow가 ArgoCD에 생성된 모습*
 
-위에서 말씀 드렸다시피 개발 환경의 Airflow는 Github Branch를 기반으로 생애주기가 결정됩니다. 따라서 사용자가 작업을 완료하고 Branch를 삭제하면 개발 환경의 Airflow는 함께 내려가게 됩니다. 그러나 사용자는 Branch를 만들고 작업하다가 중간에 다른 작업을 하는 경우들이 많았고, 이에 Airflow는 계속 유휴 상태로 남아있어 K8s Node의 자원을 차지하였습니다.
+개발 환경의 Airflow는 Github Branch를 기반으로 생애주기가 결정됩니다. 따라서 사용자가 작업을 완료하고 Branch를 삭제하면 개발 환경의 Airflow는 함께 내려가게 됩니다. 그러나 사용자는 Branch를 만들고 작업하다가 중간에 다른 작업을 하는 경우들이 많았고, 이에 Airflow는 계속 유휴 상태로 남아있어 K8s Node의 자원을 차지하였습니다.
 
-더불어 그때 당시 Airflow를 K8s에 배포하기 위해 사용한 Helm Chart(Community 버전)도 간헐적으로 원인 모를 에러를 발생하였습니다. 이에 따라 관리자는 Airflow 에러를 수정하고 사용자와 커뮤니케이션하는 데 꽤 높은 피로도가 있었습니다.  
+더불어 그때 당시 Airflow를 K8s에 배포하기 위해 사용한 Helm Chart(Community 버전)도 간헐적으로 원인 모를 에러를 발생하였습니다. 이에 따라 관리자는 Airflow 에러를 수정하고 사용자와 커뮤니케이션하는 데 높은 피로도가 있었습니다.  
 
 **문제점 2 - 많은 사용자들이 사용하기엔 불친절한 개발 환경, 긴 피드백 루프**
 
@@ -84,49 +88,49 @@ tags:
 
 **문제점 3 - Airflow 1 버전의 고질적인 문제들**
 
-현재 Airflow 2가 나온지 꽤 시간이 흘렀습니다.(2020년 12월) 기존 1 버전대 Airflow는 Dag 갯수가 늘어나면 Dag Parsing 시간이 꽤 오래 걸리는 치명적인 문제가 있었습니다. 그때 당시 쏘카에서 운영하는 Dag은 수백 개였고 점점 Dag이 늘어날 때마다 Task Instance들의 스케줄링이 점점 밀리게 되었습니다. 그리고 Webserver는 Dag Parsing 프로세스가 백그라운드에서 동작하고 있다보니 웹에 접근했을 때 속도가 느린 편이었습니다.
-
-그때 당시 K8s Node의 자원을 스케일 업해봤지만 크게 개선되는 부분은 없었고 스케일 업만 하는 건 올바른 선택지가 아니었습니다.
+기존 1 버전대 Airflow는 Dag 갯수가 늘어나면 Dag Parsing 시간이 꽤 오래 걸리는 치명적인 문제가 있었습니다. 그때 당시 쏘카에서 운영하는 Dag은 수백 개였고 점점 Dag이 늘어날 때마다 Task Instance들의 스케줄링이 점점 밀리게 되었습니다. 그리고 Webserver는 Dag Parsing 프로세스가 백그라운드에서 동작하고 있다보니 웹에 접근했을 때 속도가 느린 편이었습니다.
+그때 당시 K8s Node의 자원을 스케일 업해봤지만 크게 개선되는 부분은 없었고 조금 더 근본적인 해결책이 필요했습니다.
 
 **문제점 4 - 코드 보안에 취약하고, 사용자 개인에 대한 권한 체계 부족**
 
 다수의 사용자들이 Airflow를 사용하면서 Api Key나 Secret 정보들을 그대로 하드코딩하는 경우들이 있습니다. 특히 Airflow 사용 목적 상 외부 데이터 소스/저장소와 통신해야 하는 경우들이 많아 위 문제들이 빈번하게 발생하는 편입니다. 
 
-또한 Airflow 사용자들에게 팀 별로 사용할 수 있는 공용 계정을 제공하였습니다. 그렇기에 간혹 Connection, Variable이 지워지거나 실행되던 Task가 갑자기 종료되는 문제들이 발생했었으며, 히스토리를 추적할 때 사용자에 대한 Auditing이 힘들어지는 문제가 있었습니다.
+또한 팀 별로 공용 계정을 사용했기 때문에 간혹 Connection, Variable이 지워지거나 실행되던 Task가 갑자기 종료되는 문제들이 발생했었으며, 정확한 히스토리 추적이 힘들어지는 문제가 있었습니다.
 
-**문제점 5 - 체계적이지 않은 오류 대응 프로세스 및 모니터링 환경*
+**문제점 5 - 체계적이지 않은 오류 대응 프로세스 및 모니터링 환경**
+ 
+기존에는 Airflow Dag가 실패했을 때 알림을 보내는 슬랙 채널이 존재했습니다. 보통 메시지가 오면 관리자 혹은 히스토리를 잘 알고 있는 사용자가 해당 Dag의 책임자에게 라우팅을 해주는 방식이었습니다. 하지만 담당자를 제대로 파악하고 대응하기까지 시간이 걸리는 경우들이 있었고, 담당자를 제때 파악하지 못하는 경우들도 있었습니다.
 
-쏘카에서는 Task가 실패했을 때 알림을 보내는 슬랙 채널이 존재합니다. 보통 메시지가 오면 관리자 혹은 히스토리를 잘 알고 있는 사용자가 해당 Dag의 책임자에게 라우팅을 해주는 방식이었습니다. 하지만 담당자를 제대로 파악하고 대응하기까지 시간이 걸리는 경우들이 있었고, 담당자를 제때 파악하지 못하는 경우들도 있었습니다.
-
-또한 관리자는 기본 Airflow 상태에 대한 모니터링을 위해선 K8s 환경도 함께 모니터링 해야하지만 체계화된 모니터링 환경을 구축하고 있지는 못했습니다. 
+또한 Airflow가 동작하는 K8s 환경에 대한 체계적인 모니터링 환경을 구축하고 있지 못했습니다. 
 
 ### 1.3. 해결 방안 모색
 
-Airflow를 운영하면서 시간이 지날수록 위와 같은 문제들이 드러났고 이를 개선하기 위해 아래와 같은 해결 방안들을 세웠습니다. 아래의 구체적인 내용들은 밑에서 더 상세하게 풀어내도록 하겠습니다.
+Airflow를 운영하면서 드러난 문제들을 개선하기 위해 아래와 같은 해결 방안들을 세웠습니다. 구체적인 내용들은 밑에서 더 상세하게 풀어내도록 하겠습니다.
 
 |문제점|해결 방안|
 |:--:|:--:|
-|개발 환경의 Airflow의 에러 발생 및 리소스 낭비 <br > 불친절한 개발 환경, 긴 피드백 루프|개발 환경 개선 및 사용자의 개발/피드백 주기 단축하기|
+|개발 환경의 Airflow의 에러 발생 및 리소스 낭비 <br > 불친절한 개발 환경, 긴 피드백 루프|개발 환경 개선 및 개발 주기 단축하기|
 |Airflow 1 버전의 고질적인 문제들|Airflow 2 버전 마이그레이션 및 스케일 업|
 |코드 보안에 취약하고, 사용자 개인에 대한 권한 체계 부족|보안 강화 및 RBAC 적용|
 |체계적이지 않은 오류 대응 프로세스 및 모니터링 환경|체계적인 모니터링 환경 구축|
 
-## 2. 개발 환경 개선 및 사용자의 개발/피드백 주기 단축하기
+## 2. 개발 환경 개선 및 개발 주기 단축
 
 ### 2.1. 목적
 
-- 사용자들이 빠르게 개발할 수 있도록 지원하고 Dag 개발 이외의 관심사를 최대한 분리할 수 있도록 합니다.
+**사용자들이 빠르게 개발할 수 있도록 지원하고 Dag 개발 이외의 관심사를 최대한 분리할 수 있도록 합니다.**
     
-    데이터 플랫폼을 운영하기 위해선 시스템을 개발/유지보수하는 것을 넘어서 고객을 이해하고 플랫폼을 지속해서 개선해나가는 것이 중요합니다. 현재 쏘카의 데이터 분석가, 데이터 사이언티스트 등 프로그래밍에 익숙하지 않은 팀원들에게 Airflow 사용의 러닝 커브를 낮춰주는 것은 중요합니다. 
+데이터 플랫폼을 운영하기 위해선 시스템을 개발/유지보수하는 것을 넘어서 고객을 이해하고 플랫폼을 지속해서 개선해나가는 것이 중요합니다. 
+특히 쏘카의 데이터 분석가, 데이터 사이언티스트 등 프로그래밍에 익숙하지 않은 팀원들에게 Airflow 사용의 러닝 커브를 낮춰주는 것은 중요합니다. 
+
+또한 Airflow를 사용하기 위해서 사용자가 Airflow 구성요소와 인프라 등을 전부 이해할 필요는 없습니다. 
+사용자가 Dag을 개발하는 것에 집중할 수 있도록 나머지는 잘 추상화하여 관심사를 분리하여야 합니다. 
+
+**사용자의 개발 및 피드백 주기를 단축합니다.**
     
-    또한 Airflow를 사용하기 위해서 Airflow 구성요소와 인프라 등을 전부 이해할 필요는 없습니다. 사용자는 Dag을 개발하는 것에 집중하고 나머지는 잘 추상화하여 관심사를 분리합니다. 
-    
-- 사용자의 개발/피드백 주기를 단축합니다.
-    
-    소프트웨어는 지속적인 개선을 위해서 피드백 루프를 짧게 가져가는 것이 중요합니다. 개발 후 피드백을 받는  시간을 줄일수록 개발 속도를 늘릴 수 있습니다. 
-    
-    Airflow가 실행되는 인프라에 따라 Dag 코드 반영/수행에 대한 시간이 다를 수 있습니다. 일반적으로 로컬 환경에서 가장 Dag 개발/수행에 대한 피드백 시간이 빠릅니다(LocalExecutor, SequentialExecutor). 다만 로컬에서 개발하기 위해선 외부 환경에 대한 Mocking과 인증에 대한 고민을 함께 해야 합니다. 
-    
+소프트웨어는 지속적인 개선을 위해서 피드백 루프를 짧게 가져가는 것이 중요합니다. 개발 후 피드백을 받는  시간을 줄일수록 개발 속도를 늘릴 수 있습니다. 
+일반적으로 로컬 환경에서 Airflow Dag 개발/수행에 대한 피드백 시간이 가장 빠릅니다(LocalExecutor, SequentialExecutor). 다만 로컬에서 개발하기 위해선 외부 환경에 대한 Mocking과 인증에 대한 고민을 함께 해야 합니다. 
+
 
 ### 2.2. 로컬 개발 환경 구축
 
@@ -191,7 +195,7 @@ services:
 
 현재 GCP의 전체적 운영은 데이터 플랫폼 팀에서 담당하고 있습니다. GCP IAM은 팀 단위의 역할에 맞게 Custom Role을 만들어 관리하고 있으며, 사용자 별 Service Account는 해당 팀의 Role에 바인딩되어 있습니다. 사용자가 Airflow 개발을 필요로할 때 데이터 플랫폼 팀에서 Service Account 발급을 해줍니다. 
 
-이를 잘 활용하면 Secret(Connection, Variable 등)도 GCP Secret Manager로 옮긴 후 Service Account로 인증하여 로컬에 보안 정보를 전부 제외할 수 있었습니다.
+이를 잘 활용하여 Secret(Connection, Variable 등)도 GCP Secret Manager로 옮긴 후 Service Account로 인증하여 로컬에 보안 정보를 전부 제외할 수 있었습니다.
 
 #### KubernetesPodOperator를 테스트할 수 있는 환경 구축
 
@@ -369,9 +373,8 @@ Airflow 로컬 환경 구축 가이드(Docker, Python 환경 등)을 시작으�
 
 #### 사내 Airflow 교육 진행
 
-Airflow를 사용하고 싶은 사람들을 대상으로 Airflow 세미나를 열었습니다. Airflow 기본 개념부터 Dag 작성법과 각종 Operator 사용법 등을 가르쳐주는 방식으로 진행했습니다. 
-
-현재 Airflow를 사용하시는 분들은 녹화된 영상과 강의자료를 보면서 학습하고 있습니다.
+Airflow를 사용하고 싶은 사람들을 대상으로 사내 Airflow 세미나를 열었습니다. 
+Airflow 기본 개념부터 Dag 작성법과 각종 Operator 사용법 등을 제공했으며 추후 녹화본도 공유되었습니다.
 
 
 
@@ -404,7 +407,7 @@ clean-up: ## 🌬 Airflow 환경을 초기화합니다.
 ...
 ```
 
-![make-script.png](/img/advanced-airflow-for-databiz/make-script.png)*make install 로 간단히 로컬 Airflow 의존성을 설정하는 모습*
+[//]: # (![make-script.png]&#40;/img/advanced-airflow-for-databiz/make-script.png&#41;*make install 로 간단히 로컬 Airflow 의존성을 설정하는 모습*)
 
 ---
 
@@ -412,16 +415,14 @@ clean-up: ## 🌬 Airflow 환경을 초기화합니다.
 
 ### 3.1. 목적
 
-- Data Freshness를 항상 유지할 수 있도록 합니다.
+**Data Freshness를 항상 유지할 수 있도록 합니다.**
     
-    Data Freshness는 데이터가 얼마나 최신 상태인가를 나타냅니다. Airflow는 배치 데이터 파이프라인의 오케스트레이션 툴인 만큼 단일 실패 지점(SPOF, Single Point Of Failure)이 되기도 합니다. 만약 Airflow가 모종의 이유로 중단될 경우 제 시간에 데이터가 적재되지 않을 것이며 이는 Data Freshness를 유지하기가 어려워집니다. 따라서 Airflow의 신뢰성을 높이고 지속적으로 퍼포먼스를 확인하고 개선하는 것이 필요합니다. 
+Data Freshness는 데이터가 얼마나 최신 상태인가를 나타냅니다. Airflow는 배치 데이터 파이프라인의 오케스트레이션 툴인 만큼 단일 실패 지점(SPOF, Single Point Of Failure)이 되기도 합니다. 만약 Airflow가 모종의 이유로 중단될 경우 제 시간에 데이터가 적재되지 않을 것이며 이는 Data Freshness를 유지하기가 어려워집니다. 따라서 Airflow의 신뢰성을 높이고 지속적으로 퍼포먼스를 확인하고 개선하는 것이 필요합니다. 
     
 
 ### 3.2. Airflow 2 마이그레이션
 
-기존 Airflow 1 버전은 Dag 갯수가 늘어나면서 연속적인 Task Instance 스케줄링 간 Lag이 길었고, 기타 자잘한 버그들도 많이 보였습니다. 
-
-Airflow 2에서 대표적으로 개선된 부분들은 아래와 같습니다. 이 외에도 TaskFlow API 도입, Airflow Core Component에서 Provider 분리, Task Group, Smart Sensor 도입 등등 꽤 많은 변화가 있습니다. 더 궁금하신 분들은 [해당 글](https://www.astronomer.io/blog/airflow-2-scheduler) 을 읽어보시면 도움이 될 것 같습니다.
+기존 Airflow 1 버전은 Dag 갯수가 늘어나면서 연속적인 Task Instance 스케줄링 간 Lag이 길었고 기타 자잘한 버그들이 있었습니다. Airflow 2에서 대표적으로 개선된 부분들은 아래와 같습니다. 
 
 - 스케줄링 퍼포먼스가 개선되었습니다.
     
@@ -439,6 +440,7 @@ Airflow 2에서 대표적으로 개선된 부분들은 아래와 같습니다. �
     
     저희 쪽에서도 사용자의 Airflow 사용성을 위해 지속적으로 하위호환성을 고려하며 버전을 업그레이드 하고 있습니다. 글을 쓰는 시점인 2.3 버전은 더 직관적인 UI를 제공해주어 저희 팀에서도 2.3 버전으로 업그레이드를 완료하였습니다. 
     
+이 외에도 TaskFlow API 도입, Airflow Core Component에서 Provider 분리, Task Group, Smart Sensor 도입 등등 꽤 많은 변화가 있습니다. 더 궁금하신 분들은 [해당 글](https://www.astronomer.io/blog/airflow-2-scheduler) 을 읽어보시면 도움이 될 것 같습니다.
 
 
 ![logo-anim.gif](/img/advanced-airflow-for-databiz/logo-anim.gif)*Airflow 로고를 커스텀 해보았습니다.*
@@ -447,9 +449,9 @@ Airflow 2로 마이그레이션하면서 1버전과 호환성이 깨지는 부�
 
 ### 3.3. 고가용성 설정
 
-![scheduler-ha.png](/img/advanced-airflow-for-databiz/scheduler-ha.png)*Airflow Scheduler HA 설정*
+Airflow 2에서는 Scheduler HA 설정이 가능합니다. 즉 복수개의 Scheduler를 통해 Dag 스케줄링 지연을 개선할 수 있습니다. 저희는 [공식 Helm Chart](https://github.com/apache/airflow/tree/main/chart) 를 사용하고 있기에 손쉽게 HA 설정을 하였습니다.
 
-Airflow 2에서는 Scheduler HA 설정이 가능합니다. 복수개의 Scheduler를 통해 Dag 스케줄링 지연을 개선할 수 있습니다. 저희는 [공식 Helm Chart](https://github.com/apache/airflow/tree/main/chart) 를 사용하고 있기에 손쉽게 HA 설정을 하였습니다.
+![scheduler-ha.png](/img/advanced-airflow-for-databiz/scheduler-ha.png)*Airflow Scheduler HA 설정*
 
 이때 한가지 주의할 점은 Scheduler가 증가하는 만큼 Meta DB의 부하도 증가하게 됩니다. Scheduler들은 Row Level Locking(SELECT … FOR UPDATE) 방식으로 Dag, Task 등 자원에 접근하게 됩니다. 따라서 Scheduler가 늘어나면 자연스럽게 Meta DB의 자원 사용량도 높아집니다. 그래서 데이터베이스의 메트릭을 보면서 스케일 업을 해주거나 다중화를 설정하는 것도 하나의 옵션일 것 같습니다. 
 
@@ -532,8 +534,7 @@ t1 = assign_operator_resources(
 
 실제로 Dag 갯수가 많아지고 운영 기간이 길어질수록 데이터베이스에 히스토리 관련 레코드들이 많이 쌓여있게 됩니다. 이는 데이터베이스의 성능을 저하시키고 Scheduler의 쿼리 성능 저하를 유발하여 전체적인 퍼포먼스가 떨어지게 됩니다. 
 
-따라서 주기적으로 오래된 Dag과 Task 등 Historical Record들을 지워주게 되면 쿼리 속도를 향상시킬 수 있습니다. 저희는 [해당 레포](https://github.com/teamclairvoyant/airflow-maintenance-dags) 를 참조하여 특정 기간 내에 Dag, Task Instance 등을 지워주는 Dag을 스케줄링했습니다.
-
+따라서 주기적으로 오래된 Dag과 Task 등 Historical Record들을 지워주게 되면 쿼리 속도를 향상시킬 수 있습니다. 저희는 teamclairvoyant 의 [airflow-maintenance-dags 레포지토리](https://github.com/teamclairvoyant/airflow-maintenance-dags) 를 참조하여 특정 기간 내에 Dag, Task Instance 등을 지워주는 Dag을 스케줄링했습니다.
 ![cleanup-dag.png](/img/advanced-airflow-for-databiz/cleanup-dag.png)*Clean Up Dag 의 Task 목록*
 
 실제로 Clean Up Dag이 스케줄링되면서 Database의 리소스 사용량이 상당량 줄었으며, Airflow의 스케줄러 및 웹 서버의 성능 향상을 체감하였습니다.
@@ -542,20 +543,20 @@ t1 = assign_operator_resources(
 
 ### 4.1. 목적
 
-- 코드에 보안 정보들을 분리하도록 합니다.
+**코드에 보안 정보들을 분리하도록 합니다.**
+
+외부 자원에 많이 의존하게 되는 Airflow의 특성상 코드에 많은 보안 정보들이 담기게 됩니다. 이때 Airflow의 보안 정보들은 코드 상에 노출되는 것보다 Secret 저장소를 활용하도록 하여 보안성을 높일 수 있도록 합니다. 현재 데이터 본부에서 Airflow를 다수의 사용자가 사용하고 있기에 보안에 대한 교육과 정책 수립도 필요합니다.
     
-    외부 자원에 많이 의존하게 되는 Airflow의 특성상 코드에 많은 보안 정보들이 담기게 됩니다. 이때 Airflow의 보안 정보들은 코드 상에 노출되는 것보다 Secret 저장소를 활용하도록 하여 보안성을 높일 수 있도록 합니다. 현재 데이터 본부에서 Airflow를 다수의 사용자가 사용하고 있기에 보안에 대한 교육과 정책 수립도 필요합니다.
-    
-- 다수의 사용자를 관리하고 적절한 권한을 줄 수 있도록 합니다
-    
-    다수의 사용자가 시스템을 사용할수록 적절한 권한을 부여하는 것이 중요합니다. 따라서 개인 사용자별 인증을 할 수 있도록 계정을 제공하고, 인가를 더 체계적으로 관리하기 위해 RBAC를 적용합니다.
+**다수의 사용자를 관리하고 적절한 권한을 줄 수 있도록 합니다.**
+
+다수의 사용자가 시스템을 사용할수록 적절한 권한을 부여하는 것이 중요합니다. 따라서 개인 사용자별 인증을 할 수 있도록 계정을 제공하고, 인가를 더 체계적으로 관리하기 위해 RBAC를 적용합니다.
     
 
 ### 4.2. 보안 강화
 
 기존 Airflow는 소스 코드에 보안정보들이 포함되어 있었습니다. Dag 코드에 보안 정보들(API Key, Password 등)이 포함되는 경우들이 꽤 있었고, Airflow 배포를 위한 Helm Chart에서도 Connection, Variable, 보안이 필요한 환경 변수 등을 그대로 노출하고 있었습니다. 따라서 아래와 같이 보안 정보들은 별도의 저장소로 분리하는 작업을 진행했습니다. 
 
-#### gcp Secret Manager 적용
+#### GCP Secret Manager 적용
 
 ![airflow-secret-manager.png](/img/advanced-airflow-for-databiz/airflow-secret-manager.png)*Secret Manager 목록*
 
@@ -577,7 +578,7 @@ AIRFLOW__SECRETS__BACKEND__KWARGS: '{ "connections_prefix": "airflow-connections
 
 ### 4.3. RBAC 적용 (진행중)
 
-Airflow는 [rbac(rule based access control)](https://airflow.apache.org/docs/apache-airflow/stable/security/access-control.html) 을 제공합니다. 기본적으로 제공해주는 Role(Admin, Public, Viewer 등) 뿐만 아니라 Resource, Dag Based Permission에 기반한 Custom Role을 만들 수도 있습니다. 현재는 기본 Role에 기반해서 계정을 운영하고 있지만, 추후 액세스 패턴에 맞춰 Custom Role을 만들어 관리할 계획입니다.
+Airflow는 [RBAC(Rule Based Access Control)](https://airflow.apache.org/docs/apache-airflow/stable/security/access-control.html) 을 제공합니다. 기본적으로 제공해주는 Role(Admin, Public, Viewer 등) 뿐만 아니라 Resource, Dag Based Permission에 기반한 Custom Role을 만들 수도 있습니다. 현재는 기본 Role에 기반해서 계정을 운영하고 있지만, 추후 액세스 패턴에 맞춰 Custom Role을 만들어 관리할 계획입니다.
 
 또한 사용자가 많아짐에 따라 Airflow 계정 관리도 중요해집니다. 현재 팀 별로 공용 계정을 운영하고 있지만, 팀별 계정의 Role도 사용 대비 크게 권한을 취하고 있습니다. 이는 추후 사용자에 따른 문제가 발생했을 때 Audit이 힘들어질 수 있습니다.  
 
@@ -589,13 +590,13 @@ Airflow의 [auth_backend](https://airflow.apache.org/docs/apache-airflow/stable/
 
 ### 5.1. 목적
 
-- 사용자가 직접 Dag 오류에 대응할 수 있도록 합니다.
+**사용자가 직접 Dag 오류에 대응할 수 있도록 합니다.**
     
-    사용자가 늘어나고 운영하는 Dag의 갯수가 늘어나면서 관리자가 모든 Dag의 맥락을 파악하고 대응하기가 어려워졌습니다. 따라서 Dag 스케줄링, 런타임 오류 등의 1차적 책임은 Dag 사용자(혹은 팀)이 질 수 있도록 하는 것이 중요해졌습니다.
+사용자가 늘어나고 운영하는 Dag의 갯수가 늘어나면서 관리자가 모든 Dag의 맥락을 파악하고 대응하기가 어려워졌습니다. 따라서 Dag 스케줄링, 런타임 오류 등의 1차적 책임은 Dag 사용자(혹은 팀)이 질 수 있도록 하는 것이 중요해졌습니다.
     
-- 관리자가 더 다양한 지표들을 보고 모니터링할 수 있도록 합니다.
+**관리자가 더 다양한 지표들을 보고 모니터링할 수 있도록 합니다.**
     
-    Airflow on K8s의 모니터링을 위해선 Airflow의 상태 뿐만 아니라 이를 실행하는 K8s 환경도 함께 모니터링 할 수 있어야 합니다. 또한 Dag에 대한 통계 정보(시계열 메트릭, 실패 추이 등) 를 보고 거시적으로 대응할 수 있도록 하는 것도 중요합니다. 
+Airflow on K8s의 모니터링을 위해선 Airflow의 상태 뿐만 아니라 이를 실행하는 K8s 환경도 함께 모니터링 할 수 있어야 합니다. 또한 Dag에 대한 통계 정보(시계열 메트릭, 실패 추이 등) 를 보고 거시적으로 대응할 수 있도록 하는 것도 중요합니다. 
     
 
 ### 5.2. Dag별 모니터링 담당자 지정
@@ -695,7 +696,7 @@ Airflow는 내부적으로 `statsd` 를 통해 Metric을 외부로 전송이 가
 
 ![airflow-dashboard.png](/img/advanced-airflow-for-databiz/airflow-dashboard.png)*Datadog의 Airflow Dashboard*
 
-쏘카는 전사 모니터링 툴로 Datadog을 사용하고 있습니다. Datadog에서 [Airflow Integration](https://docs.datadoghq.com/integrations/airflow/?tab=host) 을 제공하므로 손쉽게 주요 Airflow Metric을 대시보드로 확인할 수 있습니다. 저희는 Airflow 공식 차트를 통해 statsd 설정을 통해 Datadog과 연결하여 사용하고 있습니다. 
+쏘카는 전사 모니터링 툴로 Datadog을 사용하고 있는데, Datadog에서 [Airflow Integration](https://docs.datadoghq.com/integrations/airflow/?tab=host) 을 제공하므로 손쉽게 주요 Airflow Metric을 대시보드로 확인할 수 있습니다. 저희는 Airflow 공식 차트를 통해 statsd 설정을 통해 Datadog과 연결하여 사용하고 있습니다. 
 Datadog에서 수집한 Metric들을 통해 저희가 집중해서 봐야 할 대상(e.g., 너무 오래 실행중인 Dag)을 알림으로 만들어 슬랙에서 확인이 가능하도록 하고 있습니다.
 
 Kuberentes의 경우도 동일하게 Datadog을 활용하여 모니터링하고 있습니다. Kubernetes 전용 대시보드를 통해 기본 상태를 확인하고 있으며, Task의 Log(Remote Logging)가 제대로 남지 않는 문제가 발생했을 때 Pod Log를 보고 있습니다.
@@ -705,28 +706,28 @@ Kuberentes의 경우도 동일하게 Datadog을 활용하여 모니터링하고 
 
 ### 6.1 좋아진 점
 
-- 사용자가 직접 원하는 데이터를 직접 수집/변형/적재할 수 있습니다.
+**사용자가 빠르게 원하는 데이터를 직접 수집/변형/적재할 수 있습니다.**
     
-    데이터 웨어하우스/마트를 통해 팀원들이 데이터를 직접 사용하는 것을 넘어서 Airflow를 통해 데이터를 직접 수집/변형/적재하는 ETL 파이프라인 구축이 가능해졌습니다. 기존에 불편했던 개발 환경과 Dag 개발에 대한 러닝커브가 높았던 문제가 있었지만, 현재 팀 차원에서 Airflow 사용법에 대한 교육을 진행하고 쉽고 빠르게 개발할 수 있도록 개발 환경을 개선하고 있습니다. 
+데이터 웨어하우스/마트를 통해 팀원들이 데이터를 직접 사용하는 것을 넘어서 Airflow를 통해 데이터를 직접 수집/변형/적재하는 ETL 파이프라인 구축이 가능해졌습니다. 기존에 불편했던 개발 환경과 Dag 개발에 대한 러닝커브가 높았던 문제가 있었지만, 현재 팀 차원에서 Airflow 사용법에 대한 교육을 진행하고 쉽고 빠르게 개발할 수 있도록 개발 환경을 개선하고 있습니다. 
     
-- 안정적으로 Airflow 운영이 가능해졌습니다.
+**안정적으로 Airflow 운영이 가능해졌습니다.**
     
-    매니지드 서비스가 아닌 K8s Native 환경에서 Airflow를 운영하기 위해선 신경써야 할 부분들이 꽤 있습니다. K8s 관리/운영으로 시작해서 kubernetesExecutor의 동작 방식을 이해하고 최적화 방안도 계속 고민해야 합니다. K8s 인프라 환경에 대한 모니터링을 강화하고 있으며, Airflow를 지속적으로 업그레이드하고 유연하게 자원을 분배할 수 있도록 하여 Airflow 운영을 안정적으로 할 수 있게 됐습니다. 
+매니지드 서비스가 아닌 K8s Native 환경에서 Airflow를 운영하기 위해선 신경써야 할 부분들이 꽤 있습니다. K8s 관리/운영으로 시작해서 kubernetesExecutor의 동작 방식을 이해하고 최적화 방안도 계속 고민해야 합니다. K8s 인프라 환경에 대한 모니터링을 강화하고 있으며, Airflow를 지속적으로 업그레이드하고 유연하게 자원을 분배할 수 있도록 하여 Airflow 운영을 안정적으로 할 수 있게 됐습니다. 
     
-- 모니터링/보안 환경이 개선되었습니다.
+**모니터링/보안 환경이 개선되었습니다.**
     
-    기존에는 장애가 발생했을 때 K8s Pod이나 Node에 직접 접근해서 Log, Event를 확인했다면, 현재는 모니터링 대시보드를 통해 거시적으로 문제를 파악하고 해결하고 있으며 사용자가 빠르게 장애에 대응할 수 있는 환경을 구축하였습니다.
+기존에는 장애가 발생했을 때 K8s Pod이나 Node에 직접 접근해서 Log, Event를 확인했다면, 현재는 모니터링 대시보드를 통해 거시적으로 문제를 파악하고 해결하고 있으며 사용자가 빠르게 장애에 대응할 수 있는 환경을 구축하였습니다.
     
-    또한 다수의 사용자들이 접근하는 만큼 보안에 취약할 수 있기에, 보안 정보들을 중앙 저장소에서 관리할 수 있도록 하고 사용자 교육과 시크릿 탐지 자동화 등 개선 작업을 진행 중에 있습니다.
+또한 다수의 사용자들이 접근하는 만큼 보안에 취약할 수 있기에, 보안 정보들을 중앙 저장소에서 관리할 수 있도록 하고 사용자 교육과 시크릿 탐지 자동화 등 개선 작업을 진행 중에 있습니다.
     
 
 ### 6.2 발전해야 할 점
 
 Airflow를 Docker Compose 환경으로 옮기면서 확실히 이점들이 있었지만, 아직까지 해결해야하는 문제들이 있습니다.
 
-- 데이터 본부 팀원들이 사용하는 MacOS는 Intel과 M1 두가지로 나뉩니다. 기존의 Intel은 Docker 호환에 크게 문제가 없지만 M1의 경우 특정 부분에서 호환이 안되는 이슈가 있으며, Airflow 의존성 일부가 제대로 설치되지 않는 문제들이 있습니다.
-- 로컬 환경 사용에 대해 추상화를 해두었지만, 사용자들이 Python 환경(`poetry`, `pyenv`)과 Docker에 대해 알고 있어야 하며 파이썬 버전 이슈나 컨테이너 미종료 이슈 등을 마주칠 때가 있어 해결할 필요가 있습니다.
-- 마지막으로 의존성 관리도 해결해야 할 문제 중 하나입니다. 파이썬 의존성을 하나 설치해서 운영까지 올리기 위해서는 3번의 의존성 설치가 필요합니다. Airflow 런타임에서는 Docker Compose에 의존성을 명시해줘야 하고, 개발하는 IDE에서 타입 힌팅과 Auto Complete를 위해서 로컬 가상환경에 의존성을 설치해줘야 합니다. 또 운영 환경에 배포할 때는 Airflow 이미지 Dockerfile에 의존성을 추가해준 후 CI 파이프라인을 거쳐야 합니다. 따라서 이런 복잡한 의존성 관리 방식을 간소화할 필요가 있습니다.
+- M1 호환 문제 : 데이터 본부 팀원들이 사용하는 MacOS는 Intel과 M1 두가지로 나뉩니다. 기존의 Intel은 Docker 호환에 크게 문제가 없지만 M1의 경우 특정 부분에서 호환이 안되는 이슈가 있으며, Airflow 의존성 일부가 제대로 설치되지 않는 문제들이 있습니다.
+- 추상화 개선 : 로컬 환경 사용에 대해 추상화를 해두었지만, 사용자들이 Python 환경(`poetry`, `pyenv`)과 Docker에 대해 알고 있어야 하며 파이썬 버전 이슈나 컨테이너 미종료 이슈 등을 마주칠 때가 있어 해결할 필요가 있습니다.
+- 의존성 간소화 : 파이썬 의존성을 하나 설치해서 운영까지 올리기 위해서는 3번의 의존성 설치가 필요합니다. Airflow 런타임에서는 Docker Compose에 의존성을 명시해줘야 하고, 개발하는 IDE에서 Type Hinting과 Auto Complete를 위해서 로컬 가상환경에 의존성을 설치해줘야 합니다. 또 운영 환경에 배포할 때는 Airflow 이미지 Dockerfile에 의존성을 추가해준 후 CI 파이프라인을 거쳐야 합니다. 따라서 이런 복잡한 의존성 관리 방식을 간소화할 필요가 있습니다.
 
 저희는 Airflow 로컬 환경을 시작으로 문제들을 잘 정의하고 추상화하여 나중에는 Airflow를 모르더라도 손쉽게 파이프라인을 구축할 수 있는 사내 플랫폼을 만들 계획입니다. 
 
@@ -738,4 +739,4 @@ Airflow를 Docker Compose 환경으로 옮기면서 확실히 이점들이 있�
 
 Airflow는 배치 데이터 파이프라인의 중추인 만큼, 중요하게 관리되어야 합니다. 데이터 플랫폼 팀은 계속해서 사용 패턴에 맞게 Airflow 플랫폼을 개선해 나갈 것이며 궁극적으로 쏘카의 모든 구성원들이 손쉽게 데이터 파이프라인을 구축하여 데이터를 활용할 수 있도록 하겠습니다.
 
-위 많은 시행착오들을 거치며 Airflow를 함께 고도화하고 있는 험프리, 디니, 루디, 피글렛, 토마스 그리고 모든 데이터 비즈니스 본부 분들에게 감사드립니다.
+많은 시행착오들을 거치며 Airflow를 함께 고도화하고 있는 험프리, 디니, 루디, 피글렛, 토마스 그리고 모든 데이터 비즈니스 본부 분들에게 감사드립니다.
