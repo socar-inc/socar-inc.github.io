@@ -88,7 +88,7 @@ Airflow Github Repository의 Branch 이름이 특정 조건을 만족하면 CI/C
 
 **문제점 3 - Airflow 1 버전의 고질적인 문제들**
 
-기존 1 버전대 Airflow는 Dag 갯수가 늘어나면 Dag Parsing 시간이 꽤 오래 걸리는 치명적인 문제가 있었습니다. 그때 당시 쏘카에서 운영하는 Dag은 수백 개였고 점점 Dag이 늘어날 때마다 Task Instance들의 스케줄링이 점점 밀리게 되었습니다. 그리고 Webserver는 Dag Parsing 프로세스가 백그라운드에서 동작하고 있다보니 웹에 접근했을 때 속도가 느린 편이었습니다.
+기존 1 버전대 Airflow는 Dag 갯수가 늘어나면 Dag Parsing 시간이 오래 걸리는 치명적인 문제가 있었습니다. 그때 당시 쏘카에서 운영하는 Dag은 수백 개였고 점점 Dag이 늘어날 때마다 Task Instance들의 스케줄링이 점점 밀리게 되었습니다. 그리고 Webserver는 Dag Parsing 프로세스가 백그라운드에서 동작하고 있다보니 웹에 접근했을 때 속도가 느린 편이었습니다.
 그때 당시 K8s Node의 자원을 스케일 업해봤지만 크게 개선되는 부분은 없었고 조금 더 근본적인 해결책이 필요했습니다.
 
 **문제점 4 - 코드 보안에 취약하고, 사용자 개인에 대한 권한 체계 부족**
@@ -440,12 +440,12 @@ Data Freshness는 데이터가 얼마나 최신 상태인가를 나타냅니다.
     
     저희 쪽에서도 사용자의 Airflow 사용성을 위해 지속적으로 하위호환성을 고려하며 버전을 업그레이드 하고 있습니다. 글을 쓰는 시점인 2.3 버전은 더 직관적인 UI를 제공해주어 저희 팀에서도 2.3 버전으로 업그레이드를 완료하였습니다. 
     
-이 외에도 TaskFlow API 도입, Airflow Core Component에서 Provider 분리, Task Group, Smart Sensor 도입 등등 꽤 많은 변화가 있습니다. 더 궁금하신 분들은 [해당 글](https://www.astronomer.io/blog/airflow-2-scheduler) 을 읽어보시면 도움이 될 것 같습니다.
+이 외에도 TaskFlow API 도입, Airflow Core Component에서 Provider 분리, Task Group, Smart Sensor 도입 등등 많은 변화가 있습니다. 더 궁금하신 분들은 [해당 글](https://www.astronomer.io/blog/airflow-2-scheduler) 을 읽어보시면 도움이 될 것 같습니다.
 
 
 ![logo-anim.gif](/img/advanced-airflow-for-databiz/logo-anim.gif)*Airflow 로고를 커스텀 해보았습니다.*
 
-Airflow 2로 마이그레이션하면서 1버전과 호환성이 깨지는 부분들이 꽤 있었고 이를 해결하는데 시간이 꽤 소요됐습니다. 하지만 마이그레이션 한 후 Airflow의 스케줄링 퍼포먼스가 올라갔으며 Task/Dag 간의 의존관계가 복잡하거나 코드가 복잡한 경우도 제공되는 API를 잘 활용하여 코드 퀄리티를 높일 수 있었습니다.
+Airflow 2로 마이그레이션하면서 1버전과 호환성이 깨지는 부분들이 다소 있었고 이를 해결하는데 시간이 꽤 소요됐습니다. 하지만 마이그레이션 한 후 Airflow의 스케줄링 퍼포먼스가 올라갔으며 Task/Dag 간의 의존관계가 복잡하거나 코드가 복잡한 경우도 제공되는 API를 잘 활용하여 코드 퀄리티를 높일 수 있었습니다.
 
 ### 3.3. 고가용성 설정
 
@@ -554,7 +554,7 @@ t1 = assign_operator_resources(
 
 ### 4.2. 보안 강화
 
-기존 Airflow는 소스 코드에 보안정보들이 포함되어 있었습니다. Dag 코드에 보안 정보들(API Key, Password 등)이 포함되는 경우들이 꽤 있었고, Airflow 배포를 위한 Helm Chart에서도 Connection, Variable, 보안이 필요한 환경 변수 등을 그대로 노출하고 있었습니다. 따라서 아래와 같이 보안 정보들은 별도의 저장소로 분리하는 작업을 진행했습니다. 
+기존 Airflow는 소스 코드에 보안정보들이 포함되어 있었습니다. Dag 코드에 보안 정보들(API Key, Password 등)이 포함되는 경우들이 종종 있었고, Airflow 배포를 위한 Helm Chart에서도 Connection, Variable, 보안이 필요한 환경 변수 등을 그대로 노출하고 있었습니다. 따라서 아래와 같이 보안 정보들은 별도의 저장소로 분리하는 작업을 진행했습니다. 
 
 #### GCP Secret Manager 적용
 
