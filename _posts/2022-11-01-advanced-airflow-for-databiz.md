@@ -562,7 +562,10 @@ t1 = assign_operator_resources(
 
 [GCP Secret Manager](https://cloud.google.com/secret-manager) 는 GCP에서 제공해주는 보안 정보 관리 툴입니다. 기본적으로 IAM을 통해 세부 권한 조정이 가능하며, 다양한 클라이언트에서 접근할 수 있도록 API를 제공합니다. GCP Secret Manager를 사용하면 손쉽게 보안 정보들과 코드를 분리할 수 있습니다.
 
-저희는 GCP Secret Manager를 활용할 때 Dag에 하드코딩되어 있는 경우 Airflow Variable 혹은 [Secret Manager SDK(Python)](https://cloud.google.com/secret-manager/docs/reference/libraries#client-libraries-install-python) 를 사용하였습니다. K8s의 경우 [external Secret](https://external-secrets.io/latest/) 과 함께 사용하고 있습니다. external Secret을 활용하면 외부 Secret 저장소(e.g., GCP Secret Manager) 를 통해 쉽게 Secret 리소스로 변환이 가능합니다. 
+저희는 GCP Secret Manager를 활용할 때 Dag에 하드코딩되어 있는 경우 Airflow Variable 혹은 [Secret Manager SDK(Python)](https://cloud.google.com/secret-manager/docs/reference/libraries#client-libraries-install-python) 를 사용하였습니다. 
+K8s의 경우 [external Secret](https://external-secrets.io/latest/) 과 함께 사용하고 있습니다. External Secret을 활용하면 외부 Secret 저장소(e.g., GCP Secret Manager) 를 통해 쉽게 Secret 리소스로 변환이 가능합니다. 
+보안 정보들을 분리하려면 Airflow 사용자들의 보안에 대한 인지가 필요하고 이를 CI 레벨에서 막을 수 있도록 하는 장치도 필요합니다. 현재 저희는 사용자가 암호화된 정보를 직접 저장하고 관리할 수 있도록 프로세스를 구축하고 있으며, 보안 정보들을 감지할 수 있도록 돕는 [GitGuardian Action](https://github.com/marketplace/actions/gitguardian-shield-action) 같은 오픈소스를 검토중에 있습니다. 
+
 
 ### Secret Backend 적용을 통해 하드코딩된 Connection, Variable을 옮기기
 
@@ -578,13 +581,14 @@ AIRFLOW__SECRETS__BACKEND__KWARGS: '{ "connections_prefix": "airflow-connections
 
 ### 4.3. RBAC 적용 (진행중)
 
-Airflow는 [RBAC(Rule Based Access Control)](https://airflow.apache.org/docs/apache-airflow/stable/security/access-control.html) 을 제공합니다. 기본적으로 제공해주는 Role(Admin, Public, Viewer 등) 뿐만 아니라 Resource, Dag Based Permission에 기반한 Custom Role을 만들 수도 있습니다. 현재는 기본 Role에 기반해서 계정을 운영하고 있지만, 추후 액세스 패턴에 맞춰 Custom Role을 만들어 관리할 계획입니다.
+Airflow는 [RBAC(Rule Based Access Control)](https://airflow.apache.org/docs/apache-airflow/stable/security/access-control.html) 을 제공합니다. 
+기본적으로 제공해주는 Role(Admin, Public, Viewer 등) 뿐만 아니라 Resource, Dag Based Permission에 기반한 Custom Role을 만들 수도 있습니다.
+(저희 팀은 현재는 기본 Role에 기반해서 계정을 운영하고 있지만, 추후 액세스 패턴에 맞춰 Custom Role을 만들어 관리할 계획입니다.)
 
-또한 사용자가 많아짐에 따라 Airflow 계정 관리도 중요해집니다. 현재 팀 별로 공용 계정을 운영하고 있지만, 팀별 계정의 Role도 사용 대비 크게 권한을 취하고 있습니다. 이는 추후 사용자에 따른 문제가 발생했을 때 Audit이 힘들어질 수 있습니다.  
+사용자가 많아지면 Airflow 계정 관리도 중요해집니다. 현재 팀 별로 공용 계정을 운영하고 있는데 팀별 계정의 Role이 실제 사용 대비 여유롭게 권한을 부여한 부분이 있습니다. 이는 추후 문제가 발생했을 때 Audit이 힘들어질 수 있습니다.  
 
-Airflow의 [auth_backend](https://airflow.apache.org/docs/apache-airflow/stable/security/api.html) 를 활용하면 Airflow Auth Api가 아닌 외부 인증 프레임워크를 사용할 수 있습니다. 현재 쏘카에서는 SSO로 [Keycloak](https://www.keycloak.org/)을 사용하고 있는데요([참고 글 : Keycloak를 이용한 SSO 구축](https://tech.socarcorp.kr/security/2019/07/31/keycloak-sso.html)). 위 인증 문제를 해결하기 위해 Airflow 사용자 인증을 Keycloak으로 위임하는 방식을 검토 중에 있습니다. 사용자 별로 인증을 관리할 수 있다면 이후 Audit Log를 통해 Airflow 트러블 슈팅시 도움을 줄 수 있을 것입니다. 
-
-보안 정보들을 분리하려면 Airflow 사용자들의 보안에 대한 인지가 필요하고 이를 CI 레벨에서 막을 수 있도록 하는 장치도 필요합니다. 현재 저희는 사용자가 암호화된 정보를 직접 저장하고 관리할 수 있도록 프로세스를 구축하고 있으며, 보안 정보들을 감지할 수 있도록 돕는 [GitGuardian Action](https://github.com/marketplace/actions/gitguardian-shield-action) 같은 오픈소스를 검토중에 있습니다. 
+Airflow의 [auth_backend](https://airflow.apache.org/docs/apache-airflow/stable/security/api.html) 를 활용하면 Airflow Auth API가 아닌 외부 인증 프레임워크를 사용할 수 있습니다. 현재 쏘카에서는 SSO로 [Keycloak](https://www.keycloak.org/)을 사용하고 있는데 ([참고 글 : Keycloak를 이용한 SSO 구축](https://tech.socarcorp.kr/security/2019/07/31/keycloak-sso.html)).
+위 인증 문제를 해결하기 위해 Airflow 사용자 인증을 Keycloak으로 위임하는 방식을 검토 중에 있습니다. 사용자 별로 인증을 관리할 수 있다면 이후 Audit Log를 통해 문제 해결에 도움을 줄 수 있을 것입니다. 
 
 ## 5. 모니터링 고도화
 
@@ -723,19 +727,18 @@ Kuberentes의 경우도 동일하게 Datadog을 활용하여 모니터링하고 
 
 ### 6.2 발전해야 할 점
 
-Airflow를 Docker Compose 환경으로 옮기면서 확실히 이점들이 있었지만, 아직까지 해결해야하는 문제들이 있습니다.
+Airflow를 Docker Compose 환경으로 옮기면서 확실한 이점들이 있지만 아직까지 해결해야하는 문제들도 있습니다.
 
 - M1 호환 문제 : 데이터 본부 팀원들이 사용하는 MacOS는 Intel과 M1 두가지로 나뉩니다. 기존의 Intel은 Docker 호환에 크게 문제가 없지만 M1의 경우 특정 부분에서 호환이 안되는 이슈가 있으며, Airflow 의존성 일부가 제대로 설치되지 않는 문제들이 있습니다.
 - 추상화 개선 : 로컬 환경 사용에 대해 추상화를 해두었지만, 사용자들이 Python 환경(`poetry`, `pyenv`)과 Docker에 대해 알고 있어야 하며 파이썬 버전 이슈나 컨테이너 미종료 이슈 등을 마주칠 때가 있어 해결할 필요가 있습니다.
 - 의존성 간소화 : 파이썬 의존성을 하나 설치해서 운영까지 올리기 위해서는 3번의 의존성 설치가 필요합니다. Airflow 런타임에서는 Docker Compose에 의존성을 명시해줘야 하고, 개발하는 IDE에서 Type Hinting과 Auto Complete를 위해서 로컬 가상환경에 의존성을 설치해줘야 합니다. 또 운영 환경에 배포할 때는 Airflow 이미지 Dockerfile에 의존성을 추가해준 후 CI 파이프라인을 거쳐야 합니다. 따라서 이런 복잡한 의존성 관리 방식을 간소화할 필요가 있습니다.
-
-저희는 Airflow 로컬 환경을 시작으로 문제들을 잘 정의하고 추상화하여 나중에는 Airflow를 모르더라도 손쉽게 파이프라인을 구축할 수 있는 사내 플랫폼을 만들 계획입니다. 
 
 이 외에도 보안을 강화하는 동시에 사용성을 해치지 않는 방향으로 Secret Manager 사용 정책과 가이드를 세워야 하며 종종 Pod 로그를 남기지 않고 Task가 실패하는 이슈들이 있어 모니터링 환경을 더 개선하고 알림 정책을  개선할 필요가 있습니다. 
 
 ### 6.3 마무리
 
 위와 같은 시도들을 통해 더 많은 사용자가 Airflow를 사용하여 직접 데이터 파이프라인을 구축할 수 있도록 하였으며 동시에 시스템의 신뢰성과 안전성을 높여가고 있습니다. 
+Airflow 로컬 환경을 시작으로 나중에는 Airflow를 모르더라도 사용자가 손쉽게 파이프라인을 구축할 수 있는 사내 플랫폼을 만들 계획입니다. 
 
 Airflow는 배치 데이터 파이프라인의 중추인 만큼, 중요하게 관리되어야 합니다. 데이터 플랫폼 팀은 계속해서 사용 패턴에 맞게 Airflow 플랫폼을 개선해 나갈 것이며 궁극적으로 쏘카의 모든 구성원들이 손쉽게 데이터 파이프라인을 구축하여 데이터를 활용할 수 있도록 하겠습니다.
 
