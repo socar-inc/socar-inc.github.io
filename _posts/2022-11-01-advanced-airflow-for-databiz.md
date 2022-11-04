@@ -33,7 +33,7 @@ tags:
 2. 개발 환경 개선 및 개발 주기 단축하기
 3. 지속적으로 Airflow 안정화하기
 4. 보안 강화하기
-5. 모니터링 고도화
+5. 모니터링 고도화하기
 6. 되돌아보기
 
 
@@ -590,7 +590,7 @@ Airflow는 [RBAC(Rule Based Access Control)](https://airflow.apache.org/docs/apa
 Airflow의 [auth_backend](https://airflow.apache.org/docs/apache-airflow/stable/security/api.html) 를 활용하면 Airflow Auth API가 아닌 외부 인증 프레임워크를 사용할 수 있습니다. 현재 쏘카에서는 SSO로 [Keycloak](https://www.keycloak.org/)을 사용하고 있는데 ([참고 글 : Keycloak를 이용한 SSO 구축](https://tech.socarcorp.kr/security/2019/07/31/keycloak-sso.html)).
 위 인증 문제를 해결하기 위해 Airflow 사용자 인증을 Keycloak으로 위임하는 방식을 검토 중에 있습니다. 사용자 별로 인증을 관리할 수 있다면 이후 Audit Log를 통해 문제 해결에 도움을 줄 수 있을 것입니다. 
 
-## 5. 모니터링 고도화
+## 5. 모니터링 고도화하기
 
 ### 5.1. 목적
 
