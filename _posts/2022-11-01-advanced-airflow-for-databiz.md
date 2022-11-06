@@ -204,15 +204,26 @@ services:
 
 이를 잘 활용하여 Secret(Connection, Variable 등)도 GCP Secret Manager로 옮긴 후 Service Account로 인증하여 로컬에 보안 정보를 전부 제외할 수 있었습니다.
 
-#### KubernetesPodOperator를 테스트할 수 있는 환경 구축
+### KubernetesPodOperator를 테스트할 수 있는 환경 구축
 
-쏘카에서는 Airflow의 `KubernetesPodOperator`로 Task를 띄우는 경우가 많습니다. 초반에 로컬 환경에서 KubernetesPodOperator 실행시 Kubernetes API Server를 Mocking 하는 것을 생각했으나 개발 비용이 비싸다고 판단하였습니다. 결국 개발 환경의 Kubernetes Cluster에 직접 연결해서 Pod을 띄우는 방식으로 문제를 해결하였습니다.
+현재 쏘카의 Airflow는 `KubernetesExecutor`를 사용하고 있습니다. KubernetesExecutor의 장점 중 하나는 `KubernetesPodOperator`를 통해 사용자가 직접 정의한 컨테이너 이미지를 Pod 형태로 독립적 수행이 가능하다는 점입니다. 
+사용자가 정의한 이미지에는 의존성을 별도로 설치할 수 있고 Airflow Dag 레포에 종속되지 않기에, 저희 팀에서도 자주 활용하고 있습니다. (KubernetesExecutor에 대해서 더 궁금하다면 [여기](https://airflow.apache.org/docs/apache-airflow/stable/executor/kubernetes.html) 를 참고해주세요)  
 
-로컬에서는 기본적으로 KubernetesPodOperator를 실행하게 되면, K8s 인증을 한 후 미리 생성한 Namespace(Local 전용 Namespace)에 Pod을 띄울 수 있도록 하였습니다. 이때 핵심은 사용자가 K8s를 알지 못해도 동작할 수 있도록 추상화를 하는 것입니다. 이를 위해 아래와 같은 작업들을 진행하였습니다. 
+KubernetesExecutor에서 실행하는 일반적인 Operator(PythonOperator, BigqueryOperator, etc)는 Pod 형태로 수행되며, 이는 로컬 환경인 LocalExecutor 수행방식(Scheduler Process에서 Task를 실행)으로 대체해도 수행이 가능합니다.  
+하지만 KubernetesPodOperator의 경우 컨테이너 이미지를 Pod에서 수행하다 보니 LocalExecutor로 해당 태스크를 수행하는 것이 불가능합니다. 현재 쏘카에서 KubernetesPodOperator를 많이 사용하고 있는데, 해당 기능 테스트를 제한한다면 사용자 경험을 해칠 것입니다. 
 
-- OAuth 인증이 아닌 GCP Service Account 기반의 인증을 할 수 있도록 Service Account를 발급하고 이를 기반으로 `.kubeconfig` 파일을 생성하여 Docker Image에 Mount 합니다. 
+처음에 이 문제를 해결하기 위해서 컨테이너 형태로 태스크를 수행할 수 있는 `DockerOperator`를 활용해보면 어떨까 생각하였습니다. 로컬 환경에서는 DockerOperator, 운영 환경에서는 KubernetesPodOperator를 수행하는 팩토리 형태의 Operator를 만드는 방식을 고민해봤습니다.
+하지만 두 오퍼레이터의 시그니처(속성)가 다른 부분이 꽤 있었으며 개발하더라도 본질적인 문제 해결이 아니라고 판단하였습니다.  
+
+*고민 끝에 결국 개발 환경의 Kubernetes Cluster에 직접 연결해서 Pod을 띄우는 방식으로 문제를 해결하였습니다*.  
+
+![k8s-auth.png](../img/advanced-airflow-for-databiz/k8s-auth.png)
+
+여기서 제일 신경썼던 부분은 사용자가 쿠버네티스를 알지 못해도 동작할 수 있도록 추상화를 하는 것입니다. 로컬에서는 기본적으로 KubernetesPodOperator를 실행하게 되면, Service Account 기반의 k8s 인증을 한 후 미리 생성한 namespace(local 전용 namespace)에 pod을 띄울 수 있도록 하였습니다.  
+
+- OAuth 인증이 아닌 GCP Service Account 기반의 인증을 할 수 있도록 Service Account를 발급하고 이를 기반으로 .kubeconfig 파일을 사전 정의하여 Docker Image에 Mount 합니다. 이 덕분에 사용자는 kubernetes 관련 설정(kubectl, 인증 설정 등)을 하지 않아도 됩니다.    
 ([Kubernetes API 서버에 인증](https://cloud.google.com/kubernetes-engine/docs/how-to/api-server-authentication?hl=ko#environments-without-gcloud) 글에서 더 자세한 내용을 확인할 수 있습니다)
-- K8s RBAC을 활용해 미리 허용한 Service Account를 대상으로 Airflow 전용 Namespace에서 K8s Pod의 CRUD가 가능하도록 하고, 해당 Namespace를 제외하고는 다른 자원에 접근할 수 없도록 합니다.
+- k8s RBAC을 활용해 미리 허용한 Service Account를 대상으로 airflow 전용 namespace에서 k8s pod의 crud가 가능하도록 합니다. 해당 namespace를 제외하고는 다른 자원에 접근할 수 없도록 Role을 관리합니다.
     
     ```yaml
     apiVersion: rbac.authorization.k8s.io/v1
@@ -239,14 +250,14 @@ services:
     subjects:
       - kind: User
         name: "grab-dev@socar-data-dev.iam.gserviceaccount.com"
-          ...
+    	...
     roleRef:
       kind: Role
       name: airflow-feature-role
       apiGroup: rbac.authorization.k8s.io
     ```
     
-- 사용자는 KubernetesPodOperator의 `in_cluster`와 `config_file` 속성을 설정합니다. 꼭 KubernetesExecutor가 아니더라도 다른 Executor에서도 KubernetesPodOperator를 실행할 수 있다는 사실 알고 계셨나요? 아래와 같이 설정을 해주면 로컬에서도 K8s 인증을 하고 Pod CRUD가 가능합니다.
+- 사용자는 KubernetesPodOperator의 `in_cluster`와 `config_file` 속성을 설정합니다. 꼭 KubernetesExecutor가 아니더라도 다른 Executor에서도 KubernetesPodOperator를 실행할 수 있다는 사실 알고 계셨나요? 아래와 같이 설정을 해주면 로컬에서도 k8s 인증을 하고 pod crud가 가능합니다.
     
     ```python
        task1 = KubernetesPodOperator(
@@ -256,6 +267,7 @@ services:
         )
     ```
     
+
 
 #### Dag 파싱 효율화를 위한 .airflowignore 활용
 
