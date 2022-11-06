@@ -27,7 +27,7 @@ tags:
 - 사용자가 다양한 Airflow의 개발 환경을 개선하고 싶은 소프트웨어 엔지니어
 - 데이터 플랫폼에 관심이 있는 소프트웨어 엔지니어
 
-목차는 아래와 같습니다. (Airflow에 대한 히스토리가 길고 다루는 내용들이 많다 보니 모든 과정을 상세하게 적지는 못했습니다. 댓글로 질문 편하게 남겨주시면 답변 드리겠습니다.)
+목차는 아래와 같습니다.
 
 1. 쏘카의 Airflow 현황과 문제점
 2. 개발 환경 개선 및 개발 주기 단축하기
@@ -36,10 +36,11 @@ tags:
 5. 모니터링 고도화하기
 6. 되돌아보기
 
+> Airflow에 대한 히스토리가 길고 다루는 내용들이 많다 보니 모든 과정을 상세하게 적지는 못했습니다. 댓글로 질문 편하게 남겨주시면 답변 드리겠습니다.)
 
 ## 1. 쏘카의 Airflow 현황과 문제점  
 
-데이터 파이프라인을 구축할 때 꼭 빠지지 않는 구성요소가 있습니다. 바로 `Airflow` 입니다. Airflow는 Airbnb에서 개발한 워크플로우 관리 오픈소스로, 현재 많은 기업에서 데이터 파이프라인을 자동화할 때 사용하는 툴입니다. 
+데이터 파이프라인을 구축할 때 꼭 빠지지 않는 구성요소가 있습니다. 바로 `Airflow` 입니다. Airflow는 Airbnb에서 개발한 워크플로우 관리 오픈소스로 현재 많은 기업에서 데이터 파이프라인을 자동화할 때 사용하는 툴입니다. 
 
 ### 1.1. Airflow in Socar
 
@@ -62,7 +63,7 @@ Airflow Github Repository의 Branch 이름이 특정 조건을 만족하면 CI/C
 
 ### 1.2. 문제점
 
-사용자들에게 독립된 Airflow 개발환경을 구성해준 것은 큰 장점이었습니다. 운영과 분리하여 테스트가 가능하였으며 Github을 SoT(Source of Truth)로 삼아 코드에 대한 퀄리티 관리가 용이하였습니다.
+사용자들에게 독립된 Airflow 개발환경을 구성해준 것은 큰 장점이었습니다. 운영과 분리된 환경에서 테스트가 가능하였으며 Github을 SoT(Source of Truth)로 삼아 코드 퀄리티 관리가 용이하였습니다.
 하지만 기존 방식의 Airflow는 아래와 같은 문제점들이 있었습니다.
 1. 개발 환경의 Airflow의 에러 발생 및 관리자/컴퓨팅 리소스 낭비
 2. 많은 사용자들이 사용하기엔 불친절한 개발 환경, 긴 피드백 루프
@@ -76,12 +77,13 @@ Airflow Github Repository의 Branch 이름이 특정 조건을 만족하면 CI/C
 
 ![argocd-many-airflows.png](/img/advanced-airflow-for-databiz/argocd-many-airflows.png)*다수의 사용자가 개발 환경에서 만든 Airflow가 남아있는 모습*
 
-더불어 그때 당시 Airflow를 K8s에 배포하기 위해 사용한 Helm Chart(Community 버전)도 간헐적으로 원인 모를 에러를 발생하였습니다. 이에 따라 관리자는 Airflow 에러를 수정하고 사용자와 커뮤니케이션하는 데 높은 피로도가 있었습니다.  
+더불어 당시 Airflow를 K8s에 배포하기 위해 사용한 Helm Chart(Community 버전)도 간헐적으로 원인 모를 에러가 발생하였습니다. 
+이에 따라 관리자는 Airflow 에러를 수정하고 사용자와 커뮤니케이션하는 데 높은 피로도가 있었습니다.  
 
 **문제점 2 - 많은 사용자들이 사용하기엔 불친절한 개발 환경, 긴 피드백 루프**
 
 개발 환경의 Airflow는 Git Sync를 통해 Github Repository의 코드를 동기화합니다. 
-사용자가 Dag 를 수정할 때마다 Push 를 해야 하는데, 운영하는 Dag의 갯수들이 많다 보니(700여개) 동기화 시간이 1분 이상 걸리는 경우들이 많았습니다. 
+사용자가 Dag를 수정할 때마다 Push를 해야 하는데, 운영하는 Dag의 갯수들이 많다 보니 동기화 시간이 1분 이상 걸리는 경우들이 많았습니다. 
 이런 상황에서 사용자가 코드를 작성하면서 계속해서 동작 확인을 하기 위해선 매번 1분 이상 기다려야 했습니다. 이는 피드백 루프와 개발 시간이 길어진다는 것을 의미합니다. 
 
 ![git-sync-many-commits.png](/img/advanced-airflow-for-databiz/git-sync-many-commits.png)*Airflow 커밋 히스토리가 불필요하게 길어지기도 합니다.*
@@ -90,12 +92,14 @@ Airflow Github Repository의 Branch 이름이 특정 조건을 만족하면 CI/C
 
 **문제점 3 - Airflow 1 버전의 고질적인 문제들**
 
-기존 1 버전대 Airflow는 Dag 갯수가 늘어나면 Dag Parsing 시간이 오래 걸리는 치명적인 문제가 있었습니다. 그때 당시 쏘카에서 운영하는 Dag은 수백 개였고 점점 Dag이 늘어날 때마다 Task Instance들의 스케줄링이 점점 밀리게 되었습니다. 그리고 Webserver는 Dag Parsing 프로세스가 백그라운드에서 동작하고 있다보니 웹에 접근했을 때 속도가 느린 편이었습니다.
+기존 1 버전대 Airflow는 Dag 갯수가 늘어나면 Dag Parsing 시간이 오래 걸리는 치명적인 문제가 있었습니다. 그때 당시 쏘카에서 운영하는 Dag은 수백 개였고 점점 Dag이 늘어날 때마다 Task Instance들의 스케줄링이 점점 밀리게 되었습니다.
+그리고 Dag Parsing 프로세스가 백그라운드에서 동작하고 있다보니 웹에 접근했을 때 속도가 느린 편이었습니다.
 그때 당시 K8s Node의 자원을 스케일 업해봤지만 크게 개선되는 부분은 없었고 단순 스케일 업보다는 조금 더 근본적인 해결책이 필요했습니다.
 
 **문제점 4 - 코드 보안에 취약하고, 사용자 개인에 대한 권한 체계 부족**
 
-다수의 사용자들이 Airflow를 사용하면서 Api Key나 Secret 정보들을 그대로 하드코딩하는 경우들이 있습니다. 특히 Airflow 사용 목적 상 외부 데이터 소스/저장소와 통신해야 하는 경우들이 많아 위 문제들이 빈번하게 발생하는 편입니다. 
+다수의 사용자들이 Airflow를 사용하면서 Api Key나 Secret 정보들을 그대로 하드코딩하는 경우들이 있었습니다. 
+특히 Airflow 사용 목적 상 외부 데이터 소스/저장소와 통신해야 하는 경우들이 많아 위 문제들이 빈번하게 발생했습니다. 
 
 또한 팀 별로 공용 계정을 사용했기 때문에 간혹 Connection, Variable이 지워지거나 실행되던 Task가 갑자기 종료되는 문제들이 발생했었으며, 정확한 히스토리 추적이 힘들어지는 문제가 있었습니다.
 
@@ -123,7 +127,7 @@ Airflow를 운영하면서 드러난 문제들을 개선하기 위해 아래와 
 **사용자들이 빠르게 개발할 수 있도록 지원하고 Dag 개발 이외의 관심사를 최대한 분리할 수 있도록 합니다.**
     
 데이터 플랫폼을 운영하기 위해선 시스템을 개발/유지보수하는 것을 넘어서 고객을 이해하고 플랫폼을 지속해서 개선해나가는 것이 중요합니다. 
-특히 쏘카의 데이터 분석가, 데이터 사이언티스트 등 프로그래밍에 익숙하지 않은 팀원들에게 Airflow 사용의 러닝 커브를 낮춰주는 것은 중요합니다. 
+특히 쏘카의 데이터 분석가, 데이터 사이언티스트 등 프로그래밍에 익숙하지 않은 팀원들에게 Airflow 사용의 러닝 커브를 낮춰주는 것이 중요합니다. 
 
 또한 Airflow를 사용하기 위해서 사용자가 Airflow 구성요소와 인프라 등을 전부 이해할 필요는 없습니다. 
 사용자가 Dag을 개발하는 것에 집중할 수 있도록 나머지는 잘 추상화하여 관심사를 분리하여야 합니다. 
@@ -192,7 +196,7 @@ services:
 
 #### GCP Service Account를 통합 인증 수단으로 활용하기
 
-기본적으로 Airflow는 GCP 리소스(BigQuery, Secret Manager, GKE 등)에 접근하는 경우가 많기에, 로컬에서 개발할 때 권한 관리를 필요로 합니다. 따라서 개인 별 Service Account 발급을 통해 인증을 해결하였습니다. 
+기본적으로 Airflow는 GCP 리소스(BigQuery, Secret Manager, GKE 등)에 접근하는 경우가 많기에, 로컬에서 개발할 때 권한 관리가 필요합니다. 이런 인중 문제는 개인 별 Service Account 발급을 통해 해결하였습니다. 
 
 현재 GCP의 전체적 운영은 데이터 플랫폼 팀에서 담당하고 있습니다. GCP IAM은 팀 단위의 역할에 맞게 Custom Role을 만들어 관리하고 있으며, 사용자 별 Service Account는 해당 팀의 Role에 바인딩되어 있습니다. 사용자가 Airflow 개발을 필요로할 때 데이터 플랫폼 팀에서 Service Account 발급을 해줍니다. 
 
@@ -202,7 +206,7 @@ services:
 
 #### KubernetesPodOperator를 테스트할 수 있는 환경 구축
 
-쏘카에서는 Airflow의 `KubernetesPodOperator`로 Task를 띄우는 경우가 많습니다. 초반에 로컬 환경에서 KubernetesPodOperator 실행시 Kubernetes API Server를 Mocking 하는 경우를 생각했으나 개발 비용이 비싸다고 판단하였습니다. 결국 개발 환경의 Kubernetes Cluster에 직접 연결해서 Pod을 띄우는 방식으로 문제를 해결하였습니다.
+쏘카에서는 Airflow의 `KubernetesPodOperator`로 Task를 띄우는 경우가 많습니다. 초반에 로컬 환경에서 KubernetesPodOperator 실행시 Kubernetes API Server를 Mocking 하는 것을 생각했으나 개발 비용이 비싸다고 판단하였습니다. 결국 개발 환경의 Kubernetes Cluster에 직접 연결해서 Pod을 띄우는 방식으로 문제를 해결하였습니다.
 
 로컬에서는 기본적으로 KubernetesPodOperator를 실행하게 되면, K8s 인증을 한 후 미리 생성한 Namespace(Local 전용 Namespace)에 Pod을 띄울 수 있도록 하였습니다. 이때 핵심은 사용자가 K8s를 알지 못해도 동작할 수 있도록 추상화를 하는 것입니다. 이를 위해 아래와 같은 작업들을 진행하였습니다. 
 
@@ -257,7 +261,8 @@ services:
 
 Dag 갯수가 늘어나게 되면 Scheduler는 모든 Dag을 파싱하기까지 시간이 오래 걸리며 컴퓨팅 자원을 많이 소비하게 됩니다. 따라서 개발중인 Dag들만 Parsing할 수 있다면 자원을 아끼고 개발 시간을 단축할 수 있습니다.
 
-`.airflowignore`를 활용하여 Glob 패턴으로 특정 디렉토리를 제외하고는 Parsing이되지 않도록 설정할 수 있습니다. 로컬 환경에서는 .airflowignore에서 미리 선언한 디렉토리에서 개발할 수 있도록 가이드를 주었습니다. 
+`.airflowignore`를 활용하여 Glob 패턴으로 특정 디렉토리를 제외하고는 Parsing이되지 않도록 설정할 수 있습니다. 
+그리고 사용자가 로컬 환경에서 개발할 때 해당 디렉토리 (e.g., _development 폴더)에서 개발하도록 README를 통해 가이드를 주었습니다. 
 
 ```bash
 # .airflowignore로 _development 폴더 내의 Dag만 읽도록 한다.
