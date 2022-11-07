@@ -217,9 +217,10 @@ KubernetesExecutor에서 실행하는 일반적인 Operator(PythonOperator, Bigq
 
 *고민 끝에 결국 개발 환경의 Kubernetes Cluster에 직접 연결해서 Pod을 띄우는 방식으로 문제를 해결하였습니다*.  
 
-![k8s-auth.png](/img/advanced-airflow-for-databiz/k8s-auth.png)
+여기서 제일 신경썼던 부분은 사용자가 쿠버네티스를 알지 못해도 동작할 수 있도록 추상화를 하는 것입니다. 
+로컬에서는 기본적으로 KubernetesPodOperator를 실행하게 되면, Service Account 기반의 K8s 인증을 한 후 미리 생성한 Namespace(Local 전용 Namespace)에 Pod을 띄울 수 있도록 하였습니다.  
 
-여기서 제일 신경썼던 부분은 사용자가 쿠버네티스를 알지 못해도 동작할 수 있도록 추상화를 하는 것입니다. 로컬에서는 기본적으로 KubernetesPodOperator를 실행하게 되면, Service Account 기반의 k8s 인증을 한 후 미리 생성한 namespace(local 전용 namespace)에 pod을 띄울 수 있도록 하였습니다.  
+![k8s-auth.png](/img/advanced-airflow-for-databiz/k8s-auth.png)*로컬 Airflow 환경에서 개발 클러스터를 이용하는 방식*
 
 - OAuth 인증이 아닌 GCP Service Account 기반의 인증을 할 수 있도록 Service Account를 발급하고 이를 기반으로 .kubeconfig 파일을 사전 정의하여 Docker Image에 Mount 합니다. 이 덕분에 사용자는 kubernetes 관련 설정(kubectl, 인증 설정 등)을 하지 않아도 됩니다.    
 ([Kubernetes API 서버에 인증](https://cloud.google.com/kubernetes-engine/docs/how-to/api-server-authentication?hl=ko#environments-without-gcloud) 글에서 더 자세한 내용을 확인할 수 있습니다)
