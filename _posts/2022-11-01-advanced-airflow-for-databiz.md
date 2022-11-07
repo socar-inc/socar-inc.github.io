@@ -204,7 +204,7 @@ services:
 
 이를 잘 활용하여 Secret(Connection, Variable 등)도 GCP Secret Manager로 옮긴 후 Service Account로 인증하여 로컬에 보안 정보를 전부 제외할 수 있었습니다.
 
-### KubernetesPodOperator를 테스트할 수 있는 환경 구축
+#### KubernetesPodOperator를 테스트할 수 있는 환경 구축
 
 현재 쏘카의 Airflow는 `KubernetesExecutor`를 사용하고 있습니다. KubernetesExecutor의 장점 중 하나는 `KubernetesPodOperator`를 통해 사용자가 직접 정의한 컨테이너 이미지를 Pod 형태로 독립적 수행이 가능하다는 점입니다. 
 사용자가 정의한 이미지에는 의존성을 별도로 설치할 수 있고 Airflow Dag 레포에 종속되지 않기에, 저희 팀에서도 자주 활용하고 있습니다. (KubernetesExecutor에 대해서 더 궁금하다면 [여기](https://airflow.apache.org/docs/apache-airflow/stable/executor/kubernetes.html) 를 참고해주세요)  
