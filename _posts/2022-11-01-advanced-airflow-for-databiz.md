@@ -574,7 +574,7 @@ t1 = assign_operator_resources(
 
 ### 3.5. Clean Up Dag 적용
 
-실제로 Dag 갯수가 많아지고 운영 기간이 길어질수록 데이터베이스에 히스토리 관련 레코드들이 많이 쌓여있게 됩니다. 이는 데이터베이스의 성능을 저하시키고 Scheduler의 쿼리 성능 저하를 유발하여 전체적인 퍼포먼스가 떨어지게 됩니다. 
+실제로 Dag 개수가 많아지고 운영 기간이 길어질수록 데이터베이스에 히스토리 관련 레코드들이 많이 쌓여있게 됩니다. 이는 데이터베이스의 성능을 저하시키고 Scheduler의 쿼리 성능 저하를 유발하여 전체적인 퍼포먼스가 떨어지게 됩니다. 
 
 따라서 주기적으로 오래된 Dag과 Task 등 Historical Record들을 지워주게 되면 쿼리 속도를 향상시킬 수 있습니다. 저희는 teamclairvoyant의 [airflow-maintenance-dags 레포지토리](https://github.com/teamclairvoyant/airflow-maintenance-dags) 를 참조하여 특정 기간 내에 Dag, Task Instance 등을 지워주는 Dag을 스케줄링했습니다.
 ![cleanup-dag.png](/img/advanced-airflow-for-databiz/cleanup-dag.png)*Clean Up Dag의 Task 목록*
