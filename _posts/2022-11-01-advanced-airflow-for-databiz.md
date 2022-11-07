@@ -576,8 +576,8 @@ t1 = assign_operator_resources(
 
 실제로 Dag 갯수가 많아지고 운영 기간이 길어질수록 데이터베이스에 히스토리 관련 레코드들이 많이 쌓여있게 됩니다. 이는 데이터베이스의 성능을 저하시키고 Scheduler의 쿼리 성능 저하를 유발하여 전체적인 퍼포먼스가 떨어지게 됩니다. 
 
-따라서 주기적으로 오래된 Dag과 Task 등 Historical Record들을 지워주게 되면 쿼리 속도를 향상시킬 수 있습니다. 저희는 teamclairvoyant 의 [airflow-maintenance-dags 레포지토리](https://github.com/teamclairvoyant/airflow-maintenance-dags) 를 참조하여 특정 기간 내에 Dag, Task Instance 등을 지워주는 Dag을 스케줄링했습니다.
-![cleanup-dag.png](/img/advanced-airflow-for-databiz/cleanup-dag.png)*Clean Up Dag 의 Task 목록*
+따라서 주기적으로 오래된 Dag과 Task 등 Historical Record들을 지워주게 되면 쿼리 속도를 향상시킬 수 있습니다. 저희는 teamclairvoyant의 [airflow-maintenance-dags 레포지토리](https://github.com/teamclairvoyant/airflow-maintenance-dags) 를 참조하여 특정 기간 내에 Dag, Task Instance 등을 지워주는 Dag을 스케줄링했습니다.
+![cleanup-dag.png](/img/advanced-airflow-for-databiz/cleanup-dag.png)*Clean Up Dag의 Task 목록*
 
 실제로 Clean Up Dag이 스케줄링되면서 Database의 리소스 사용량이 상당량 줄었으며, Airflow의 스케줄러 및 웹 서버의 성능 향상을 체감하였습니다.
 
@@ -596,40 +596,40 @@ t1 = assign_operator_resources(
 
 ### 4.2. 보안 강화
 
-기존 Airflow는 소스 코드에 보안정보들이 포함되어 있었습니다. Dag 코드에 보안 정보들(API Key, Password 등)이 포함되는 경우들이 종종 있었고, Airflow 배포를 위한 Helm Chart에서도 Connection, Variable, 보안이 필요한 환경 변수 등을 그대로 노출하고 있었습니다. 따라서 보안 정보들은 별도의 저장소로 분리하는 작업을 진행했습니다. 
+기존 Airflow는 소스 코드에 보안 정보들이 포함되어 있었습니다. Dag 코드에 보안 정보들(API Key, Password 등)이 포함되는 경우들이 종종 있었고, Airflow 배포를 위한 Helm Chart에서도 Connection, Variable, 보안이 필요한 환경 변수 등을 그대로 노출하고 있었습니다. 따라서 보안 정보들은 별도의 저장소로 분리하는 작업을 진행했습니다. 
 
 #### GCP Secret Manager 적용
 
 ![airflow-secret-manager.png](/img/advanced-airflow-for-databiz/airflow-secret-manager.png)*Secret Manager 목록*
 
-[GCP Secret Manager](https://cloud.google.com/secret-manager) 는 GCP에서 제공해주는 보안 정보 관리 툴입니다. 기본적으로 IAM을 통해 세부 권한 조정이 가능하며, 다양한 클라이언트에서 접근할 수 있도록 API를 제공합니다. GCP Secret Manager를 사용하면 손쉽게 보안 정보들과 코드를 분리할 수 있습니다.
+[GCP Secret Manager](https://cloud.google.com/secret-manager)는 GCP에서 제공해 주는 보안 정보 관리 툴입니다. 기본적으로 IAM을 통해 세부 권한 조정이 가능하며, 다양한 클라이언트에서 접근할 수 있도록 API를 제공합니다. GCP Secret Manager를 사용하면 손쉽게 보안 정보들과 코드를 분리할 수 있습니다.
 
-저희는 GCP Secret Manager를 활용할 때 Dag에 하드코딩되어 있는 경우 Airflow Variable 혹은 [Secret Manager SDK(Python)](https://cloud.google.com/secret-manager/docs/reference/libraries#client-libraries-install-python) 를 사용하였습니다. 
-K8s의 경우 [external Secret](https://external-secrets.io/latest/) 과 함께 사용하고 있습니다. External Secret을 활용하면 외부 Secret 저장소(e.g., GCP Secret Manager) 를 통해 쉽게 Secret 리소스로 변환이 가능합니다. 
-보안 정보들을 분리하려면 Airflow 사용자들의 보안에 대한 인지가 필요하고 이를 CI 레벨에서 막을 수 있도록 하는 장치도 필요합니다. 현재 저희는 사용자가 암호화된 정보를 직접 저장하고 관리할 수 있도록 프로세스를 구축하고 있으며, 보안 정보들을 감지할 수 있도록 돕는 [GitGuardian Action](https://github.com/marketplace/actions/gitguardian-shield-action) 같은 오픈소스를 검토중에 있습니다. 
+저희는 GCP Secret Manager를 활용할 때 Dag에 하드코딩되어 있는 경우 Airflow Variable 혹은 [Secret Manager SDK(Python)](https://cloud.google.com/secret-manager/docs/reference/libraries#client-libraries-install-python)를 사용하였습니다. 
+K8s의 경우 [external Secret](https://external-secrets.io/latest/) 과 함께 사용하고 있습니다. External Secret을 활용하면 외부 Secret 저장소(e.g., GCP Secret Manager)를 통해 쉽게 Secret 리소스로 변환이 가능합니다. 
+보안 정보들을 분리하려면 Airflow 사용자들의 보안에 대한 인지가 필요하고 이를 CI 레벨에서 막을 수 있도록 하는 장치도 필요합니다. 현재 저희는 사용자가 암호화된 정보를 직접 저장하고 관리할 수 있도록 프로세스를 구축하고 있으며, 보안 정보들을 감지할 수 있도록 돕는 [GitGuardian Action](https://github.com/marketplace/actions/gitguardian-shield-action) 같은 오픈소스를 검토 중에 있습니다. 
 
 
 ####  Secret Backend 적용을 통해 하드코딩된 Connection, Variable을 옮기기
 
-Airflow에서는 [Secret Backend](https://airflow.apache.org/docs/apache-airflow/stable/security/secrets/secrets-backend/index.html) 로 GCP Secret Manager, vault 등 시크릿 관리 툴을 설정할 수 있도록 지원합니다. 위에서 언급한 것처럼 GCP Secret Manager를 Secret Backend로 사용하여 Connection, Variable을 암호화하여 사용하고 있습니다.
+Airflow에서는 [Secret Backend](https://airflow.apache.org/docs/apache-airflow/stable/security/secrets/secrets-backend/index.html)로 GCP Secret Manager, vault 등 시크릿 관리 툴을 설정할 수 있도록 지원합니다. 위에서 언급한 것처럼 GCP Secret Manager를 Secret Backend로 사용하여 Connection, Variable을 암호화하여 사용하고 있습니다.
 
 ```bash
 AIRFLOW__SECRETS__BACKEND: airflow.providers.google.cloud.secrets.secret_manager.CloudSecretManagerBackend # GCP Secret Manager 적용
 AIRFLOW__SECRETS__BACKEND__KWARGS: '{ "connections_prefix": "airflow-connections", "variables_prefix": "airflow-variables", "gcp_key_path": "..." }'
 ```
 
-위와 같이 `AIRFLOW__SECRETS__BACKEND` 환경변수를 활용해 Secret Backend 설정이 가능합니다. 그리고 `AIRFLOW__SECRETS__BACKEND__KWARGS` 환경변수를 활용하면 Connection, Variable의 prefix를 설정해두면 GCP Secret Manager에 prefix에 맞게 작성된 Secret들을 자동으로 불러오게 됩니다. 
-더 자세한 내용은 [여기](https://airflow.apache.org/docs/apache-airflow/1.10.10/howto/use-alternative-secrets-backend.html#aws-ssm-parameter-store-secrets-backend) 를 참고해주세요. 
+위와 같이 `AIRFLOW__SECRETS__BACKEND` 환경 변수를 활용해 Secret Backend 설정이 가능합니다. 그리고 `AIRFLOW__SECRETS__BACKEND__KWARGS` 환경 변수를 활용하면 Connection, Variable의 prefix를 설정해두면 GCP Secret Manager에 prefix에 맞게 작성된 Secret들을 자동으로 불러오게 됩니다. 
+더 자세한 내용은 [여기](https://airflow.apache.org/docs/apache-airflow/1.10.10/howto/use-alternative-secrets-backend.html#aws-ssm-parameter-store-secrets-backend)를 참고해 주세요. 
 
-### 4.3. RBAC 적용 (진행중)
+### 4.3. RBAC 적용 (진행 중)
 
 Airflow는 [RBAC(Rule Based Access Control)](https://airflow.apache.org/docs/apache-airflow/stable/security/access-control.html) 을 제공합니다. 
-기본적으로 제공해주는 Role(Admin, Public, Viewer 등) 뿐만 아니라 Resource, Dag Based Permission에 기반한 Custom Role을 만들 수도 있습니다.
+기본적으로 제공해 주는 Role(Admin, Public, Viewer 등) 뿐만 아니라 Resource, Dag Based Permission에 기반한 Custom Role을 만들 수도 있습니다.
 (저희 팀은 현재는 기본 Role에 기반해서 계정을 운영하고 있지만, 추후 액세스 패턴에 맞춰 Custom Role을 만들어 관리할 계획입니다.)
 
 사용자가 많아지면 Airflow 계정 관리도 중요해집니다. 현재 팀 별로 공용 계정을 운영하고 있는데 팀별 계정의 Role이 실제 사용 대비 여유롭게 권한을 부여한 부분이 있습니다. 이는 추후 문제가 발생했을 때 Audit이 힘들어질 수 있습니다.  
 
-Airflow의 [auth_backend](https://airflow.apache.org/docs/apache-airflow/stable/security/api.html) 를 활용하면 Airflow Auth API가 아닌 외부 인증 프레임워크를 사용할 수 있습니다. 현재 쏘카에서는 SSO로 [Keycloak](https://www.keycloak.org/)을 사용하고 있는데 ([참고 글 : Keycloak를 이용한 SSO 구축](https://tech.socarcorp.kr/security/2019/07/31/keycloak-sso.html)).
+Airflow의 [auth_backend](https://airflow.apache.org/docs/apache-airflow/stable/security/api.html)를 활용하면 Airflow Auth API가 아닌 외부 인증 프레임워크를 사용할 수 있습니다. 현재 쏘카에서는 SSO로 [Keycloak](https://www.keycloak.org/)을 사용하고 있는데 ([참고 글 : Keycloak를 이용한 SSO 구축](https://tech.socarcorp.kr/security/2019/07/31/keycloak-sso.html)).
 위 인증 문제를 해결하기 위해 Airflow 사용자 인증을 Keycloak으로 위임하는 방식을 검토 중에 있습니다. 사용자 별로 인증을 관리할 수 있다면 이후 Audit Log를 통해 문제 해결에 도움을 줄 수 있을 것입니다. 
 
 ## 5. 모니터링 고도화하기
@@ -638,21 +638,21 @@ Airflow의 [auth_backend](https://airflow.apache.org/docs/apache-airflow/stable/
 
 **사용자가 직접 Dag 오류에 대응할 수 있도록 합니다.**
     
-사용자가 늘어나고 운영하는 Dag의 갯수가 늘어나면서 관리자가 모든 Dag의 맥락을 파악하고 대응하기가 어려워졌습니다. 따라서 Dag 스케줄링, 런타임 오류 등의 1차적 책임은 Dag 사용자(혹은 팀)이 질 수 있도록 하는 것이 중요해졌습니다.
+사용자가 늘어나고 운영하는 Dag의 개수가 늘어나면서 관리자가 모든 Dag의 맥락을 파악하고 대응하기가 어려워졌습니다. 따라서 Dag 스케줄링, 런타임 오류 등의 1차적 책임은 Dag 사용자(혹은 팀)이 질 수 있도록 하는 것이 중요해졌습니다.
     
 **관리자가 더 다양한 지표들을 보고 모니터링할 수 있도록 합니다.**
     
-Airflow on K8s의 모니터링을 위해선 Airflow의 상태 뿐만 아니라 이를 실행하는 K8s 환경도 함께 모니터링 할 수 있어야 합니다. 또한 Dag에 대한 통계 정보(시계열 메트릭, 실패 추이 등) 를 보고 거시적으로 대응할 수 있도록 하는 것도 중요합니다. 
+Airflow on K8s의 모니터링을 위해선 Airflow의 상태뿐만 아니라 이를 실행하는 K8s 환경도 함께 모니터링할 수 있어야 합니다. 또한 Dag에 대한 통계 정보(시계열 메트릭, 실패 추이 등)를 보고 거시적으로 대응할 수 있도록 하는 것도 중요합니다. 
     
 
-### 5.2. Dag별 모니터링 담당자 지정
+### 5.2. Dag 별 모니터링 담당자 지정
 
 데이터 파이프라인을 직접 개발하기 위해 Airflow를 사용하는 경우들이 늘어났고, 현재 700개 이상의 Dag이 운영되고 있습니다. 이에 관리자는 모든 Dag을 관리하고 문맥을 파악하는 것이 힘들어졌습니다. 
 따라서 1차적으로 Dag 개발/동작에 대한 책임은 Dag 사용자(개발자)가 질 수 있도록 기반 모니터링 환경을 구축하였습니다(기본적인 Airflow 개발/관리 교육과 지원을 가정합니다)
 
-![user-slack-mention.png](/img/advanced-airflow-for-databiz/user-slack-mention.png)*실패한 Dag의 담당자를 태그하는 알람*
+![user-slack-mention.png](/img/advanced-airflow-for-databiz/user-slack-mention.png)*실패한 Dag의 담당자를 태그 하는 알람*
 
-정상적으로 스케줄되지 않은 Dag을 모아서 10분에 한 번씩 슬랙 채널에 알림을 주고 있습니다. 이때 즉각적으로 대응할 수 있도록 담당자를 멘션할 수 있도록 구현하였습니다. 이를 통해 실패한 Dag을 대응하는 속도가 빨라졌으며 관리자도 담당자를 찾고 대응하지 않아도 되기에 관리 비용을 줄일 수 있었습니다.
+정상적으로 스케줄 되지 않은 Dag을 모아서 10분에 한 번씩 슬랙 채널에 알림을 주고 있습니다. 이때 즉각적으로 대응할 수 있도록 담당자를 멘션 할 수 있도록 구현하였습니다. 이를 통해 실패한 Dag을 대응하는 속도가 빨라졌으며 관리자도 담당자를 찾고 대응하지 않아도 되기에 관리 비용을 줄일 수 있었습니다.
 
 ```python
 @dag(
@@ -732,21 +732,21 @@ class DAGAlertPayload:
         }
 ```
 
-위와 같이 10분 마다 Meta DB에서 실패한 Task를 Dag과 Join하여 쿼리한 후, 입력된 Owner 정보를 바탕으로 담당자 멘션을 하는 Slack Hook이 호출됩니다. 
+위와 같이 10분마다 Meta DB에서 실패한 Task를 Dag과 Join 하여 쿼리한 후, 입력된 Owner 정보를 바탕으로 담당자 멘션을 하는 Slack Hook이 호출됩니다. 
 
 슬랙 사용자 멘션을 위해선 유저의 ID 값이 필요합니다. 저희는 Dag의 Owner에 Email 정보를 필수로 받도록 하였으며(Github Action을 통해 PR 단계에서 검증합니다) 슬랙의 `[users.lookupByEmail](https://api.slack.com/methods/users.lookupByEmail)` API를 활용하여 해당 문제를 해결하였습니다.
 
 ### 5.3. 관리자 모니터링
 
-Airflow는 내부적으로 `statsd` 를 통해 Metric을 외부로 전송이 가능합니다. 대표적인 Metric으로는 Task Instance의 성공/실패 갯수, Dag Run의 Task 실행 시간, Dag Run의 스케줄 딜레이 시간 등이 있습니다. 더 자세한 내용은 [Airflow 공식 문서](https://airflow.apache.org/docs/apache-airflow/stable/logging-monitoring/metrics.html) 를 참고해주세요.
+Airflow는 내부적으로 `statsd`를 통해 Metric을 외부로 전송이 가능합니다. 대표적인 Metric으로는 Task Instance의 성공/실패 개수, Dag Run의 Task 실행 시간, Dag Run의 스케줄 딜레이 시간 등이 있습니다. 더 자세한 내용은 [Airflow 공식 문서](https://airflow.apache.org/docs/apache-airflow/stable/logging-monitoring/metrics.html)를 참고해 주세요.
 
 ![airflow-dashboard.png](/img/advanced-airflow-for-databiz/airflow-dashboard.png)*Datadog의 Airflow Dashboard*
 
 쏘카는 전사 모니터링 툴로 Datadog을 사용하고 있는데, Datadog에서 [Airflow Integration](https://docs.datadoghq.com/integrations/airflow/?tab=host) 을 제공하므로 손쉽게 주요 Airflow Metric을 대시보드로 확인할 수 있습니다. 저희는 Airflow 공식 차트를 통해 statsd 설정을 통해 Datadog과 연결하여 사용하고 있습니다. 
-Datadog에서 수집한 Metric들을 통해 저희가 집중해서 봐야 할 대상(e.g., 너무 오래 실행중인 Dag)을 알림으로 만들어 슬랙에서 확인이 가능하도록 하고 있습니다.
+Datadog에서 수집한 Metric들을 통해 저희가 집중해서 봐야 할 대상(e.g., 너무 오래 실행 중인 Dag)을 알림으로 만들어 슬랙에서 확인이 가능하도록 하고 있습니다.
 
 Kuberentes의 경우도 동일하게 Datadog을 활용하여 모니터링하고 있습니다. Kubernetes 전용 대시보드를 통해 기본 상태를 확인하고 있으며, Task의 Log(Remote Logging)가 제대로 남지 않는 문제가 발생했을 때 Pod Log를 보고 있습니다.
-현재 Kubernetes를 Managed Service인 GKE(Google Kubernetes Engine)로 사용하고 있는데, 간혹 Node가 갑자기 내려가서 Task가 실패하는 경우들도 발생하고 있습니다. 이 경우 Task의 로그가 제대로 남지 않아서 K8s Node의 상태와 기타 인프라 상황을 종합적으로 검토하여 문제를 해결하려고 시도중입니다.
+현재 Kubernetes를 Managed Service인 GKE(Google Kubernetes Engine)로 사용하고 있는데, 간혹 Node가 갑자기 내려가서 Task가 실패하는 경우들도 발생하고 있습니다. 이 경우 Task의 로그가 제대로 남지 않아서 K8s Node의 상태와 기타 인프라 상황을 종합적으로 검토하여 문제를 해결하려고 시도 중입니다.
 
 ## 6. 되돌아보기
 
@@ -754,11 +754,11 @@ Kuberentes의 경우도 동일하게 Datadog을 활용하여 모니터링하고 
 
 **사용자가 빠르게 원하는 데이터를 직접 수집/변형/적재할 수 있습니다.**
     
-데이터 웨어하우스/마트를 통해 팀원들이 데이터를 직접 사용하는 것을 넘어서 Airflow를 통해 데이터를 직접 수집/변형/적재하는 ETL 파이프라인 구축이 가능해졌습니다. 기존에 불편했던 개발 환경과 Dag 개발에 대한 러닝커브가 높았던 문제가 있었지만, 현재 팀 차원에서 Airflow 사용법에 대한 교육을 진행하고 쉽고 빠르게 개발할 수 있도록 개발 환경을 개선하고 있습니다. 
+데이터 웨어하우스/마트를 통해 팀원들이 데이터를 직접 사용하는 것을 넘어서 Airflow를 통해 데이터를 직접 수집/변형/적재하는 ETL 파이프라인 구축이 가능해졌습니다. 기존에 불편했던 개발 환경과 Dag 개발에 대한 러닝 커브가 높았던 문제가 있었지만, 현재 팀 차원에서 Airflow 사용법에 대한 교육을 진행하고 쉽고 빠르게 개발할 수 있도록 개발 환경을 개선하고 있습니다. 
     
 **안정적으로 Airflow 운영이 가능해졌습니다.**
     
-매니지드 서비스가 아닌 K8s Native 환경에서 Airflow를 운영하기 위해선 신경써야 할 부분들이 꽤 있습니다. K8s 관리/운영으로 시작해서 kubernetesExecutor의 동작 방식을 이해하고 최적화 방안도 계속 고민해야 합니다. K8s 인프라 환경에 대한 모니터링을 강화하고 있으며, Airflow를 지속적으로 업그레이드하고 유연하게 자원을 분배할 수 있도록 하여 Airflow 운영을 안정적으로 할 수 있게 됐습니다. 
+매니지드 서비스가 아닌 K8s Native 환경에서 Airflow를 운영하기 위해선 신경 써야 할 부분들이 꽤 있습니다. K8s 관리/운영으로 시작해서 kubernetesExecutor의 동작 방식을 이해하고 최적화 방안도 계속 고민해야 합니다. K8s 인프라 환경에 대한 모니터링을 강화하고 있으며, Airflow를 지속적으로 업그레이드하고 유연하게 자원을 분배할 수 있도록 하여 Airflow 운영을 안정적으로 할 수 있게 됐습니다. 
     
 **모니터링/보안 환경이 개선되었습니다.**
     
@@ -769,11 +769,11 @@ Kuberentes의 경우도 동일하게 Datadog을 활용하여 모니터링하고 
 
 ### 6.2 발전해야 할 점
 
-Airflow를 Docker Compose 환경으로 옮기면서 확실한 이점들이 있지만 아직까지 해결해야하는 문제들도 있습니다.
+Airflow를 Docker Compose 환경으로 옮기면서 확실한 이점들이 있지만 아직까지 해결해야 하는 문제들도 있습니다.
 
-- M1 호환 문제 : 데이터 본부 팀원들이 사용하는 MacOS는 Intel과 M1 두가지로 나뉩니다. 기존의 Intel은 Docker 호환에 크게 문제가 없지만 M1의 경우 특정 부분에서 호환이 안되는 이슈가 있으며, Airflow 의존성 일부가 제대로 설치되지 않는 문제들이 있습니다.
-- 추상화 개선 : 로컬 환경 사용에 대해 추상화를 해두었지만, 사용자들이 Python 환경(`poetry`, `pyenv`)과 Docker에 대해 알고 있어야 하며 파이썬 버전 이슈나 컨테이너 미종료 이슈 등을 마주칠 때가 있어 해결할 필요가 있습니다.
-- 의존성 간소화 : 파이썬 의존성을 하나 설치해서 운영까지 올리기 위해서는 3번의 의존성 설치가 필요합니다. Airflow 런타임에서는 Docker Compose에 의존성을 명시해줘야 하고, 개발하는 IDE에서 Type Hinting과 Auto Complete를 위해서 로컬 가상환경에 의존성을 설치해줘야 합니다. 또 운영 환경에 배포할 때는 Airflow 이미지 Dockerfile에 의존성을 추가해준 후 CI 파이프라인을 거쳐야 합니다. 따라서 이런 복잡한 의존성 관리 방식을 간소화할 필요가 있습니다.
+- M1 호환 문제 : 데이터 본부 팀원들이 사용하는 MacOS는 Intel과 M1 두 가지로 나뉩니다. 기존의 Intel은 Docker 호환에 크게 문제가 없지만 M1의 경우 특정 부분에서 호환이 안되는 이슈가 있으며, Airflow 의존성 일부가 제대로 설치되지 않는 문제들이 있습니다.
+- 추상화 개선 : 로컬 환경 사용에 대해 추상화를 해두었지만, 사용자들이 Python 환경(`poetry`, `pyenv`)과 Docker에 대해 알고 있어야 하며 파이썬 버전 이슈나 컨테이너 미 종료 이슈 등을 마주칠 때가 있어 해결할 필요가 있습니다.
+- 의존성 간소화 : 파이썬 의존성을 하나 설치해서 운영까지 올리기 위해서는 3번의 의존성 설치가 필요합니다. Airflow 런타임에서는 Docker Compose에 의존성을 명시해 줘야 하고, 개발하는 IDE에서 Type Hinting과 Auto Complete를 위해서 로컬 가상환경에 의존성을 설치해 줘야 합니다. 또 운영 환경에 배포할 때는 Airflow 이미지 Dockerfile에 의존성을 추가해 준 후 CI 파이프라인을 거쳐야 합니다. 따라서 이런 복잡한 의존성 관리 방식을 간소화할 필요가 있습니다.
 
 이 외에도 보안을 강화하는 동시에 사용성을 해치지 않는 방향으로 Secret Manager 사용 정책과 가이드를 세워야 하며 종종 Pod 로그를 남기지 않고 Task가 실패하는 이슈들이 있어 모니터링 환경을 더 개선하고 알림 정책을  개선할 필요가 있습니다. 
 
