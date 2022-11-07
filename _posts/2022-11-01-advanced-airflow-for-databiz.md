@@ -465,7 +465,42 @@ Data Freshness는 데이터가 얼마나 최신 상태인가를 나타냅니다.
 
 Airflow 2로 마이그레이션하면서 1버전과 호환성이 깨지는 부분들이 다소 있었고 이를 해결하는데 시간이 꽤 소요됐습니다. 하지만 마이그레이션 한 후 Airflow의 스케줄링 퍼포먼스가 올라갔으며 Task/Dag 간의 의존관계가 복잡하거나 코드가 복잡한 경우도 제공되는 API를 잘 활용하여 코드 퀄리티를 높일 수 있었습니다.
 
-### 3.3. 고가용성 설정
+### 3.3. 스케줄러 성능 최적화를 위한 Configuration 설정 
+Airflow는 Scheduler, Webserver의 성능을 [Configuration](https://airflow.apache.org/docs/apache-airflow/stable/configurations-ref.html#) 을 통해 설정할 수 있도록 지원합니다.
+팀에서도 많은 Dag들을 운영하는 과정에서 스케줄러 성능에 대한 고민과 변경을 지속하였습니다.   
+
+`AIRFLOW__CORE__PARALLELISM`  
+- 스케줄러 당 동시에 스케줄링 가능한 DagRun 갯수에 대한 설정입니다 (기본 값: 32)
+- 병렬 처리를 위해 기존보다 갯수를 높게 설정했습니다.
+
+`AIRFLOW__SCHEDULER__PARSING_PROCESSES`
+- 스케줄러가 Dag 파일을 파싱할 때 사용할 Process 갯수에 대한 설정입니다 (기본 값: 2)
+- 스케줄러 HA를 적용하기도 했고, cpu 사용량에 비해 기대효과가 잘 나오지는 않아서 기존 값을 유지하였습니다.
+
+`AIRFLOW__SCHEDULER__MIN_FILE_PROCESS_INTERVAL`  
+- 스케줄러가 Dag File을 파싱하는 주기(초)에 대한 설정입니다 (기본 값: 30)
+- Parsing 시 CPU 사용량이 높아져서 기존보다 주기를 높게 설정하였습니다.
+
+`AIRFLOW__SCHEDULER__POOL_METRICS_INTERVAL`  
+- [pool](https://airflow.apache.org/docs/apache-airflow/stable/concepts/pools.html) 사용량을 StatSD로 보내는 주기에 대한 설정입니다 (기본 값: 5)  
+- 공식 문서에 상대적으로 비싼 쿼리라고 명시되어 있어, 기존보다 주기를 높게 설정하였습니다. 
+
+Scheduler의 상태를 모니터링하면서 지속적으로 스케줄링 지연 현상이 발생하면, 아래 Configuration도 함께 조정할 계획입니다. 
+
+`AIRFLOW__KUBERNETES__WORKER_PODS_CREATION_BATCH_SIZE`  
+- 스케줄러가 한 번 루프를 돌 때 Worker Pod 최대 생성 갯수에 대한 설정입니다.  
+- 기본 값은 `1`이며 `KubernetesExecutor`를 사용할 때 더 높은 퍼포먼스를 기대할 수 있습니다.   
+
+`AIRFLOW__SCHEDULER__MAX_DAGRUNS_PER_LOOP_TO_SCHEDULER`  
+- 스케줄러가 한 번 루프를 돌 때 얼마나 많은 DagRun들을 처리할지에 대한 설정입니다 (기본 값: 20)
+
+`AIRFLOW__SCHEDULER__MAX_DAGRUNS_TO_CREATE_PER_LOOP`  
+- 스케줄러가 한 번 루프를 돌 때 얼마나 많은 Dag이 DagRun을 생성하게 할지에 대한 설정입니다 (기본 값: 10)
+
+
+스케줄러 성능 튜닝에 대해 더 자세하게 알고 싶다면 
+[공식 문서](https://airflow.apache.org/docs/apache-airflow/stable/concepts/scheduler.html#fine-tuning-your-scheduler-performance) 와 [Astronomer 블로그 문서](https://docs.astronomer.io/learn/airflow-scaling-workers) 를 읽어보세요. 
+### 3.4. 고가용성 설정
 
 Airflow 2에서는 Scheduler HA 설정이 가능합니다. 즉 복수개의 Scheduler를 통해 Dag 스케줄링 지연을 개선할 수 있습니다. 저희는 [공식 Helm Chart](https://github.com/apache/airflow/tree/main/chart) 를 사용하고 있기에 손쉽게 HA 설정을 하였습니다.
 
@@ -586,7 +621,7 @@ K8s의 경우 [external Secret](https://external-secrets.io/latest/) 과 함께 
 보안 정보들을 분리하려면 Airflow 사용자들의 보안에 대한 인지가 필요하고 이를 CI 레벨에서 막을 수 있도록 하는 장치도 필요합니다. 현재 저희는 사용자가 암호화된 정보를 직접 저장하고 관리할 수 있도록 프로세스를 구축하고 있으며, 보안 정보들을 감지할 수 있도록 돕는 [GitGuardian Action](https://github.com/marketplace/actions/gitguardian-shield-action) 같은 오픈소스를 검토중에 있습니다. 
 
 
-### Secret Backend 적용을 통해 하드코딩된 Connection, Variable을 옮기기
+####  Secret Backend 적용을 통해 하드코딩된 Connection, Variable을 옮기기
 
 Airflow에서는 [Secret Backend](https://airflow.apache.org/docs/apache-airflow/stable/security/secrets/secrets-backend/index.html) 로 GCP Secret Manager, vault 등 시크릿 관리 툴을 설정할 수 있도록 지원합니다. 위에서 언급한 것처럼 GCP Secret Manager를 Secret Backend로 사용하여 Connection, Variable을 암호화하여 사용하고 있습니다.
 
