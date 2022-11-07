@@ -15,7 +15,7 @@ tags:
 
 안녕하세요. 데이터 플랫폼 팀의 그랩입니다. 
 
-데이터 플랫폼팀은 **“쏘카 내부의 데이터 이용자가 비즈니스에 임팩트를 낼 수 있도록 소프트웨어 엔지니어링에 기반하여 문제를 해결합니다”** 라는 미션을 기반으로 인프라, 데이터 파이프라인 개발, 운영, 모니터링, 데이터 애플리케이션 개발, MLOps 등의 업무를 맡고 있습니다. 팀 구성원들은 모두가 소프트웨어 엔지니어라는 사명감을 가지고 개발 뿐만 아니라 Ops에 대한 이해와 책임감을 가지고 업무에 임하고 있습니다.
+데이터 플랫폼팀은 **“쏘카 내부의 데이터 이용자가 비즈니스에 임팩트를 낼 수 있도록 소프트웨어 엔지니어링에 기반하여 문제를 해결합니다”**라는 미션을 기반으로 인프라, 데이터 파이프라인 개발, 운영, 모니터링, 데이터 애플리케이션 개발, MLOps 등의 업무를 맡고 있습니다. 팀 구성원들은 모두가 소프트웨어 엔지니어라는 사명감을 가지고 개발뿐만 아니라 Ops에 대한 이해와 책임감을 가지고 업무에 임하고 있습니다.
 
 본 글에서는 데이터 플랫폼 팀에서 운영하는 Airflow에 대해 소개하려고 합니다. 
 데이터 엔지니어 위주로 사용하던 초기와 달리 현재는 데이터 비즈니스 본부 구성원 모두가 Airflow를 활용하여 직접 파이프라인을 구축할 수 있습니다. 
@@ -36,11 +36,11 @@ tags:
 5. 모니터링 고도화하기
 6. 되돌아보기
 
-> Airflow에 대한 히스토리가 길고 다루는 내용들이 많다 보니 모든 과정을 상세하게 적지는 못했습니다. 댓글로 질문 편하게 남겨주시면 답변 드리겠습니다.)
+> Airflow에 대한 히스토리가 길고 다루는 내용들이 많다 보니 모든 과정을 상세하게 적지는 못했습니다. 댓글로 질문 편하게 남겨주시면 답변드리겠습니다.)
 
 ## 1. 쏘카의 Airflow 현황과 문제점  
 
-데이터 파이프라인을 구축할 때 꼭 빠지지 않는 구성요소가 있습니다. 바로 `Airflow` 입니다. Airflow는 Airbnb에서 개발한 워크플로우 관리 오픈소스로 현재 많은 기업에서 데이터 파이프라인을 자동화할 때 사용하는 툴입니다. 
+데이터 파이프라인을 구축할 때 꼭 빠지지 않는 구성요소가 있습니다. 바로 `Airflow`입니다. Airflow는 Airbnb에서 개발한 워크플로우 관리 오픈소스로 현재 많은 기업에서 데이터 파이프라인을 자동화할 때 사용하는 툴입니다. 
 
 ### 1.1. Airflow in Socar
 
@@ -57,14 +57,14 @@ tags:
 쏘카의 데이터 플랫폼/애플리케이션들은 대부분 GKE(Google Kubernetes Engine) 환경에서 동작하고 있습니다. 개발 편의성을 위해서 운영/개발 환경 별로 클러스터를 분리하여 사용하고 있으며, Airflow도 운영 환경과 개발 환경이 분리되어 있습니다. 
 Airflow Github Repository의 Branch 이름이 특정 조건을 만족하면 CI/CD 파이프라인을 거쳐서 개발 클러스터에 Branch 별로 Airflow 서비스가 독립적으로 생성됩니다.
 
-과거 Airflow 사용자는 Dag을 생성/변경하기 위해서 기본적으로 `feature` Branch를 생성하여 변경 커밋을 원격 Branch에 푸시하였습니다. 그러면 Git Sync를 통해 Airflow에 Dag이 동기화되어 테스트가 가능했습니다.
+과거 Airflow 사용자는 Dag을 생성/변경하기 위해서 기본적으로 `feature` Branch를 생성하여 변경 커밋을 원격 Branch에 푸시 하였습니다. 그러면 Git Sync를 통해 Airflow에 Dag이 동기화되어 테스트가 가능했습니다.
 
 > 쏘카의 Airflow On K8s 운영에 대해 더 궁금하시다면 [쏘카 데이터 그룹 - Airflow와 함께한 데이터 환경 구축기](https://tech.socarcorp.kr/data/2021/06/01/data-engineering-with-airflow.html)를 읽어보세요.
 
 
 ### 1.2. 문제점
 
-사용자들에게 독립된 Airflow 개발환경을 구성해준 것은 큰 장점이었습니다. 운영과 분리된 환경에서 테스트가 가능하였으며 Github을 SoT(Source of Truth)로 삼아 코드 퀄리티 관리가 용이하였습니다.
+사용자들에게 독립된 Airflow 개발 환경을 구성해 준 것은 큰 장점이었습니다. 운영과 분리된 환경에서 테스트가 가능하였으며 Github을 SoT(Source of Truth)로 삼아 코드 퀄리티 관리가 용이하였습니다.
 하지만 기존 방식의 Airflow는 아래와 같은 문제점들이 있었습니다.
 1. 개발 환경의 Airflow의 에러 발생 및 관리자/컴퓨팅 리소스 낭비
 2. 많은 사용자들이 사용하기엔 불친절한 개발 환경, 긴 피드백 루프
@@ -74,7 +74,7 @@ Airflow Github Repository의 Branch 이름이 특정 조건을 만족하면 CI/C
 
 **문제점 1 - 개발 환경의 Airflow의 에러 발생 및 관리자/컴퓨팅 리소스 낭비**
 
-개발 환경의 Airflow는 Github Branch를 기반으로 생애주기가 결정됩니다. 따라서 사용자가 작업을 완료하고 Branch를 삭제하면 개발 환경의 Airflow는 함께 내려가게 됩니다. 그러나 사용자는 Branch를 만들고 작업하다가 중간에 다른 작업을 하는 경우들이 많았고, 이에 Airflow는 계속 유휴 상태로 남아있어 K8s Node의 자원을 차지하였습니다.
+개발 환경의 Airflow는 Github Branch를 기반으로 생애 주기가 결정됩니다. 따라서 사용자가 작업을 완료하고 Branch를 삭제하면 개발 환경의 Airflow는 함께 내려가게 됩니다. 그러나 사용자는 Branch를 만들고 작업하다가 중간에 다른 작업을 하는 경우들이 많았고, 이에 Airflow는 계속 유휴 상태로 남아있어 K8s Node의 자원을 차지하였습니다.
 
 ![argocd-many-airflows.png](/img/advanced-airflow-for-databiz/argocd-many-airflows.png)*다수의 사용자가 개발 환경에서 만든 Airflow가 남아있는 모습*
 
@@ -84,7 +84,7 @@ Airflow Github Repository의 Branch 이름이 특정 조건을 만족하면 CI/C
 **문제점 2 - 많은 사용자들이 사용하기엔 불친절한 개발 환경, 긴 피드백 루프**
 
 개발 환경의 Airflow는 Git Sync를 통해 Github Repository의 코드를 동기화합니다. 
-사용자가 Dag를 수정할 때마다 Push를 해야 하는데, 운영하는 Dag의 갯수들이 많다 보니 동기화 시간이 1분 이상 걸리는 경우들이 많았습니다. 
+사용자가 Dag를 수정할 때마다 Push를 해야 하는데, 운영하는 Dag의 개수들이 많다 보니 동기화 시간이 1분 이상 걸리는 경우들이 많았습니다. 
 이런 상황에서 사용자가 코드를 작성하면서 계속해서 동작 확인을 하기 위해선 매번 1분 이상 기다려야 했습니다. 이는 피드백 루프와 개발 시간이 길어진다는 것을 의미합니다. 
 
 ![git-sync-many-commits.png](/img/advanced-airflow-for-databiz/git-sync-many-commits.png)*Airflow 커밋 히스토리가 불필요하게 길어지기도 합니다.*
@@ -93,8 +93,8 @@ Airflow Github Repository의 Branch 이름이 특정 조건을 만족하면 CI/C
 
 **문제점 3 - Airflow 1 버전의 고질적인 문제들**
 
-기존 1 버전대 Airflow는 Dag 갯수가 늘어나면 Dag Parsing 시간이 오래 걸리는 치명적인 문제가 있었습니다. 그때 당시 쏘카에서 운영하는 Dag은 수백 개였고 점점 Dag이 늘어날 때마다 Task Instance들의 스케줄링이 점점 밀리게 되었습니다.
-그리고 Dag Parsing 프로세스가 백그라운드에서 동작하고 있다보니 웹에 접근했을 때 속도가 느린 편이었습니다.
+기존 1 버전 대 Airflow는 Dag 개수가 늘어나면 Dag Parsing 시간이 오래 걸리는 치명적인 문제가 있었습니다. 그때 당시 쏘카에서 운영하는 Dag은 수백 개였고 점점 Dag이 늘어날 때마다 Task Instance들의 스케줄링이 점점 밀리게 되었습니다.
+그리고 Dag Parsing 프로세스가 백그라운드에서 동작하고 있다 보니 웹에 접근했을 때 속도가 느린 편이었습니다.
 그때 당시 K8s Node의 자원을 스케일 업해봤지만 크게 개선되는 부분은 없었고 단순 스케일 업보다는 조금 더 근본적인 해결책이 필요했습니다.
 
 **문제점 4 - 코드 보안에 취약하고, 사용자 개인에 대한 권한 체계 부족**
@@ -127,7 +127,7 @@ Airflow를 운영하면서 드러난 문제들을 개선하기 위해 아래와 
 
 **사용자들이 빠르게 개발할 수 있도록 지원하고 Dag 개발 이외의 관심사를 최대한 분리할 수 있도록 합니다.**
     
-데이터 플랫폼을 운영하기 위해선 시스템을 개발/유지보수하는 것을 넘어서 고객을 이해하고 플랫폼을 지속해서 개선해나가는 것이 중요합니다. 
+데이터 플랫폼을 운영하기 위해선 시스템을 개발/유지 보수하는 것을 넘어서 고객을 이해하고 플랫폼을 지속해서 개선해나가는 것이 중요합니다. 
 특히 쏘카의 데이터 분석가, 데이터 사이언티스트 등 프로그래밍에 익숙하지 않은 팀원들에게 Airflow 사용의 러닝 커브를 낮춰주는 것이 중요합니다. 
 
 또한 Airflow를 사용하기 위해서 사용자가 Airflow 구성요소와 인프라 등을 전부 이해할 필요는 없습니다. 
@@ -141,7 +141,7 @@ Airflow를 운영하면서 드러난 문제들을 개선하기 위해 아래와 
 
 ### 2.2. 로컬 개발 환경 구축
 
-기존 Airflow 개발 환경은 Airflow의 생애주기가 Branch에 의존적이기 때문에 Branch가 남아있다면 자원을 유휴상태로 낭비하는 경우들이 많았습니다. 또한 Branch가 삭제되었을 때 CI/CD 파이프라인의 이슈로 Airflow가 제대로 삭제되지 않는 문제들이 있었습니다. 
+기존 Airflow 개발 환경은 Airflow의 생애 주기가 Branch에 의존적이기 때문에 Branch가 남아있다면 자원을 유휴상태로 낭비하는 경우들이 많았습니다. 또한 Branch가 삭제되었을 때 CI/CD 파이프라인의 이슈로 Airflow가 제대로 삭제되지 않는 문제들이 있었습니다. 
 그리고 K8s + Git Sync 조합은 Dag이 많을수록 동기화 속도가 느려져서 피드백 루프와 개발 속도의 저하를 유발했습니다.
 
 그래서 **개발 환경을 노트북(로컬 환경)에서 쉽게 구축할 수 있다면 생산성이 더 높아질 것이라고 판단하였습니다.** 기본적으로 Docker는 OS에 크게 상관없이 표준을 따르기 때문에 로컬 환경에 **Docker Compose**를 띄워서 개발 환경을 개선하는 작업을 진행했습니다. 
@@ -157,7 +157,7 @@ Airflow를 운영하면서 드러난 문제들을 개선하기 위해 아래와 
 
 #### Docker Compose로 각 컴포넌트 띄우기
 
-`docker-compose` 로컬 환경 구축을 진행 할 때 기본 Airflow 컴포넌트들은 각각 Image로 나눠서 띄웠습니다. 
+`docker-compose` 로컬 환경 구축을 진행할 때 기본 Airflow 컴포넌트들은 각각 Image로 나눠서 띄웠습니다. 
 기본적으로 공식 Airflow의 [docker-compose 파일](https://airflow.apache.org/docs/apache-airflow/2.4.1/docker-compose.yaml) 을 참고하였고, 추가로 저희 상황에 맞게 의존성을 추가하였습니다. 
 
 ```yaml
@@ -199,7 +199,7 @@ services:
 
 기본적으로 Airflow는 GCP 리소스(BigQuery, Secret Manager, GKE 등)에 접근하는 경우가 많기에, 로컬에서 개발할 때 권한 관리가 필요합니다. 이런 인중 문제는 개인 별 Service Account 발급을 통해 해결하였습니다. 
 
-현재 GCP의 전체적 운영은 데이터 플랫폼 팀에서 담당하고 있습니다. GCP IAM은 팀 단위의 역할에 맞게 Custom Role을 만들어 관리하고 있으며, 사용자 별 Service Account는 해당 팀의 Role에 바인딩되어 있습니다. 사용자가 Airflow 개발을 필요로할 때 데이터 플랫폼 팀에서 Service Account 발급을 해줍니다. 
+현재 GCP의 전체적 운영은 데이터 플랫폼 팀에서 담당하고 있습니다. GCP IAM은 팀 단위의 역할에 맞게 Custom Role을 만들어 관리하고 있으며, 사용자별 Service Account는 해당 팀의 Role에 바인딩 되어 있습니다. 사용자가 Airflow 개발을 필요로 할 때 데이터 플랫폼 팀에서 Service Account 발급을 해줍니다. 
 
 ![service-account-one-key.png](/img/advanced-airflow-for-databiz/service-account-one-key.png)*Service Account 활용 구조*
 
@@ -208,17 +208,17 @@ services:
 #### KubernetesPodOperator를 테스트할 수 있는 환경 구축
 
 현재 쏘카의 Airflow는 `KubernetesExecutor`를 사용하고 있습니다. KubernetesExecutor의 장점 중 하나는 `KubernetesPodOperator`를 통해 사용자가 직접 정의한 컨테이너 이미지를 Pod 형태로 독립적 수행이 가능하다는 점입니다. 
-사용자가 정의한 이미지에는 의존성을 별도로 설치할 수 있고 Airflow Dag 레포에 종속되지 않기에, 저희 팀에서도 자주 활용하고 있습니다. (KubernetesExecutor에 대해서 더 궁금하다면 [여기](https://airflow.apache.org/docs/apache-airflow/stable/executor/kubernetes.html) 를 참고해주세요)  
+사용자가 정의한 이미지에는 의존성을 별도로 설치할 수 있고 Airflow Dag 레포에 종속되지 않기에, 저희 팀에서도 자주 활용하고 있습니다. (KubernetesExecutor에 대해서 더 궁금하다면 [여기](https://airflow.apache.org/docs/apache-airflow/stable/executor/kubernetes.html)를 참고해 주세요)  
 
-KubernetesExecutor에서 실행하는 일반적인 Operator(PythonOperator, BigqueryOperator, etc)는 Pod 형태로 수행되며, 이는 로컬 환경인 LocalExecutor 수행방식(Scheduler Process에서 Task를 실행)으로 대체해도 수행이 가능합니다.  
+KubernetesExecutor에서 실행하는 일반적인 Operator(PythonOperator, BigqueryOperator, etc)는 Pod 형태로 수행되며, 이는 로컬 환경인 LocalExecutor 수행 방식(Scheduler Process에서 Task를 실행)으로 대체해도 수행이 가능합니다.  
 하지만 KubernetesPodOperator의 경우 컨테이너 이미지를 Pod에서 수행하다 보니 LocalExecutor로 해당 태스크를 수행하는 것이 불가능합니다. 현재 쏘카에서 KubernetesPodOperator를 많이 사용하고 있는데, 해당 기능 테스트를 제한한다면 사용자 경험을 해칠 것입니다. 
 
-처음에 이 문제를 해결하기 위해서 컨테이너 형태로 태스크를 수행할 수 있는 `DockerOperator`를 활용해보면 어떨까 생각하였습니다. 로컬 환경에서는 DockerOperator, 운영 환경에서는 KubernetesPodOperator를 수행하는 팩토리 형태의 Operator를 만드는 방식을 고민해봤습니다.
+처음에 이 문제를 해결하기 위해서 컨테이너 형태로 태스크를 수행할 수 있는 `DockerOperator`를 활용해 보면 어떨까 생각하였습니다. 로컬 환경에서는 DockerOperator, 운영 환경에서는 KubernetesPodOperator를 수행하는 팩토리 형태의 Operator를 만드는 방식을 고민해 봤습니다.
 하지만 두 오퍼레이터의 시그니처(속성)가 다른 부분이 꽤 있었으며 개발하더라도 본질적인 문제 해결이 아니라고 판단하였습니다.  
 
 *고민 끝에 결국 개발 환경의 Kubernetes Cluster에 직접 연결해서 Pod을 띄우는 방식으로 문제를 해결하였습니다*.  
 
-여기서 제일 신경썼던 부분은 사용자가 쿠버네티스를 알지 못해도 동작할 수 있도록 추상화를 하는 것입니다. 
+여기서 제일 신경 썼던 부분은 사용자가 쿠버네티스를 알지 못해도 동작할 수 있도록 추상화를 하는 것입니다. 
 로컬에서는 기본적으로 KubernetesPodOperator를 실행하게 되면, Service Account 기반의 K8s 인증을 한 후 미리 생성한 Namespace(Local 전용 Namespace)에 Pod을 띄울 수 있도록 하였습니다.  
 
 ![k8s-auth.png](/img/advanced-airflow-for-databiz/k8s-auth.png)*로컬 Airflow 환경에서 개발 클러스터를 이용하는 방식*
@@ -273,9 +273,9 @@ KubernetesExecutor에서 실행하는 일반적인 Operator(PythonOperator, Bigq
 
 #### Dag 파싱 효율화를 위한 .airflowignore 활용
 
-Dag 갯수가 늘어나게 되면 Scheduler는 모든 Dag을 파싱하기까지 시간이 오래 걸리며 컴퓨팅 자원을 많이 소비하게 됩니다. 따라서 개발중인 Dag들만 Parsing할 수 있다면 자원을 아끼고 개발 시간을 단축할 수 있습니다.
+Dag 개수가 늘어나게 되면 Scheduler는 모든 Dag을 파싱 하기까지 시간이 오래 걸리며 컴퓨팅 자원을 많이 소비하게 됩니다. 따라서 개발 중인 Dag들만 Parsing 할 수 있다면 자원을 아끼고 개발 시간을 단축할 수 있습니다.
 
-`.airflowignore`를 활용하여 Glob 패턴으로 특정 디렉토리를 제외하고는 Parsing이되지 않도록 설정할 수 있습니다. 
+`.airflowignore`를 활용하여 Glob 패턴으로 특정 디렉토리를 제외하고는 Parsing이 되지 않도록 설정할 수 있습니다. 
 그리고 사용자가 로컬 환경에서 개발할 때 해당 디렉토리 (e.g., _development 폴더)에서 개발하도록 README를 통해 가이드를 주었습니다. 
 
 ```bash
@@ -284,15 +284,15 @@ Dag 갯수가 늘어나게 되면 Scheduler는 모든 Dag을 파싱하기까지 
 ^((?!_development).)*$
 ```
 
-(`.airflowignore`에 대한 내용은 [Airflow 공식 문서](https://airflow.apache.org/docs/apache-airflow/stable/concepts/dags.html#airflowignore) 를 참고해주세요)
+(`.airflowignore`에 대한 내용은 [Airflow 공식 문서](https://airflow.apache.org/docs/apache-airflow/stable/concepts/dags.html#airflowignore)를 참고해 주세요)
 
 ### 2.3. 테스트 환경 구축
 
-신뢰성있는 소프트웨어를 운영하기 위해선 테스트는 선택이 아닌 필수입니다. 테스트 작성 및 자동화를 통해 많은 사용자들이 개입하는 코드베이스의 안전성을 높일 수 있으며 코드 퀄리티를 높게 유지할 수 있습니다.
+신뢰성 있는 소프트웨어를 운영하기 위해선 테스트는 선택이 아닌 필수입니다. 테스트 작성 및 자동화를 통해 많은 사용자들이 개입하는 코드 베이스의 안전성을 높일 수 있으며 코드 퀄리티를 높게 유지할 수 있습니다.
 
 #### 테스트 코드 작성
 
-수많은 Dag에 대해 모두 테스트 코드를 작성하기 보다는 변경된 Dag 파일을 대상으로 Dag 문법 검사 및 일부 포맷 검사를 하는 방식으로 테스트 코드를 작성했습니다. 이를 위해선 커밋에서 변경된 Dag들을 대상으로 문법에 맞게 잘 작성되었는지 `dagbag`을 활용했습니다. 
+수많은 Dag에 대해 모두 테스트 코드를 작성하기보다는 변경된 Dag 파일을 대상으로 Dag 문법 검사 및 일부 포맷 검사를 하는 방식으로 테스트 코드를 작성했습니다. 이를 위해선 커밋에서 변경된 Dag들을 대상으로 문법에 맞게 잘 작성되었는지 `dagbag`을 활용했습니다. 
 
 - 변경되는 파일을 추출하여 테스트를 실행하는 스크립트
     
@@ -308,7 +308,7 @@ Dag 갯수가 늘어나게 되면 Scheduler는 모든 Dag을 파싱하기까지 
     PYTHONPATH=. files=$staged_files python -m pytest tests/test_dag_bag.py
     ```
     
-- pytest의 `monkeypatch`을 활용해 외부 의존성(Service Account, BaseHook 등)을 mocking합니다.
+- pytest의 `monkeypatch`을 활용해 외부 의존성(Service Account, BaseHook 등)을 mocking 합니다.
     
     ```python
     @pytest.fixture
@@ -357,14 +357,14 @@ Dag 갯수가 늘어나게 되면 Scheduler는 모든 Dag을 파싱하기까지 
             dag = list(dagbag.dags.values())[0]
             for task in dag.tasks:
                 if task.task_type in POD_OPERATOR_LIST:
-                    assert task.in_cluster is not False, f"{task.task_type}의 in_cluster 속성을 삭제해주세요"
-                    assert task.config_file is not None, f"{task.task_type}의 config_file 속성을 삭제해주세요"
+                    assert task.in_cluster is not False, f"{task.task_type}의 in_cluster 속성을 삭제해 주세요"
+                    assert task.config_file is not None, f"{task.task_type}의 config_file 속성을 삭제해 주세요"
     
     ...
     ```
     
 
-이 외에도 팀에서 직접 만든 Operator나 Helper 코드에 대한 테스트를 작성중에 있습니다.
+이 외에도 팀에서 직접 만든 Operator나 Helper 코드에 대한 테스트를 작성 중에 있습니다.
 
 #### Github Action을 통한 테스트 자동화
 
@@ -381,15 +381,15 @@ Dag 갯수가 늘어나게 되면 Scheduler는 모든 Dag을 파싱하기까지 
 
  
 
-운영 환경으로 머지되는 모든 Pull Request는 위 워크플로우를 통과하고 한 명 이상의 리뷰어의 승인이 있어야 머지될 수 있도록 설정하였습니다. 
+운영 환경으로 머지되는 모든 Pull Request는 위 워크플로우를 통과하고 한 명 이상의 리뷰어의 승인이 있어야 머지 될 수 있도록 설정하였습니다. 
 
 ### 2.4. 사용자의 Airflow 러닝 커브를 낮추기 위한 시도들
 
-처음 Airflow를 사용한다면 Dag, Task를 작성하는 방법부터 시작해서, 컨벤션에 맞게 코드를 작성하는 것은 난이도가 높을 수 있습니다. 따라서 사용자가 최대한 빠르게 온보딩할 수 있도록 문서화 및 교육을 진행하였습니다. 
+처음 Airflow를 사용한다면 Dag, Task를 작성하는 방법부터 시작해서, 컨벤션에 맞게 코드를 작성하는 것은 난도가 높을 수 있습니다. 따라서 사용자가 최대한 빠르게 온보딩 할 수 있도록 문서화 및 교육을 진행하였습니다. 
 
 #### Airflow 환경 설치 & 개발 가이드 등 문서화
 
-Airflow 로컬 환경 구축 가이드(Docker, Python 환경 등)을 시작으로 트러블슈팅, 개발 가이드 등을 문서화하여 기존 사용자와 신규 입사자가 더 빠르게 Airflow에 온보딩할 수 있도록 하였습니다.
+Airflow 로컬 환경 구축 가이드(Docker, Python 환경 등)을 시작으로 트러블슈팅, 개발 가이드 등을 문서화하여 기존 사용자와 신규 입사자가 더 빠르게 Airflow에 온보딩 할 수 있도록 하였습니다.
 
 ![airflow-user-guide.png](/img/advanced-airflow-for-databiz/airflow-user-guide.png)*사내 Airflow 이용자를 위해 만든 가이드*
 
@@ -402,15 +402,15 @@ Airflow 기본 개념부터 Dag 작성법과 각종 Operator 사용법 등을 �
 
 ![semina-survey.png](/img/advanced-airflow-for-databiz/semina-survey.png)*Airflow 사내 세미나 후기*
 
-#### 오피스아워, 슬랙 문의 채널 운영 등을 통해 개발 서포트
+#### 오피스 아워, 슬랙 문의 채널 운영 등을 통해 개발 서포트
 
-데이터 플랫폼 팀에서는 격주 오피스아워를 통해 Airflow, MLOps Platform 등 데이터 플랫폼을 사용하면서 생기는 문제들을 자유롭게 질문할 수 있도록 하고 있습니다. 또한 슬랙 문의 채널을 통해 데이터 플랫폼 이용 관련 질문들을 할 수 있도록 하여 사용하는데 불편함이 없도록 최대한 서포트하고 있습니다
+데이터 플랫폼 팀에서는 격주 오피스 아워를 통해 Airflow, MLOps Platform 등 데이터 플랫폼을 사용하면서 생기는 문제들을 자유롭게 질문할 수 있도록 하고 있습니다. 또한 슬랙 문의 채널을 통해 데이터 플랫폼 이용 관련 질문들을 할 수 있도록 하여 사용하는데 불편함이 없도록 최대한 서포트하고 있습니다
 
 ![dp-office-hour.png](/img/advanced-airflow-for-databiz/dp-office-hour.png)*데이터 플랫폼팀 오피스 아워 페이지*
 
 #### makefile 활용해서 쉽게 명령어들 사용할 수 있도록 구성
 
-사용자가 Airflow를 더 편하게 사용할 수 있도록 주요 명령어를 Shell Script 기반으로 작성하고 Makefile 커맨드를 활용하도록 가이드하였습니다. 
+사용자가 Airflow를 더 편하게 사용할 수 있도록 주요 명령어를 Shell Script 기반으로 작성하고 Makefile 커맨드를 활용하도록 가이드 하였습니다. 
 
 ```makefile
 project_flag=-p local-airflow
@@ -420,16 +420,16 @@ project_flag=-p local-airflow
 PROJECT_ROOT_RELATIVE_PATH=.
 PYTHONPATH=.
 
-install: ## ♻️ 로컬 에어플로우 의존성을 설치합니다.
+install: ## ♻ 로컬 Airflow 의존성을 설치합니다.
 	@bash scripts/install.sh
-local-airflow: ## 📍 로컬에 에어플로우를 띄웁니다.
+local-airflow: ## 📍 로컬에 Airflow를 띄웁니다.
 	@bash scripts/run-local.sh
 clean-up: ## 🌬 Airflow 환경을 초기화합니다.
 	@bash scripts/clean-up.sh
 ...
 ```
 
-[//]: # (![make-script.png]&#40;/img/advanced-airflow-for-databiz/make-script.png&#41;*make install 로 간단히 로컬 Airflow 의존성을 설정하는 모습*)
+[//]: # (![make-script.png](/img/advanced-airflow-for-databiz/make-script.png)*make install로 간단히 로컬 Airflow 의존성을 설정하는 모습*)
 
 ---
 
@@ -439,16 +439,16 @@ clean-up: ## 🌬 Airflow 환경을 초기화합니다.
 
 **Data Freshness를 항상 유지할 수 있도록 합니다.**
     
-Data Freshness는 데이터가 얼마나 최신 상태인가를 나타냅니다. Airflow는 배치 데이터 파이프라인의 오케스트레이션 툴인 만큼 단일 실패 지점(SPOF, Single Point Of Failure)이 되기도 합니다. 만약 Airflow가 모종의 이유로 중단될 경우 제 시간에 데이터가 적재되지 않을 것이며 이는 Data Freshness를 유지하기가 어려워집니다. 따라서 Airflow의 신뢰성을 높이고 지속적으로 퍼포먼스를 확인하고 개선하는 것이 필요합니다. 
+Data Freshness는 데이터가 얼마나 최신 상태인가를 나타냅니다. Airflow는 배치 데이터 파이프라인의 오케스트레이션 툴인만큼 단일 실패 지점(SPOF, Single Point Of Failure)이 되기도 합니다. 만약 Airflow가 모종의 이유로 중단될 경우 제시간에 데이터가 적재되지 않을 것이며 이는 Data Freshness를 유지하기가 어려워집니다. 따라서 Airflow의 신뢰성을 높이고 지속적으로 퍼포먼스를 확인하고 개선하는 것이 필요합니다. 
     
 
 ### 3.2. Airflow 2 마이그레이션
 
-기존 Airflow 1 버전은 Dag 갯수가 늘어나면서 연속적인 Task Instance 스케줄링 간 Lag이 길었고 기타 자잘한 버그들이 있었습니다. Airflow 2에서 대표적으로 개선된 부분들은 아래와 같습니다. 
+기존 Airflow 1 버전은 Dag 개수가 늘어나면서 연속적인 Task Instance 스케줄링 간 Lag이 길었고 기타 자잘한 버그들이 있었습니다. Airflow 2에서 대표적으로 개선된 부분들은 아래와 같습니다. 
 
 - 스케줄링 퍼포먼스가 개선되었습니다.
     
-    Airflow 2는 Dag Serialization과 Fast-Follow를 도입하여 Scheduler의 반복적인 Dag 파싱 작업을 줄이고 Task Scheduling 과정을 개선하였습니다. [astronomer 블로그](https://www.astronomer.io/blog/airflow-2-scheduler) 에서 벤치마크 테스트를 했을 때 10배 이상의 성능 개선이 있었다고 합니다. 팀에서 경험하는 문제였던 Task instance 스케줄링 간 Lag 현상도 많이 줄었습니다. 
+    Airflow 2는 Dag Serialization과 Fast-Follow를 도입하여 Scheduler의 반복적인 Dag 파싱 작업을 줄이고 Task Scheduling 과정을 개선하였습니다. [astronomer 블로그](https://www.astronomer.io/blog/airflow-2-scheduler)에서 벤치마크 테스트를 했을 때 10배 이상의 성능 개선이 있었다고 합니다. 팀에서 경험하는 문제였던 Task instance 스케줄링 간 Lag 현상도 많이 줄었습니다. 
     
 - Scheduler HA(High Availability)를 지원해서 스케줄러의 Scale Out이 용이합니다.
     
@@ -456,14 +456,14 @@ Data Freshness는 데이터가 얼마나 최신 상태인가를 나타냅니다.
     
 - 웹 서버 사용성이 개선되었습니다.
     
-    Dag Serialization을 통해 더 빠르게 웹 UI에서 더 빠르게 Dag 정보를 불러올 수 있으며 Auto Refresh 기능 등 사용성이 개선되었습니다. 저희 팀에서도 사용자의 Airflow 사용성을 위해 지속적으로 하위호환성을 고려하며 버전을 업그레이드 하고 있습니다. 글을 쓰는 시점인 2.3 버전은 더 직관적인 UI를 제공해주어 저희 팀에서도 2.3 버전으로 업그레이드를 완료하였습니다. 
+    Dag Serialization을 통해 더 빠르게 웹 UI에서 더 빠르게 Dag 정보를 불러올 수 있으며 Auto Refresh 기능 등 사용성이 개선되었습니다. 저희 팀에서도 사용자의 Airflow 사용성을 위해 지속적으로 하위호환성을 고려하며 버전을 업그레이드하고 있습니다. 글을 쓰는 시점인 2.3 버전은 더 직관적인 UI를 제공해 주어 저희 팀에서도 2.3 버전으로 업그레이드를 완료하였습니다. 
     
 이 외에도 TaskFlow API 도입, Airflow Core Component에서 Provider 분리, Task Group, Smart Sensor 도입 등등 많은 변화가 있습니다. 더 궁금하신 분들은 [해당 글](https://www.astronomer.io/blog/airflow-2-scheduler) 을 읽어보시면 도움이 될 것 같습니다.
 
 
 ![logo-anim.gif](/img/advanced-airflow-for-databiz/logo-anim.gif)*Airflow 로고를 커스텀 해보았습니다.*
 
-Airflow 2로 마이그레이션하면서 1버전과 호환성이 깨지는 부분들이 다소 있었고 이를 해결하는데 시간이 꽤 소요됐습니다. 하지만 마이그레이션 한 후 Airflow의 스케줄링 퍼포먼스가 올라갔으며 Task/Dag 간의 의존관계가 복잡하거나 코드가 복잡한 경우도 제공되는 API를 잘 활용하여 코드 퀄리티를 높일 수 있었습니다.
+Airflow 2로 마이그레이션하면서 1버전과 호환성이 깨지는 부분들이 다소 있었고 이를 해결하는 데 시간이 꽤 소요됐습니다. 하지만 마이그레이션 한 후 Airflow의 스케줄링 퍼포먼스가 올라갔으며 Task/Dag 간의 의존관계가 복잡하거나 코드가 복잡한 경우도 제공되는 API를 잘 활용하여 코드 퀄리티를 높일 수 있었습니다.
 
 ### 3.3. 스케줄러 성능 최적화를 위한 Configuration 설정 
 Airflow는 Scheduler, Webserver의 성능을 [Configuration](https://airflow.apache.org/docs/apache-airflow/stable/configurations-ref.html#) 을 통해 설정할 수 있도록 지원합니다.
@@ -472,50 +472,50 @@ Airflow는 Scheduler, Webserver의 성능을 [Configuration](https://airflow.apa
 
 |변수명|정의|설정 내용|
 |:--:|:--:|:--:|
-|`AIRFLOW__CORE__PARALLELISM`|스케줄러 당 동시에 스케줄링 가능한 DagRun 갯수에 대한 설정|병렬 처리를 위해 기존보다 높게 설정|
-|`AIRFLOW__SCHEDULER__PARSING_PROCESSES`|스케줄러가 Dag 파일을 파싱할 때 사용할 Process 갯수에 대한 설정|스케줄러 HA를 적용하기도 했고, CPU 사용량에 비해 기대효과가 잘 나오지 않아 기존 값 유지|
-|`AIRFLOW__SCHEDULER__MIN_FILE_PROCESS_INTERVAL`  |스케줄러가 Dag File을 파싱하는 주기(초)에 대한 설정|Parsing 시 CPU 사용량이 높아져서 기존보다 높게 설정|
+|`AIRFLOW__CORE__PARALLELISM`|스케줄러 당 동시에 스케줄링 가능한 DagRun 개수에 대한 설정|병렬 처리를 위해 기존보다 높게 설정|
+|`AIRFLOW__SCHEDULER__PARSING_PROCESSES`|스케줄러가 Dag 파일을 파싱 할 때 사용할 Process 개수에 대한 설정|스케줄러 HA를 적용하기도 했고, CPU 사용량에 비해 기대효과가 잘 나오지 않아 기존 값 유지|
+|`AIRFLOW__SCHEDULER__MIN_FILE_PROCESS_INTERVAL`  |스케줄러가 Dag File을 파싱 하는 주기(초)에 대한 설정|Parsing 시 CPU 사용량이 높아져서 기존보다 높게 설정|
 |`AIRFLOW__SCHEDULER__POOL_METRICS_INTERVAL`|[pool](https://airflow.apache.org/docs/apache-airflow/stable/concepts/pools.html) 사용량을 StatSD로 보내는 주기에 대한 설정|공식 문서에 상대적으로 비싼 쿼리라고 명시되어 있어 기존보다 높게 설정 |
 
 Scheduler에서 지속적으로 스케줄링 지연 현상이 발생하면 아래 Configuration도 함께 조정할 계획입니다. 
 
 |변수명|정의|
 |:--:|:--:|
-|`AIRFLOW__KUBERNETES__WORKER_PODS_CREATION_BATCH_SIZE`|스케줄러가 한 번 루프를 돌 때 Worker Pod 최대 생성 갯수에 대한 설정 <br> `KubernetesExecutor`를 사용할 때 더 높은 퍼포먼스를 기대할 수 있음 |
+|`AIRFLOW__KUBERNETES__WORKER_PODS_CREATION_BATCH_SIZE`|스케줄러가 한 번 루프를 돌 때 Worker Pod 최대 생성 개수에 대한 설정 <br> `KubernetesExecutor`를 사용할 때 더 높은 퍼포먼스를 기대할 수 있음 |
 |`AIRFLOW__SCHEDULER__MAX_DAGRUNS_PER_LOOP_TO_SCHEDULER` | 스케줄러가 한 번 루프를 돌 때 얼마나 많은 DagRun들을 처리할지에 대한 설정|
 |`AIRFLOW__SCHEDULER__MAX_DAGRUNS_TO_CREATE_PER_LOOP`|스케줄러가 한 번 루프를 돌 때 얼마나 많은 Dag이 DagRun을 생성하게 할지에 대한 설정|
 
 
 스케줄러 성능 튜닝에 대해 더 자세하게 알고 싶다면 
-[공식 문서](https://airflow.apache.org/docs/apache-airflow/stable/concepts/scheduler.html#fine-tuning-your-scheduler-performance) 와 [Astronomer 블로그 문서](https://docs.astronomer.io/learn/airflow-scaling-workers) 를 읽어보세요. 
+[공식 문서](https://airflow.apache.org/docs/apache-airflow/stable/concepts/scheduler.html#fine-tuning-your-scheduler-performance) 와 [Astronomer 블로그 문서](https://docs.astronomer.io/learn/airflow-scaling-workers)를 읽어보세요. 
 ### 3.4. 고가용성 설정
 
-Airflow 2에서는 Scheduler HA 설정이 가능합니다. 즉 복수개의 Scheduler를 통해 Dag 스케줄링 지연을 개선할 수 있습니다. 저희는 [공식 Helm Chart](https://github.com/apache/airflow/tree/main/chart) 를 사용하고 있기에 손쉽게 HA 설정을 하였습니다.
+Airflow 2에서는 Scheduler HA 설정이 가능합니다. 즉 복수개의 Scheduler를 통해 Dag 스케줄링 지연을 개선할 수 있습니다. 저희는 [공식 Helm Chart](https://github.com/apache/airflow/tree/main/chart)를 사용하고 있기에 손쉽게 HA 설정을 하였습니다.
 
 ![scheduler-ha.png](/img/advanced-airflow-for-databiz/scheduler-ha.png)*Airflow Scheduler HA 설정*
 
-이때 한가지 주의할 점은 Scheduler가 증가하는 만큼 Meta DB의 부하도 증가하게 된다는 것입니다. 
+이때 한 가지 주의할 점은 Scheduler가 증가하는 만큼 Meta DB의 부하도 증가하게 된다는 것입니다. 
 Scheduler들은 Row Level Locking(SELECT … FOR UPDATE) 방식으로 Dag, Task 등 자원에 접근하므로 Scheduler가 늘어나면 자연스럽게 Meta DB의 자원 사용량도 높아집니다. 그래서 데이터베이스의 메트릭을 보면서 스케일 업을 해주거나 다중화를 설정하는 것도 하나의 옵션일 것 같습니다. 
 
 ### 3.4. Kubernetes 환경 개선
 
-저희는 K8s 환경에서 Airflow를 운영하기 때문에 kubernetes의 자원 관리도 함께 고려해야 합니다. 현재 운영중인 Dag이 700개가 넘기 때문에 많은 Task Pod들이 각각 리소스를 점유하게 됩니다. 만약 특정 시간대에 Dag들이 몰려있는 경우 K8s Node의 리소스가 부족해지고 해당 Node에 떠있는 Pod들의 성능이 저하될 수 있습니다.
+저희는 K8s 환경에서 Airflow를 운영하기 때문에 kubernetes의 자원 관리도 함께 고려해야 합니다. 현재 운영 중인 Dag이 700개가 넘기 때문에 많은 Task Pod들이 각각 리소스를 점유하게 됩니다. 만약 특정 시간대에 Dag들이 몰려있는 경우 K8s Node의 리소스가 부족해지고 해당 Node에 떠있는 Pod들의 성능이 저하될 수 있습니다.
 
 #### Node Pool 분리 및 Auto Scaling 적용
 
 기본적으로 K8s에서 Airflow를 구성하는 컴포넌트는 기본 구성 컴포넌트(Scheduler, Webserver 등)과 Worker Pod으로 분리할 수 있습니다. 기본 컴포넌트는 요청 자원이 충분히 예측 가능한 반면, Worker Pod은 시간대에 따라 요청하는 자원이 다릅니다. 
 
-그래서 저희는 Worker Pod을 별도로 Ochestration하는 Node Pool을 분리하였습니다. 그리고 해당 Node Pool은 Auto Scaling을 적용하여 유동적으로 throughput을 늘려줄 수 있도록 하였습니다. 
+그래서 저희는 Worker Pod을 별도로 Ochestration 하는 Node Pool을 분리하였습니다. 그리고 해당 Node Pool은 Auto Scaling을 적용하여 유동적으로 throughput을 늘려줄 수 있도록 하였습니다. 
 
 #### 사용자의 Task 리소스 직접 할당
 
-K8s 환경의 장점은 Task 별로 자원 할당을 할 수 있다는 점입니다. CPU Bound한 Task의 경우 CPU 리소스를 높게 할당하고, I/O Bound한 Task는 CPU 리소스를 낮게 관리하여 K8s Node의 자원 관리를 더 효율적으로 할 수 있습니다. 아래와 같이 Operator의 K8s 리소스 설정을 Patch하는 `assign_operator_resources` 라는 Helper 함수를 만들어서 관리하고 있습니다. 
+K8s 환경의 장점은 Task 별로 자원 할당을 할 수 있다는 점입니다. CPU Bound 한 Task의 경우 CPU 리소스를 높게 할당하고, I/O Bound 한 Task는 CPU 리소스를 낮게 관리하여 K8s Node의 자원 관리를 더 효율적으로 할 수 있습니다. 아래와 같이 Operator의 K8s 리소스 설정을 Patch 하는 `assign_operator_resources`라는 Helper 함수를 만들어서 관리하고 있습니다. 
 
 ```python
 @dataclass
 class DynamicResource:
     """
-    요청할 cpu, memory 자원을 입력해줍니다.
+    요청할 cpu, memory 자원을 입력해 줍니다.
     ex) cpu: "500m", memory: "500Mi"
     - cpu의 기본 단위는 m으로 1000m이 1코어라고 보시면 됩니다.
     - memory의 기본 단위는 Mi로 MB와 동일합니다.
