@@ -4,7 +4,7 @@ title:  "50명 규모의 데이터 본부가 사용하는 Airflow 플랫폼 구�
 subtitle: 기존 Airflow 환경의 문제 정의 및 해결
 date: 2022-11-01 10:00:00 +0900
 category: data
-background : "/img/advanced-airflow-for-databiz/background.jpg"
+background : '/img/advanced-airflow-for-databiz/background.jpg'
 author: grab
 comments: true
 tags:
@@ -217,7 +217,7 @@ KubernetesExecutor에서 실행하는 일반적인 Operator(PythonOperator, Bigq
 
 *고민 끝에 결국 개발 환경의 Kubernetes Cluster에 직접 연결해서 Pod을 띄우는 방식으로 문제를 해결하였습니다*.  
 
-![k8s-auth.png](../img/advanced-airflow-for-databiz/k8s-auth.png)
+![k8s-auth.png](/img/advanced-airflow-for-databiz/k8s-auth.png)
 
 여기서 제일 신경썼던 부분은 사용자가 쿠버네티스를 알지 못해도 동작할 수 있도록 추상화를 하는 것입니다. 로컬에서는 기본적으로 KubernetesPodOperator를 실행하게 되면, Service Account 기반의 k8s 인증을 한 후 미리 생성한 namespace(local 전용 namespace)에 pod을 띄울 수 있도록 하였습니다.  
 
