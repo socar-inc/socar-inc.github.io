@@ -4,7 +4,7 @@ title:  "50명 규모의 데이터 본부가 사용하는 Airflow 플랫폼 구�
 subtitle: 기존 Airflow 환경의 문제 정의 및 해결
 date: 2022-11-01 10:00:00 +0900
 category: data
-background : '/img/advanced-airflow-for-databiz/background.jpg'
+background : "/img/advanced-airflow-for-databiz/background.jpg"
 author: grab
 comments: true
 tags:
@@ -398,7 +398,7 @@ Airflow 기본 개념부터 Dag 작성법과 각종 Operator 사용법 등을 �
 
 
 
-![seminar-recording.png](/img/advanced-airflow-for-databiz/seminar-recording.png)*Airflow 사내 세미나 모습*
+![semina-survey.png](/img/advanced-airflow-for-databiz/semina-survey.png)*Airflow 사내 세미나 후기*
 
 #### 오피스아워, 슬랙 문의 채널 운영 등을 통해 개발 서포트
 
