@@ -467,35 +467,23 @@ Airflow 2로 마이그레이션하면서 1버전과 호환성이 깨지는 부�
 
 ### 3.3. 스케줄러 성능 최적화를 위한 Configuration 설정 
 Airflow는 Scheduler, Webserver의 성능을 [Configuration](https://airflow.apache.org/docs/apache-airflow/stable/configurations-ref.html#) 을 통해 설정할 수 있도록 지원합니다.
-팀에서도 많은 Dag들을 운영하는 과정에서 스케줄러 성능에 대한 고민과 변경을 지속하였습니다.   
+팀에서도 많은 Dag들을 운영하는 과정에서 스케줄러 성능 최적화를 위해 아래처럼 Configuration을 변경하였습니다.
 
-`AIRFLOW__CORE__PARALLELISM`  
-- 스케줄러 당 동시에 스케줄링 가능한 DagRun 갯수에 대한 설정입니다 (기본 값: 32)
-- 병렬 처리를 위해 기존보다 갯수를 높게 설정했습니다.
 
-`AIRFLOW__SCHEDULER__PARSING_PROCESSES`
-- 스케줄러가 Dag 파일을 파싱할 때 사용할 Process 갯수에 대한 설정입니다 (기본 값: 2)
-- 스케줄러 HA를 적용하기도 했고, cpu 사용량에 비해 기대효과가 잘 나오지는 않아서 기존 값을 유지하였습니다.
+|변수명|정의|설정 내용|
+|:--:|:--:|:--:|
+|`AIRFLOW__CORE__PARALLELISM`|스케줄러 당 동시에 스케줄링 가능한 DagRun 갯수에 대한 설정|병렬 처리를 위해 기존보다 높게 설정|
+|`AIRFLOW__SCHEDULER__PARSING_PROCESSES`|스케줄러가 Dag 파일을 파싱할 때 사용할 Process 갯수에 대한 설정|스케줄러 HA를 적용하기도 했고, CPU 사용량에 비해 기대효과가 잘 나오지 않아 기존 값 유지|
+|`AIRFLOW__SCHEDULER__MIN_FILE_PROCESS_INTERVAL`  |스케줄러가 Dag File을 파싱하는 주기(초)에 대한 설정|Parsing 시 CPU 사용량이 높아져서 기존보다 높게 설정|
+|`AIRFLOW__SCHEDULER__POOL_METRICS_INTERVAL`|[pool](https://airflow.apache.org/docs/apache-airflow/stable/concepts/pools.html) 사용량을 StatSD로 보내는 주기에 대한 설정|공식 문서에 상대적으로 비싼 쿼리라고 명시되어 있어 기존보다 높게 설정 |
 
-`AIRFLOW__SCHEDULER__MIN_FILE_PROCESS_INTERVAL`  
-- 스케줄러가 Dag File을 파싱하는 주기(초)에 대한 설정입니다 (기본 값: 30)
-- Parsing 시 CPU 사용량이 높아져서 기존보다 주기를 높게 설정하였습니다.
+Scheduler에서 지속적으로 스케줄링 지연 현상이 발생하면 아래 Configuration도 함께 조정할 계획입니다. 
 
-`AIRFLOW__SCHEDULER__POOL_METRICS_INTERVAL`  
-- [pool](https://airflow.apache.org/docs/apache-airflow/stable/concepts/pools.html) 사용량을 StatSD로 보내는 주기에 대한 설정입니다 (기본 값: 5)  
-- 공식 문서에 상대적으로 비싼 쿼리라고 명시되어 있어, 기존보다 주기를 높게 설정하였습니다. 
-
-Scheduler의 상태를 모니터링하면서 지속적으로 스케줄링 지연 현상이 발생하면, 아래 Configuration도 함께 조정할 계획입니다. 
-
-`AIRFLOW__KUBERNETES__WORKER_PODS_CREATION_BATCH_SIZE`  
-- 스케줄러가 한 번 루프를 돌 때 Worker Pod 최대 생성 갯수에 대한 설정입니다.  
-- 기본 값은 `1`이며 `KubernetesExecutor`를 사용할 때 더 높은 퍼포먼스를 기대할 수 있습니다.   
-
-`AIRFLOW__SCHEDULER__MAX_DAGRUNS_PER_LOOP_TO_SCHEDULER`  
-- 스케줄러가 한 번 루프를 돌 때 얼마나 많은 DagRun들을 처리할지에 대한 설정입니다 (기본 값: 20)
-
-`AIRFLOW__SCHEDULER__MAX_DAGRUNS_TO_CREATE_PER_LOOP`  
-- 스케줄러가 한 번 루프를 돌 때 얼마나 많은 Dag이 DagRun을 생성하게 할지에 대한 설정입니다 (기본 값: 10)
+|변수명|정의|
+|:--:|:--:|
+|`AIRFLOW__KUBERNETES__WORKER_PODS_CREATION_BATCH_SIZE`|스케줄러가 한 번 루프를 돌 때 Worker Pod 최대 생성 갯수에 대한 설정 <br> `KubernetesExecutor`를 사용할 때 더 높은 퍼포먼스를 기대할 수 있음 |
+|`AIRFLOW__SCHEDULER__MAX_DAGRUNS_PER_LOOP_TO_SCHEDULER` | 스케줄러가 한 번 루프를 돌 때 얼마나 많은 DagRun들을 처리할지에 대한 설정|
+|`AIRFLOW__SCHEDULER__MAX_DAGRUNS_TO_CREATE_PER_LOOP`|스케줄러가 한 번 루프를 돌 때 얼마나 많은 Dag이 DagRun을 생성하게 할지에 대한 설정|
 
 
 스케줄러 성능 튜닝에 대해 더 자세하게 알고 싶다면 
@@ -521,7 +509,7 @@ Scheduler들은 Row Level Locking(SELECT … FOR UPDATE) 방식으로 Dag, Task 
 
 #### 사용자의 Task 리소스 직접 할당
 
-K8s 환경의 장점은 Task 별로 자원 할당을 할 수 있다는 점입니다. Cpu Bound한 Task의 경우 Cpu 리소스를 높게 할당하고, I/O Bound한 Task는 Cpu 리소스를 낮게 관리하여 K8s Node의 자원 관리를 더 효율적으로 할 수 있습니다. 아래와 같이 Operator의 K8s 리소스 설정을 Patch하는 `assign_operator_resources` 라는 Helper 함수를 만들어서 관리하고 있습니다. 
+K8s 환경의 장점은 Task 별로 자원 할당을 할 수 있다는 점입니다. CPU Bound한 Task의 경우 CPU 리소스를 높게 할당하고, I/O Bound한 Task는 CPU 리소스를 낮게 관리하여 K8s Node의 자원 관리를 더 효율적으로 할 수 있습니다. 아래와 같이 Operator의 K8s 리소스 설정을 Patch하는 `assign_operator_resources` 라는 Helper 함수를 만들어서 관리하고 있습니다. 
 
 ```python
 @dataclass
