@@ -171,7 +171,7 @@ x-airflow-common: &airflow-common
         _PIP_ADDITIONAL_REQUIREMENTS: ... # 추가 의존성을 설치합니다
         GOOGLE_APPLICATION_CREDENTIALS: ... # 사용자 인증 파일(GCP Service Account) 경로를 넣어줍니다
         AIRFLOW__SCHEDULER__DAG_DIR_LIST_INTERVAL: 5  # Dag 코드의 변화를 빠르게 감지하여 metadb에 반영한다. 
-      ...
+        ...
 services:
   init: # Airflow user를 생성하고 .airflowignore를 적용하는 등의 script를 실행합니다
     <<: *airflow-common
@@ -248,7 +248,7 @@ KubernetesExecutor에서 실행하는 일반적인 Operator(PythonOperator, Bigq
     subjects:
       - kind: User
         name: "grab-dev@socar-data-dev.iam.gserviceaccount.com"
-    	...
+        ...
     roleRef:
       kind: Role
       name: airflow-feature-role
@@ -274,9 +274,7 @@ Dag 개수가 늘어나게 되면 Scheduler는 모든 Dag을 파싱 하기까지
 `.airflowignore`를 활용하여 Glob 패턴으로 특정 디렉토리를 제외하고는 Parsing이 되지 않도록 설정할 수 있습니다. 
 그리고 사용자가 로컬 환경에서 개발할 때 해당 디렉토리 (e.g., _development 폴더)에서 개발하도록 README를 통해 가이드를 주었습니다. 
 
-```bash
-# .airflowignore로 _development 폴더 내의 Dag만 읽도록 한다.
-
+```
 ^((?!_development).)*$
 ```
 
@@ -422,7 +420,6 @@ local-airflow: ## 📍 로컬에 Airflow를 띄웁니다.
 	@bash scripts/run-local.sh
 clean-up: ## 🌬 Airflow 환경을 초기화합니다.
 	@bash scripts/clean-up.sh
-...
 ```
 
 [//]: # (![make-script.png](/img/advanced-airflow-for-databiz/make-script.png)*make install로 간단히 로컬 Airflow 의존성을 설정하는 모습*)
