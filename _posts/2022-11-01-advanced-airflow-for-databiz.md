@@ -45,7 +45,7 @@ tags:
 ### 1.1. Airflow in Socar
 
 쏘카에서는 데이터 분석가, 데이터 사이언티스트, AI 엔지니어 등 다양한 사용자들이 Airflow Dag을 통하여 파이프라인을 직접 구축할 수 있습니다. 
-대신 다양한 사용자가 Airflow를 불편함 없이 이용하기 위해서 관리자는 Airflow의 사용 범주와 개발 방식이 잘 정의하는 것이 중요합니다.
+대신 다양한 사용자가 Airflow를 불편함 없이 이용하기 위해서 관리자가 Airflow의 사용 범주와 개발 방식을 잘 정의하는 것이 중요합니다.
 
 쏘카에서는 데이터 통합 저장소(데이터 레이크, 웨어하우스)로 `BigQuery`를 사용하고 있습니다. 
 기본적으로 외부 데이터 소스(Open API, AWS Data Source, BigQuery의 다른 테이블 등)에서 데이터를 BigQuery로 옮기는 작업에만 Airflow를 사용하도록 권장하고 있습니다. 
@@ -84,8 +84,9 @@ Airflow Github Repository의 Branch 이름이 특정 조건을 만족하면 CI/C
 **문제점 2 - 많은 사용자들이 사용하기엔 불친절한 개발 환경, 긴 피드백 루프**
 
 개발 환경의 Airflow는 Git Sync를 통해 Github Repository의 코드를 동기화합니다. 
-사용자가 Dag를 수정할 때마다 Push를 해야 하는데, 운영하는 Dag의 개수들이 많다 보니 동기화 시간이 1분 이상 걸리는 경우들이 많았습니다. 
-이런 상황에서 사용자가 코드를 작성하면서 계속해서 동작 확인을 하기 위해선 매번 1분 이상 기다려야 했습니다. 이는 피드백 루프와 개발 시간이 길어진다는 것을 의미합니다. 
+사용자가 Dag의 변경 사항을 개발 클러스터에 반영하기 위해 매번 Commit를 해야 하는 것도 불편했으며
+운영하는 Dag의 개수들이 많다 보니 Push 때마다 동기화 시간이 1분 이상 걸리기도 했습니다. 
+이런 상황에서 사용자가 코드를 작성하면서 계속해서 동작 확인을 하기 위해선 Commit당 매번 1분 이상 기다려야 했습니다. 이는 피드백 루프와 개발 시간이 길어진다는 것을 의미합니다. 
 
 ![git-sync-many-commits.png](/img/advanced-airflow-for-databiz/git-sync-many-commits.png)*Airflow 커밋 히스토리가 불필요하게 길어지기도 합니다.*
 
@@ -135,7 +136,7 @@ Airflow를 운영하면서 드러난 문제들을 개선하기 위해 아래와 
 
 **사용자의 개발 및 피드백 주기를 단축합니다.**
     
-소프트웨어는 지속적인 개선을 위해서 피드백 루프를 짧게 가져가는 것이 중요합니다. 개발 후 피드백을 받는  시간을 줄일수록 개발 속도를 늘릴 수 있습니다. 
+소프트웨어는 지속적인 개선을 위해서 피드백 루프를 짧게 가져가는 것이 중요합니다.
 일반적으로 로컬 환경에서 Airflow Dag 개발/수행에 대한 피드백 시간이 가장 빠릅니다(LocalExecutor, SequentialExecutor). 다만 로컬에서 개발하기 위해선 외부 환경에 대한 Mocking과 인증에 대한 고민을 함께 해야 합니다. 
 
 
@@ -158,7 +159,7 @@ Airflow를 운영하면서 드러난 문제들을 개선하기 위해 아래와 
 #### Docker Compose로 각 컴포넌트 띄우기
 
 `docker-compose` 로컬 환경 구축을 진행할 때 기본 Airflow 컴포넌트들은 각각 Image로 나눠서 띄웠습니다. 
-기본적으로 공식 Airflow의 [docker-compose 파일](https://airflow.apache.org/docs/apache-airflow/2.4.1/docker-compose.yaml) 을 참고하였고, 추가로 저희 상황에 맞게 의존성을 추가하였습니다. 
+기본적으로 공식 Airflow의 [docker-compose 파일](https://airflow.apache.org/docs/apache-airflow/2.4.1/docker-compose.yaml)을 참고하였고, 추가로 저희 상황에 맞게 의존성을 추가하였습니다. 
 
 ```yaml
 version: "3.8"
@@ -197,7 +198,7 @@ services:
 
 #### GCP Service Account를 통합 인증 수단으로 활용하기
 
-기본적으로 Airflow는 GCP 리소스(BigQuery, Secret Manager, GKE 등)에 접근하는 경우가 많기에, 로컬에서 개발할 때 권한 관리가 필요합니다. 이런 인중 문제는 개인 별 Service Account 발급을 통해 해결하였습니다. 
+기본적으로 Airflow는 GCP 리소스(BigQuery, Secret Manager, GKE 등)에 접근하는 경우가 많기에, 로컬에서 개발할 때 권한 관리가 필요합니다. 이런 인증 문제는 개인 별 Service Account 발급을 통해 해결하였습니다. 
 
 현재 GCP의 전체적 운영은 데이터 플랫폼 팀에서 담당하고 있습니다. GCP IAM은 팀 단위의 역할에 맞게 Custom Role을 만들어 관리하고 있으며, 사용자별 Service Account는 해당 팀의 Role에 바인딩 되어 있습니다. 사용자가 Airflow 개발을 필요로 할 때 데이터 플랫폼 팀에서 Service Account 발급을 해줍니다. 
 
@@ -207,7 +208,7 @@ services:
 
 #### KubernetesPodOperator를 테스트할 수 있는 환경 구축
 
-현재 쏘카의 Airflow는 `KubernetesExecutor`를 사용하고 있습니다. KubernetesExecutor의 장점 중 하나는 `KubernetesPodOperator`를 통해 사용자가 직접 정의한 컨테이너 이미지를 Pod 형태로 독립적 수행이 가능하다는 점입니다. 
+현재 쏘카의 Airflow는 `KubernetesExecutor`를 사용하고 있습니다. KubernetesExecutor의 장점 중 하나는 KubernetesPodOperator를 통해 사용자가 직접 정의한 컨테이너 이미지를 Pod 형태로 독립적 수행이 가능하다는 점입니다. 
 사용자가 정의한 이미지에는 의존성을 별도로 설치할 수 있고 Airflow Dag 레포에 종속되지 않기에, 저희 팀에서도 자주 활용하고 있습니다. (KubernetesExecutor에 대해서 더 궁금하다면 [여기](https://airflow.apache.org/docs/apache-airflow/stable/executor/kubernetes.html)를 참고해 주세요)  
 
 KubernetesExecutor에서 실행하는 일반적인 Operator(PythonOperator, BigqueryOperator, etc)는 Pod 형태로 수행되며, 이는 로컬 환경인 LocalExecutor 수행 방식(Scheduler Process에서 Task를 실행)으로 대체해도 수행이 가능합니다.  
@@ -216,16 +217,11 @@ KubernetesExecutor에서 실행하는 일반적인 Operator(PythonOperator, Bigq
 처음에 이 문제를 해결하기 위해서 컨테이너 형태로 태스크를 수행할 수 있는 `DockerOperator`를 활용해 보면 어떨까 생각하였습니다. 로컬 환경에서는 DockerOperator, 운영 환경에서는 KubernetesPodOperator를 수행하는 팩토리 형태의 Operator를 만드는 방식을 고민해 봤습니다.
 하지만 두 오퍼레이터의 시그니처(속성)가 다른 부분이 꽤 있었으며 개발하더라도 본질적인 문제 해결이 아니라고 판단하였습니다.  
 
-*고민 끝에 결국 개발 환경의 Kubernetes Cluster에 직접 연결해서 Pod을 띄우는 방식으로 문제를 해결하였습니다*.  
-
-여기서 제일 신경 썼던 부분은 사용자가 쿠버네티스를 알지 못해도 동작할 수 있도록 추상화를 하는 것입니다. 
+**고민 끝에 결국 개발 환경의 Kubernetes Cluster에 직접 연결해서 Pod을 띄우는 방식으로 문제를 해결하였습니다**. 여기서 제일 신경 썼던 부분은 사용자가 쿠버네티스를 알지 못해도 동작할 수 있도록 추상화를 하는 것입니다. 
 로컬에서는 기본적으로 KubernetesPodOperator를 실행하게 되면, Service Account 기반의 K8s 인증을 한 후 미리 생성한 Namespace(Local 전용 Namespace)에 Pod을 띄울 수 있도록 하였습니다.  
 
-![k8s-auth.png](/img/advanced-airflow-for-databiz/k8s-auth.png)*로컬 Airflow 환경에서 개발 클러스터를 이용하는 방식*
-
-- OAuth 인증이 아닌 GCP Service Account 기반의 인증을 할 수 있도록 Service Account를 발급하고 이를 기반으로 .kubeconfig 파일을 사전 정의하여 Docker Image에 Mount 합니다. 이 덕분에 사용자는 kubernetes 관련 설정(kubectl, 인증 설정 등)을 하지 않아도 됩니다.    
-([Kubernetes API 서버에 인증](https://cloud.google.com/kubernetes-engine/docs/how-to/api-server-authentication?hl=ko#environments-without-gcloud) 글에서 더 자세한 내용을 확인할 수 있습니다)
-- k8s RBAC을 활용해 미리 허용한 Service Account를 대상으로 airflow 전용 namespace에서 k8s pod의 crud가 가능하도록 합니다. 해당 namespace를 제외하고는 다른 자원에 접근할 수 없도록 Role을 관리합니다.
+- OAuth 인증이 아닌 GCP Service Account 기반의 인증을 할 수 있도록 Service Account를 발급하고 이를 기반으로 .kubeconfig 파일을 사전 정의하여 Docker Image에 Mount 합니다. 이 덕분에 사용자는 Kubernetes 관련 설정(Kubectl, 인증 설정 등)을 하지 않아도 됩니다. ([Kubernetes API 서버에 인증](https://cloud.google.com/kubernetes-engine/docs/how-to/api-server-authentication?hl=ko#environments-without-gcloud) 글에서 더 자세한 내용을 확인할 수 있습니다)
+- K8s RBAC을 활용해 미리 허용한 Service Account를 대상으로 Airflow 전용 Namespace에서 K8s Pod의 CRUD가 가능하도록 합니다. 해당 Namespace를 제외하고는 다른 자원에 접근할 수 없도록 Role을 관리합니다.
     
     ```yaml
     apiVersion: rbac.authorization.k8s.io/v1
@@ -259,7 +255,7 @@ KubernetesExecutor에서 실행하는 일반적인 Operator(PythonOperator, Bigq
       apiGroup: rbac.authorization.k8s.io
     ```
     
-- 사용자는 KubernetesPodOperator의 `in_cluster`와 `config_file` 속성을 설정합니다. 꼭 KubernetesExecutor가 아니더라도 다른 Executor에서도 KubernetesPodOperator를 실행할 수 있다는 사실 알고 계셨나요? 아래와 같이 설정을 해주면 로컬에서도 k8s 인증을 하고 pod crud가 가능합니다.
+- 사용자는 KubernetesPodOperator의 `in_cluster`와 `config_file` 속성을 설정합니다. 꼭 KubernetesExecutor가 아니더라도 다른 Executor에서도 KubernetesPodOperator를 실행할 수 있다는 사실 알고 계셨나요? 아래와 같이 설정을 해주면 로컬에서도 K8s 인증을 하고 Pod CRUD가 가능합니다.
     
     ```python
        task1 = KubernetesPodOperator(
@@ -308,23 +304,23 @@ Dag 개수가 늘어나게 되면 Scheduler는 모든 Dag을 파싱 하기까지
     PYTHONPATH=. files=$staged_files python -m pytest tests/test_dag_bag.py
     ```
     
-- pytest의 `monkeypatch`을 활용해 외부 의존성(Service Account, BaseHook 등)을 mocking 합니다.
+- pytest의 `monkeypatch`을 활용해 외부 의존성(Service Account, BaseHook 등)을 Mocking 합니다.
     
     ```python
     @pytest.fixture
     def changed_files() -> List[str]:
-    		changed_files = os.getenv("files", "").replace("\n", " ").split()
-    		changed_dag_files = [
-    		        path
-    		        for path in changed_files
-    		        if path.startswith("dags/") and might_contain_dag(file_path=path, safe_mode=True)
-    		    ]
+        changed_files = os.getenv("files", "").replace("\n", " ").split()
+        changed_dag_files = [
+            path
+            for path in changed_files
+            if path.startswith("dags/") and might_contain_dag(file_path=path, safe_mode=True)
+        ]
         return changed_dag_files
     
     @pytest.fixture
     def monkey_patching(monkeypatch):
         # Mock
-    		monkeypatch.setattr(Credentials, "from_service_account_file", lambda *args, **kwargs: "")
+        monkeypatch.setattr(Credentials, "from_service_account_file", lambda *args, **kwargs: "")
         ...
     
     ```
@@ -400,7 +396,7 @@ Airflow 기본 개념부터 Dag 작성법과 각종 Operator 사용법 등을 �
 
 
 
-![semina-survey.png](/img/advanced-airflow-for-databiz/semina-survey.png)*Airflow 사내 세미나 후기*
+![seminar-recording.png](/img/advanced-airflow-for-databiz/seminar-recording.png)*Airflow 사내 세미나 녹화본*
 
 #### 오피스 아워, 슬랙 문의 채널 운영 등을 통해 개발 서포트
 
@@ -408,7 +404,7 @@ Airflow 기본 개념부터 Dag 작성법과 각종 Operator 사용법 등을 �
 
 ![dp-office-hour.png](/img/advanced-airflow-for-databiz/dp-office-hour.png)*데이터 플랫폼팀 오피스 아워 페이지*
 
-#### makefile 활용해서 쉽게 명령어들 사용할 수 있도록 구성
+#### Makefile 활용해서 쉽게 명령어들 사용할 수 있도록 구성
 
 사용자가 Airflow를 더 편하게 사용할 수 있도록 주요 명령어를 Shell Script 기반으로 작성하고 Makefile 커맨드를 활용하도록 가이드 하였습니다. 
 
@@ -448,7 +444,7 @@ Data Freshness는 데이터가 얼마나 최신 상태인가를 나타냅니다.
 
 - 스케줄링 퍼포먼스가 개선되었습니다.
     
-    Airflow 2는 Dag Serialization과 Fast-Follow를 도입하여 Scheduler의 반복적인 Dag 파싱 작업을 줄이고 Task Scheduling 과정을 개선하였습니다. [astronomer 블로그](https://www.astronomer.io/blog/airflow-2-scheduler)에서 벤치마크 테스트를 했을 때 10배 이상의 성능 개선이 있었다고 합니다. 팀에서 경험하는 문제였던 Task instance 스케줄링 간 Lag 현상도 많이 줄었습니다. 
+    Airflow 2는 Dag Serialization과 Fast-Follow를 도입하여 Scheduler의 반복적인 Dag 파싱 작업을 줄이고 Task Scheduling 과정을 개선하였습니다. [Astronomer 블로그](https://www.astronomer.io/blog/airflow-2-scheduler)에서 벤치마크 테스트를 했을 때 10배 이상의 성능 개선이 있었다고 합니다. 팀에서 경험하는 문제였던 Task instance 스케줄링 간 Lag 현상도 많이 줄었습니다. 
     
 - Scheduler HA(High Availability)를 지원해서 스케줄러의 Scale Out이 용이합니다.
     
@@ -458,12 +454,12 @@ Data Freshness는 데이터가 얼마나 최신 상태인가를 나타냅니다.
     
     Dag Serialization을 통해 더 빠르게 웹 UI에서 더 빠르게 Dag 정보를 불러올 수 있으며 Auto Refresh 기능 등 사용성이 개선되었습니다. 저희 팀에서도 사용자의 Airflow 사용성을 위해 지속적으로 하위호환성을 고려하며 버전을 업그레이드하고 있습니다. 글을 쓰는 시점인 2.3 버전은 더 직관적인 UI를 제공해 주어 저희 팀에서도 2.3 버전으로 업그레이드를 완료하였습니다. 
     
-이 외에도 TaskFlow API 도입, Airflow Core Component에서 Provider 분리, Task Group, Smart Sensor 도입 등등 많은 변화가 있습니다. 더 궁금하신 분들은 [해당 글](https://www.astronomer.io/blog/airflow-2-scheduler) 을 읽어보시면 도움이 될 것 같습니다.
+이 외에도 TaskFlow API 도입, Airflow Core Component에서 Provider 분리, Task Group, Smart Sensor 도입 등등 많은 변화가 있습니다. 더 궁금하신 분들은 [해당 글](https://www.astronomer.io/blog/airflow-2-scheduler)을 읽어보시면 도움이 될 것 같습니다.
 
 
 ![logo-anim.gif](/img/advanced-airflow-for-databiz/logo-anim.gif)*Airflow 로고를 커스텀 해보았습니다.*
 
-Airflow 2로 마이그레이션하면서 1버전과 호환성이 깨지는 부분들이 다소 있었고 이를 해결하는 데 시간이 꽤 소요됐습니다. 하지만 마이그레이션 한 후 Airflow의 스케줄링 퍼포먼스가 올라갔으며 Task/Dag 간의 의존관계가 복잡하거나 코드가 복잡한 경우도 제공되는 API를 잘 활용하여 코드 퀄리티를 높일 수 있었습니다.
+Airflow 2로 마이그레이션하면서 1 버전과 호환성이 깨지는 부분들이 다소 있었고 이를 해결하는 데 시간이 꽤 소요됐습니다. 하지만 마이그레이션 한 후 Airflow의 스케줄링 퍼포먼스가 올라갔으며 Task/Dag 간의 의존관계가 복잡하거나 코드가 복잡한 경우도 제공되는 API를 잘 활용하여 코드 퀄리티를 높일 수 있었습니다.
 
 ### 3.3. 스케줄러 성능 최적화를 위한 Configuration 설정 
 Airflow는 Scheduler, Webserver의 성능을 [Configuration](https://airflow.apache.org/docs/apache-airflow/stable/configurations-ref.html#) 을 통해 설정할 수 있도록 지원합니다.
@@ -499,13 +495,13 @@ Scheduler들은 Row Level Locking(SELECT … FOR UPDATE) 방식으로 Dag, Task 
 
 ### 3.4. Kubernetes 환경 개선
 
-저희는 K8s 환경에서 Airflow를 운영하기 때문에 kubernetes의 자원 관리도 함께 고려해야 합니다. 현재 운영 중인 Dag이 700개가 넘기 때문에 많은 Task Pod들이 각각 리소스를 점유하게 됩니다. 만약 특정 시간대에 Dag들이 몰려있는 경우 K8s Node의 리소스가 부족해지고 해당 Node에 떠있는 Pod들의 성능이 저하될 수 있습니다.
+저희는 K8s 환경에서 Airflow를 운영하기 때문에 Kubernetes의 자원 관리도 함께 고려해야 합니다. 현재 운영 중인 Dag이 700개가 넘기 때문에 많은 Task Pod들이 각각 리소스를 점유하게 됩니다. 만약 특정 시간대에 Dag들이 몰려있는 경우 K8s Node의 리소스가 부족해지고 해당 Node에 떠있는 Pod들의 성능이 저하될 수 있습니다.
 
 #### Node Pool 분리 및 Auto Scaling 적용
 
 기본적으로 K8s에서 Airflow를 구성하는 컴포넌트는 기본 구성 컴포넌트(Scheduler, Webserver 등)과 Worker Pod으로 분리할 수 있습니다. 기본 컴포넌트는 요청 자원이 충분히 예측 가능한 반면, Worker Pod은 시간대에 따라 요청하는 자원이 다릅니다. 
 
-그래서 저희는 Worker Pod을 별도로 Ochestration 하는 Node Pool을 분리하였습니다. 그리고 해당 Node Pool은 Auto Scaling을 적용하여 유동적으로 throughput을 늘려줄 수 있도록 하였습니다. 
+그래서 저희는 Worker Pod을 별도로 Ochestration 하는 Node Pool을 분리하였습니다. 그리고 해당 Node Pool은 Auto Scaling을 적용하여 유동적으로 Throughput을 늘려줄 수 있도록 하였습니다. 
 
 #### 사용자의 Task 리소스 직접 할당
 
@@ -605,20 +601,20 @@ t1 = assign_operator_resources(
 [GCP Secret Manager](https://cloud.google.com/secret-manager)는 GCP에서 제공해 주는 보안 정보 관리 툴입니다. 기본적으로 IAM을 통해 세부 권한 조정이 가능하며, 다양한 클라이언트에서 접근할 수 있도록 API를 제공합니다. GCP Secret Manager를 사용하면 손쉽게 보안 정보들과 코드를 분리할 수 있습니다.
 
 저희는 GCP Secret Manager를 활용할 때 Dag에 하드코딩되어 있는 경우 Airflow Variable 혹은 [Secret Manager SDK(Python)](https://cloud.google.com/secret-manager/docs/reference/libraries#client-libraries-install-python)를 사용하였습니다. 
-K8s의 경우 [external Secret](https://external-secrets.io/latest/) 과 함께 사용하고 있습니다. External Secret을 활용하면 외부 Secret 저장소(e.g., GCP Secret Manager)를 통해 쉽게 Secret 리소스로 변환이 가능합니다. 
+K8s의 경우 [External Secret](https://external-secrets.io/latest/) 과 함께 사용하고 있는데 External Secret을 활용하면 외부 Secret 저장소(e.g., GCP Secret Manager)를 통해 쉽게 Secret 리소스로 변환이 가능합니다. 
 보안 정보들을 분리하려면 Airflow 사용자들의 보안에 대한 인지가 필요하고 이를 CI 레벨에서 막을 수 있도록 하는 장치도 필요합니다. 현재 저희는 사용자가 암호화된 정보를 직접 저장하고 관리할 수 있도록 프로세스를 구축하고 있으며, 보안 정보들을 감지할 수 있도록 돕는 [GitGuardian Action](https://github.com/marketplace/actions/gitguardian-shield-action) 같은 오픈소스를 검토 중에 있습니다. 
 
 
 ####  Secret Backend 적용을 통해 하드코딩된 Connection, Variable을 옮기기
 
-Airflow에서는 [Secret Backend](https://airflow.apache.org/docs/apache-airflow/stable/security/secrets/secrets-backend/index.html)로 GCP Secret Manager, vault 등 시크릿 관리 툴을 설정할 수 있도록 지원합니다. 위에서 언급한 것처럼 GCP Secret Manager를 Secret Backend로 사용하여 Connection, Variable을 암호화하여 사용하고 있습니다.
+Airflow에서는 [Secret Backend](https://airflow.apache.org/docs/apache-airflow/stable/security/secrets/secrets-backend/index.html)로 GCP Secret Manager, Vault 등 시크릿 관리 툴을 설정할 수 있도록 지원합니다. 위에서 언급한 것처럼 GCP Secret Manager를 Secret Backend로 사용하여 Connection, Variable을 암호화하여 사용하고 있습니다.
 
 ```bash
 AIRFLOW__SECRETS__BACKEND: airflow.providers.google.cloud.secrets.secret_manager.CloudSecretManagerBackend # GCP Secret Manager 적용
 AIRFLOW__SECRETS__BACKEND__KWARGS: '{ "connections_prefix": "airflow-connections", "variables_prefix": "airflow-variables", "gcp_key_path": "..." }'
 ```
 
-위와 같이 `AIRFLOW__SECRETS__BACKEND` 환경 변수를 활용해 Secret Backend 설정이 가능합니다. 그리고 `AIRFLOW__SECRETS__BACKEND__KWARGS` 환경 변수를 활용하면 Connection, Variable의 prefix를 설정해두면 GCP Secret Manager에 prefix에 맞게 작성된 Secret들을 자동으로 불러오게 됩니다. 
+위와 같이 `AIRFLOW__SECRETS__BACKEND` 환경 변수를 활용해 Secret Backend 설정이 가능합니다. 그리고 `AIRFLOW__SECRETS__BACKEND__KWARGS` 환경 변수를 활용하면 Connection, Variable의 Prefix를 설정해두면 GCP Secret Manager에 Prefix에 맞게 작성된 Secret들을 자동으로 불러오게 됩니다. 
 더 자세한 내용은 [여기](https://airflow.apache.org/docs/apache-airflow/1.10.10/howto/use-alternative-secrets-backend.html#aws-ssm-parameter-store-secrets-backend)를 참고해 주세요. 
 
 ### 4.3. RBAC 적용 (진행 중)
@@ -734,7 +730,7 @@ class DAGAlertPayload:
 
 위와 같이 10분마다 Meta DB에서 실패한 Task를 Dag과 Join 하여 쿼리한 후, 입력된 Owner 정보를 바탕으로 담당자 멘션을 하는 Slack Hook이 호출됩니다. 
 
-슬랙 사용자 멘션을 위해선 유저의 ID 값이 필요합니다. 저희는 Dag의 Owner에 Email 정보를 필수로 받도록 하였으며(Github Action을 통해 PR 단계에서 검증합니다) 슬랙의 `[users.lookupByEmail](https://api.slack.com/methods/users.lookupByEmail)` API를 활용하여 해당 문제를 해결하였습니다.
+슬랙 사용자 멘션을 위해선 유저의 ID 값이 필요합니다. 저희는 Dag의 Owner에 Email 정보를 필수로 받도록 하였으며(Github Action을 통해 PR 단계에서 검증합니다) 슬랙의 [users.lookupByEmail](https://api.slack.com/methods/users.lookupByEmail) API를 활용하여 해당 문제를 해결하였습니다.
 
 ### 5.3. 관리자 모니터링
 
@@ -758,7 +754,7 @@ Kuberentes의 경우도 동일하게 Datadog을 활용하여 모니터링하고 
     
 **안정적으로 Airflow 운영이 가능해졌습니다.**
     
-매니지드 서비스가 아닌 K8s Native 환경에서 Airflow를 운영하기 위해선 신경 써야 할 부분들이 꽤 있습니다. K8s 관리/운영으로 시작해서 kubernetesExecutor의 동작 방식을 이해하고 최적화 방안도 계속 고민해야 합니다. K8s 인프라 환경에 대한 모니터링을 강화하고 있으며, Airflow를 지속적으로 업그레이드하고 유연하게 자원을 분배할 수 있도록 하여 Airflow 운영을 안정적으로 할 수 있게 됐습니다. 
+매니지드 서비스가 아닌 K8s Native 환경에서 Airflow를 운영하기 위해선 신경 써야 할 부분들이 꽤 있습니다. K8s 관리/운영으로 시작해서 KubernetesExecutor의 동작 방식을 이해하고 최적화 방안도 계속 고민해야 합니다. K8s 인프라 환경에 대한 모니터링을 강화하고 있으며, Airflow를 지속적으로 업그레이드하고 유연하게 자원을 분배할 수 있도록 하여 Airflow 운영을 안정적으로 할 수 있게 됐습니다. 
     
 **모니터링/보안 환경이 개선되었습니다.**
     
