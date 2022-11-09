@@ -57,6 +57,15 @@ ray:
 dini:
   name: 디니
   image: '/assets/authors/dini.jpeg'
+  position: 데이터 엔지니어
+  introduction: 쏘카에서 가격/면책 시스템 서버 개발과 테크 블로그 운영을 맡고 있습니다. 커피챗 환영합니다. :)
+  links:
+    blog:
+      name: 블로그
+      url: 'https://diana-lab.tistory.com/'
+    linkedin:
+      name: 링크드인
+      url: 'https://www.linkedin.com/in/hyejinyoon/'
 
 jian:
   name: 지안
