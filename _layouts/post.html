@@ -46,6 +46,30 @@ layout: default
         <div class="post-content">
         {{ content }}
         </div>
+        {% if author.introduction %}
+        <div class="author-card">
+          <div class="card mb-3">
+            <div class="row no-gutters">
+              <div class="col-md-4">
+                <img src="{{ author.image }}" class="card-img" alt="프로필사진">
+              </div>
+              <div class="col-md-8">
+                <div class="card-body">
+                  <p class="card-title">
+                    <a href="/authors/#{{ author.name }}">{{ author.name }}</a>
+                    <small class="text-muted"> {{ author.position }}</small>
+                  </p>
+                  <p class="card-text">{{ author.introduction }} </p>
+                  <p class="card-text">
+                    {% for link in author.links %}
+                      <small class="text-muted"><a href="{{ link[1].url }}">{{ link[1].name }}</a></small>
+                    {% endfor %}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endif %}
         <hr>
         <div class="clearfix">
           {% if page.previous.url %}

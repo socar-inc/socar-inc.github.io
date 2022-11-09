@@ -278,3 +278,18 @@ header.masthead {
     visibility: hidden;
   }
 }
+
+.author-card {
+  .card-body {
+    a {
+      text-decoration: none
+    }
+    .card-title {
+      font-size: 24px;
+      font-weight: bold;
+    }
+    .card-text {
+      font-size: 18px;
+    }
+  }
+}
