@@ -125,3 +125,12 @@ corgi:
 grab:
   name: 그랩
   image: '/assets/authors/grab.png'
+  position: 데이터 엔지니어
+  introduction: 문제를 구체적으로 정의하고 소프트웨어 기반으로 문제를 해결하고 있습니다. 기술 교육과 성장에 관심이 많습니다.
+  links:
+    blog:
+      name: 블로그
+      url: 'https://tansfil.tistory.com/'
+    linkedin:
+      name: 링크드인
+      url: 'https://www.linkedin.com/in/hoyeon-lee-a58702117/'
