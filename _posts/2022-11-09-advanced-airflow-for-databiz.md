@@ -1,7 +1,7 @@
 ---
 layout: post
-title:  "50명 규모의 데이터 본부가 사용하는 Airflow 플랫폼 구축하기"
-subtitle: 기존 Airflow 환경의 문제 정의 및 해결
+title:  "전사 구성원들이 사용하는 Airflow 플랫폼 만들기"
+subtitle: Airflow 운영 고도화를 위한 고군분투기
 date: 2022-11-09 10:00:00 +0900
 category: data
 background : "/img/advanced-airflow-for-databiz/background.jpg"
