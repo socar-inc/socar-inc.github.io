@@ -59,6 +59,8 @@ Airflow Github Repository의 Branch 이름이 특정 조건을 만족하면 CI/C
 
 과거 Airflow 사용자는 Dag을 생성/변경하기 위해서 기본적으로 `feature` Branch를 생성하여 변경 커밋을 원격 Branch에 푸시 하였습니다. 그러면 Git Sync를 통해 Airflow에 Dag이 동기화되어 테스트가 가능했습니다.
 
+![airflow-dev-env-as-is.png](/img/advanced-airflow-for-databiz/airflow-dev-env-as-is.png)*Airflow 기존 개발 환경*
+
 > 쏘카의 Airflow On K8s 운영에 대해 더 궁금하시다면 [쏘카 데이터 그룹 - Airflow와 함께한 데이터 환경 구축기](https://tech.socarcorp.kr/data/2021/06/01/data-engineering-with-airflow.html)를 읽어보세요.
 
 
@@ -154,7 +156,7 @@ Airflow를 운영하면서 드러난 문제들을 개선하기 위해 아래와 
 - 개발 클러스터에서 유휴 Airflow들이 Node를 점유하였던 문제 해결 : **2개 이상의 VM 절약**
 - Docker라는 표준 환경을 통해 Airflow 서버의 불안정성을 낮추고 관리 비용을 줄임
 
-![local-airflow.png](/img/advanced-airflow-for-databiz/local-airflow.png)*Local Airflow의 구조*
+![airflow-dev-env-to-be.png](/img/advanced-airflow-for-databiz/airflow-dev-env-to-be.png)*Airflow 로컬 개발 환경*
 
 #### Docker Compose로 각 컴포넌트 띄우기
 
