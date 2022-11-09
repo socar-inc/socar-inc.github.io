@@ -11,6 +11,7 @@ tags:
     - data
     - data-engineering
     - airflow
+    - data platform
 ---
 
 안녕하세요. 데이터 플랫폼 팀의 그랩입니다. 
