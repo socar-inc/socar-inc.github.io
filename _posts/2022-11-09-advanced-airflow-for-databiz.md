@@ -48,8 +48,8 @@ tags:
 쏘카에서는 데이터 분석가, 데이터 사이언티스트, AI 엔지니어 등 다양한 사용자들이 Airflow DAG을 통하여 파이프라인을 직접 구축할 수 있습니다. 
 대신 다양한 사용자가 Airflow를 불편함 없이 이용하기 위해서 관리자가 Airflow의 사용 범주와 개발 방식을 잘 정의하는 것이 중요합니다.
 
-쏘카에서는 데이터 통합 저장소(데이터 레이크, 웨어하우스)로 `BigQuery`를 사용하고 있습니다. 
-기본적으로 외부 데이터 소스(Open API, AWS Data Source, BigQuery의 다른 테이블 등)에서 데이터를 BigQuery로 옮기는 작업에만 Airflow를 사용하도록 권장하고 있습니다. 
+쏘카에서는 데이터 통합 저장소(데이터 레이크, 웨어하우스)로 `BigQuery`를 사용하고 있습니다.
+기본적으로 외부 데이터 소스(Open API, RDBMS, S3 등)와 BigQuery 원본 데이터 셋을 BigQuery로 가공/적재하는 작업에 Airflow를 사용할 것을 권장하고 있습니다.
 또한 DAG는 Data Lake, Data Mart, Monitoring, Crawling 등 각 용도에 맞게 분류하여 관리되고 있습니다. 
 (단순 스케줄링을 필요로 하는 작업은 Airflow의 사용을 지양하고 K8s(Kubernetes) Cronjob이나 Github Action 등을 활용하는 것을 권장하고 있습니다)
 
