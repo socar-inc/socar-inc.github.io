@@ -62,7 +62,7 @@ layout: default
                   <p class="card-text">{{ author.introduction }} </p>
                   <p class="card-text">
                     {% for link in author.links %}
-                      <small class="text-muted"><a href="{{ link[1].url }}">{{ link[1].name }}</a></small>
+                    <a href="{{ link[1] }}"><img src="/assets/icon/{{ link[0] }}.png" class="link-img" alt="{{ link[0] }}"></a>
                     {% endfor %}
                   </p>
                 </div>
