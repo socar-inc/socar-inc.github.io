@@ -9,7 +9,7 @@ author: serena
 comments: true
 tags:
     - data
-    - deep-learning
+    - deep learning
    
 ---
 

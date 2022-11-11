@@ -8,7 +8,7 @@ background: '/img/socar-design-system-01/socar-design-system.png'
 author: gadi
 comments: true
 tags:
-    - design_system
+    - design system
 ---
 
 

@@ -9,8 +9,8 @@ author: dini
 comments: true
 tags:
     - data
-    - metadata-platform
-    - data-engineering
+    - metadata platform
+    - data engineering
 ---
 
 안녕하세요, 데이터 플랫폼 팀의 디니입니다. 

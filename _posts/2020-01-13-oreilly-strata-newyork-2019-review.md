@@ -8,7 +8,7 @@ background: '/img/big_wheel.jpg'
 author: kyle
 comments: true
 tags:
-    - machine-learning    
+    - machine learning    
 ---
 
 

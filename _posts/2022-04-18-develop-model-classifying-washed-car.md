@@ -8,8 +8,8 @@ background: '/img/develop-model-classifying-washed-car/0.png'
 author: esther
 comments: true
 tags:
-  - applied-research-scientist
-  - deep-learning
+  - applied research scientist
+  - deep learning
   - ai
 ---
 

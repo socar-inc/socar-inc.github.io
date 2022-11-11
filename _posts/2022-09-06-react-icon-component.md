@@ -11,7 +11,7 @@ tags:
   - web
   - frontend
   - react
-  - design_system
+  - design system
 ---
 
 안녕하세요. 쏘카 웹 프론트엔드 개발자 시에나, 블랑입니다.

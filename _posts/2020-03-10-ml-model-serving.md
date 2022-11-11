@@ -8,7 +8,7 @@ background: '/img/posts_dl_serving/fabrizio-magoni-boaDpmC-_Xo-unsplash.jpg'
 author: thomas
 comments: true
 tags:
-    - deeplearning
+    - deep learning
     - serving
     - sqs
     - kubernetes
