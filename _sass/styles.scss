@@ -282,7 +282,7 @@ header.masthead {
 .author-card {
   .card-body {
     a {
-      text-decoration: none
+      text-decoration: none;
     }
     .card-title {
       font-size: 24px;
@@ -290,6 +290,12 @@ header.masthead {
     }
     .card-text {
       font-size: 18px;
+    }
+    .link-img {
+      height: 20px;
+      width: 20px;
+      display: inline;
+      margin: 0 10px 0 0;
     }
   }
 }
