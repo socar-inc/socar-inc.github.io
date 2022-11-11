@@ -8,8 +8,8 @@ background: '/img/analytics-engineering-with-dbt/mathew-schwartz-sb7RUrRMaC4-uns
 author: humphrey
 comments: true
 tags:
-    - data-engineering
-    - analytics-engineering
+    - data engineering
+    - analytics engineering
 
 ---
 

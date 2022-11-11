@@ -10,7 +10,7 @@ comments: true
 tags:
     - iot
     - data
-    - data-engineering
+    - data engineering
 ---
 
 <div class="photo-copyright">

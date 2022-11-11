@@ -8,8 +8,8 @@ background: '/img/role-of-applied-research-scientist-at-socar/brain_background.j
 author: kp
 comments: true
 tags:
-  - applied-research-scientist
-  - deep-learning
+  - applied research scientist
+  - deep learning
   - ai
 ---
 

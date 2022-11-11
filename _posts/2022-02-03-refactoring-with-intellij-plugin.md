@@ -10,7 +10,7 @@ comments: true
 tags:
   - kotlin
   - intellij
-  - android-studio
+  - android studio
   - plugin
 ---
 

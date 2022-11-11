@@ -9,7 +9,7 @@ author: dini
 comments: true
 tags:
     - data
-    - data-engineering
+    - data engineering
 ---
 
 안녕하세요! 쏘카 데이터 엔지니어링 팀의 디니입니다.
