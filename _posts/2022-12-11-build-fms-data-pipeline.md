@@ -26,9 +26,9 @@ tags:
 
 ### 신사업 FMS 서비스 소개
 ### 실시간 파이프라인에서 중요한 것
-    - Real Time Response
-    - Scalability
-    - Data Consistency
+- Real Time Response
+- Scalability
+- Data Reliablity
 ### IoT 시계열 데이터 특징
 ### 전체 파이프라인 훑어보기
 
@@ -37,20 +37,20 @@ tags:
 ### Kafka Connector란?
 ### Kafka Connector 동작 원리 및 장단점
 ### DynamoDB Sink Connector 요구 사항 및 구현
-    - Exactly once
+Exactly once
 ### Custom S3 Sink Connector 요구 사항 및 구현
-    - Exactly once
+Exactly once
 ### Kafka Connect 모니터링하기
-    - Prometheus + Grafana 확인
+Prometheus + Grafana 확인
 
-## 4. 람다 함수 조지기
+## 4. 비정형 데이터 쿼리를 위한 미들웨어, Lambda 함수 개발하기 
 
 ### 배경
-    - 프로토콜이 많다 보니 토픽을 대분류로 분리해서 저장
-    - PoC기간에 스키마 레지스트리 도입이 힘들었음
-    - redshift를 활용해서 쿼리하기로 결정 (athena는 일부 window function 지원이 안됨)
-        - 파티셔닝된 parquet 들
-        - glue table
+- 프로토콜이 많다 보니 토픽을 대분류로 분리해서 저장
+- PoC기간에 스키마 레지스트리 도입이 힘들었음
+- redshift를 활용해서 쿼리하기로 결정 (athena는 일부 window function 지원이 안됨)
+    - 파티셔닝된 parquet 들
+    - glue table
 ### 요구사항
 ### 람다 함수 주요 동작방식
 ### 람다 모니터링하기
@@ -66,11 +66,11 @@ tags:
 ### 메시지 시뮬레이터 구현
 ### 실 데이터 중심의 부하 테스트 진행
 
-## 6. 데이터 정합성과 무결성 검증하기
+## 6. 데이터 신뢰성을 위한 정합성과 무결성 검증하기
 
 ### 데이터 정합성/무결성이 중요한 이유
 ### 검사할 대상 정의하기
-    - 크게 3가지…
+- 크게 3가지…
 ### 정합성/무결성 검사 진행하기
 ### 검사 결과 모니터링하기
 
