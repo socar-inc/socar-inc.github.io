@@ -16,7 +16,7 @@ tags:
     - aws
 ---
 
-0. 들어가며
+## 0. 들어가며 (heading 삭제 예정)
 
 안녕하세요. 데이터 플랫폼 팀의 그랩입니다.
 
@@ -123,22 +123,23 @@ S3는 AWS에서 제공하는 객체 스토리지로 다양한 형태(정형/비�
 
 다음은 배치 분석 집계를 위한 컴포넌트입니다.
 
-**Lambda**
+**Lambda**  
+Lambda는 AWS의 서버리스 컴퓨팅 플랫폼입니다. 개발자는 서버에 대한 존재를 모르고 코드만 작성하면 손쉽게 서버를 운영할 수 있게 됩니다. 람다는 API 서버 형태로 활용이 가능할 뿐만 아니라 AWS 리소스(S3, Kafka, Kinesis 등)의 이벤트 기반으로 동작시킬 수 있어 활용 범위가 굉장히 넓습니다.  
+현재 배치 분석 집계를 할 때 S3의 적재된 Raw 파일을 타입에 맞게 분리하여 parquet로 변환하는 용도로 Lambda를 사용하고 있습니다.
 
-**Glue Catalog**
+**Redshift**  
+Redshift는 AWS의 데이터 웨어하우스 서비스입니다. 표준 SQL(ANSI)를 따르며 대용량 데이터 처리를 빠르게 처리할 수 있어 데이터 웨어하우스 솔루션으로 AWS Athena(Presto 기반)와 함께 많이 사용되고 있습니다.  
+저희는 Redshift 운영 비용을 낮추기 위해 Serverless를 사용하고 S3에 적재된 Parquet를 읽을 수 있도록 Redshift Spectrum 기능을 도입하였습니다.
 
-**Redshift**
+**Glue Data Catalog**  
+Glue는 AWS의 완전 관리형 ETL 도구입니다. Glue는 크게 `Data Catalog`와 `Data Integration and ETL`로 나뉘는데, 이번에 저희가 주로 사용한 서비스는 Data Catalog입니다. Data Catalog는 비정형/반정형 데이터들을 SQL 형태로 조회할 수 있도록 메타 정보들(테이블, 파티션 등)을 저장하는 메타스토어로 활용됩니다.  
+현재 S3에 Parquet로 데이터를 저장할 때 스키마를 추론하는 용도와 Redshift Spectrum에서 외부 테이블 형태로 사용할 때 Glue Catalog를 활용하고 있습니다.
 
-**Airflow**
+**Airflow**  
+Airflow는 Airbnb에서 개발한 워크플로우 관리 오픈소스로 현재 많은 기업에서 데이터 파이프라인을 자동화할 때 사용하는 툴입니다. 스케줄링, 재처리 기능, 외부와 연동해주는 다양한 3rd party 라이브러리, 직관적인 UI 등을 제공해줘서 많은 기업들이 배치 집계를 할 때 사용하고 있습니다.  
+현재 [RedshiftSQLOperator](https://airflow.apache.org/docs/apache-airflow-providers-amazon/2.4.0/operators/redshift.html)를 활용해서 데이터 마트 데이터 집계를 스케줄링하는데 사용하고 있습니다.
 
-마지막으로 모니터링과 관련된 컴포넌트입니다.
-**Prometheus**
-
-**Loki**
-
-**Grafana**
-
-위에서 다룬 주요 컴포넌트들은 아래 소개글에서 더 자세하게 다뤄보도록 하겠습니다.
+여기까지 주요 컴포넌트들에 대해 가볍게 소개드렸스빈다. 더 자세한 내용은 아래 장에서 더 다루도록 하겠습니다.
 
 ## 2. 실시간 데이터 처리와 적재를 한 번에, Kafka Sink Connector 개발하기
 
