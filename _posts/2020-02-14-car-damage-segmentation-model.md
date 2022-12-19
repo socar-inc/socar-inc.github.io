@@ -44,7 +44,7 @@ tags:
 - 4) 약속한 이용 시간이 가까워지면 선택한 쏘카존에 방문해, 차량의 상태를 확인합니다.
 	- 이때 사용자는 차량의 당시 외관 사진을 앱 내에 업로드해야 합니다.
 	
-![](/img/car-damage-segmentation-model/socar-app.png
+![](/img/car-damage-segmentation-model/socar-app.png)
 
 - 5) 문제가 없는 경우, 운행을 시작합니다.
 
