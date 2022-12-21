@@ -33,6 +33,14 @@ tags:
 -   Kafka Connect를 활용한 메시지 소비에 관심이 있는 소프트웨어 엔지니어
 -   쏘카의 데이터 엔지니어가 무슨 일을 하는지 궁금한 모든 이들
 
+분량 관계상 생략하는 부분은 다음과 같습니다.
+
+-   Kafka에 대한 기본적인 설명
+-   주요 컴포넌트들의 상세한 구현 설명 및 코드
+-
+
+글을 읽으시면서 궁금한 점들이 있다면 편하게 질문 남겨주시면, 확인 후 답변드리겠습니다.
+
 목차는 아래와 같습니다.  
 ....
 
@@ -188,30 +196,60 @@ Airflow는 Airbnb에서 개발한 워크플로우 관리 오픈소스로 현재 
 
 ## 3. 실시간 데이터 처리와 적재를 한 번에, Kafka Sink Connector 개발하기
 
-본 장에서는 Kafka Topic에 저장된 메시지를 외부 데이터 싱크(DynamoDB, S3)로 적재하는 역할을 담당하는 Kafka Sink Connector에 대해 알아보도록 하겠습니다.
+본 장에서는 Kafka 토픽에 저장된 메시지를 외부 데이터 싱크(DynamoDB, S3)로 적재하는 Kafka Sink Connector를 개발하게 된 배경과 구현 사항, 장단점 등에 대해 알아보도록 하겠습니다.
 
-Kafka
+### Kafka Connect란?
 
-### Kafka Connector 란?
+![kafka-connect.jpeg](/img/build-fms-data-pipeline/kafka-connect.jpeg)_kafka connect의 역할 (출처: https://developer.confluent.io/learn-kafka/kafka-connect/intro)_
 
--   Kafka 란
--   Kafka Consumer 란
--   Kafka Connect 란
-    -   Consumer를 한단계 추상화하여 제공한 프레임워크
+보통 Kafka 토픽의 메시지를 적재하기 위해선 크게 2가지 방식을 활용합니다(클라우드, SaaS에서 제공해주는 기능은 제외하였습니다) 첫 번째는 프로그래밍 언어 별 존재하는 kafka sdk를 사용해서 Kafka Consumer를 구현하는 것이며 두 번째는 Kafka Connect를 활용하여 적재하는 방법입니다.
+
+Kafka Consumer는 높은 자유도로 개발이 가능하며, 다양한 프로그래밍 언어(JVM 계열 언어, Python, Javascript 등)로 개발할 수 있도록 SDK를 지원합니다. 일반적으로 Kafka 토픽의 메시지를 처리할 때 광범위하게 사용됩니다.
+
+Kafka Connect는 Consumer를 한단계 추상화하여 제공하는 Confluent에서 개발한 프레임워크입니다. 데이터 소스에서 Kafka로 데이터를 옮기거나 Kafka에서 데이터 싱크로 적재하는 목적으로 주로 사용됩니다. 대중적인 데이터 소스/싱크에 대한 Connector(Mysql, MongoDB, S3, ElasticSearch 등)는 이미 오픈소스로 나와있어 손쉽게 사용이 가능합니다. ([Confluent Hub](https://www.confluent.io/hub)에서 확인이 가능합니다)
+
+Kafka Connect를 썼을 때 장점은 아래와 같습니다
+
+-   다양한 데이터 소스,싱크에 대한 오픈소스를 활용하면 손쉽게 데이터 이동이 가능합니다.
+-   REST API를 통해 Kafka Connect의 운영이 가능합니다.
+-   Worker와 Task 갯수 조정을 통해 손쉽게 스케일 아웃이 가능합니다.
+-   kafka connect 운영을 위한 주요 메트릭을 jmx를 통해 지원합니다.
+
+하지만 꼭 장점만 있는 것은 아닙니다.
+
+-   kafka connect 프레임워크의 동작방식을 기본적으로 이해하고 있어야 합니다.
+-   Kafka consumer에 비해 상대적으로 테스트하기나 디버깅하기가 불편합니다.
+-   Java로 개발되어 있어 JVM 계열 언어로만 개발이 가능합니다.
+-   간단한 변형 후 적재가 아닌 비즈니스 요구사항이나 복잡한 처리가 포함된 작업을 구현할 경우 Kafka Consumer로 구현하는 것이 수월합니다.
+
+Kafka Connect에 대한 더 자세한 설명은 [여기](https://docs.confluent.io/platform/current/connect/index.html)를 참고해주세요.
+
+### 요구 사항 및 결정 이유
+
+Kafka Consumer와 kafka Connect 중 선택할 때는 현재 비즈니스 요구 사항에 맞춰 장/단점을 잘 비교하여 선택하는 것이 중요합니다. FMS 프로젝트에서 Kafka 토픽에 있는 메시지를 데이터 싱크에 적재하기 위해서 아래와 같은 요구사항들을 고려하여 Kafka Connect를 선택하였습니다.
+
+1. Kafka 토픽 별 메시지들이 S3와 DynamoDB에 적재되어야 합니다.  
+   Kafka에서 S3로 적재할 때 오픈소스인 [S3 Sink Connector](https://docs.confluent.io/kafka-connectors/s3-sink/current/overview.html)를 많이 활용합니다.
+2. 일부 데이터 싱크의 요구사항에 맞게 변형 작업이 필요합니다.
+3. 실시간 처리에 중요한 신뢰성과 확장성이 보장되어야 합니다.
+4. PoC 기간 내에 빠르게 개발할 수 있어야 합니다.
+
+### Kafka Connector의 동작 방식
+
+-   Kafka Connect/ Kakfa Connector
 -   Source/Sink Connector
-
-### 요구 사항 및 선택 배경
-
--   장단점
--   기본 Montioring 지표들 제공
--   ...
+-   Put method
 
 ### DynamoDB Sink Connector 요구 사항 및 구현
+
+-   요구사항
 
 -   DynamoDB Connector는 오픈소스로 따로 없고 유료 라이센스가 있었음
 -   구현 코드
 
 ### Custom S3 Sink Connector 요구 사항 및 구현
+
+-   요구사항
 
 -   DynamoDB와 유사하게 measurements를 다시 풀어서 제공해줘야 함
 -   Kotlin mutli module을 활용
