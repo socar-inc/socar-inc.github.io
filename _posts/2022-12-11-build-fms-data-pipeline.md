@@ -37,7 +37,6 @@ tags:
 
 -   Kafka에 대한 기본적인 설명
 -   주요 컴포넌트들의 상세한 구현 설명 및 코드
--
 
 글을 읽으시면서 궁금한 점들이 있다면 편하게 질문 남겨주시면, 확인 후 답변드리겠습니다.
 
@@ -206,16 +205,35 @@ Airflow는 Airbnb에서 개발한 워크플로우 관리 오픈소스로 현재 
 
 Kafka Consumer는 높은 자유도로 개발이 가능하며, 다양한 프로그래밍 언어(JVM 계열 언어, Python, Javascript 등)로 개발할 수 있도록 SDK를 지원합니다. 일반적으로 Kafka 토픽의 메시지를 처리할 때 광범위하게 사용됩니다.
 
-Kafka Connect는 Consumer를 한단계 추상화하여 제공하는 Confluent에서 개발한 프레임워크입니다. 데이터 소스에서 Kafka로 데이터를 옮기거나 Kafka에서 데이터 싱크로 적재하는 목적으로 주로 사용됩니다. 대중적인 데이터 소스/싱크에 대한 Connector(Mysql, MongoDB, S3, ElasticSearch 등)는 이미 오픈소스로 나와있어 손쉽게 사용이 가능합니다. ([Confluent Hub](https://www.confluent.io/hub)에서 확인이 가능합니다)
+Kafka Connect는 Consumer를 한단계 추상화하여 제공하는 Confluent에서 개발한 프레임워크입니다. 데이터 소스에서 Kafka로 데이터를 옮기거나 Kafka에서 데이터 싱크로 적재하는 목적으로 주로 사용됩니다. 대중적인 데이터 소스/싱크에 대한 Connector(Mysql, MongoDB, S3, ElasticSearch 등)는 이미 오픈소스로 나와있어 손쉽게 사용이 가능합니다 ([Confluent Hub](https://www.confluent.io/hub)에서 확인이 가능합니다)
 
 Kafka Connect를 썼을 때 장점은 아래와 같습니다
 
 -   다양한 데이터 소스,싱크에 대한 오픈소스를 활용하면 손쉽게 데이터 이동이 가능합니다.
+-   프레임워크의 가이드를 따라 Connector를 손쉽게 개발하여 사용할 수 있습니다.
 -   REST API를 통해 Kafka Connect의 운영이 가능합니다.
 -   Worker와 Task 갯수 조정을 통해 손쉽게 스케일 아웃이 가능합니다.
--   kafka connect 운영을 위한 주요 메트릭을 jmx를 통해 지원합니다.
+-   Property 기반으로 Kafka Connector 설정을 할 수 있어 선언적인(declarative) 소프트웨어 운영이 가능해집니다. 아래 예시는 S3 Sink Connector를 배포할 때 사용하는 프로퍼티입니다.
 
-하지만 꼭 장점만 있는 것은 아닙니다.
+    ```json
+    {
+        "connector.class": "kr.socar.fms.connector.s3.S3SinkConnector",
+        "topics": "OOO",
+        "tasks.max": "1",
+        "key.converter.schemas.enable": "false",
+        "value.converter.schemas.enable": "false",
+        "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+        "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+        "flush.size": "60000",
+        "rotate.interval.ms": "300000",
+        "s3.part.size": "60000000",
+        "partition.duration.ms": "3600000",
+        "s3.region": "ap-northeast-2",
+        ...
+    }
+    ```
+
+    하지만 꼭 장점만 있는 것은 아닙니다.
 
 -   kafka connect 프레임워크의 동작방식을 기본적으로 이해하고 있어야 합니다.
 -   Kafka consumer에 비해 상대적으로 테스트하기나 디버깅하기가 불편합니다.
@@ -228,11 +246,59 @@ Kafka Connect에 대한 더 자세한 설명은 [여기](https://docs.confluent.
 
 Kafka Consumer와 kafka Connect 중 선택할 때는 현재 비즈니스 요구 사항에 맞춰 장/단점을 잘 비교하여 선택하는 것이 중요합니다. FMS 프로젝트에서 Kafka 토픽에 있는 메시지를 데이터 싱크에 적재하기 위해서 아래와 같은 요구사항들을 고려하여 Kafka Connect를 선택하였습니다.
 
-1. Kafka 토픽 별 메시지들이 S3와 DynamoDB에 적재되어야 합니다.  
-   Kafka에서 S3로 적재할 때 오픈소스인 [S3 Sink Connector](https://docs.confluent.io/kafka-connectors/s3-sink/current/overview.html)를 많이 활용합니다.
-2. 일부 데이터 싱크의 요구사항에 맞게 변형 작업이 필요합니다.
-3. 실시간 처리에 중요한 신뢰성과 확장성이 보장되어야 합니다.
-4. PoC 기간 내에 빠르게 개발할 수 있어야 합니다.
+1.  **Kafka 토픽 별 메시지들이 S3와 DynamoDB에 적재되어야 합니다.**  
+    Kafka에서 S3로 데이터를 적재하는 S3 Sink Connector는 오픈소스로 존재하여 많은 곳에서 사용하고 있습니다. 하지만 DynamoDB의 경우 별도의 Sink Connector가 존재하지 않아 직접 구현이 필요한 상황이었습니다. 이미 제공되는 S3 Sink Connector를 사용하면서 DynamoDB도 Connector 형태로 개발한다면 빌드, 운영 상 이점이 있을 것이라고 판단하였습니다 (Kafka Connect와 Connector의 관계는 아래에서 더 다루곘습니다)
+
+2.  **일부 요구사항에 맞게 가벼운 변형 작업이 필요합니다.**  
+     DynamoDB는 레코드를 추가할 때 Partition Key를 필수적으로 입력해야 합니다. FMS 프로젝트에서 DynamoDB 테이블은 비용/성능 효율화를 위해 [Single Table Design](https://aws.amazon.com/ko/blogs/compute/creating-a-single-table-design-with-amazon-dynamodb/) 기법으로 디자인했고 이에 맞는 Partition key를 추가해줘야 했습니다. Kafka Connect에는 [SMT(Single Message Transformation)](https://docs.confluent.io/platform/current/connect/transforms/overview.html)가 있어 Property 기반으로 손쉽게 메시지의 변형이 가능합니다. 물론 제약 사항이 존재하지만 필요하면 직접 Transfrom 을 구현할 수도 있습니다. 아래는 Message의 특정 Field 이름을 변경하는 `ReplaceField`를 사용한 예시입니다.
+
+        ```json
+        "transforms": "RenameField",
+        "transforms.RenameField.type": "org.apache.kafka.connect.transforms.ReplaceField$Value",
+        "transforms.RenameField.renames": "foo:c1,bar:c2"
+        ```
+
+        또한 위에서 언급했듯이 FMS 프로젝트의 차량 IoT 데이터는 보통 배치로 묶여서 메시지들이 들어옵니다. 만약 클라이언트가 이렇게 nested된 형태의 데이터를 쿼리하는 경우 전처리를 진행해야 하기 때문에 적재하기 전에 데이터를 풀어서 적재해주는 것이 좋습니다.
+
+        -   as-is
+            ```json
+            {
+                "object": "vehicle",
+                "type": "kinematic",
+                "messaged_at": "2023-01-01T12:00:00+09:00",
+                "measurements": [
+                    {
+                        "timestamp_iso": "2023-01-01T11:59:00+09:00",
+                        "speed": 30,
+                    },
+                    {
+                        "timestamp_iso": "2022-01-01T11:59:01+09:00",
+                        "speed": 40,
+                    },
+                ],
+            }
+            ```
+        - to-be
+            ```json
+            [
+                {
+                    "object": "vehicle",
+                    "type": "kinematic",
+                    "messaged_at": "2023-01-01T12:00:00+09:00",
+                    "timestamp_iso": "2023-01-01T11:59:00+09:00",
+                    "speed": 30,
+                },
+                {
+                    "object": "vehicle",
+                    "type": "kinematic",
+                    "messaged_at": "2023-01-01T12:00:00+09:00",
+                    "timestamp_iso": "2023-01-01T11:59:01+09:00",
+                    "speed": 45,
+                },
+            ]
+            ```
+
+3.  **실시간 처리에 중요한 신뢰성과 확장성이 보장되어야 합니다.**
 
 ### Kafka Connector의 동작 방식
 
