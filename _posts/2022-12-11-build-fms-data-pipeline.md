@@ -242,6 +242,12 @@ Kafka Connect를 썼을 때 장점은 아래와 같습니다
 
 Kafka Connect에 대한 더 자세한 설명은 [여기](https://docs.confluent.io/platform/current/connect/index.html)를 참고해주세요.
 
+### Kafka Connector의 동작 방식
+
+-   Kafka Connect/ Kakfa Connector
+-   Source/Sink Connector
+-   Put method
+
 ### 요구 사항 및 결정 이유
 
 Kafka Consumer와 kafka Connect 중 선택할 때는 현재 비즈니스 요구 사항에 맞춰 장/단점을 잘 비교하여 선택하는 것이 중요합니다. FMS 프로젝트에서 Kafka 토픽에 있는 메시지를 데이터 싱크에 적재하기 위해서 아래와 같은 요구사항들을 고려하여 Kafka Connect를 선택하였습니다.
@@ -250,61 +256,96 @@ Kafka Consumer와 kafka Connect 중 선택할 때는 현재 비즈니스 요구 
     Kafka에서 S3로 데이터를 적재하는 S3 Sink Connector는 오픈소스로 존재하여 많은 곳에서 사용하고 있습니다. 하지만 DynamoDB의 경우 별도의 Sink Connector가 존재하지 않아 직접 구현이 필요한 상황이었습니다. 이미 제공되는 S3 Sink Connector를 사용하면서 DynamoDB도 Connector 형태로 개발한다면 빌드, 운영 상 이점이 있을 것이라고 판단하였습니다 (Kafka Connect와 Connector의 관계는 아래에서 더 다루곘습니다)
 
 2.  **일부 요구사항에 맞게 가벼운 변형 작업이 필요합니다.**  
-     DynamoDB는 레코드를 추가할 때 Partition Key를 필수적으로 입력해야 합니다. FMS 프로젝트에서 DynamoDB 테이블은 비용/성능 효율화를 위해 [Single Table Design](https://aws.amazon.com/ko/blogs/compute/creating-a-single-table-design-with-amazon-dynamodb/) 기법으로 디자인했고 이에 맞는 Partition key를 추가해줘야 했습니다. Kafka Connect에는 [SMT(Single Message Transformation)](https://docs.confluent.io/platform/current/connect/transforms/overview.html)가 있어 Property 기반으로 손쉽게 메시지의 변형이 가능합니다. 물론 제약 사항이 존재하지만 필요하면 직접 Transfrom 을 구현할 수도 있습니다. 아래는 Message의 특정 Field 이름을 변경하는 `ReplaceField`를 사용한 예시입니다.
+     DynamoDB는 레코드를 추가할 때 Partition Key를 필수적으로 입력해야 합니다. FMS 프로젝트에서 DynamoDB 테이블은 비용/성능 효율화를 위해 [Single Table Design](https://aws.amazon.com/ko/blogs/compute/creating-a-single-table-design-with-amazon-dynamodb/) 기법으로 디자인했고 이에 맞는 Partition key를 추가해줘야 했습니다. 이외에도 비용 절감을 위해 불필요한 컬럼을 삭제하는 것도 고려가 필요합니다.
 
-        ```json
-        "transforms": "RenameField",
-        "transforms.RenameField.type": "org.apache.kafka.connect.transforms.ReplaceField$Value",
-        "transforms.RenameField.renames": "foo:c1,bar:c2"
-        ```
+    여기서 Kafka Connect에는 [SMT(Single Message Transformation)](https://docs.confluent.io/platform/current/connect/transforms/overview.html)가 있어 Property 기반으로 손쉽게 메시지의 변형이 가능합니다. 물론 SMT 특성상 제약 사항이 존재하지만 필요하면 직접 Transfrom 을 구현하여 사용이 가능합니다.
 
-        또한 위에서 언급했듯이 FMS 프로젝트의 차량 IoT 데이터는 보통 배치로 묶여서 메시지들이 들어옵니다. 만약 클라이언트가 이렇게 nested된 형태의 데이터를 쿼리하는 경우 전처리를 진행해야 하기 때문에 적재하기 전에 데이터를 풀어서 적재해주는 것이 좋습니다.
+3.  **스트리밍 환경에서 신뢰성과 확장성이 보장되어야 합니다.**
+    스트리밍 환경에서는 메시지를 빠르게 처리 후 적재하는 것이 중요합니다. 따라서 kafka의 메시지가 빠르게 쌓여도 Transformation & Load 레이어에서는 일관성있게 처리할 수 있어야 합니다.  
+    Kafka Connect는 `Distributed Mode`를 통해 Worker 갯수를 조정하여 Scale Out/In을 쉽게 할 수 있으며, Worker가 만약 실패하더라도 기존 Worker들에 Task들을 리밸런싱해줍니다.
 
-        -   as-is
-            ```json
-            {
-                "object": "vehicle",
-                "type": "kinematic",
-                "messaged_at": "2023-01-01T12:00:00+09:00",
-                "measurements": [
-                    {
-                        "timestamp_iso": "2023-01-01T11:59:00+09:00",
-                        "speed": 30,
-                    },
-                    {
-                        "timestamp_iso": "2022-01-01T11:59:01+09:00",
-                        "speed": 40,
-                    },
-                ],
-            }
-            ```
-        - to-be
-            ```json
-            [
-                {
-                    "object": "vehicle",
-                    "type": "kinematic",
-                    "messaged_at": "2023-01-01T12:00:00+09:00",
-                    "timestamp_iso": "2023-01-01T11:59:00+09:00",
-                    "speed": 30,
-                },
-                {
-                    "object": "vehicle",
-                    "type": "kinematic",
-                    "messaged_at": "2023-01-01T12:00:00+09:00",
-                    "timestamp_iso": "2023-01-01T11:59:01+09:00",
-                    "speed": 45,
-                },
-            ]
-            ```
+    Kafka Connect의 배포 모드에 대해 더 자세하게 알고 싶다면 [여기](https://docs.confluent.io/kafka-connectors/self-managed/userguide.html#deployment-considerations)를 확인해주세요.
 
-3.  **실시간 처리에 중요한 신뢰성과 확장성이 보장되어야 합니다.**
+### Kafka Connector 공통 기능 정의
 
-### Kafka Connector의 동작 방식
+**일부 요구사항에 맞게 가벼운 변형 작업이 필요합니다.**  
+DynamoDB는 레코드를 추가할 때 Partition Key를 필수적으로 입력해야 합니다. FMS 프로젝트에서 DynamoDB 테이블은 비용/성능 효율화를 위해 [Single Table Design](https://aws.amazon.com/ko/blogs/compute/creating-a-single-table-design-with-amazon-dynamodb/) 기법으로 디자인했고 이에 맞는 Partition key를 추가해줘야 했습니다. Kafka Connect에는 [SMT(Single Message Transformation)](https://docs.confluent.io/platform/current/connect/transforms/overview.html)가 있어 Property 기반으로 손쉽게 메시지의 변형이 가능합니다. 물론 SMT 특성상 제약 사항이 존재하지만 필요하면 직접 Transfrom 을 구현하여 사용이 가능합니다.  
+아래는 메시지를 템플릿 언어 기반으로 변경할 수 있도록 구현한 Transform입니다.
 
--   Kafka Connect/ Kakfa Connector
--   Source/Sink Connector
--   Put method
+```json
+"transforms": "RenameField",
+"transforms.InsertFieldInStringTemplate.field": "pk",
+"transforms.InsertFieldInStringTemplate.value" : "${id}#${object}#${type}"
+```
+
+-   as-is
+
+```json
+{
+    "object": "vehicle",
+    "type": "kinematic",
+    "id": 350
+}
+```
+
+-   to-be
+
+```json
+{
+    "object": "vehicle",
+    "type": "kinematic",
+    "id": 350,
+    "pk": "350#vehicle#kinematic"
+}
+```
+
+또한 위에서 언급했듯이 FMS 프로젝트의 차량 IoT 데이터는 보통 배치로 묶여서 메시지들이 들어옵니다. 만약 클라이언트가 이렇게 nested된 형태의 데이터를 쿼리하는 경우 전처리를 진행해야 하기 때문에 적재하기 전에 데이터를 풀어서 적재해주는 것이 좋습니다.  
+보통 메시지를 전처리하기 위해서 적재 전에 별도의 Consumer를 두곤 하지만, PoC 단계에서 관리 포인트를 높이고 싶지 않았습니다. 그래서 Kafka Connector에서 Property 기반으로 배치 메시지를 풀어줄 수 있도록 기능을 추상화하여 제공하였습니다.
+
+```json
+"converter.split.list.key": "measurements"
+```
+
+-   as-is
+
+```json
+{
+    "object": "vehicle",
+    "type": "kinematic",
+    "messaged_at": "2023-01-01T12:00:00+09:00",
+    "measurements": [
+        {
+            "timestamp_iso": "2023-01-01T11:59:00+09:00",
+            "speed": 30
+        },
+        {
+            "timestamp_iso": "2022-01-01T11:59:01+09:00",
+            "speed": 40
+        }
+    ]
+}
+```
+
+-   to-be
+
+```json
+[
+    {
+        "object": "vehicle",
+        "type": "kinematic",
+        "messaged_at": "2023-01-01T12:00:00+09:00",
+        "timestamp_iso": "2023-01-01T11:59:00+09:00",
+        "speed": 30
+    },
+    {
+        "object": "vehicle",
+        "type": "kinematic",
+        "messaged_at": "2023-01-01T12:00:00+09:00",
+        "timestamp_iso": "2023-01-01T11:59:01+09:00",
+        "speed": 45
+    }
+]
+```
 
 ### DynamoDB Sink Connector 요구 사항 및 구현
 
