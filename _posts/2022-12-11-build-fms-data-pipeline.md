@@ -235,40 +235,95 @@ Kafka Connect를 썼을 때 장점은 아래와 같습니다
 
     하지만 꼭 장점만 있는 것은 아닙니다.
 
--   kafka connect 프레임워크의 동작방식을 기본적으로 이해하고 있어야 합니다.
--   Kafka consumer에 비해 상대적으로 테스트하기나 디버깅하기가 불편합니다.
+-   Kafka Connect 프레임워크의 동작방식을 기본적으로 이해하고 있어야 합니다.
+-   Kafka Consumer에 비해 상대적으로 테스트하기나 디버깅하기가 불편합니다.
 -   Java로 개발되어 있어 JVM 계열 언어로만 개발이 가능합니다.
 -   간단한 변형 후 적재가 아닌 비즈니스 요구사항이나 복잡한 처리가 포함된 작업을 구현할 경우 Kafka Consumer로 구현하는 것이 수월합니다.
 
 Kafka Connect에 대한 더 자세한 설명은 [여기](https://docs.confluent.io/platform/current/connect/index.html)를 참고해주세요.
 
-### Kafka Connector의 동작 방식
+### Kafka Connect의 동작 방식
 
--   Kafka Connect/ Kakfa Connector
--   Source/Sink Connector
--   Put method
+Kafka Connect는 Kafka와 외부 데이터 소스/싱크를 연결해주는 프레임워크입니다. Kafka Connector는 Kafka Conneect에서 실제로 동작하는 구현체이며 Kafka Connect에 의해 관리됩니다. Kafka Connect를 사용하기 위해선 Kafka Connector를 jar 형태로 Kafka Connect 내부(보통 Docker Image)에 포함시킨 후, Kafka Conenct를 실행한 후 제공되는 API로 Kafka Connector를 등록하는 과정을 거치게 됩니다.
+
+Kafka Connector는 Source와 Sink 2가지 방식을 제공합니다. Source Connector는 데이터 소스에서 Kafka 토픽으로 메시지를 전달하고 Sink Connector는 Kafka 토픽에서 데이터 싱크로 메시지를 전달합니다. 실제로 Kafka Connector를 구현하기 위해서 Source, Sink에 따라 나뉘어진 인터페이스를 따르게 됩니다.
+
+Kafka Connect를 관리하기 위해선 `Worker`와 `Task`의 개념을 알고 있어야 합니다. Task는 Kafka Connector의 논리적인 실행 단위이며 JVM으로 실행되는 Process라고 보시면 됩니다. 보통 하나의 Task는 Kafka 토픽의 한 개 이상의 파티션을 담당합니다 (보통 1개의 Task가 1개의 파티션을 맡도록 운영합니다).
+
+Worker는 Task를 운영하는 물리적인 프로세스로 Task의 라이프사이클을 담당합니다. 즉 하나의 Worker에는 여러 개의 Task를 실행하고 있으며, Worker끼리 서로 통신하면서 Task를 재할당해주기도 합니다. FMS 프로젝트에서는 Kubernetes 환경에서 Kafka Connect를 운영하며 이때 Worker는 `Pod`이 됩니다.
+
+Kafka Connect는 `Standalone Mode`와 `Distributed Mode`가 있는데, Standalone은 Worker를 1개, Distributed Mode는 Worker를 여러 개 사용할 수 있습니다. 주로 운영 환경에서 Kafka Connect는 Distributed Mode로 사용하며 여러 개의 Worker와 Task를 상황에 맞게 조정하며 변화되는 트래픽에 유연하게 대응합니다.
+
+Kafka Connect의 동작 방식에 대한 더 자세한 내용은 [여기](https://docs.confluent.io/platform/current/connect/concepts.html)를 참고해주세요.
 
 ### 요구 사항 및 결정 이유
 
-Kafka Consumer와 kafka Connect 중 선택할 때는 현재 비즈니스 요구 사항에 맞춰 장/단점을 잘 비교하여 선택하는 것이 중요합니다. FMS 프로젝트에서 Kafka 토픽에 있는 메시지를 데이터 싱크에 적재하기 위해서 아래와 같은 요구사항들을 고려하여 Kafka Connect를 선택하였습니다.
+Kakfa 토픽의 메시지를 처리하기 위해 Kafka Consumer와 kafka Connect 중 선택할 때는 현재 비즈니스 요구 사항에 맞춰 장/단점을 잘 비교하여 선택하는 것이 중요합니다. 사실 Kafka 토픽의 메시지를 단순하게 적재하는 경우라면 오픈소스 Kafka Connector를 사용하는 게 낫습니다. 하지만 FMS 프로젝트에는 아래와 같은 요구사항들이 있었고, 충분히 기술적 검토를 한 후 Kafka Connector를 직접 개발하여 하나의 Kafka Connect로 메시지 적재를 관리하자는 결정을 내렸습니다.
 
 1.  **Kafka 토픽 별 메시지들이 S3와 DynamoDB에 적재되어야 합니다.**  
-    Kafka에서 S3로 데이터를 적재하는 S3 Sink Connector는 오픈소스로 존재하여 많은 곳에서 사용하고 있습니다. 하지만 DynamoDB의 경우 별도의 Sink Connector가 존재하지 않아 직접 구현이 필요한 상황이었습니다. 이미 제공되는 S3 Sink Connector를 사용하면서 DynamoDB도 Connector 형태로 개발한다면 빌드, 운영 상 이점이 있을 것이라고 판단하였습니다 (Kafka Connect와 Connector의 관계는 아래에서 더 다루곘습니다)
+    Kafka에서 S3로 데이터를 적재하는 S3 Sink Connector는 오픈소스로 존재하여 많은 곳에서 사용하고 있습니다. 하지만 DynamoDB의 경우 별도의 Sink Connector가 존재하지 않아 직접 구현이 필요한 상황이었습니다. 이미 제공되는 S3 Sink Connector를 사용하면서 DynamoDB도 Connector 형태로 개발한다면 하나의 플랫폼으로 빌드, 운영할 수 있게 되어 이점이 있을 것이라고 판단하였습니다.
 
 2.  **일부 요구사항에 맞게 가벼운 변형 작업이 필요합니다.**  
-     DynamoDB는 레코드를 추가할 때 Partition Key를 필수적으로 입력해야 합니다. FMS 프로젝트에서 DynamoDB 테이블은 비용/성능 효율화를 위해 [Single Table Design](https://aws.amazon.com/ko/blogs/compute/creating-a-single-table-design-with-amazon-dynamodb/) 기법으로 디자인했고 이에 맞는 Partition key를 추가해줘야 했습니다. 이외에도 비용 절감을 위해 불필요한 컬럼을 삭제하는 것도 고려가 필요합니다.
+     DynamoDB는 레코드를 추가할 때 Partition Key를 필수적으로 입력해야 합니다. FMS 프로젝트에서 DynamoDB 테이블은 비용/성능 효율화를 위해 [Single Table Design](https://aws.amazon.com/ko/blogs/compute/creating-a-single-table-design-with-amazon-dynamodb/) 기법으로 디자인했고 이에 맞는 Partition key가 적재되기 전에 메시지에 추가되어야 합니다. 이외에도 비용 절감을 위해 불필요한 컬럼을 삭제하는 것도 고려가 필요합니다.
 
     여기서 Kafka Connect에는 [SMT(Single Message Transformation)](https://docs.confluent.io/platform/current/connect/transforms/overview.html)가 있어 Property 기반으로 손쉽게 메시지의 변형이 가능합니다. 물론 SMT 특성상 제약 사항이 존재하지만 필요하면 직접 Transfrom 을 구현하여 사용이 가능합니다.
 
 3.  **스트리밍 환경에서 신뢰성과 확장성이 보장되어야 합니다.**
     스트리밍 환경에서는 메시지를 빠르게 처리 후 적재하는 것이 중요합니다. 따라서 kafka의 메시지가 빠르게 쌓여도 Transformation & Load 레이어에서는 일관성있게 처리할 수 있어야 합니다.  
-    Kafka Connect는 `Distributed Mode`를 통해 Worker 갯수를 조정하여 Scale Out/In을 쉽게 할 수 있으며, Worker가 만약 실패하더라도 기존 Worker들에 Task들을 리밸런싱해줍니다.
+    Kafka Connect는 `Distributed Mode`를 통해 Worker 갯수를 조정하여 Scale Out/In을 쉽게 할 수 있으며, Worker가 만약 실패하더라도 기존 Worker들에 Task들을 리밸런싱 해줘서 안전하게 운영이 가능합니다.
 
-    Kafka Connect의 배포 모드에 대해 더 자세하게 알고 싶다면 [여기](https://docs.confluent.io/kafka-connectors/self-managed/userguide.html#deployment-considerations)를 확인해주세요.
+**결과적으로 DynamoDB Sink Connector를 직접 개발하였으며, S3 Sink Connector도 추가 요구사항을 위해 Class를 Override하여 커스마이징하였습니다.**
 
-### Kafka Connector 공통 기능 정의
+### Kafka Connector 레포 구성
 
-**일부 요구사항에 맞게 가벼운 변형 작업이 필요합니다.**  
+참고 : Kafka Connector를 직접 개발하고 싶다면 [여기](https://docs.confluent.io/platform/current/connect/devguide.html#developing-a-simple-connector)에서 더 자세한 정보를 확인해보세요.
+
+Kafka Connector를 구현하는 레포지토리는 Kotlin으로 작성되었으며 아래와 같은 구성으로 이뤄집니다. S3, DyanmoDB Sink Connector가 멀티 모듈 형태로 구성되어 있으며 공통 기능(변형)을 하는 모듈을 별도로 의존하고 있습니다.
+
+```
+...
+build.gradle.kts
+Dockerfile
+e2e
+subprojects
+├── core
+│   └── src
+│       ├── main/...
+│       |   ├── converters
+│       │   │   ├── SplitListConverter.kt
+│       │   │   └── UpdateFieldsConverter.kt
+│       │   └── transforms
+│       │       ├── InsertFieldInStringTemplate.kt
+│       │       └── SplitArrayField.kt
+│       └── test/...
+├── dynamodb
+│   └── src
+│       ├── main
+│       │   ├── DynamoDbDao.kt
+│       │   ├── DynamoDbSinkConnector.kt
+│       │   ├── DynamoDbSinkConnectorConfig.kt
+│       │   └── DynamoDbSinkTask.kt
+│       └── test/...
+└── s3
+    └── src
+        ├── main
+        │   ├── S3SinkConnector.kt
+        │   ├── S3SinkConnectorConfig.kt
+        │   └── S3SinkTask.kt
+        └── test/...
+
+```
+
+S3 Sink Connector의 경우
+
+build.gradle.kts에는 Kafka Connector 관련 의존성(org.apache.kafka:connect-api)을 추가하고 S3 Sink Connector의 구현체
+
+```gradle
+implementation("io.confluent:kafka-connect-s3:10.0.11")
+implementation("org.apache.kafka:connect-api:$kafkaVersion")
+implementation("org.apache.kafka:connect-transforms:$kafkaConnectTransformVersion")
+```
+
 DynamoDB는 레코드를 추가할 때 Partition Key를 필수적으로 입력해야 합니다. FMS 프로젝트에서 DynamoDB 테이블은 비용/성능 효율화를 위해 [Single Table Design](https://aws.amazon.com/ko/blogs/compute/creating-a-single-table-design-with-amazon-dynamodb/) 기법으로 디자인했고 이에 맞는 Partition key를 추가해줘야 했습니다. Kafka Connect에는 [SMT(Single Message Transformation)](https://docs.confluent.io/platform/current/connect/transforms/overview.html)가 있어 Property 기반으로 손쉽게 메시지의 변형이 가능합니다. 물론 SMT 특성상 제약 사항이 존재하지만 필요하면 직접 Transfrom 을 구현하여 사용이 가능합니다.  
 아래는 메시지를 템플릿 언어 기반으로 변경할 수 있도록 구현한 Transform입니다.
 
