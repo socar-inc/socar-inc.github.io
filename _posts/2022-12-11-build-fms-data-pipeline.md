@@ -213,9 +213,10 @@ Kafka Connect를 썼을 때 장점은 아래와 같습니다
 -   프레임워크의 가이드를 따라 Connector를 손쉽게 개발하여 사용할 수 있습니다.
 -   REST API를 통해 Kafka Connect의 운영이 가능합니다.
 -   Worker와 Task 갯수 조정을 통해 손쉽게 스케일 아웃이 가능합니다.
--   Property 기반으로 Kafka Connector 설정을 할 수 있어 선언적인(declarative) 소프트웨어 운영이 가능해집니다. 아래 예시는 S3 Sink Connector를 배포할 때 사용하는 프로퍼티입니다.
+-   Property 기반으로 Kafka Connector 설정을 할 수 있어 선언적인(declarative) 소프트웨어 운영이 가능해집니다. 아래는 S3 Sink Connector를 배포할 때 API에 요청하는 스크립트 에시입니다.
 
-    ```json
+    ```shell
+    echo '
     {
         "connector.class": "kr.socar.fms.connector.s3.S3SinkConnector",
         "topics": "OOO",
@@ -231,6 +232,7 @@ Kafka Connect를 썼을 때 장점은 아래와 같습니다
         "s3.region": "ap-northeast-2",
         ...
     }
+    ' | curl -X PUT -d @- -s localhost:8083/connectors/vehicle-to-s3/config --header "content-Type:application/json"
     ```
 
     하지만 꼭 장점만 있는 것은 아닙니다.
@@ -261,52 +263,53 @@ Kafka Connect의 동작 방식에 대한 더 자세한 내용은 [여기](https:
 Kakfa 토픽의 메시지를 처리하기 위해 Kafka Consumer와 kafka Connect 중 선택할 때는 현재 비즈니스 요구 사항에 맞춰 장/단점을 잘 비교하여 선택하는 것이 중요합니다. 사실 Kafka 토픽의 메시지를 단순하게 적재하는 경우라면 오픈소스 Kafka Connector를 사용하는 게 낫습니다. 하지만 FMS 프로젝트에는 아래와 같은 요구사항들이 있었고, 충분히 기술적 검토를 한 후 Kafka Connector를 직접 개발하여 하나의 Kafka Connect로 메시지 적재를 관리하자는 결정을 내렸습니다.
 
 1.  **Kafka 토픽 별 메시지들이 S3와 DynamoDB에 적재되어야 합니다.**  
-    Kafka에서 S3로 데이터를 적재하는 S3 Sink Connector는 오픈소스로 존재하여 많은 곳에서 사용하고 있습니다. 하지만 DynamoDB의 경우 별도의 Sink Connector가 존재하지 않아 직접 구현이 필요한 상황이었습니다. 이미 제공되는 S3 Sink Connector를 사용하면서 DynamoDB도 Connector 형태로 개발한다면 하나의 플랫폼으로 빌드, 운영할 수 있게 되어 이점이 있을 것이라고 판단하였습니다.
+    Kafka에서 S3로 데이터를 적재하는 S3 Sink Connector는 오픈소스로 존재하여 많은 곳에서 사용하고 있습니다. 하지만 DynamoDB의 경우 Sink Connector가 오픈소스로 존재하지 않아 직접 구현이 필요한 상황이었습니다 (Confluenent에서 제공하는 Sink Connector가 있지만 유료 라이센스입니다) 이미 제공되는 S3 Sink Connector를 사용하면서 DynamoDB도 Connector 형태로 개발한다면 하나의 플랫폼으로 빌드, 운영할 수 있게 되어 이점이 있을 것이라고 판단하였습니다.
 
 2.  **일부 요구사항에 맞게 가벼운 변형 작업이 필요합니다.**  
      DynamoDB는 레코드를 추가할 때 Partition Key를 필수적으로 입력해야 합니다. FMS 프로젝트에서 DynamoDB 테이블은 비용/성능 효율화를 위해 [Single Table Design](https://aws.amazon.com/ko/blogs/compute/creating-a-single-table-design-with-amazon-dynamodb/) 기법으로 디자인했고 이에 맞는 Partition key가 적재되기 전에 메시지에 추가되어야 합니다. 이외에도 비용 절감을 위해 불필요한 컬럼을 삭제하는 것도 고려가 필요합니다.
 
     여기서 Kafka Connect에는 [SMT(Single Message Transformation)](https://docs.confluent.io/platform/current/connect/transforms/overview.html)가 있어 Property 기반으로 손쉽게 메시지의 변형이 가능합니다. 물론 SMT 특성상 제약 사항이 존재하지만 필요하면 직접 Transfrom 을 구현하여 사용이 가능합니다.
 
-3.  **스트리밍 환경에서 신뢰성과 확장성이 보장되어야 합니다.**
+3.  **스트리밍 환경에서 신뢰성과 확장성이 보장되어야 합니다.**  
     스트리밍 환경에서는 메시지를 빠르게 처리 후 적재하는 것이 중요합니다. 따라서 kafka의 메시지가 빠르게 쌓여도 Transformation & Load 레이어에서는 일관성있게 처리할 수 있어야 합니다.  
     Kafka Connect는 `Distributed Mode`를 통해 Worker 갯수를 조정하여 Scale Out/In을 쉽게 할 수 있으며, Worker가 만약 실패하더라도 기존 Worker들에 Task들을 리밸런싱 해줘서 안전하게 운영이 가능합니다.
 
 **결과적으로 DynamoDB Sink Connector를 직접 개발하였으며, S3 Sink Connector도 추가 요구사항을 위해 Class를 Override하여 커스마이징하였습니다.**
 
-### Kafka Connector 레포 구성
+### Kafka Connector 레포 구성 및 구현
 
-참고 : Kafka Connector를 직접 개발하고 싶다면 [여기](https://docs.confluent.io/platform/current/connect/devguide.html#developing-a-simple-connector)에서 더 자세한 정보를 확인해보세요.
-
-Kafka Connector를 구현하는 레포지토리는 Kotlin으로 작성되었으며 아래와 같은 구성으로 이뤄집니다. S3, DyanmoDB Sink Connector가 멀티 모듈 형태로 구성되어 있으며 공통 기능(변형)을 하는 모듈을 별도로 의존하고 있습니다.
+Kafka Connector의 레포 구성 및 구현에 대해 알아보도록 하겠습니다. 구체적인 구현 코드는 분량 관계상 생략하겠습니다.
 
 ```
 ...
-build.gradle.kts
-Dockerfile
-e2e
-subprojects
-├── core
-│   └── src
-│       ├── main/...
-│       |   ├── converters
-│       │   │   ├── SplitListConverter.kt
-│       │   │   └── UpdateFieldsConverter.kt
-│       │   └── transforms
-│       │       ├── InsertFieldInStringTemplate.kt
-│       │       └── SplitArrayField.kt
-│       └── test/...
-├── dynamodb
-│   └── src
-│       ├── main
-│       │   ├── DynamoDbDao.kt
-│       │   ├── DynamoDbSinkConnector.kt
-│       │   ├── DynamoDbSinkConnectorConfig.kt
-│       │   └── DynamoDbSinkTask.kt
-│       └── test/...
-└── s3
-    └── src
-        ├── main
+.
+├── ...
+├── build.gradle.kts
+├── Dockerfile
+├── e2e
+│   ├── Makefile
+│   ├── docker-compose.e2e.yaml
+│   ├── socar-fms-pipeline-docker
+│   └── tests
+└── subprojects
+    ├── core
+    │  ├── main/...
+    │  |   ├── converters
+    │  │   │   ├── SplitListConverter.kt
+    │  │   │   └── UpdateFieldsConverter.kt
+    │  │   └── transforms
+    │  │       ├── InsertFieldInStringTemplate.kt
+    │  │       └── SplitArrayField.kt
+    │  └── test/...
+    ├── dynamodb
+    │   ├── main/...
+    │   │   ├── DynamoDbDao.kt
+    │   │   ├── DynamoDbSinkConnector.kt
+    │   │   ├── DynamoDbSinkConnectorConfig.kt
+    │   │   └── DynamoDbSinkTask.kt
+    │   └── test/...
+    └── s3
+        ├── main/...
         │   ├── S3SinkConnector.kt
         │   ├── S3SinkConnectorConfig.kt
         │   └── S3SinkTask.kt
@@ -314,9 +317,9 @@ subprojects
 
 ```
 
-S3 Sink Connector의 경우
-
-build.gradle.kts에는 Kafka Connector 관련 의존성(org.apache.kafka:connect-api)을 추가하고 S3 Sink Connector의 구현체
+Kafka Connector를 구현하는 레포지토리는 Kotlin으로 작성되었으며 위와 같은 구성되어 있습니다. S3, DyanmoDB Sink Connector가 멀티 모듈 형태로 구성되어 있으며 공통 기능(변형)을 하는 모듈을 별도로 의존하고 있습니다.  
+DynamoDB의 경우 유일하게 Confluent에서 제공하는 Connector가 존재했지만 유료 라이센스이기에 직접 구현하는 것을 선택했습니다. 직접 구현하기 위해선 [connect-api](https://mvnrepository.com/artifact/org.apache.kafka/connect-api) 의존성을 추가 해줬습니다.  
+S3의 경우 Maven Repo에 올라와 있는 [kafka-connect-s3](https://mvnrepository.com/artifact/io.confluent/kafka-connect-s3)를 상속받아 구현하였습니다.
 
 ```gradle
 implementation("io.confluent:kafka-connect-s3:10.0.11")
@@ -324,11 +327,113 @@ implementation("org.apache.kafka:connect-api:$kafkaVersion")
 implementation("org.apache.kafka:connect-transforms:$kafkaConnectTransformVersion")
 ```
 
-DynamoDB는 레코드를 추가할 때 Partition Key를 필수적으로 입력해야 합니다. FMS 프로젝트에서 DynamoDB 테이블은 비용/성능 효율화를 위해 [Single Table Design](https://aws.amazon.com/ko/blogs/compute/creating-a-single-table-design-with-amazon-dynamodb/) 기법으로 디자인했고 이에 맞는 Partition key를 추가해줘야 했습니다. Kafka Connect에는 [SMT(Single Message Transformation)](https://docs.confluent.io/platform/current/connect/transforms/overview.html)가 있어 Property 기반으로 손쉽게 메시지의 변형이 가능합니다. 물론 SMT 특성상 제약 사항이 존재하지만 필요하면 직접 Transfrom 을 구현하여 사용이 가능합니다.  
+기본적으로 Sink Connector를 구현하기 위해선 `SinkConnector`, `SinkTask`, `AbstractConfig` 3가지 추상클래스를 구현해야 합니다.
+
+AbstractConfig는 Kafka Connector에 대한 설정 Config들을 작성합니다. 위에서 언급했듯이 Kafka Connector를 실행할 때 Property 기반으로 설정 값을 입력하게 됩니다. 아래는 DynamoDB Sink Connector 설정값을 정의한 것으로 Table, Partition key, Sort key 등에 대한 입력이 있음을 확인할 수 있습니다.
+
+```kotlin
+class DynamoDbSinkConnectorConfig(config: Map<String, String>) : AbstractConfig(CONFIG, config) {
+    internal companion object {
+        const val DYNAMODB_TABLE = "dynamodb.table"
+        private const val DYNAMODB_TABLE_NAME_DOC = "DynamoDB Target Table"
+
+        const val DYNAMODB_TABLE_PARTITION_KEY = "dynamodb.partition.key"
+        private const val DYNAMODB_TABLE_PARTITION_KEY_DOC = "DynamoDB Partition Key"
+
+        const val DYNAMODB_TABLE_SORT_KEY = "dynamodb.sort.key"
+        private const val DYNAMODB_TABLE_SORT_KEY_DOC = "DynamoDB Sort Key"
+
+        const val CONVERTER_SPLIT_LIST_KEY = "converter.split.list.key"
+        private const val CONVERTER_SPLIT_LIST_KEY_DOC = "Key for splitting record to array of record"
+
+        const val CONVERTER_UPDATE_FIELDS_TEMPLATE = "converter.update.fields.template"
+        private const val CONVERTER_UPDATE_FIELDS_TEMPLATE_DOC = "fields template for update"
+
+        ...
+}
+```
+
+SinkConnector는 Task가 실행될 때 필요한 기능들을 작성합니다. Task가 실행, 중단될 때 동작이나 SinkTask, Config에 대한 정의를 합니다.
+
+```kotlin
+class DynamoDbSinkConnector : SinkConnector() {
+    private val logger = LoggerFactory.getLogger(DynamoDbSinkConnector::class.java)
+    private lateinit var sinkConfig: DynamoDbSinkConnectorConfig
+    ...
+
+    override fun version(): String = ...
+    override fun start(props: MutableMap<String, String>) {...}
+    override fun stop() {...}
+    override fun taskClass(): Class<out Task> = DynamoDbSinkTask::class.java
+    override fun taskConfigs(maxTasks: Int): MutableList<MutableMap<String, String>> {...}
+    override fun config() = DynamoDbSinkConnectorConfig.CONFIG
+}
+```
+
+SinkTask는 실제로 메시지를 처리하는 Task의 구현부를 작성합니다. 메시지를 DynamoDB 적재하기 위해 필요한 의존성들을 초기화하여 사용하게 됩니다. 대표적으로 DynamoDB와 통신하는 역할을 하는 `DynamoDBDao`이나 변형을 담당하는 Converter 등이 있습니다(Converter의 역할은 아래에서 다룹니다). 그리고 실제 메시지를 처리하는 부분은 `put` 메소드에서 작성하게 됩니다.
+
+```kotlin
+open class DynamoDbSinkTask : SinkTask() {
+    private val logger = LoggerFactory.getLogger(DynamoDbSinkTask::class.java)
+    private var reporter: ErrantRecordReporter? = null
+    lateinit var config: DynamoDbSinkConnectorConfig
+    lateinit var dao: DynamoDbDao
+    lateinit var splitArrayConverter: SplitListConverter
+    lateinit var updateFieldsConverter: UpdateFieldsConverter
+
+    override fun version() = ...
+    override fun start(props: MutableMap<String, String>?) {...}
+    override fun stop(){...}
+    override fun put(records: MutableCollection<SinkRecord>?) {
+        // 메시지 변형
+        // 예외 메시지 방어 처리 및 DeadletterQueue 전송
+        ...
+        // DynamoDb 적재
+        logger.info("dynamodb request item size : ${passed.size}")
+        val response = dao.batchWrite(passed).partition {
+            it.unprocessedItems.isEmpty()
+        }
+        ...
+    }
+}
+
+```
+
+위에서 Sink Connector를 직접 구현한 DynamoDB Connector의 구현부에 대해 알아보았습니다. S3 Sink Connector 같은 경우 기존 구현체(kafka-connect-s3)를 상속받아서 변형 작업만 일부 추가하였습니다.
+
+```kotlin
+open class S3SinkTask : ConfluentS3SinkTask() {
+    private val logger = LoggerFactory.getLogger(S3SinkTask::class.java)
+    private var reporter: ErrantRecordReporter? = null
+    lateinit var config: S3SinkConnectorConfig
+    lateinit var splitArrayConverter: SplitListConverter
+    lateinit var updateFieldsConverter: UpdateFieldsConverter
+
+    override fun version() = ...
+    override fun start(props: MutableMap<String, String>?) {...}
+    override fun stop(){...}
+    override fun put(records: MutableCollection<SinkRecord>?) {
+        // 변형 및 에외 방어 로직
+        ...
+        super.put(newRecords)
+    }
+}
+
+```
+
+직접 Kafka Connector를 개발하면서 [공식 가이드](https://docs.confluent.io/platform/current/connect/devguide.html#developing-a-simple-connector)를 참고하였고 구현 코드는 S3 Sink Connector의 구현체인 [kafka-connect-storage-cloud](https://github.com/confluentinc/kafka-connect-storage-cloud) 소스코드를 보면서 빠르게 코드 작성을 할 수 있었습니다. 직접 Kafka Connector를 구현하시는 분들께 도움이 되었으면 합니다.
+
+### Kafka Connector 변형
+
+이번에는 Kafka Connector에서 구현한 변형 기능에 대해 알아보도록 하곘습니다. 위에서 언급한 것처럼 Kafka Connector는 Propery 기반으로 Configuration 설정을 할 수 있어 Connector Task를 선언적으로 관리 할 수 있는 장점이 있습니다.  
+따라서 메시지 변형 관련 설정도 최대한 Property 기반으로 관리할 수 있도록 하였으며, 이를 위해서 비즈니스 로직은 최대한 제외하고 Property로 설정할 수 있도록 추상화하였습니다. 이를 통해 Kafka Connector가 새로 추가되는 토픽이나 다른 프로젝트에서 사용되도 문제가 없도록 하였습니다.
+
+DynamoDB는 레코드를 추가할 때 Partition Key를 필수적으로 입력해야 합니다. FMS 프로젝트에서 DynamoDB 테이블은 비용/성능 효율화를 위해 [Single Table Design](https://aws.amazon.com/ko/blogs/compute/creating-a-single-table-design-with-amazon-dynamodb/) 기법으로 디자인했고 이에 맞는 Partition key를 추가해줘야 했습니다. Kafka Connect에는 [SMT(Single Message Transformation)](https://docs.confluent.io/platform/current/connect/transforms/overview.html)가 있어 Property 기반으로 손쉽게 메시지의 변형이 가능합니다. 물론 SMT 특성상 제약 사항이 존재하지만 필요하면 직접 Transfrom 을 구현하여 사용이 가능합니다.
+
 아래는 메시지를 템플릿 언어 기반으로 변경할 수 있도록 구현한 Transform입니다.
 
 ```json
-"transforms": "RenameField",
+"transforms": "InsertFieldInStringTemplate",
 "transforms.InsertFieldInStringTemplate.field": "pk",
 "transforms.InsertFieldInStringTemplate.value" : "${id}#${object}#${type}"
 ```
@@ -354,11 +459,11 @@ DynamoDB는 레코드를 추가할 때 Partition Key를 필수적으로 입력�
 }
 ```
 
-또한 위에서 언급했듯이 FMS 프로젝트의 차량 IoT 데이터는 보통 배치로 묶여서 메시지들이 들어옵니다. 만약 클라이언트가 이렇게 nested된 형태의 데이터를 쿼리하는 경우 전처리를 진행해야 하기 때문에 적재하기 전에 데이터를 풀어서 적재해주는 것이 좋습니다.  
-보통 메시지를 전처리하기 위해서 적재 전에 별도의 Consumer를 두곤 하지만, PoC 단계에서 관리 포인트를 높이고 싶지 않았습니다. 그래서 Kafka Connector에서 Property 기반으로 배치 메시지를 풀어줄 수 있도록 기능을 추상화하여 제공하였습니다.
+또한 위에서 언급했듯이 FMS 프로젝트의 차량 IoT 데이터는 보통 배치로 묶여서 메시지들이 들어옵니다. 만약 클라이언트가 nested된 형태의 데이터를 쿼리하는 경우 전처리를 진행해야 하는 불편함이 생기기에 적재하기 전에 데이터를 풀어서 적재해주는 것이 좋습니다.  
+보통 메시지를 전처리하기 위해서 적재 전에 별도의 Consumer를 두곤 하지만, PoC 단계에서 관리 포인트를 높이고 싶지 않았습니다. 그래서 Kafka Connector에서 Property 기반으로 배치 메시지를 풀어줄 수 있도록 Converter를 구현하고 Property를 통해 조작이 가능하도록 했습니다.
 
 ```json
-"converter.split.list.key": "measurements"
+"converter.split.list.key": "measurements" //배치 메시지를 풀어낼 필드를 입력합니다
 ```
 
 -   as-is
@@ -401,22 +506,6 @@ DynamoDB는 레코드를 추가할 때 Partition Key를 필수적으로 입력�
     }
 ]
 ```
-
-### DynamoDB Sink Connector 요구 사항 및 구현
-
--   요구사항
-
--   DynamoDB Connector는 오픈소스로 따로 없고 유료 라이센스가 있었음
--   구현 코드
-
-### Custom S3 Sink Connector 요구 사항 및 구현
-
--   요구사항
-
--   DynamoDB와 유사하게 measurements를 다시 풀어서 제공해줘야 함
--   Kotlin mutli module을 활용
--   S3 Sink Connector를 상속받아 구현했음
--   구현 코드
 
 ### Kafka Connect 배포 및 운영
 
