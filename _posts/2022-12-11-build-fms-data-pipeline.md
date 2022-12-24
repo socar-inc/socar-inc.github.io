@@ -215,7 +215,7 @@ Kafka Connect를 썼을 때 장점은 아래와 같습니다
 -   Worker와 Task 갯수 조정을 통해 손쉽게 스케일 아웃이 가능합니다.
 -   Property 기반으로 Kafka Connector 설정을 할 수 있어 선언적인(declarative) 소프트웨어 운영이 가능해집니다. 아래는 S3 Sink Connector를 배포할 때 API에 요청하는 스크립트 에시입니다.
 
-    ```shell
+    ```bash
     echo '
     {
         "connector.class": "kr.socar.fms.connector.s3.S3SinkConnector",
@@ -460,7 +460,7 @@ DynamoDB는 레코드를 추가할 때 Partition Key를 필수적으로 입력�
 ```
 
 또한 위에서 언급했듯이 FMS 프로젝트의 차량 IoT 데이터는 보통 배치로 묶여서 메시지들이 들어옵니다. 만약 클라이언트가 nested된 형태의 데이터를 쿼리하는 경우 전처리를 진행해야 하는 불편함이 생기기에 적재하기 전에 데이터를 풀어서 적재해주는 것이 좋습니다.  
-보통 메시지를 전처리하기 위해서 적재 전에 별도의 Consumer를 두곤 하지만, PoC 단계에서 관리 포인트를 높이고 싶지 않았습니다. 그래서 Kafka Connector에서 Property 기반으로 배치 메시지를 풀어줄 수 있도록 Converter를 구현하고 Property를 통해 조작이 가능하도록 했습니다.
+보통 메시지를 전처리하기 위해서 적재 전에 별도의 Consumer를 두곤 하지만, PoC 단계에서 관리 포인트를 높이고 싶지 않았습니다. 그래서 Kafka Connector에서 Property 기반으로 배치 메시지를 풀어줄 수 있도록 Converter를 구현하고 Property를 통해 조작이 가능하도록 했습니다(Kafka Connector의 Converter API와는 다릅니다).
 
 ```json
 "converter.split.list.key": "measurements" //배치 메시지를 풀어낼 필드를 입력합니다
@@ -509,13 +509,118 @@ DynamoDB는 레코드를 추가할 때 Partition Key를 필수적으로 입력�
 
 ### Kafka Connect 배포 및 운영
 
--   Kafka Connect 이미지에 Connector를 jar 형태로 마운트시켜준다
--   Kafka Connect + k8s Helm Chart를 활요앻
+이제 Kafka Connect 배포 및 운영에 대해 알아보도록 하겠습니다. FMS 프로젝트에서 Kafka Connect는 Kubernetes(AWS EKS)에서 프로비저닝하고 있습니다. 아래 Dockerfile에서 보시는 것처럼 Kubernetes에서 배포하기 위해 Kafka Connect 이미지가 필요합니다. 이에 DynamoDB, S3 Sink Connector를 jar로 빌드한 후 Kafka Connect 이미지에 파일을 마운트합니다. 만약 Connector가 추가되면 여기서 마운트를 시켜줍니다.
+
+```Dockerfile
+FROM openjdk:17-jdk-slim-buster AS builder
+WORKDIR /usr/src/app
+...
+COPY subprojects subprojects
+RUN ./gradlew :s3:uberjar && ./gradlew :dynamodb:uberjar
+
+FROM confluentinc/cp-kafka-connect:$KAKFA_CONNECT_VERSION
+ARG FMS_CONNECTOR_PATH="/usr/share/fms-connectors"
+ENV CONNECT_PLUGIN_PATH $CONNECT_PLUGIN_PATH,$FMS_CONNECTOR_PATH
+ENV JAVA_OPTS="-XX:+UseG1GC -XX:MaxGCPauseMillis=100 -XX:+ExitOnOutOfMemoryError -Xmx1024m -Xms1024m"
+COPY --from=builder /usr/src/app/subprojects/dynamodb/build/libs $FMS_CONNECTOR_PATH
+COPY --from=builder /usr/src/app/subprojects/s3/build/libs $FMS_CONNECTOR_PATH
+```
+
+CI 파이프라인에서는 Github Action을 사용하고 있습니다. Github Action에서는 main 브랜치의 tag push가 발생했을 때 각 Connector 별 유닛 테스트와 Kafka Connect의 E2E 테스트 (Docker Compose 기반)을 수행합니다. 만약 통과했을 시 AWS ECR로 이미지를 빌드 후 배포합니다.
+
+Kubernetes 프로비저닝을 위해서 Helm chart을 사용하고 있습니다. [cp-kafka-connect 차트](https://github.com/confluentinc/cp-helm-charts)를 Clone해서 사용하고 있으며 추후 [strimizi](https://strimzi.io/)로 환경을 옮길 계획입니다. Helm Chart의 배포는 ArgoCD를 사용하고 있습니다.
+
+```yaml
+replicaCount: 3 # Worker 갯수를 설정합니다 (k8s Deployment로 관리됩니다)
+
+image: ...
+imageTag: ...
+imagePullPolicy: ...
+
+heapOptions: "-Xms512M -Xmx1024M"
+
+kafka:
+  bootstrapServers: ...
+
+configurationOverrides: # Worker Configuration를 입력합니다.
+  plugin.path: "/usr/share/java,/usr/share/confluent-hub-components,/usr/share/fms-connectors"
+  key.converter: "org.apache.kafka.connect.storage.StringConverter"
+  value.converter: "org.apache.kafka.connect.storage.StringConverter"
+  key.converter.schemas.enable: "false"
+  value.converter.schemas.enable: "false"
+  ...
+...
+```
+
+Kafka Connect는 [REST API](https://docs.confluent.io/platform/current/connect/references/restapi.html#kconnect-rest-interface)를 통해 Kafka Connector 운영이 가능합니다. 따라서 Shell Script 파일을 실행해 API를 호출하게 되며 Kafka Connector는 여기서 Task 단위로 실행됩니다.
+
+```bash
+for obj in "vehicle" ... ; do # topic 별로 Kafka Connector를 배포합니다
+  echo '
+  {
+      "connector.class": "kr.socar.fms.connector.s3.S3SinkConnector",
+      "topics": "fms.'${obj}'.real.msk",
+      "tasks.max" : "1",
+      "converter.split.list.key": "measurements",
+      ...
+  }
+  ' | curl -X PUT -d @- -s localhost:8083/connectors/${obj}-to-s3/config --header "content-Type:application/json"
+
+  echo '
+  {
+        "connector.class" : "kr.socar.fms.connector.dynamodb.DynamoDbSinkConnector",
+        "topics": "fms.'${obj}'.real.msk",
+        "tasks.max" : "1",
+        "converter.split.list.key": "measurements",
+        ...
+        ...
+  }
+  ' | curl -X PUT -d @- -s localhost:8083/connectors/${obj}-to-dynamodb/config --header "content-Type:application/json"
+done
+```
+
+Kafka Connector를 운영하면서 신경썼던 지점들도 말씀드리겠습니다.
+
+1. 메시지 중복 처리
+
+실시간 데이터가 저장소에 저장될 때 데이터가 중복되거나 손실되지 않아야 합니다. 만약 특정 Offset의 메시지를 적재하는 과정에서 Kafka Connector가 문제가 생겨 리밸런싱이 발생한다면 메시지의 누락이나 중복이 발생할 수도 있습니다. 중복은 저장소에서 후처리를 할 수 있지만, 누락은 복구하기가 힘들어 더 조심해야 합니다.
+
+이때 메시지를 처리하는 영역(Producer, Consumer)에서는 `Message Delivery Semantics`라고 해서 메시지를 전송하는 전략을 결정합니다. 대표적으로 `At Least Once`는 적어도 한 번 이상의 메시지를 다시 보내겠다는 의미로 메시지의 누락은 발생하지 않지만 중복이 발생할 수 있습니다. 반면 `Exactly Once`는 메시지를 정확히 한 번씩만 보내겠다는 의미로 누락과 중복이 발생하지 않습니다. 이는 다운타임이 있더라도 정확하게 처리했던 메시지의 Offset을 기억해서 동작함을 의미합니다.
+
+S3 Sink Connector는 특정 조건에서 Exactly Once를 지원합니다([여기](https://docs.confluent.io/kafka-connectors/s3-sink/current/overview.html#exactly-once-delivery-on-top-of-eventual-consistency) 참고). DynamoDB Sink Connector의 경우 At Least Once 방식으로 구현을 했습니다. 이유는 DynamoDB의 경우 같은 메시지(Primiary Key가 같은 경우)는 Upsert하기 때문에 중복 이슈는 발생하지 않을 것이라 판단하였습니다.
+
+2.  에러 핸들링
+
+![inside-kafka-connect](/img/build-fms-data-pipeline/inside-kafka-connect.jpeg)
+
+Kafka Sink Connector는 실행될 때 앞단에서 메시지를 검증/전처리하는 `Converter`와 `Transform`이 위치합니다. 만약 메시지가 해당 Converter나 Transform 조건에 맞지 않는 경우 Error Message로 간주하게 됩니다. 이 때 `errors.tolerance`를 적용해서 None(기본값)일 경우 Task를 실패시키고, 'all'일 경우 메시지를 생략하고 다음 메시지를 처리하게 됩니다.
+
+FMS 프로젝트에서는 'all'을 설정해 생략되는 메시지는 Deadletter Queue로 보내도록해 모니터링 및 재처리가 가능하도록 하였습니다. Deadletter Queue로 사용될 Topic을 생성하고 운영하는 Task들에서 문제가 발생한 메시지는 해당 Topic으로 보내도록 설정하였습니다.
+
+```json
+"errors.tolerance" : "all"
+"errors.deadletterqueue.topic.name":"fms.all.deadletter.msk",
+"errors.deadletterqueue.topic.replication.factor": 1,
+"errors.deadletterqueue.context.headers.enable": "true",
+"errors.log.include.messages": "true"
+```
+
+만약 Connector Instance에서 메시지 처리에 실패하는 경우 에러로 인해 Task가 실패할 수 있습니다. 이 경우 모니터링한 후 다시 Task를 실행해줘야 합니다.  
+만약 Kafka Connector를 직접 개발하시는 경우 Connector Instance에서 발생한 에러 메시지를 Deadletter Queue로 보내도록 돕는[ErrantRecordReporter](https://cwiki.apache.org/confluence/display/KAFKA/KIP-610%3A+Error+Reporting+in+Sink+Connectors)를 사용해보시는 걸 추천드립니다.
+
+Kafka Connector의 에러 핸들링에 대해 더 자세하게 알고 싶다면 [여기](https://www.confluent.io/blog/kafka-connect-deep-dive-error-handling-dead-letter-queues/)를 확인해 보세요.
 
 ### Kafka Connect 모니터링하기
 
--   Prometheus + Grafana 확인
--   주요하게 보면 좋은 Metric들
+![kafka-connect-dashboard](/img/build-fms-data-pipeline/kafka-connect-dashboard.png)
+
+Kafka Connect는 기본적으로 jmx를 통해 운영에 필요한 메트릭들을 제공합니다. FMS 프로젝트에서 모니터링 툴로 Prometheus와 Grafana를 사용하고 있으므로, prometheus에서 jmx의 메트릭을 수집할 수 있도록 돕는 [jmx_exporter](https://github.com/prometheus/jmx_exporter)를 사용하여 prometheus와 연동하였습니다.  
+(Kafka Connect 메트릭과 관련해 더 자세한 내용은 [여기](https://docs.confluent.io/kafka-connectors/self-managed/monitoring.html#using-jmx-to-monitor-kconnect)를 확인해보세요)
+
+Kafka 토픽의 메시지가 잘 처리되고 있는지를 나타내는 `Consumer Lag`도 꼭 확인해야 할 메트릭 중 하나입니다. AWS MSK의 모니터링 설정을 통해 Cloud Watch에서 Consumer Lag을 확인할 수 있기에 Grafana Dashboard에서 Cloud Watch를 연동해 함께 확인하고 있습니다.
+
+![grafana-slack-alert](/img/build-fms-data-pipeline/grafana-slack-alert.png)
+만약 모니터링 중 이상이 발생하는 경우 `Grafana Alert`를 사용해 슬랙 모니터링 채널로 메시지를 보내고 있습니다.
 
 ## 4. 비정형 데이터를 Redshift에서 조회하기 까지
 
