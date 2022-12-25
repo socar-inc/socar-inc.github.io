@@ -622,32 +622,63 @@ Kafka 토픽의 메시지가 잘 처리되고 있는지를 나타내는 `Consume
 ![grafana-slack-alert](/img/build-fms-data-pipeline/grafana-slack-alert.png)
 만약 모니터링 중 이상이 발생하는 경우 `Grafana Alert`를 사용해 슬랙 모니터링 채널로 메시지를 보내고 있습니다.
 
-## 4. 비정형 데이터를 Redshift에서 조회하기 까지
+## 4. 반정형 데이터를 Redshift에서 조회하기 까지
 
-### 배치 분석 플랫폼 훑어보기
+이번 장에서는 FMS 프로젝트에서 구축한 배치 분석 플랫폼에 대해 소개드리겠습니다. 위에서 말씀드린 것처럼 차량의 이동 정보와 같은 실시간 조회의 경우 Redis를, 실시간에서 준 실시간 조회는 DynamoDB를 사용하였습니다. 마지막으로 배치로 집계되는 데이터는 본 플랫폼을 거쳐 데이터 마트(RDS)에 적재됩니다.
 
-### Redshift Spectrum이란
+### 요구사항 및 결정 사항
 
--   redshift를 활용해서 쿼리하기로 결정 (athena는 일부 window function 지원이 안됨)
-    -   파티셔닝된 parquet 들
-    -   glue table
+배치 분석 플랫폼 환경을 구축하기 위해 아래와 같은 요구사항들을 고려하였습니다.
 
-### 요구사항
+-   **분석가들이 쿼리를 작성할 수 있는 형태의 시스템이 필요합니다**  
+    고객사에게 운영 인사이트를 제공하기 위해 데이터 분석/집계 과정이 꼭 필요합니다. 데이터를 다루는 팀원들에게 익숙한 SQL 환경을 제공해주는 것이 초기 비용 대비 생산성이 높다고 판단하였습니다. 따라서 Spark 같은 대용량 처리 엔진이 아닌 ANSI SQL에 호환되는 Athena나 Redshift로 선택지를 좁혔습니다.
 
--   프로토콜이 많다 보니 토픽을 대분류로 분리해서 저장
--   PoC기간에 스키마 레지스트리 도입이 힘들었음
+    Athena는 AWS에서 제공하는 대화형 쿼리 서비스로 내부적으로 Presto 엔진을 사용하고 있습니다. 프로젝트 개발 초기에 Athena를 사용하다가 일부 윈도우 함수의 지원이 되지 않고 OOO의 이유로 `Redshift`를 선택하였습니다. 그리고 Redshift에서 S3 데이터를 조회할 수 있는 `Redshift Spectrum`을 활용했습니다. Redshift Spectrum를 사용하기 위해선 데이터의 스키마를 잡아줄 수 있는 Glue External Table을 사용하므로 Glue Data Catalog도 도입하였습니다.
 
-### 람다 함수 주요 동작방식
+-   **S3에 적재된 데이터는 Redshift의 조회에 최적화되어야 합니다**  
+    Redshift Spectrum을 통해 S3에서 데이터를 조회할 때 탐색 시간과 비용을 줄이기 위해선 대표적으로 해야하는 Practice들이 존재합니다 (더 자세한 내용은 [여기](https://aws.amazon.com/ko/blogs/big-data/10-best-practices-for-amazon-redshift-spectrum/)를 확인해주세요). 이 중에서 필수적으로 해야할 것 중 하나는 쿼리의 풀스캔을 막기 위해서 S3 객체들을 파티션에 따라서 적재하는 것입니다. 또한 Column 기반 저장 포맷과 높은 압축률이 특징인 Parquet로 파일 포맷을 가져가는 것도 좋은 선택지입니다.
 
-### 람다 모니터링하기
+    S3 Sink Connector에 적재된 원본 json 데이터는 여러 타입의 메시지들이 함께 포함되어 있습니다(위에서 언급했듯이 하나의 Kafka 토픽에 여러 메시지 프로토콜이 존재합니다). 따라서 Redshft에서 테이블 단위로 조회하기 때문에 메시지들로 같은 타입으로 분류되어 있어야 합니다.
+
+    위 방식들을 적용하기 위해서 원본 데이터를 전처리하여 S3에 적재하는 도구로 `Lambda`를 선택하였습니다.
+
+-   **주기적으로 분석/집계하는 쿼리를 실행하고 적재 수 있어야 합니다**  
+    일, 주 단위 집계를 위해서는 주기적으로 Redshift 쿼리를 실행하고 중간 과정을 거쳐 데이터 마트에 적재해야 합니다. 집계 데이터 적재를 위한 데이터 마트는 조회가 용이한 `RDS(Mysql)`를 선택하였습니다. 또한 Redshift 쿼리 실행 및 적재를 위한 스케줄링 도구로 `MWAA(Managed Worflow Apache Airflow)`를 선택하였습니다. 데이터 본부에서는 Airflow 사용이 익숙하기도 하고 팀 내에서 Airflow 운영에 대한 전문성이 높기에 자연스럽게 결정하였습니다.
+
+### 배치 분석 플랫폼의 흐름
+
+![analytics-platform](/img/build-fms-data-pipeline/analytics-platform.png)
+
+위 이미지를 통해 배치로 데이터기 집계되는 흐름을 파악할 수 있습니다.
+
+1. **S3 Sink Connector를 통해 차량 디바이스의 데이터가 S3에 Json 포맷으로 적재됩니다.**  
+   5분 주기로 각 Kafka 토픽의 메시지들이 S3에 [파티셔닝(Hive Partition)](https://docs.aws.amazon.com/ko_kr/athena/latest/ug/partitions.html)되어 적재됩니다. 예를 들어 `object=vehicle/type=kinematic/year=2022/month=12/day=25/hour=11`과 같이 시간 분류를 위한 년,월,일,시간과 메시지 프로토콜 별로 분류를 위한 파티션들로 각각 분류되어 데이터가 적재됩니다. 이렇게 파티션으로 분류된 데이터는 Athena, Redshift 같은 쿼리 엔진에서 데이터를 효율적으로 조회할 수 있습니다.
+
+2. **Lambda의 이벤트 트리거를 통해 원본 JSON의 타입별로 분류하여 Parquet로 형변환하여 적재합니다**  
+   위 요구사항에서 언급한 것 처럼, Redshift에서 효율적으로 조회하기 위해서 원본 데이터의 전처리 작업이 필요합니다. Lambda 함수는 타입별로 메시지를 분류하며 Parquet로 적재합니다. 이때 Redshift의 집계 패턴에 맞게 Range 스캔이 쉽도록 `.../ymd=2022-12-25/hour=11` 다음과 같은 파티션으로 변경해서 적재합니다.  
+   적재하는 과정에서 Glue Table을 통한 메시지 Schema에 대한 검증을 진행하며 문제가 있다면 AWS SQS로 실패한 이벤트 정보를 전송합니다.
+
+3. **Airflow로 Redshift 집계 쿼리를 스케줄링하여 데이터 마트(RDS)에 적재합니다.**
+
+    Airflow에서 Redshift 조회 결과를 Mysql(RDS)에 적재하기 위해서 Custom Operator를 구현해서 사용하고 있습니다. 또한 Airflow는 AWS 관련 Provider를 제공해주기에 저희는 `RedshiftSQLOperator`를 사용하여 Redshift 조회 결과를 임시로 저장할 때 사용할 수 있었습니다.
+
+### Glue Data Catalog 활용
+
+-   AWS Glue Data Catalog는 ...
+-   사용처
+    -   Redshift External Table
+    -   Lambda 함수의 스키마 검증 및 후처리에 사용
+-   각 S3의 타입별 파티션에 맞게 Glue Table 생성해서 관리하고 있음
+-   초기에 Glue Crawler로 한번 스키마를 추론하고 이후 수동으로 수정을 한 번 해줌
+-   Glue Crawler는 따로 사용하지 않고, Lambda에서 사용하는 lake formation을 활용함
+
+### Lambda 함수의 구현 및 주요 동작
+
+### Lambda 모니터링 및 Fallback 처리
 
 -   Grafana에서 확인
 -   문제 발생시 Alert가 오도록
-
-### fallback 처리
-
--   SQS 활용
--   ***
+-   SQS Fallback
 
 ## 5. 견고한 파이프라인을 위한 통합 테스트 환경 구축하기
 
