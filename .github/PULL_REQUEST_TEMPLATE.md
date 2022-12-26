@@ -3,7 +3,9 @@
 ex.) `socar-{닉네임}.github.io`
 
 # PR 리뷰 전 Checklist
+
 > PR 시, 아래 부분을 확인해주세요! 
+
 - [ ] PR 제목을 `post: <글_제목>` 으로 해주셨나요? 
 - [ ] 파일명과 metadata의 date가 현재 시점 전으로 설정 되었나요? (현재 시점 이후라면 웹에서 확인이 되지 않습니다)
 - [ ] fork 한 repository의 url 로 확인이 가능한가요?  
@@ -23,5 +25,5 @@ ex.) `socar-{닉네임}.github.io`
 - [ ] Background image 확정 및 저작권 확인
 
 # TO DO 
- >머지하기 전 추가로 의논해야 될 점이 있다면 남겨주세요. 
+> 머지하기 전 추가로 의논해야 될 점이 있다면 남겨주세요. 
 
