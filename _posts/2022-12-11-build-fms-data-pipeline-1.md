@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "빠르고 정확하게, 신사업 FMS 데이터 파이프라인 구축기"
+title: "빠르고 정확하게, 신사업 FMS 데이터 파이프라인 구축기 - 1"
 subtitle: 빠르고 정확하게, 신사업 FMS 데이터 파이프라인 구축기
 date: 2022-12-11 09:00:00 +0900
 category: data
@@ -16,14 +16,12 @@ tags:
     - aws
 ---
 
-## 0. 들어가며 (heading 삭제 예정)
-
 안녕하세요. 데이터 플랫폼 팀의 그랩입니다.
 
 데이터 플랫폼팀은 “쏘카 내부의 데이터 이용자가 비즈니스에 임팩트를 낼 수 있도록 소프트웨어 엔지니어링에 기반하여 문제를 해결합니다”라는 미션을 기반으로 인프라, 데이터 파이프라인 개발, 운영, 모니터링, 데이터 애플리케이션 개발, MLOps 등의 업무를 맡고 있습니다.
 팀 구성원들은 모두가 소프트웨어 엔지니어라는 사명감을 가지고 개발뿐만 아니라 Ops에 대한 이해와 책임감을 가지고 업무에 임하고 있습니다.
 
-본 글에서는 쏘카의 신사업 FMS 서비스의 IoT 데이터 파이프라인에 대해 소개하려고 합니다. 차량 IoT 디바이스에서 생성되는 서비스에서 제공되기까지 어떤 파이프라인을 거쳤는지 하나하나 설명드리려고 합니다.
+본 글에서는 쏘카의 신사업 FMS 서비스의 IoT 데이터 파이프라인에 대해 소개하려고 합니다. 차량 IoT 단말기에서 생성되는 서비스에서 제공되기까지 어떤 파이프라인을 거쳤는지 하나하나 설명드리려고 합니다.
 
 다음과 같은 분들이 읽으면 좋습니다.
 
@@ -80,7 +78,7 @@ FMS 서비스를 통해 고객사는 수집/분석된 차량 데이터를 실시
 처음으로 실시간 파이프라인을 담당하는 주요 컴포넌트입니다.
 
 **IoT Core**  
-AWS IoT Core는 IoT 디바이스의 메시지를 송/수신하는 메시지 브로커로 내부는 MQTT 프로토콜로 구현되어 있습니다. Fully Managed Service로 인프라 관리가 필요 없고 보안이나 디바이스 관리 등의 이점이 있어 현재 쏘카 서비스와 FMS 모두 IoT Core를 차량 데이터의 매개체로 사용하고 있습니다.
+AWS IoT Core는 IoT 단말기의 메시지를 송/수신하는 메시지 브로커로 내부는 MQTT 프로토콜로 구현되어 있습니다. Fully Managed Service로 인프라 관리가 필요 없고 보안이나 단말기 관리 등의 이점이 있어 현재 쏘카 서비스와 FMS 모두 IoT Core를 차량 데이터의 매개체로 사용하고 있습니다.
 
 **MSK(Managed Streaming for Kafka Service)**  
 보통 실시간 데이터 파이프라인 아키텍처를 설계할 떄 메시지 브로커인 Kafka를 많이 선택합니다. Kafka는 분산 스트리밍 플랫폼으로 실시간으로 들어오는 데이터를 확장성있게 처리할 수 있어 많은 기업들이 메시지 브로커로 사용하고 있습니다 (본 글에서는 Kafka에 대해 자세하게 다루지 않곘습니다)
@@ -132,20 +130,20 @@ Airflow는 Airbnb에서 개발한 워크플로우 관리 오픈소스로 현재 
 2. 수집되는 데이터는 발송 주기에 맞춰 IoT Core로 전송합니다.
 3. IoT Core 메시지 브로커에 저장된 메시지는 라우팅 규칙에 따라 상위 주제별로 Kafka Topic으로 라우팅됩니다.
 4. Kafka Topic의 각 파티션에 저장된 메시지는 Kafka Connect를 통해 데이터 싱크(DynamoDB, S3)로 적재됩니다 (Redis는 필터링을 하는 Kafka Consumer를 통해 적재됩니다)
-5. S3에 적재된 Json 파일은 람다를 통해 분류/변형 후 S3에 적재됩니다 (Redshift, Athena 쿼리에 적합한 형태로 적재됩니다)
+5. S3에 적재된 Json 포맷의 객체는 람다를 통해 분류/변형 후 S3에 적재됩니다 (Redshift, Athena 쿼리에 적합한 형태로 적재됩니다)
 6. Airflow로 스케줄링된 Redshift 쿼리를 통해 데이터를 집계하여 RDS(데이터 마트)에 저장합니다.
 
 ## 2. 차량 데이터가 Kafka로 오기까지
 
 ### 차량 IoT 데이터의 특징
 
-쏘카 서비스와 동일하게 FMS 서비스도 관리하는 차량들은 IoT 디바이스 내에서 차량의 상태 정보를 수집 서버(AWS IoT Core)로 전송합니다. 해당 메시지는 가공/적재 과정을 거쳐 서비스에서 활용됩니다.
+쏘카 서비스와 동일하게 FMS 서비스도 관리하는 차량들은 IoT 단말기 내에서 차량의 상태 정보를 수집 서버(AWS IoT Core)로 전송합니다. 해당 메시지는 가공/적재 과정을 거쳐 서비스에서 활용됩니다.
 
 쏘카의 차량에서 수집되는 상태 메시지는 다음과 같은 특징들이 있습니다.
 
 1. 보고하는 유형과 제어 응답 유형이 있습니다  
-   일반적으로 차량을 관제하기 위해선 차량 디바이스에서 차량의 상태를 주기적으로 수집해서 보고하는 것이 필요합니다. 실제로 특정 프로토콜은 차량의 위치(위도, 경도)와 속도 같은 이동 정보를 주기적으로 보고하는 역할을 합니다.  
-   또한 차량 디바이스를 제어하기 위해 클라이언트에서 명령을 보낼 수 있습니다. 이떄 디바이스는 명령은 수행한 후 결과를 응답하게 됩니다. 예를 들어 블랙박스에 녹화되고 있는 영상을 업로드 하라는 명령이 있습니다. 디바이스는 이를 수행한 후 결과를 메시지로 수집 서버에 전송합니다.
+   일반적으로 차량을 관제하기 위해선 차량 단말기에서 차량의 상태를 주기적으로 수집해서 보고하는 것이 필요합니다. 실제로 특정 프로토콜은 차량의 위치(위도, 경도)와 속도 같은 이동 정보를 주기적으로 보고하는 역할을 합니다.  
+   또한 차량 단말기를 제어하기 위해 클라이언트에서 명령을 보낼 수 있습니다. 이떄 단말기는 명령은 수행한 후 결과를 응답하게 됩니다. 예를 들어 블랙박스에 녹화되고 있는 영상을 업로드 하라는 명령이 있습니다. 단말기는 이를 수행한 후 결과를 메시지로 수집 서버에 전송합니다.
 
 2. 차량의 상태를 표현하기 위한 다양한 프로토콜이 존재합니다.  
    FMS 서비스에서 차량 관제, 운전 효율화 등의 기능을 제공하기 위해선 다양한 수집 데이터를 필요로 합니다.
@@ -154,7 +152,7 @@ Airflow는 Airbnb에서 개발한 워크플로우 관리 오픈소스로 현재 
     위처럼 메시지 프로토콜이 다양하다 보니 쏘카에서는 프로토콜별로 스키마를 설계할 때 프로젝트에 참여하는 주요 팀들과 함께 논의를 진행했습니다. 덕분에 스키마간의 통일성과 규칙이 생겼으며 데이터를 처리하는 쪽에서는 예측 가능하게 소프트웨어 개발이 가능했습니다. 개인적으로 스키마 설계를 할 때 이해관계자들이 함께 참여하는 것이 정말 중요하다고 느껴졌습니다.
 
 3. 주기적으로 보고하는 유형은 보통 배치로 묶어서 전송합니다
-   디바이스에서 수집하는 상태 정보들은 프로토콜 별로 설정된 Hz 수집 주기에 따라 수집됩니다. 이때 메시지를 수집 서버로 전송한다면 통신비나 클라우드 리소스(IoT Core, Kafka 등)의 비용이 더 비싸집니다. 따라서 비용 효울화를 위해 상태 정보를 배치 형태로 묶어서 전송 주기에 따라 전송됩니다. 그래서 주기 보고의 메시지는 아래와 같은 형태로 구성됩니다.
+   단말기에서 수집하는 상태 정보들은 프로토콜 별로 설정된 Hz 수집 주기에 따라 수집됩니다. 이때 메시지를 수집 서버로 전송한다면 통신비나 클라우드 리소스(IoT Core, Kafka 등)의 비용이 더 비싸집니다. 따라서 비용 효울화를 위해 상태 정보를 배치 형태로 묶어서 전송 주기에 따라 전송됩니다. 그래서 주기 보고의 메시지는 아래와 같은 형태로 구성됩니다.
 
     ```json
     {
@@ -612,8 +610,6 @@ Kafka Connector의 에러 핸들링에 대해 더 자세하게 알고 싶다면 
 
 ### Kafka Connect 모니터링하기
 
-![kafka-connect-dashboard](/img/build-fms-data-pipeline/kafka-connect-dashboard.png)
-
 Kafka Connect는 기본적으로 jmx를 통해 운영에 필요한 메트릭들을 제공합니다. FMS 프로젝트에서 모니터링 툴로 Prometheus와 Grafana를 사용하고 있으므로, prometheus에서 jmx의 메트릭을 수집할 수 있도록 돕는 [jmx_exporter](https://github.com/prometheus/jmx_exporter)를 사용하여 prometheus와 연동하였습니다.  
 (Kafka Connect 메트릭과 관련해 더 자세한 내용은 [여기](https://docs.confluent.io/kafka-connectors/self-managed/monitoring.html#using-jmx-to-monitor-kconnect)를 확인해보세요)
 
@@ -636,7 +632,8 @@ Kafka 토픽의 메시지가 잘 처리되고 있는지를 나타내는 `Consume
     Athena는 AWS에서 제공하는 대화형 쿼리 서비스로 내부적으로 Presto 엔진을 사용하고 있습니다. 프로젝트 개발 초기에 Athena를 사용하다가 일부 윈도우 함수의 지원이 되지 않고 OOO의 이유로 `Redshift`를 선택하였습니다. 그리고 Redshift에서 S3 데이터를 조회할 수 있는 `Redshift Spectrum`을 활용했습니다. Redshift Spectrum를 사용하기 위해선 데이터의 스키마를 잡아줄 수 있는 Glue External Table을 사용하므로 Glue Data Catalog도 도입하였습니다.
 
 -   **S3에 적재된 데이터는 Redshift의 조회에 최적화되어야 합니다**  
-    Redshift Spectrum을 통해 S3에서 데이터를 조회할 때 탐색 시간과 비용을 줄이기 위해선 대표적으로 해야하는 Practice들이 존재합니다 (더 자세한 내용은 [여기](https://aws.amazon.com/ko/blogs/big-data/10-best-practices-for-amazon-redshift-spectrum/)를 확인해주세요). 이 중에서 필수적으로 해야할 것 중 하나는 쿼리의 풀스캔을 막기 위해서 S3 객체들을 파티션에 따라서 적재하는 것입니다. 또한 Column 기반 저장 포맷과 높은 압축률이 특징인 Parquet로 파일 포맷을 가져가는 것도 좋은 선택지입니다.
+    또한 Column 기반 저장 포맷과 높은 압축률이 특징인 Parquet로 파일 포맷을 가져가는 것도 좋은 선택지입니다.
+    Redshift Spectrum을 통해 S3에서 데이터를 조회할 때 탐색 시간과 비용을 줄이기 위해선 대표적으로 해야하는 Practice들이 존재합니다 (더 자세한 내용은 [여기](https://aws.amazon.com/ko/blogs/big-data/10-best-practices-for-amazon-redshift-spectrum/)를 확인해주세요). 이 중에서 필수적으로 해야할 것 중 하나는 쿼리의 풀스캔을 막기 위해서 S3 객체들을 파티션에 따라 적재하는 것입니다(S3 Partititon 개념은 [여기](https://docs.aws.amazon.com/ko_kr/athena/latest/ug/partitions.html)를 참고해주세요)
 
     S3 Sink Connector에 적재된 원본 json 데이터는 여러 타입의 메시지들이 함께 포함되어 있습니다(위에서 언급했듯이 하나의 Kafka 토픽에 여러 메시지 프로토콜이 존재합니다). 따라서 Redshft에서 테이블 단위로 조회하기 때문에 메시지들로 같은 타입으로 분류되어 있어야 합니다.
 
@@ -651,7 +648,7 @@ Kafka 토픽의 메시지가 잘 처리되고 있는지를 나타내는 `Consume
 
 위 이미지를 통해 배치로 데이터기 집계되는 흐름을 파악할 수 있습니다.
 
-1. **S3 Sink Connector를 통해 차량 디바이스의 데이터가 S3에 Json 포맷으로 적재됩니다.**  
+1. **S3 Sink Connector를 통해 차량 단말기의 데이터가 S3에 Json 포맷으로 적재됩니다.**  
    5분 주기로 각 Kafka 토픽의 메시지들이 S3에 [파티셔닝(Hive Partition)](https://docs.aws.amazon.com/ko_kr/athena/latest/ug/partitions.html)되어 적재됩니다. 예를 들어 `object=vehicle/type=kinematic/year=2022/month=12/day=25/hour=11`과 같이 시간 분류를 위한 년,월,일,시간과 메시지 프로토콜 별로 분류를 위한 파티션들로 각각 분류되어 데이터가 적재됩니다. 이렇게 파티션으로 분류된 데이터는 Athena, Redshift 같은 쿼리 엔진에서 데이터를 효율적으로 조회할 수 있습니다.
 
 2. **Lambda의 이벤트 트리거를 통해 원본 JSON의 타입별로 분류하여 Parquet로 형변환하여 적재합니다**  
@@ -664,90 +661,172 @@ Kafka 토픽의 메시지가 잘 처리되고 있는지를 나타내는 `Consume
 
 ### Glue Data Catalog 활용
 
--   AWS Glue Data Catalog는 ...
--   사용처
-    -   Redshift External Table
-    -   Lambda 함수의 스키마 검증 및 후처리에 사용
--   각 S3의 타입별 파티션에 맞게 Glue Table 생성해서 관리하고 있음
--   초기에 Glue Crawler로 한번 스키마를 추론하고 이후 수동으로 수정을 한 번 해줌
--   Glue Crawler는 따로 사용하지 않고, Lambda에서 사용하는 lake formation을 활용함
+AWS Glue Data Catalog는 S3 데이터 레이크에 저장된 데이터들을 SQL 형태로 조회할 수 있도록 메타스토어를 제공해줍니다. 현재 S3에 저장되어 있는 프로토콜 별 경로에 맞춰 Glue Table을 생성하여 관리하고 있습니다.
 
-### Lambda 함수의 구현 및 주요 동작
+Redshift에서 S3의 반정형 데이터에 접근하기 위해서는 External Table이라는 개념이 필요합니다. 실질적으로 External Table은 Glue Data Catalog의 Table과 동일하기에 Redshift의 S3 조회를 위해서는 Glue의 Table이 꼭 필요합니다. 따라서 각 프로토콜 별로 Glue Table을 생성해서 관리해줘야 하며 처음부터 스키마를 일일이 만들어주는 것보단 Glue Crawler를 활용하면 자동화된 추론을 통해 손쉽게 스키마를 생성할 수 있습니다. 물론 정확하지 않기에 한 번 생성 후 수동으로 스키마를 다시 조정해주는 작업은 필요합니다.  
+생성된 Glue Table은 Redshift 뿐만 아니라 Lambda에서 S3 원본 객체를 전처리할 떄 스키마를 검증하는 용도로도 사용되고 있습니다.
 
-### Lambda 모니터링 및 Fallback 처리
+Glue Table은 AWS의 분석 환경에서 SoT(Source Of Truth)로 간주되며 이를 위해서는 스키마의 변경이 합의없이 이뤄지면 안됩니다. 따라서 Glue Crawler의 설정이나 외부 환경에서 Glue Table의 Schema 변경을 막는 방향으로 설정하는 것을 추천드립니다.
 
--   Grafana에서 확인
--   문제 발생시 Alert가 오도록
--   SQS Fallback
+### Lambda 함수의 주요 동작 및 구현
 
-## 5. 견고한 파이프라인을 위한 통합 테스트 환경 구축하기
+FMS 프로젝트에서 Lambda 함수는 원본 S3에 적재된 객체(json 포맷)를 메시지 프로토콜 별로 분류하고 parquet로 포맷을 형변환하여 저장하는 역할을 합니다. 지정된 S3 Bucket의 객체가 생성되는 Put Event가 발생할 때 Lambda 함수가 트리거되어 동작합니다.  
+S3 Sink Connector에서는 Parquet로 적재를 지원해주지만 Schema Registry가 필수적으로 필요하며, 원본 메시지도 Avro, Protobuf 같은 바이너리 포맷의 경우에만 지원을 합니다. 현재 차량 단말기에서 Json 포맷으로 메시지를 전송하고 있고 하나의 토픽에 여러 메시지 타입이 들어오는 경우 S3 Sink Connector에서 분류/형변환 과정이 어렵습니다.
 
-### 데이터 파이프라인에 테스트가 필요한 이유
+Lambda 함수를 구성하는 주요 라이브러리로 `AWS Data Wrangler`가 있습니다. AWS Data Wrangler는 Pandas를 기반으로 해서 AWS의 데이터 레이크 관련 서비스들을 연결하는 기능을 제공합니다. 대표적으로 AWS Glue, S3, Redshift, Athena 등을 쉽게 연결하여 사용할 수 있습니다. 특히 S3에서 Parquet 형식의 데이터 처리가 가능해서 형 변환을 손쉽게 할 수 있습니다 (더 자세한 내용은 [여기](https://aws.amazon.com/ko/blogs/korea/using-aws-lake-formation-governed-table-with-aws-data-wrangler/)를 참고해주세요)
 
--   데이터 파이프라인의 구성요소는 각각 SPoF가 되기 쉽다.
--   Input/Output이 명확하여 테스트 결과를 정확하게 파악할 수 있다
+Lambda 함수의 구현부는 아래와 같습니다. 크게 다음과 같은 순서로 함수가 동작합니다.
 
-### Docker Compose를 통한 E2E 테스트 환경 구축
+1. S3 Key에서 파티션 추출
+2. 파티션 요구사항에 맞게 새로운 파티션 생성
+3. 메시지 분류 작업
+4. 메시지 적재
 
--   Docker-Compose를 통해 데이터 파이프라인을 구성하는 주요 요소들을 도커 컨테이너로 전부 실행
--   소스코드
--   localhost를 통해 테스트할 컴포넌트는 접근이 가능
+```python
+import json
+import urllib.parse
 
-### Github Action을 통한 CI/CD 파이프라인에 테스트 자동화
+import awswrangler as wr
+from s3_format.s3_parquet_parser import S3ParquetParser
 
--   Github Action이란?
--   Github Action의 Checkout을 활용해 Docker Compose 백그라운드로 실행하기
-    -   Github Action은 하나의 Job이 하나의 가상환경에서 돌아감
--   Pull Request, Deploy하기 전에 E2E로 검사
 
-## 6. 시뮬레이터를 활용한 실 데이터 기반 부하 테스트
+def lambda_handler(event, context):
+    parser = S3ParquetParser()
+    bucket = event["Records"][0]["s3"]["bucket"]["name"]
+    s3_key = urllib.parse.unquote_plus(
+        event["Records"][0]["s3"]["object"]["key"], encoding="utf-8"
+    )
+    ...
 
-### 실 데이터 기반의 메시지 시뮬레이터
+    # 1. s3 key를 통해 파티션 추출
+    partitions = parser.extract_partitions_from_s3_key(
+        s3_key=s3_key,
+        format="topics/{{ topic }}/year={{ year }}/month={{ month }}/day={{ day }}/hour={{ hour }}/{{ filename }}",
+    )
+    # 파티션 삭제 및 추가 작업
+    partitions.pop("topic")
+    partitions[
+        "ymd"
+    ] = f"{partitions.get('year', '1972')}-{partitions.get('month', '1')}-{partitions.get('day', '1')}"
+    ...
 
--   MVP 서비스 런칭 전까지 데이터를 처리/저장하는 소프트웨어는 계속해서 데이터가 흘러야 했음
--   메시지 시뮬레이터를 구현해 실데이터 기반으로 메시지를 전송할 수 있도록 제공함
--   병렬 처리, 데이터 번형 전송이 가능하도록 구현
+    # 2. 메시지 분류하기
+    fields = ["object", "type", "command"]
+    classified = parser.classify_s3_json_into_field(
+        s3_bucket=bucket, s3_key=s3_key, fields=fields, partitions=partitions
+    )
 
-### 부하 테스트
 
--   부하 테스트 계획 세우기
--   주요하게 확인한 지표
--   부하테스트 진행
-    -   차량 데이터 설정
-    -   각 프로토콜 메시지를 병렬로 전송
--   부하테스트 결과 정리
+    # 3. 메시지 타입 별 S3에 적재하기
+    target_bucket = ...
+    glue_database = ...
 
-## 7. 데이터 신뢰성을 위한 정합성과 무결성 검증하기
+    for key, messages in classified.items():
+        _object, _type, _command = key.split("#")
+        glue_table = f"{_object}_{_type}_{_command}"
+        ...
 
-### 데이터 정합성/무결성이란?
+        try:
+            result = parser.save_to_s3_in_parquet_with_partitions(
+                messages=messages,
+                partition_cols=[
+                    "ymd",
+                    "hour",
+                ],
+                s3_bucket=target_bucket,
+                s3_prefix=f"formatted/object={_object}/type={_type}/command={_command}",
+                extra=extra_args,
+            )
+            print(f"Successful in loading  {result}")
+        except Exception as e:
+            ...
+            raise e
+    # wr.lakeformation.commit_transaction(transaction_id=transaction)
+    ...
+```
 
--   정합성
--   무결성
--   중요한 이유
+S3 Parquet 적재 관련 책임은 `S3ParquetParser`라는 모듈이 담당하고 있습니다. `Lambda Layer`로 배포되며 Lambda 함수에서 import가 가능합니다. S3ParquetParser는 아래와 같이 구성됩니다.
 
-### 검사할 대상 정의하기
+```python
+import json
+import logging
+from collections import defaultdict
+from typing import Any, Dict, List, Optional
 
--   유형
-    -   원본 데이터에 대한 차량 데이터 이상 현상 검사
-    -   마트 테이블의 정합성 검사
-    -   마트 테이블의 무결성 검사
--   검사지 만들기
+import awswrangler as wr
+import boto3
+import pandas as pd
+from ttp import ttp
 
-### 정합성/무결성 검사 모니터링 구현하기
+logging.getLogger().setLevel(logging.INFO)
 
--   Airflow 활용
--   프로세스
-    -   마트 테이블 무결성 검사는 마트 생성 Dag에서 진행
-    -   원본 데이터 이상 여부 검사, 마트 테이블 정합성 검사는 하나의 Dag에서 진행
--   Dag 구현 코드
 
-### 검사 결과 모니터링하기
+class S3ParquetParser:
+    def __init__(
+        self,
+        boto3_session: boto3.Session = boto3.Session(region_name="ap-northeast-2"),
+        endpoint_url: str = None,
+    ):
+        ...
 
--   Grafana를 통한 대시보드에서 확인
--   이상이 있는 경우 Slack Alert를 통해 확인
+    def extract_partitions_from_s3_key(
+        self, s3_key: str, format: str
+    ) -> Dict[str, str]:
+        parser = ttp(s3_key, format)
+        parser.parse()
 
-## 8. 마무리
+        result = parser.result()[0][0]
+        if not result:
+            raise ValueError(f"해당 s3_key({s3_key})에 올바른 포맷({format})인지 확인해주세요")
+        return result
 
-### 남은과제
+    def classify_s3_json_into_field(
+        self,
+        s3_bucket: str,
+        s3_key: str,
+        fields: List[str],
+        partitions: Optional[Dict[str, Any]] = dict(),
+    ) -> Dict[str, list]:
+        s3 = self.session.client("s3", endpoint_url=self.endpoint_url)
+        result = defaultdict(list)
+        response = s3.get_object(Bucket=s3_bucket, Key=s3_key)
+        messages = response["Body"].read().decode("utf-8").splitlines()
 
-### 결론
+        for m in messages:
+            ...
+            result[field_concat_key].append(obj)
+        return result
+
+    def save_to_s3_in_parquet_with_partitions(
+        self,
+        messages: List[dict],
+        partition_cols: List[str],
+        s3_bucket: str,
+        s3_prefix: str,
+        extra: dict = {},
+    ):
+        df = pd.DataFrame.from_records(messages)
+        ...
+
+        result = wr.s3.to_parquet(
+            df=df,
+            path=f"s3://{s3_bucket}/{s3_prefix}",
+            boto3_session=self.session,
+            dataset=True,
+            partition_cols=partition_cols,
+            **extra,
+        )
+        return result
+```
+
+메시지를 적재해주는 `save_to_s3_in_parquet_with_partitions` 에서는 AWS Data Wrangler의 s3.to_parquet를 사용합니다. pandas dataframe을 s3에 parquet 형태로 저장해주는데 이 과정에서 Glue Table과 연동이 가능합니다. 이를 통해 적재할 메시지들의 스키마가 Glue Table의 스키마와 일치하는지를 검증할 수 있으며, 파티션을 Glue Table에 추가해줄 수 있습니다(이를 통해 Glue Crawler를 사용하지 않아도 되는 이점이 있습니다)
+
+또한 메시지를 분류하기 위해서는 원본 json 포맷을 Serialization해야 합니다. 먼저 pandas의 `read_json`으로 dataframe화 해서 메시지를 분류하려고 했지만 처리 시간 및 메모리 사용량이 높은 이슈가 있었습니다. 따라서 str 객체의 `splitLines`와 json 모듈의 `loads`로 serialization을 대체하였고 이를 통해 메모리 할당량을 절반 이하로 낮추고 처리 속도를 2배 이상 개선하였습니다.
+
+### 모니터링 및 Fallback 처리
+
+![grafana-lambda](/img/build-fms-data-pipeline/grafana-lambda.png)
+
+배치 분석 플랫폼의 모니터링은 마찬가지로 Grafana를 사용하고 있습니다. 현재는 주로 Lambda 함수에 대한 모니터링을 하고 있지만, Airflow의 데이터 신뢰성 검사 결과나 다른 리소스에 대한 지표들도 시각화할 계획을 하고 있습니다.
+
+Lambda 함수가 실패하는 경우 Redshift에서 누락된 데이터를 조회하게 됩니다. 정합성을 보장해주기 위해선 재처리를 할 수 있도록 Fallback 처리가 중요합니다. 따라서 Lambda에서는 이벤트가 실패할 때 SQS로 이벤트 정보를 보내도록 설정하였으며 문제 원인 파악 후 다른 Lambda 함수에서 SQS의 메시지를 소비할 수 있도록 하였습니다.
