@@ -42,17 +42,17 @@ tags:
 
 소프트웨어를 테스트 할 때 많이 나누는 분류 기준으로 Unit Test(단위 테스트), Integration Test(통합 테스트), E2E Test(종단간 테스트)가 있습니다.
 
-유닛 테스트
+**유닛 테스트**
 
 -   유닛(Unit)이라는 말 그대로, 가장 작은 단위의 테스트입니다. 단일 기능을 가지는 함수, 클래스의 메서드가 잘 작동하는지 테스트할 때 많이 사용됩니다.
 -   가장 간단하고, 직관적이며, 빠르게 실행과 결과를 볼 수 있는 테스트입니다.
 
-통합 테스트
+**통합 테스트**
 
 -   통합(Integration)이라는 말 그대로, 여러 요소를 통합한 테스트를 말합니다. 데이터베이스와 연동한 코드가 잘 작동하는지, 여러 함수와 클래스가 엮인 로직이 잘 작동하는지 등을 확인합니다.
 -   유닛 테스트보다는 복잡하고 느리지만, 소프트웨어는 결국 여러 코드 로직의 통합이라는 점에서 통합 테스트 역시 중요합니다.
 
-E2E 테스트
+**E2E 테스트**
 
 -   E2E는 End To End의 약자로, 끝에서 끝, 즉 클라이언트 입장에서 테스트해보는 것입니다.
     예를 들어 Lambda 함수의 Input으로 Event 정보를 넣었을 때 Output으로 S3 객체가 잘 생성되었는지 확인하는 것도 E2E 테스트로 볼 수 있습니다.
@@ -65,11 +65,220 @@ PoC 단계에서는 빠르게 개발을 해야 했고, 데이터 파이프라인
 
 ### Docker Compose를 통한 E2E 환경 구성
 
--   Docker-Compose를 통해 데이터 파이프라인을 구성하는 주요 요소들을 도커 컨테이너로 전부 실행
--   소스코드
--   localhost를 통해 테스트할 컴포넌트는 접근이 가능
+E2E 테스트를 하기 위해선 테스트할 애플리케이션 뿐만 아니라 외부 의존성들도 함께 실행해야 합니다. 기본적으로 애플리케이션의 실행 및 운영은 도커 컨테이너 기반으로 수행되고 있었기에 테스트 환경 구성에 `Docker Compose`를 사용하였습니다. Docker Compose는 다중 컨테이너 서비스를 정의하고 실행하기 위해 많이 사용되는 도구입니다. 여러 도커 애플리케이션을 yaml 파일에서 정의/실행할 수 있어 E2E 테스트처럼 여러 의존성들을 직접 띄워야 할 때 유용하게 사용됩니다.
 
-### Github Submodule을 통한 컴포넌트 별 E2E 테스트
+```yaml
+version: '3.8'
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:6.2.0
+    container_name: zookeeper
+    ...
+  broker:
+    image: confluentinc/cp-kafka:6.2.0
+    container_name: broker
+    depends_on:
+      - zookeeper
+    ...
+  localstack:
+    image: localstack/localstack
+    container_name: localstack
+    ...
+  kafka-ui:
+    image: provectuslabs/kafka-ui
+    container_name: kafka-ui
+    depends_on:
+      - broker
+    ...
+  kafkacat:
+    image: confluentinc/cp-kafkacat:5.4.9
+    container_name: kafkacat
+    depends_on:
+      - broker
+    ...
+networks:
+  shared-network:
+    name: shared-network
+    driver: bridge
+```
+
+위는 현재 파이프라인의 컴포넌트들을 띄우기 위한 docker-compose.yaml 파일의 일부입니다.
+Kafka 환경을 중심으로 모니터링 툴인 kafka-ui, aws 서비스를 로컬 환경에서 실행할 수 있도록 mocking해주는 localstack 등이 있습니다. 이를 통해 로컬, CI 환경에서 각 컴포넌트들을 빠르게 띄우게 되며 호스트에서 localhost를 통해서 접근하거나 각 컨테이너 서비스 사이에 통신이 가능해졌습니다.
+
+또한 외부 Docker Compose로 실행되는 컨테이너와 통신할 수 있도록 하기 위해서 network를 추가했습니다.
+
+### Git Submodule을 통한 컴포넌트 별 E2E 테스트
+
+파이프라인을 띄우는 Docker Compose 코드는 독립적인 Git Repository에서 관리되고 있습니다. FMS 프로젝트에 여러 컴포넌트들을 테스트해야 하는 것 뿐만 아니라 다른 프로젝트에서 사용할 수 있기 때문에 이를 분리하였습니다.
+
+E2E 테스트 대상이 되는 Kafka Sink Connector, Lambda 같은 컴포넌트도 마찬가지로 독립적인 Git Repository로 관리되고 있습니다. 따라서 테스트할 Repository에서 파이프라인 구성 Repository를 연결할 수 있는 `Git Submodule`을 사용하였습니다.
+
+예시로 Kafka Sink Connector의 E2E 테스트 폴더를 보면 아래와 같습니다. Git Submodule을 통해 Clone된 Repsoitory가 있는 걸 확인할 수 있습니다. 또한 `tests/`에 테스트 코드들이 들어있고 해당 테스트를 실행하는 `docker-compose.e2e.yaml`이 있습니다.
+
+```bash
+e2e
+├── ...
+├── docker-compose.e2e.yaml # 테스트할 대상들을 띄우기 위한 Docker Compose 파일
+├── socar-fms-pipeline-docker # Git Submodule
+│   ├── Makefile
+│   ├── README.md
+│   ├── docker-compose.yaml
+│   └── scripts
+└── tests
+    ├── messages
+    ├── test_ddb_sink_connector.sh
+    └── test_s3_sink_connector.sh
+```
+
+Kafka Sink Connector의 E2E 테스트를 실행하기 위해서 Kafka Connect 애플리케이션과 테스트 스크립트(Bash로 작성)을 실행하는 Docker Compose 파일이 필요합니다. 아래와 같이 Service에 작성하였으며 위에서 다룬 스트리밍 파이프라인 쪽 컨테이너들과 통신하기 위해 External Network로 연결하였습니다.
+
+```yaml
+version: '3.8'
+x-connect-test-configs: &connect-common
+  environment: &connect-common-env
+    ...
+
+services:
+  kafka-connect:
+    <<: *connect-common
+    image: ...
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    container_name: kafka-connect
+    networks:
+      - network
+      - default
+    ...
+  test-container:
+    image: confluentinc/cp-kafkacat:5.4.9
+    container_name: test-container
+    volumes:
+      - ./tests:/app/tests
+    command:
+      - /bin/bash
+      - -c
+      - |
+        ...
+        for f in /app/tests/*.sh; do
+          echo "run $$f..." && bash $$f
+        done
+    networks:
+      - network
+      - default
+    ...
+networks:
+  network:
+    external:
+      name: shared-network
+```
+
+그리고 실제로 컴포넌트가 제대로 동작하는지 검증하기 위한 테스트 코드는 아래와 같습니다. REST API로 테스트 할 Kafka Connector를 등록하고 Kafka Topic에 메시지를 보냈을 때 Sink에 제대로 적재가 되었는지 확인합니다. E2E 환경을 Docker Compose를 통해 전부 구축된 상황에서 Input을 넣고 Output을 확인하는 방식임을 알 수 있습니다.
+
+```bash
+#!/bin/bash
+set -eo pipefail
+
+Red='\033[0;31m'          # Red
+Green='\033[0;32m'        # Green
+Yellow='\033[0;33m'       # Yellow
+
+kafkaConnectServer=kafka-connect:8083
+targetTopic=s3-topic
+deadletterTopic=deadletterqueue
+
+echo "\n=============\n 0. Waiting for Kafka Connect to start listening on localhost \n============="
+while [[ $(curl -s -o /dev/null -w %{http_code} $kafkaConnectServer) -ne 200 ]]; do
+    echo "waiting..." && sleep 5
+done;
+
+echo "\n=============\n 1. test s3 sink connector exists \n============="
+command=$(curl -s $kafkaConnectServer/connector-plugins | grep "kr.socar.fms.connector.s3.S3SinkConnector" | wc -l)
+if [[ ${command} == 0 ]]; then
+  echo "${Red}Fms kafka connect doesn't have S3SinkConnector"
+  exit 1
+else
+  echo "${Green}passed"
+fi
+
+echo "\n=============\n 2. test s3 sink connector registered \n============="
+command=$(echo '
+            {
+                "connector.class" : "kr.socar.fms.connector.s3.S3SinkConnector",
+                "topics": "'"$targetTopic"'",
+                ...
+            }
+          ' | curl -X PUT -d @- -s $kafkaConnectServer/connectors/s3-sink-connector/config --header "content-Type:application/json")
+
+
+if [[ -z $(echo $command | jq -r ".error_code" ) ]]; then
+  echo "${Green}passed"
+else
+  echo $command
+  exit 1
+fi
+
+echo "\n=============\n 3. test s3 objects exist after putting messages \n============="
+kafkacat -P -b broker:29092 -t $targetTopic -l /app/tests/messages/s3-sink-test.message
+sleep 3 # wait for a work of s3 connector
+
+result=$(aws --endpoint-url http://localstack:4566 s3api list-objects --bucket test-bucket)
+
+s3FileSize=$(echo $result | jq -r '.Contents | length')
+if [[ $s3FileSize == 2 ]]; then
+  echo "${Green}passed"
+else
+  echo "${Red}S3SinkConnector doesn't put messages to s3 (object size : $s3FileSize)"
+  exit 1
+fi
+
+echo "\n=============\n 4. test dlq after putting error messages \n============="
+...
+
+```
+
+Kafka Sink Connector Docker Compose 환경에서 전부 실행했지만, Lambda 함수에 대한 E2E 테스트는 아래와 같이 python + pytest 환경에서 실행할 수 있습니다. 아래 코드는 Docker Compose의 일부 서비스(LocalStack S3)만 실행하여 E2E 테스트를 구현하였습니다.
+
+```python
+...
+
+S3_BUCKET = "test-bucket"
+S3_PREFIX = "raw"
+
+
+def is_port_in_use(port: int) -> bool:
+    import socket
+
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        return s.connect_ex(("localhost", port)) == 0
+
+...
+
+@pytest.mark.skipif(
+    not is_port_in_use(4566), reason="localstack s3 (포트번호 4566)를 실행해야 합니다"
+)
+def test_save_to_s3_in_parquet_with_partitions(s3_source_json_key, s3_parquet_parser):
+    import awswrangler as wr
+
+    wr.config.s3_endpoint_url = "http://localhost:4566"
+    paritition_col = "partition"
+    s3_prefix = "formatted"
+    messages = [
+        {"object": "vehicle", "type": "kinematic", paritition_col: "0"},
+        {"object": "vehicle", "type": "status", paritition_col: "0"},
+    ]
+
+    result = s3_parquet_parser.save_to_s3_in_parquet_with_partitions(
+        messages=messages,
+        partition_cols=[paritition_col],
+        s3_bucket=S3_BUCKET,
+        s3_prefix=s3_prefix,
+    )
+
+    assert result["paths"][0].startswith(f"s3://{S3_BUCKET}/{s3_prefix}")
+
+...
+```
 
 ### Github Action을 통한 E2E 테스트 자동화
 
