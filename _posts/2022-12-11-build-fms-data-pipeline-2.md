@@ -282,10 +282,44 @@ def test_save_to_s3_in_parquet_with_partitions(s3_source_json_key, s3_parquet_pa
 
 ### Github Action을 통한 E2E 테스트 자동화
 
--   Github Action이란?
--   Github Action의 Checkout을 활용해 Docker Compose 백그라운드로 실행하기
-    -   Github Action은 하나의 Job이 하나의 가상환경에서 돌아감
--   Pull Request, Deploy하기 전에 E2E로 검사
+위에서 구성한 E2E 테스트는 사용자가 로컬에서 수행하는 것 뿐만 아니라 CI(Continuous Integration) 단계에서도 수행됩니다. 쏘카에서는 CI 도구로 `Github Action`을 사용하고 있습니다. 아래는 Github Action에서 E2E Test 관련 워크플로우 설정 파일입니다. 보통 Pull Request와 배포하기 전에 해당 워크플로우가 실행됩니다.
+
+```yaml
+name: E2E Test On Kafka Connect
+
+on:
+    pull_request:
+    ...
+jobs:
+    e2e-test:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+              with:
+                  persist-credentials: false
+            - name: Checkout socar-data-pipeline-docker
+              uses: actions/checkout@v3
+              with:
+                  repository: socar-inc/socar-data-pipeline-docker
+                  ref: main
+                  token: ${{ secrets.SOCAR_BOT_ACCESS_TOKEN }}
+                  path: socar-data-pipeline-docker
+            - name: Run e2e pipleine
+              run: |
+                  cd socar-data-pipeline-docker
+                  docker-compose -p pipeline-docker --project-directory $PWD up  -d --force-recreate
+                  cd ..
+            - uses: actions/checkout@v3
+              with:
+                  persist-credentials: false
+                  clean: false # pipeline-docker를 유지하기 위해서 사용합니다.
+            - name: run e2e test
+              run: |
+                  cd e2e
+                  docker-compose --project-directory $PWD -f docker-compose.e2e.yaml up --abort-on-container-exit
+```
+
+[`Checkout`](https://github.com/actions/checkout) Action을 사용하면 외부의 Github Repostiory를 손쉽게 checkout 할 수 있습니다. Github Action에서 하나의 Job은 하나의 격리된 환경에서 동작합니다. 따라서 E2E 환경을 구성하는 Repository로 Checkout하여 Docker Compose로 실행한 후, 다시 원 Repository로 checkout하여 E2E 테스트를 수행합니다. 이때 주의할 점은 checkout 할 때 `clean` 속성을 false로 줘야 기존 볼륨을 유지할 수 있습니다 (기수행된 컨테이너에 마운트 된 볼륨이 갑자기 사라지는 이슈로 꽤 골치가 아팠습니다)
 
 ## 6. 시뮬레이터를 활용한 실 데이터 기반 부하 테스트
 
