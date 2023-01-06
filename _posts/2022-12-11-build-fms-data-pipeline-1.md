@@ -510,6 +510,7 @@ DynamoDB는 레코드를 추가할 때 Partition Key를 필수적으로 입력�
 이제 Kafka Connect 배포 및 운영에 대해 알아보도록 하겠습니다. FMS 프로젝트에서 Kafka Connect는 Kubernetes(AWS EKS)에서 프로비저닝하고 있습니다. 아래 Dockerfile에서 보시는 것처럼 Kubernetes에서 배포하기 위해 Kafka Connect 이미지가 필요합니다. 이에 DynamoDB, S3 Sink Connector를 jar로 빌드한 후 Kafka Connect 이미지에 파일을 마운트합니다. 만약 Connector가 추가되면 여기서 마운트를 시켜줍니다.
 
 ```Dockerfile
+
 FROM openjdk:17-jdk-slim-buster AS builder
 WORKDIR /usr/src/app
 ...
@@ -522,6 +523,7 @@ ENV CONNECT_PLUGIN_PATH $CONNECT_PLUGIN_PATH,$FMS_CONNECTOR_PATH
 ENV JAVA_OPTS="-XX:+UseG1GC -XX:MaxGCPauseMillis=100 -XX:+ExitOnOutOfMemoryError -Xmx1024m -Xms1024m"
 COPY --from=builder /usr/src/app/subprojects/dynamodb/build/libs $FMS_CONNECTOR_PATH
 COPY --from=builder /usr/src/app/subprojects/s3/build/libs $FMS_CONNECTOR_PATH
+
 ```
 
 CI 파이프라인에서는 Github Action을 사용하고 있습니다. Github Action에서는 main 브랜치의 tag push가 발생했을 때 각 Connector 별 유닛 테스트와 Kafka Connect의 E2E 테스트 (Docker Compose 기반)을 수행합니다. 만약 통과했을 시 AWS ECR로 이미지를 빌드 후 배포합니다.
