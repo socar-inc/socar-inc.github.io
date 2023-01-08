@@ -135,3 +135,7 @@ grab:
   links:
     blog: 'https://tansfil.tistory.com/'
     linkedin: 'https://www.linkedin.com/in/hoyeon-lee-a58702117/'
+
+alti:
+  name: 알티
+  image: '/assets/authors/default.png'
