@@ -45,13 +45,13 @@ tags:
 
 ## 1. FMS 데이터 파이프라인 소개
 
-### FMS 서비스 소개
+### 1.1. FMS 서비스 소개
 
 FMS는 Fleet Management System의 약자로, IoT 단말기를 차량에 부착해 데이터 기반으로 차량을 관제하고 운행 정보들을 분석하여 차량의 관리 및 운영을 효율화하는 차량 관제 플랫폼입니다. FMS 서비스를 통해 고객사는 데이터 수집/분석된 차량들의 운영을 효울화하고 비용 절감, 안전 강화 등의 기대효과를 취할 수 있습니다.
 
 2022년 6월 부터 PoC 개발을 시작으로, 현재 주요 고객사들을 대상으로 PoC 서비스를 성공적으로 런칭하여 운영중에 있습니다.
 
-### 스트리밍/배치 파이프라인 소개
+### 1.2. 스트리밍/배치 파이프라인 소개
 
 ![batch-streaming.png](/img/build-fms-data-pipeline/fms-pipeline-batch-streaming.png)_FMS 데이터 파이프라인 아키텍처 (배치/스트리밍)_
 
@@ -63,13 +63,15 @@ FMS 프로젝트에서는 배치 파이프라인을 MWAA(Airflow)와 데이터 �
 **스트리밍**은 생성되는 데이터를 실시간으로 처리하는 기술을 뜻합니다. 실시간으로 생성되는 데이터(메시지)를 일시적으로 저장하는 데이터베이스로 메시지 큐를 많이 활용합니다. 이는 대표적으로 Kafka, Redis, RabitMQ등의 오픈소스와 클라우드 서비스인 Kinesis, SQS, PubSub등이 있습니다.  
 FMS 프로젝트에서 스트리밍 파이프라인을 MSK(Kafka)를 중심으로 Kafka Connect on EKS(Kubernetes)를 데이터 처리/적재 컴포넌트로 구성하였으며 차량 단말기의 메시지를 수신하기 위한 브로커로 IoT Core를 채택하였습니다.
 
-### 주요 컴포넌트 소개
+### 1.3. 주요 컴포넌트 소개
 
 ![overall-architecture.png](/img/build-fms-data-pipeline/fms-data-pipeline-all.png)_FMS 데이터 파이프라인 아키텍처_
 
-이번 챕터에서는 FMS 데이터 파이프라인을 구성하는 주요 컴포넌트들을 가볍게 소개드리고 아래 챕터에서 더 자세하게 다루도록 하겠습니다. 이미 알고 있는 내용이라면 아래 "데이터가 흐르는 순서"로 바로 읽으셔도 좋습니다. (참고: 본 글에서는 실시간 조회에 사용되는 Redis와 관련 서비스(Consumer, Backend API 등)은 따로 다루지 않습니다)
+이번 챕터에서는 FMS 데이터 파이프라인을 구성하는 주요 컴포넌트들을 가볍게 소개드리고 아래 챕터에서 더 자세하게 다루도록 하겠습니다. 크게 스트리밍 파이프라인과 배치 파이프라인으로 나눠서 설명드리도록 하겠습니다.
 
-[스트리밍]
+(참고: 본 글에서는 실시간 조회에 사용되는 Redis와 관련 서비스(Consumer, Backend API 등)은 따로 다루지 않습니다)
+
+#### 스트리밍 파이프라인
 
 처음으로 실시간 파이프라인을 담당하는 주요 컴포넌트입니다.
 
@@ -78,25 +80,23 @@ AWS IoT Core는 IoT 단말기의 메시지를 송/수신하는 메시지 브로�
 
 **MSK(Managed Streaming for Kafka Service)**  
 보통 실시간 데이터 파이프라인 아키텍처를 설계할 떄 메시지 브로커인 Kafka를 많이 선택합니다. Kafka는 분산 스트리밍 플랫폼으로 실시간으로 들어오는 데이터를 확장성있게 처리할 수 있어 많은 기업들이 메시지 브로커로 사용하고 있습니다 (본 글에서는 Kafka에 대해 자세하게 다루지 않곘습니다)
-
-Kafka는 메시지 브로커로 많은 장점이 있지만 관리하기 위해서 많은 지식과 노하우를 필요로 합니다. AWS에서 제공하는 MSK(Managed Streaming for Kafka Service)는 Kafka를 완전관리형으로 제공해주며 사용자 측에서 관리 비용을 아끼고 애플리케이션 개발에 집중할 수 있습니다. 실제로 Kafka를 운영하기 위한 컴포넌트들(Broker, Zookeeper 등)을 자동으로 프로비저닝해주고 보안, 모니터링 등을 폭넓게 지원해줘서 쏘카에서도 많이 사용하고 있는 서비스입니다.
+AWS에서 제공하는 MSK(Managed Streaming for Kafka Service)는 Kafka를 완전관리형으로 제공해주고 보안, 모니터링 등을 폭넓게 지원해줘서 사용자 측에서 관리 비용을 아끼고 애플리케이션 개발에 집중할 수 있습니다.
 
 **Kafka Connect**  
 Kafka Topic에 저장된 메시지들을 데이터베이스/스토리지에 적재하기 위해서는 이를 처리하는 애플리케이션이 필요합니다. 일반적으로 각 프로그래밍 언어에서 이를 구현할 수 있도록 Consumer 라이브러리가 있습니다.  
-Kafka Connect는 Consumer를 메시지 추출(Source)과 적재(Sink)에 적절하게 추상화한 프레임워크입니다. 실제로 작업을 수행하는 Kafka Connector들을 Kafka Connect에 등록하여 관리하게 되는 구조라고 보시면 됩니다. 사용자는 이를 이용해 손쉽게 Kafka의 메시지를 추출/적재할 수 있습니다.  
-현재 MongoDB, MongoDB, S3, ElasticSearch 등을 대상으로 메시지를 처리하는 Kafka Connector가 오픈소스로 많이 존재합니다 ([Confluent Hub](https://www.confluent.io/hub)에서 확인이 가능합니다)
+Kafka Connect는 Consumer를 메시지 추출(Source)과 적재(Sink)에 적절하게 추상화한 프레임워크입니다. 실제로 작업을 수행하는 Kafka Connector들을 Kafka Connect에 등록하여 관리하게 되는 구조라고 보시면 됩니다. 사용자는 이를 이용해 손쉽게 Kafka의 메시지를 추출/적재할 수 있습니다.
 
 다음은 FMS 서비스에서 주요 사용되는 데이터베이스입니다.
 
 **DynamoDB**  
 DynamoDB는 AWS에서 운영하는 완전관리형 NoSQL 데이터베이스입니다. 사용자는 손쉽게 DynamoDB 대한 성능을 설정할 수 있고 주요 지표들로 모니터링을 하기 용이합니다. 5분단위 집계된 평균 화물칸의 온도와 같은 실시간으로 집계하는 용도나 준 실시간 데이터 조회 목적으로 사용되고 있습니다.
 
-[배치]
-
 **S3**  
 S3는 AWS에서 제공하는 객체 스토리지로 다양한 형태(정형/비정형)의 파일들을 저장할 수 있습니다. 현재 배치 분석에 필요한 json 원본 데이터와 Parquet 형식의 데이터를 저장하는 데이터 레이크 형태로 사용하고 있습니다.
 
-다음은 배치 분석 집계를 위한 컴포넌트입니다.
+#### 배치 파이프라인
+
+다음은 배치 분석/집계를 위한 컴포넌트입니다.
 
 **Lambda**  
 Lambda는 AWS의 서버리스 컴퓨팅 플랫폼입니다. 개발자는 서버에 대한 존재를 모르고 코드만 작성하면 손쉽게 서버를 운영할 수 있게 됩니다. 람다는 API 서버 형태로 활용이 가능할 뿐만 아니라 AWS 리소스(S3, Kafka, Kinesis 등)의 이벤트 기반으로 동작시킬 수 있어 활용 범위가 굉장히 넓습니다.  
@@ -116,7 +116,7 @@ Airflow는 Airbnb에서 개발한 워크플로우 관리 오픈소스로 현재 
 
 여기까지 주요 컴포넌트들에 대해 가볍게 소개드렸습니다. 더 자세한 내용은 글에서 더 다루도록 하겠습니다.
 
-### 데이터가 흐르는 순서
+### 1.4. 데이터가 흐르는 순서
 
 처음에 차량에서 수집되는 여러 상태 데이터들은 최종적으로 데이터베이스/스토리지에 적재됩니다. 아래와 같은 흐름을 거쳐 FMS 서비스에 필요한 형태로 데이터가 저장됩니다.
 
@@ -129,7 +129,7 @@ Airflow는 Airbnb에서 개발한 워크플로우 관리 오픈소스로 현재 
 
 ## 2. 차량 데이터가 Kafka로 오기까지
 
-### 차량 IoT 데이터의 특징
+### 2.1. 차량 IoT 데이터의 특징
 
 쏘카 서비스와 동일하게 FMS 서비스도 관리하는 차량들은 IoT 단말기 내에서 차량의 상태 정보를 수집 서버(AWS IoT Core)로 전송합니다. 해당 메시지는 가공/적재 과정을 거쳐 서비스에서 활용됩니다.
 
@@ -170,14 +170,14 @@ Airflow는 Airbnb에서 개발한 워크플로우 관리 오픈소스로 현재 
     }
     ```
 
-### IoT Core에서 Kafka로
+### 2.2. IoT Core에서 Kafka로
 
 차량에서 수집된 데이터는 IoT Core의 `메시지 라우팅` 규칙에 따라 kafka로 전송됩니다. 위 메시지에서 분류 목적으로 사용하고 있는 `object` 필드에 대응되는 각 kafka topic으로 라우팅됩니다.
 
 여기서 한가지 중요한 점은 하나의 topic에 여러 프로토콜의 메시지가 들어올 수 있다는 점입니다. 메시지 프로토콜에 1:1 대응되도록 topic을 만든다면 수많은 토픽을 관리해야 하며 관리에 대한 부담이 늘어나게 됩니다.  
 보통 Kafka를 운영하면 메시지 스키마에 대한 검증을 하기 위해 사용하는 Schema Registry를 사용하는 경우가 많습니다. 쏘카의 유즈케이스에서는 하나의 토픽에 여러 메시지가 들어오다 보니 Schema Registry를 도입하기가 쉽지 않았기에 우선 장애 없이 메시지를 적재하고 이후에 스키마를 검증하는 `fail safe` 방식으로 아키텍처를 설계하였습니다.
 
-### Kafka 관리
+### 2.3. Kafka 관리
 
 현재 MSK를 통해 kafka를 운영하고 있습니다. 현재 모니터링은 MSK의 [향상된 파티션 수준 모니터링](https://docs.aws.amazon.com/msk/latest/developerguide/metrics-details.html#topic-partition-metrics) 설정으로 kafka 운영에 필요한 주요 메트릭을 cloudwatch에서 확인하고 있습니다. 이를 통해 기본 메트릭 뿐만 아니라 Consumer Group 별로 Lag 확인이 가능해서 모니터링하는데 큰 도움이 되고 있습니다.
 
@@ -189,7 +189,7 @@ Airflow는 Airbnb에서 개발한 워크플로우 관리 오픈소스로 현재 
 
 본 장에서는 Kafka 토픽에 저장된 메시지를 외부 데이터 싱크(DynamoDB, S3)로 적재하는 Kafka Sink Connector를 개발하게 된 배경과 구현 사항, 장단점 등에 대해 알아보도록 하겠습니다.
 
-### Kafka Connect란?
+### 3.1. Kafka Connect란?
 
 ![kafka-connect.jpeg](/img/build-fms-data-pipeline/kafka-connect.jpeg)_kafka connect의 역할 (출처: https://developer.confluent.io/learn-kafka/kafka-connect/intro)_
 
@@ -236,7 +236,7 @@ Kafka Connect를 썼을 때 장점은 아래와 같습니다
 
 Kafka Connect에 대한 더 자세한 설명은 [여기](https://docs.confluent.io/platform/current/connect/index.html)를 참고해주세요.
 
-### Kafka Connect의 동작 방식
+### 3.2. Kafka Connect의 동작 방식
 
 Kafka Connect는 Kafka와 외부 데이터 소스/싱크를 연결해주는 프레임워크입니다. Kafka Connector는 Kafka Conneect에서 실제로 동작하는 구현체이며 Kafka Connect에 의해 관리됩니다. Kafka Connect를 사용하기 위해선 Kafka Connector를 jar 형태로 Kafka Connect 내부(보통 Docker Image)에 포함시킨 후, Kafka Conenct를 실행한 후 제공되는 API로 Kafka Connector를 등록하는 과정을 거치게 됩니다.
 
@@ -250,7 +250,7 @@ Kafka Connect는 `Standalone Mode`와 `Distributed Mode`가 있는데, Standalon
 
 Kafka Connect의 동작 방식에 대한 더 자세한 내용은 [여기](https://docs.confluent.io/platform/current/connect/concepts.html)를 참고해주세요.
 
-### 요구 사항 및 결정 이유
+### 3.3. 요구 사항 및 결정 이유
 
 Kakfa 토픽의 메시지를 처리하기 위해 Kafka Consumer와 kafka Connect 중 선택할 때는 현재 비즈니스 요구 사항에 맞춰 장/단점을 잘 비교하여 선택하는 것이 중요합니다. 사실 Kafka 토픽의 메시지를 단순하게 적재하는 경우라면 오픈소스 Kafka Connector를 사용하는 게 낫습니다. 하지만 FMS 프로젝트에는 아래와 같은 요구사항들이 있었고, 충분히 기술적 검토를 한 후 Kafka Connector를 직접 개발하여 하나의 Kafka Connect로 메시지 적재를 관리하자는 결정을 내렸습니다.
 
@@ -268,7 +268,7 @@ Kakfa 토픽의 메시지를 처리하기 위해 Kafka Consumer와 kafka Connect
 
 **결과적으로 DynamoDB Sink Connector를 직접 개발하였으며, S3 Sink Connector도 추가 요구사항을 위해 Class를 Override하여 커스마이징하였습니다.**
 
-### Kafka Connector 레포 구성 및 구현
+### 3.4. Kafka Connector 레포 구성 및 구현
 
 Kafka Connector의 레포 구성 및 구현에 대해 알아보도록 하겠습니다. 구체적인 구현 코드는 분량 관계상 생략하겠습니다.
 
@@ -415,7 +415,7 @@ open class S3SinkTask : ConfluentS3SinkTask() {
 
 직접 Kafka Connector를 개발하면서 [공식 가이드](https://docs.confluent.io/platform/current/connect/devguide.html#developing-a-simple-connector)를 참고하였고 구현 코드는 S3 Sink Connector의 구현체인 [kafka-connect-storage-cloud](https://github.com/confluentinc/kafka-connect-storage-cloud) 소스코드를 보면서 빠르게 코드 작성을 할 수 있었습니다. 직접 Kafka Connector를 구현하시는 분들께 도움이 되었으면 합니다.
 
-### Kafka Connector 변형
+### 3.5. Kafka Connector 변형
 
 이번에는 Kafka Connector에서 구현한 변형 기능에 대해 알아보도록 하곘습니다. 위에서 언급한 것처럼 Kafka Connector는 Propery 기반으로 Configuration 설정을 할 수 있어 Connector Task를 선언적으로 관리 할 수 있는 장점이 있습니다.  
 따라서 메시지 변형 관련 설정도 최대한 Property 기반으로 관리할 수 있도록 하였으며, 이를 위해서 비즈니스 로직은 최대한 제외하고 Property로 설정할 수 있도록 추상화하였습니다. 이를 통해 Kafka Connector가 새로 추가되는 토픽이나 다른 프로젝트에서 사용되도 문제가 없도록 하였습니다.
@@ -499,7 +499,7 @@ DynamoDB는 레코드를 추가할 때 Partition Key를 필수적으로 입력�
 ]
 ```
 
-### Kafka Connect 배포 및 운영
+### 3.6. Kafka Connect 배포 및 운영
 
 이제 Kafka Connect 배포 및 운영에 대해 알아보도록 하겠습니다. FMS 프로젝트에서 Kafka Connect는 Kubernetes(AWS EKS)에서 프로비저닝하고 있습니다. 아래 Dockerfile에서 보시는 것처럼 Kubernetes에서 배포하기 위해 Kafka Connect 이미지가 필요합니다. 이에 DynamoDB, S3 Sink Connector를 jar로 빌드한 후 Kafka Connect 이미지에 파일을 마운트합니다. 만약 Connector가 추가되면 여기서 마운트를 시켜줍니다.
 
@@ -602,7 +602,7 @@ FMS 프로젝트에서는 'all'을 설정해 생략되는 메시지는 Deadlette
 
 Kafka Connector의 에러 핸들링에 대해 더 자세하게 알고 싶다면 [여기](https://www.confluent.io/blog/kafka-connect-deep-dive-error-handling-dead-letter-queues/)를 확인해 보세요.
 
-### Kafka Connect 모니터링하기
+### 3.7. Kafka Connect 모니터링하기
 
 Kafka Connect는 기본적으로 jmx를 통해 운영에 필요한 메트릭들을 제공합니다. FMS 프로젝트에서 모니터링 툴로 Prometheus와 Grafana를 사용하고 있으므로, prometheus에서 jmx의 메트릭을 수집할 수 있도록 돕는 [jmx_exporter](https://github.com/prometheus/jmx_exporter)를 사용하여 prometheus와 연동하였습니다.  
 (Kafka Connect 메트릭과 관련해 더 자세한 내용은 [여기](https://docs.confluent.io/kafka-connectors/self-managed/monitoring.html#using-jmx-to-monitor-kconnect)를 확인해보세요)
@@ -616,7 +616,7 @@ Kafka 토픽의 메시지가 잘 처리되고 있는지를 나타내는 `Consume
 
 이번 장에서는 FMS 프로젝트에서 구축한 배치 분석 플랫폼에 대해 소개드리겠습니다. 위에서 말씀드린 것처럼 차량의 이동 정보와 같은 실시간 조회의 경우 Redis를, 실시간에서 준 실시간 조회는 DynamoDB를 사용하였습니다. 마지막으로 배치로 집계되는 데이터는 본 플랫폼을 거쳐 데이터 마트(RDS)에 적재됩니다.
 
-### 요구사항 및 결정 사항
+### 4.1. 요구사항 및 결정 사항
 
 배치 분석 플랫폼 환경을 구축하기 위해 아래와 같은 요구사항들을 고려하였습니다.
 
@@ -636,7 +636,7 @@ Kafka 토픽의 메시지가 잘 처리되고 있는지를 나타내는 `Consume
 -   **주기적으로 분석/집계하는 쿼리를 실행하고 적재 수 있어야 합니다**  
     일, 주 단위 집계를 위해서는 주기적으로 Redshift 쿼리를 실행하고 중간 과정을 거쳐 데이터 마트에 적재해야 합니다. 집계 데이터 적재를 위한 데이터 마트는 조회가 용이한 `RDS(Mysql)`를 선택하였습니다. 또한 Redshift 쿼리 실행 및 적재를 위한 스케줄링 도구로 `MWAA(Managed Worflow Apache Airflow)`를 선택하였습니다. 데이터 본부에서는 Airflow 사용이 익숙하기도 하고 팀 내에서 Airflow 운영에 대한 전문성이 높기에 자연스럽게 결정하였습니다.
 
-### 배치 분석 플랫폼의 흐름
+### 4.2. 배치 분석 플랫폼의 흐름
 
 ![analytics-platform](/img/build-fms-data-pipeline/analytics-platform.png)
 
@@ -653,7 +653,7 @@ Kafka 토픽의 메시지가 잘 처리되고 있는지를 나타내는 `Consume
 
     Airflow에서 Redshift 조회 결과를 Mysql(RDS)에 적재하기 위해서 Custom Operator를 구현해서 사용하고 있습니다. 또한 Airflow는 AWS 관련 Provider를 제공해주기에 저희는 `RedshiftSQLOperator`를 사용하여 Redshift 조회 결과를 임시로 저장할 때 사용할 수 있었습니다.
 
-### Glue Data Catalog 활용
+### 4.3. Glue Data Catalog 활용
 
 AWS Glue Data Catalog는 S3 데이터 레이크에 저장된 데이터들을 SQL 형태로 조회할 수 있도록 메타스토어를 제공해줍니다. 현재 S3에 저장되어 있는 프로토콜 별 경로에 맞춰 Glue Table을 생성하여 관리하고 있습니다.
 
@@ -662,7 +662,7 @@ Redshift에서 S3의 반정형 데이터에 접근하기 위해서는 External T
 
 Glue Table은 AWS의 분석 환경에서 SoT(Source Of Truth)로 간주되며 이를 위해서는 스키마의 변경이 합의없이 이뤄지면 안됩니다. 따라서 Glue Crawler의 설정이나 외부 환경에서 Glue Table의 Schema 변경을 막는 방향으로 설정하는 것을 추천드립니다.
 
-### Lambda 함수의 주요 동작 및 구현
+### 4.4. Lambda 함수의 주요 동작 및 구현
 
 FMS 프로젝트에서 Lambda 함수는 원본 S3에 적재된 객체(json 포맷)를 메시지 프로토콜 별로 분류하고 parquet로 포맷을 형변환하여 저장하는 역할을 합니다. 지정된 S3 Bucket의 객체가 생성되는 Put Event가 발생할 때 Lambda 함수가 트리거되어 동작합니다.  
 S3 Sink Connector에서는 Parquet로 적재를 지원해주지만 Schema Registry가 필수적으로 필요하며, 원본 메시지도 Avro, Protobuf 같은 바이너리 포맷의 경우에만 지원을 합니다. 현재 차량 단말기에서 Json 포맷으로 메시지를 전송하고 있고 하나의 토픽에 여러 메시지 타입이 들어오는 경우 S3 Sink Connector에서 분류/형변환 과정이 어렵습니다.
@@ -817,7 +817,7 @@ class S3ParquetParser:
 
 또한 메시지를 분류하기 위해서는 원본 json 포맷을 Serialization해야 합니다. 먼저 pandas의 `read_json`으로 dataframe화 해서 메시지를 분류하려고 했지만 처리 시간 및 메모리 사용량이 높은 이슈가 있었습니다. 따라서 str 객체의 `splitLines`와 json 모듈의 `loads`로 serialization을 대체하였고 이를 통해 메모리 할당량을 절반 이하로 낮추고 처리 속도를 2배 이상 개선하였습니다.
 
-### 모니터링 및 Fallback 처리
+### 4.5. 모니터링 및 Fallback 처리
 
 ![grafana-lambda](/img/build-fms-data-pipeline/grafana-lambda.png)
 
