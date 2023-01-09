@@ -172,6 +172,8 @@ Airflow는 Airbnb에서 개발한 워크플로우 관리 오픈소스로 현재 
 
 ### 2.2. IoT Core에서 Kafka로
 
+![iot-to-msk.jpeg](/img/build-fms-data-pipeline/iot-to-msk.png)
+
 차량에서 수집된 데이터는 IoT Core의 `메시지 라우팅` 규칙에 따라 kafka로 전송됩니다. 위 메시지에서 분류 목적으로 사용하고 있는 `object` 필드에 대응되는 각 kafka topic으로 라우팅됩니다.
 
 여기서 한가지 중요한 점은 하나의 topic에 여러 프로토콜의 메시지가 들어올 수 있다는 점입니다. 메시지 프로토콜에 1:1 대응되도록 topic을 만든다면 수많은 토픽을 관리해야 하며 관리에 대한 부담이 늘어나게 됩니다.  
@@ -251,6 +253,8 @@ Kafka Connect는 `Standalone Mode`와 `Distributed Mode`가 있는데, Standalon
 Kafka Connect의 동작 방식에 대한 더 자세한 내용은 [여기](https://docs.confluent.io/platform/current/connect/concepts.html)를 참고해주세요.
 
 ### 3.3. 요구 사항 및 결정 이유
+
+![msk-to-storage.jpeg](/img/build-fms-data-pipeline/msk-to-storage.png)
 
 Kakfa 토픽의 메시지를 처리하기 위해 Kafka Consumer와 kafka Connect 중 선택할 때는 현재 비즈니스 요구 사항에 맞춰 장/단점을 잘 비교하여 선택하는 것이 중요합니다. 사실 Kafka 토픽의 메시지를 단순하게 적재하는 경우라면 오픈소스 Kafka Connector를 사용하는 게 낫습니다. 하지만 FMS 프로젝트에는 아래와 같은 요구사항들이 있었고, 충분히 기술적 검토를 한 후 Kafka Connector를 직접 개발하여 하나의 Kafka Connect로 메시지 적재를 관리하자는 결정을 내렸습니다.
 
@@ -614,7 +618,9 @@ Kafka 토픽의 메시지가 잘 처리되고 있는지를 나타내는 `Consume
 
 ## 4. 배치 처리 플랫폼, 반정형 데이터가 분석/집계 되어 적재되기까지
 
-이번 장에서는 FMS 프로젝트에서 구축한 배치 처리 플랫폼에 대해 소개드리겠습니다. 위에서 말씀드린 것처럼 차량의 이동 정보와 같은 실시간 조회의 경우 Redis를, 실시간에서 준 실시간 조회는 DynamoDB를 사용하였습니다. 마지막으로 배치로 처리되는 데이터는 본 플랫폼을 거쳐 데이터 마트(RDS)에 적재됩니다.
+![batch-platform.png](/img/build-fms-data-pipeline/batch-platform.png)
+
+이번 장에서는 FMS 프로젝트에서 구축한 배치 처리 플랫폼에 대해 소개드리겠습니다. 위에서 말씀드린 것처럼 차량의 이동 정보와 같은 실시간 조회의 경우 Redis를, 실시간에서 준 실시간 조회는 DynamoDB를 사용하였습니다. 배치로 처리되는 데이터는 본 플랫폼을 거쳐 데이터 마트(RDS)에 적재됩니다.
 
 ### 4.1. 요구사항 및 결정 사항
 
@@ -817,7 +823,7 @@ class S3ParquetParser:
 
 또한 메시지를 분류하기 위해서는 원본 json 포맷을 Serialization해야 합니다. 먼저 pandas의 `read_json`으로 dataframe화 해서 메시지를 분류하려고 했지만 처리 시간 및 메모리 사용량이 높은 이슈가 있었습니다. 따라서 str 객체의 `splitLines`와 json 모듈의 `loads`로 serialization을 대체하였고 이를 통해 메모리 할당량을 절반 이하로 낮추고 처리 속도를 2배 이상 개선하였습니다.
 
-### 4.5. 모니터링 및 Fallback 처리
+### 4.5. Lambda 모니터링 및 Fallback 처리
 
 ![grafana-lambda](/img/build-fms-data-pipeline/grafana-lambda.png)
 
