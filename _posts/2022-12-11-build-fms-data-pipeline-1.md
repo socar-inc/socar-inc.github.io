@@ -21,7 +21,7 @@ tags:
 데이터 플랫폼팀은 “쏘카 내부의 데이터 이용자가 비즈니스에 임팩트를 낼 수 있도록 소프트웨어 엔지니어링에 기반하여 문제를 해결합니다”라는 미션을 기반으로 인프라, 데이터 파이프라인 개발, 운영, 모니터링, 데이터 애플리케이션 개발, MLOps 등의 업무를 맡고 있습니다.
 팀 구성원들은 모두가 소프트웨어 엔지니어라는 사명감을 가지고 개발뿐만 아니라 Ops에 대한 이해와 책임감을 가지고 업무에 임하고 있습니다.
 
-본 글에서는 쏘카의 신사업 FMS 서비스의 IoT 데이터 파이프라인에 대해 소개하려고 합니다. 차량 IoT 단말기에서 생성되는 서비스에서 제공되기까지 어떤 파이프라인을 거쳤는지 하나하나 설명드리려고 합니다.
+본 글에서는 쏘카의 신사업 FMS 서비스의 IoT 데이터 파이프라인에 대해 소개하려고 합니다. 차량 IoT 단말기에서 생성되는 서비스에서 제공되기까지 파이프라인 구성 요소들을 구체적으로 설명드리려고 합니다.
 
 다음과 같은 분들이 읽으면 좋습니다.
 
@@ -509,8 +509,7 @@ DynamoDB는 레코드를 추가할 때 Partition Key를 필수적으로 입력�
 
 이제 Kafka Connect 배포 및 운영에 대해 알아보도록 하겠습니다. FMS 프로젝트에서 Kafka Connect는 Kubernetes(AWS EKS)에서 프로비저닝하고 있습니다. 아래 Dockerfile에서 보시는 것처럼 Kubernetes에서 배포하기 위해 Kafka Connect 이미지가 필요합니다. 이에 DynamoDB, S3 Sink Connector를 jar로 빌드한 후 Kafka Connect 이미지에 파일을 마운트합니다. 만약 Connector가 추가되면 여기서 마운트를 시켜줍니다.
 
-```Dockerfile
-
+```dockerfile
 FROM openjdk:17-jdk-slim-buster AS builder
 WORKDIR /usr/src/app
 ...
@@ -523,7 +522,6 @@ ENV CONNECT_PLUGIN_PATH $CONNECT_PLUGIN_PATH,$FMS_CONNECTOR_PATH
 ENV JAVA_OPTS="-XX:+UseG1GC -XX:MaxGCPauseMillis=100 -XX:+ExitOnOutOfMemoryError -Xmx1024m -Xms1024m"
 COPY --from=builder /usr/src/app/subprojects/dynamodb/build/libs $FMS_CONNECTOR_PATH
 COPY --from=builder /usr/src/app/subprojects/s3/build/libs $FMS_CONNECTOR_PATH
-
 ```
 
 CI 파이프라인에서는 Github Action을 사용하고 있습니다. Github Action에서는 main 브랜치의 tag push가 발생했을 때 각 Connector 별 유닛 테스트와 Kafka Connect의 E2E 테스트 (Docker Compose 기반)을 수행합니다. 만약 통과했을 시 AWS ECR로 이미지를 빌드 후 배포합니다.
@@ -581,7 +579,7 @@ done
 
 Kafka Connector를 운영하면서 신경썼던 지점들도 말씀드리겠습니다.
 
-1. 메시지 중복 처리
+**1. 메시지 중복 처리**
 
 실시간 데이터가 저장소에 저장될 때 데이터가 중복되거나 손실되지 않아야 합니다. 만약 특정 Offset의 메시지를 적재하는 과정에서 Kafka Connector가 문제가 생겨 리밸런싱이 발생한다면 메시지의 누락이나 중복이 발생할 수도 있습니다. 중복은 저장소에서 후처리를 할 수 있지만, 누락은 복구하기가 힘들어 더 조심해야 합니다.
 
@@ -589,7 +587,7 @@ Kafka Connector를 운영하면서 신경썼던 지점들도 말씀드리겠습�
 
 S3 Sink Connector는 특정 조건에서 Exactly Once를 지원합니다([여기](https://docs.confluent.io/kafka-connectors/s3-sink/current/overview.html#exactly-once-delivery-on-top-of-eventual-consistency) 참고). DynamoDB Sink Connector의 경우 At Least Once 방식으로 구현을 했습니다. 이유는 DynamoDB의 경우 같은 메시지(Primiary Key가 같은 경우)는 Upsert하기 때문에 중복 이슈는 발생하지 않을 것이라 판단하였습니다.
 
-2.  에러 핸들링
+**2. 에러 핸들링**
 
 ![inside-kafka-connect](/img/build-fms-data-pipeline/inside-kafka-connect.jpeg)
 
