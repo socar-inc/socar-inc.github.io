@@ -235,7 +235,10 @@ Kafka 토픽의 메시지를 단순하게 적재하는 경우라면 오픈소스
     스트리밍 환경에서는 메시지를 빠르게 처리 후 적재하는 것이 중요합니다. 따라서 kafka의 메시지가 빠르게 쌓여도 Transformation & Load 레이어에서는 일관성있게 처리할 수 있어야 합니다.  
     Kafka Connect는 `Distributed Mode`를 통해 Worker 갯수를 조정하여 Scale Out/In을 쉽게 할 수 있으며, Worker가 만약 실패하더라도 기존 Worker들에 Task들을 리밸런싱 해줘서 안전하게 운영이 가능합니다.
 
-Kafka Connect의 장/단점은 아래와 같습니다
+<details>
+<summary>Kafka Connect의 장단점</summary>
+<div markdown="1">
+
 
 - 다양한 데이터 소스,싱크에 대한 오픈소스를 활용하면 손쉽게 데이터 이동이 가능합니다.
 - 프레임워크의 가이드를 따라 Connector를 손쉽게 개발하여 사용할 수 있습니다.
@@ -270,7 +273,9 @@ Kafka Connect의 장/단점은 아래와 같습니다
 - Java로 개발되어 있어 JVM 계열 언어로만 개발이 가능합니다.
 - 간단한 변형 후 적재가 아닌 비즈니스 요구사항이나 복잡한 처리가 포함된 작업을 구현할 경우 Kafka Consumer로 구현하는 것이 수월합니다.
 
-> 꼭 단점을 언급해야 할까? 장단점을 토글로 처리하는 것은 어떨까? 
+
+</div>
+</details>
 
 **결과적으로 DynamoDB Sink Connector를 직접 개발하였으며, S3 Sink Connector도 추가 요구사항을 위해 Class를 Override하여 커스마이징하였습니다.**
 
@@ -701,7 +706,10 @@ Lambda 함수의 구현부는 아래와 같습니다. 크게 다음과 같은 �
 3. 메시지 분류 작업
 4. 메시지 적재
 
-> 토글로 처리할 것 
+
+<details>
+<summary>Lambda 구현 코드</summary>
+<div markdown="1">
 
 ```python
 import json
@@ -766,7 +774,16 @@ def lambda_handler(event, context):
     ...
 ```
 
+</div>
+</details>
+
+
 S3 Parquet 적재 관련 책임은 `S3ParquetParser`라는 모듈이 담당하고 있습니다. `Lambda Layer`로 배포되며 Lambda 함수에서 import가 가능합니다. S3ParquetParser는 아래와 같이 구성됩니다.
+
+<details>
+<summary>S3ParquetParser 구현 코드</summary>
+<div markdown="1">
+
 
 ```python
 import json
@@ -839,6 +856,10 @@ class S3ParquetParser:
         )
         return result
 ```
+
+</div>
+</details>
+
 
 메시지를 적재해주는 `save_to_s3_in_parquet_with_partitions` 에서는 AWS Data Wrangler의 s3.to_parquet를 사용합니다. pandas dataframe을 s3에 parquet 형태로 저장해주는데 이 과정에서 Glue Table과 연동이 가능합니다. 이를 통해 적재할 메시지들의 스키마가 Glue Table의 스키마와 일치하는지를 검증할 수 있으며, 파티션을 Glue Table에 추가해줄 수 있습니다(이를 통해 Glue Crawler를 사용하지 않아도 되는 이점이 있습니다)
 
