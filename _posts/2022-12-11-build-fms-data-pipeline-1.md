@@ -51,13 +51,13 @@ tags:
 
 ### 1.1. FMS 서비스 소개
 
+![batch-stream.png](/img/build-fms-data-pipeline/batch-stream.png)
+
 FMS는 Fleet Management System의 약자로, IoT 단말기를 차량에 부착해 데이터 기반으로 차량을 관제하고 운행 정보들을 분석하여 차량의 관리 및 운영을 효율화하는 차량 관제 플랫폼입니다. FMS 서비스를 통해 고객사는 데이터 수집/분석된 차량들의 운영을 효울화하고 비용 절감, 안전 강화 등의 기대효과를 취할 수 있습니다.
 
 2022년 6월 부터 PoC 개발을 시작으로, 현재 주요 고객사들을 대상으로 PoC 서비스를 성공적으로 런칭하여 운영중에 있습니다.
 
 ### 1.2. FMS 스트리밍/배치 파이프라인 소개
-
-![batch-streaming.png](/img/build-fms-data-pipeline/fms-pipeline-batch-streaming.png)_FMS 데이터 파이프라인 아키텍처 (배치/스트리밍)_
 
 보통 비즈니스/분석 요구사항에 맞게 데이터 파이프라인을 구축하다 보면 배치와 스트리밍에 대한 고민을 자연스럽게 하게 됩니다. FMS 프로젝트에서도 동일하게 스트리밍/배치 환경에 대한 요구사항이 있었으며 위와 같이 파이프라인을 구성하였습니다.
 
@@ -69,7 +69,7 @@ FMS 프로젝트에서 스트리밍 파이프라인을 MSK(Kafka)를 중심으�
 
 ### 1.3. 주요 컴포넌트 소개
 
-![overall-architecture.png](/img/build-fms-data-pipeline/fms-data-pipeline-all.png)_FMS 데이터 파이프라인 아키텍처_
+![batch-streaming.png](/img/build-fms-data-pipeline/fms-pipeline-batch-streaming.png)_FMS 데이터 파이프라인 아키텍처 (배치/스트리밍)_
 
 이번 챕터에서는 FMS 데이터 파이프라인을 구성하는 주요 컴포넌트들을 가볍게 소개드리고 아래 챕터에서 더 자세하게 다루도록 하겠습니다. 크게 스트리밍 파이프라인과 배치 파이프라인으로 나눠서 설명드리도록 하겠습니다.
 
@@ -121,6 +121,8 @@ Airflow는 Airbnb에서 개발한 워크플로우 관리 오픈소스로 현재 
 여기까지 주요 컴포넌트들에 대해 가볍게 소개드렸습니다. 더 자세한 내용은 글에서 더 다루도록 하겠습니다.
 
 ### 1.4. 데이터가 흐르는 순서
+
+![overall-architecture.png](/img/build-fms-data-pipeline/fms-data-pipeline-all.png)_FMS 데이터 파이프라인 아키텍처_
 
 처음에 차량에서 수집되는 여러 상태 데이터들은 최종적으로 데이터베이스/스토리지에 적재됩니다. 아래와 같은 흐름을 거쳐 FMS 서비스에 필요한 형태로 데이터가 저장됩니다.
 
