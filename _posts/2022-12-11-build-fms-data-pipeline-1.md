@@ -26,7 +26,6 @@ tags:
 다음과 같은 분들이 읽으면 좋습니다.
 
 -   실시간 데이터 파이프라인에 관심이 있는 소프트웨어 엔지니어
--   데이터 파이프라인에 테스트를 도입하고 싶은 소프트웨어 엔지니어
 -   AWS 기반의 데이터 엔지니어링 환경 구축에 관심이 있는 소프트웨어 엔지니어
 -   Kafka Connect를 활용한 메시지 소비에 관심이 있는 소프트웨어 엔지니어
 -   쏘카의 데이터 엔지니어가 무슨 일을 하는지 궁금한 모든 이들
@@ -38,8 +37,13 @@ tags:
 
 글을 읽으시면서 궁금한 점들이 있다면 편하게 질문 남겨주시면, 확인 후 답변드리겠습니다.
 
-목차는 아래와 같습니다.  
-....
+목차는 아래와 같습니다.
+
+1. [FMS 데이터 파이프라인 소개]()
+2. [차량 IoT 데이터가 Kafka로 오기까지]()
+3. [Kafka Sink Connector, 실시간 데이터 처리와 적재를 한 번에]()
+4. [배치 처리 플랫폼, 반정형 데이터가 분석/집계 되어 적재되기까지]()
+5. [마무리]()
 
 <br/>
 
@@ -201,7 +205,27 @@ Kafka Consumer는 높은 자유도로 개발이 가능하며, 다양한 프로�
 
 Kafka Connect는 Consumer를 한단계 추상화하여 제공하는 Confluent에서 개발한 프레임워크입니다. 데이터 소스에서 Kafka로 데이터를 옮기거나 Kafka에서 데이터 싱크로 적재하는 목적으로 주로 사용됩니다. 대중적인 데이터 소스/싱크에 대한 Connector(Mysql, MongoDB, S3, ElasticSearch 등)는 이미 오픈소스로 나와있어 손쉽게 사용이 가능합니다 ([Confluent Hub](https://www.confluent.io/hub)에서 확인이 가능합니다)
 
-Kafka Connect를 썼을 때 장점은 아래와 같습니다
+Kafka Connect에 대한 더 자세한 설명은 [여기](https://docs.confluent.io/platform/current/connect/index.html)를 참고해주세요.
+
+### 3.2. 요구 사항 및 결정 이유
+
+![msk-to-storage.jpeg](/img/build-fms-data-pipeline/msk-to-storage.png)
+
+Kakfa 토픽의 메시지를 처리하기 위해 Kafka Consumer와 kafka Connect 중 선택할 때는 현재 비즈니스 요구 사항에 맞춰 장/단점을 잘 비교하여 선택하는 것이 중요합니다. 사실 Kafka 토픽의 메시지를 단순하게 적재하는 경우라면 오픈소스 Kafka Connector를 사용하는 게 낫습니다. 하지만 FMS 프로젝트에는 아래와 같은 요구사항들이 있었고, Kafka Connect의 장단점을 바탕으로 충분히 기술적 검토를 한 후 Kafka Connector를 직접 개발하여 하나의 Kafka Connect로 메시지 적재를 관리하자는 결정을 내렸습니다.
+
+1.  **Kafka 토픽 별 메시지들이 S3와 DynamoDB에 적재되어야 합니다.**  
+    Kafka에서 S3로 데이터를 적재하는 S3 Sink Connector는 오픈소스로 존재하여 많은 곳에서 사용하고 있습니다. 하지만 DynamoDB의 경우 Sink Connector가 오픈소스로 존재하지 않아 직접 구현이 필요한 상황이었습니다 (Confluenent에서 제공하는 Sink Connector가 있지만 유료 라이센스입니다) 이미 제공되는 S3 Sink Connector를 사용하면서 DynamoDB도 Connector 형태로 개발한다면 하나의 플랫폼으로 빌드, 운영할 수 있게 되어 이점이 있을 것이라고 판단하였습니다.
+
+2.  **일부 요구사항에 맞게 가벼운 변형 작업이 필요합니다.**  
+     DynamoDB는 레코드를 추가할 때 Partition Key를 필수적으로 입력해야 합니다. FMS 프로젝트에서 DynamoDB 테이블은 비용/성능 효율화를 위해 [Single Table Design](https://aws.amazon.com/ko/blogs/compute/creating-a-single-table-design-with-amazon-dynamodb/) 기법으로 디자인했고 이에 맞는 Partition key가 적재되기 전에 메시지에 추가되어야 합니다. 이외에도 비용 절감을 위해 불필요한 컬럼을 삭제하는 것도 고려가 필요합니다.
+
+    여기서 Kafka Connect에는 [SMT(Single Message Transformation)](https://docs.confluent.io/platform/current/connect/transforms/overview.html)가 있어 Property 기반으로 손쉽게 메시지의 변형이 가능합니다. 물론 SMT 특성상 제약 사항이 존재하지만 필요하면 직접 Transfrom 을 구현하여 사용이 가능합니다.
+
+3.  **스트리밍 환경에서 신뢰성과 확장성이 보장되어야 합니다.**  
+    스트리밍 환경에서는 메시지를 빠르게 처리 후 적재하는 것이 중요합니다. 따라서 kafka의 메시지가 빠르게 쌓여도 Transformation & Load 레이어에서는 일관성있게 처리할 수 있어야 합니다.  
+    Kafka Connect는 `Distributed Mode`를 통해 Worker 갯수를 조정하여 Scale Out/In을 쉽게 할 수 있으며, Worker가 만약 실패하더라도 기존 Worker들에 Task들을 리밸런싱 해줘서 안전하게 운영이 가능합니다.
+
+Kafka Connect의 장/단점은 아래와 같습니다
 
 -   다양한 데이터 소스,싱크에 대한 오픈소스를 활용하면 손쉽게 데이터 이동이 가능합니다.
 -   프레임워크의 가이드를 따라 Connector를 손쉽게 개발하여 사용할 수 있습니다.
@@ -236,9 +260,9 @@ Kafka Connect를 썼을 때 장점은 아래와 같습니다
 -   Java로 개발되어 있어 JVM 계열 언어로만 개발이 가능합니다.
 -   간단한 변형 후 적재가 아닌 비즈니스 요구사항이나 복잡한 처리가 포함된 작업을 구현할 경우 Kafka Consumer로 구현하는 것이 수월합니다.
 
-Kafka Connect에 대한 더 자세한 설명은 [여기](https://docs.confluent.io/platform/current/connect/index.html)를 참고해주세요.
+**결과적으로 DynamoDB Sink Connector를 직접 개발하였으며, S3 Sink Connector도 추가 요구사항을 위해 Class를 Override하여 커스마이징하였습니다.**
 
-### 3.2. Kafka Connect의 동작 방식
+### 3.3. Kafka Connect의 동작 방식
 
 Kafka Connect는 Kafka와 외부 데이터 소스/싱크를 연결해주는 프레임워크입니다. Kafka Connector는 Kafka Conneect에서 실제로 동작하는 구현체이며 Kafka Connect에 의해 관리됩니다. Kafka Connect를 사용하기 위해선 Kafka Connector를 jar 형태로 Kafka Connect 내부(보통 Docker Image)에 포함시킨 후, Kafka Conenct를 실행한 후 제공되는 API로 Kafka Connector를 등록하는 과정을 거치게 됩니다.
 
@@ -251,26 +275,6 @@ Worker는 Task를 운영하는 물리적인 프로세스로 Task의 라이프사
 Kafka Connect는 `Standalone Mode`와 `Distributed Mode`가 있는데, Standalone은 Worker를 1개, Distributed Mode는 Worker를 여러 개 사용할 수 있습니다. 주로 운영 환경에서 Kafka Connect는 Distributed Mode로 사용하며 여러 개의 Worker와 Task를 상황에 맞게 조정하며 변화되는 트래픽에 유연하게 대응합니다.
 
 Kafka Connect의 동작 방식에 대한 더 자세한 내용은 [여기](https://docs.confluent.io/platform/current/connect/concepts.html)를 참고해주세요.
-
-### 3.3. 요구 사항 및 결정 이유
-
-![msk-to-storage.jpeg](/img/build-fms-data-pipeline/msk-to-storage.png)
-
-Kakfa 토픽의 메시지를 처리하기 위해 Kafka Consumer와 kafka Connect 중 선택할 때는 현재 비즈니스 요구 사항에 맞춰 장/단점을 잘 비교하여 선택하는 것이 중요합니다. 사실 Kafka 토픽의 메시지를 단순하게 적재하는 경우라면 오픈소스 Kafka Connector를 사용하는 게 낫습니다. 하지만 FMS 프로젝트에는 아래와 같은 요구사항들이 있었고, 충분히 기술적 검토를 한 후 Kafka Connector를 직접 개발하여 하나의 Kafka Connect로 메시지 적재를 관리하자는 결정을 내렸습니다.
-
-1.  **Kafka 토픽 별 메시지들이 S3와 DynamoDB에 적재되어야 합니다.**  
-    Kafka에서 S3로 데이터를 적재하는 S3 Sink Connector는 오픈소스로 존재하여 많은 곳에서 사용하고 있습니다. 하지만 DynamoDB의 경우 Sink Connector가 오픈소스로 존재하지 않아 직접 구현이 필요한 상황이었습니다 (Confluenent에서 제공하는 Sink Connector가 있지만 유료 라이센스입니다) 이미 제공되는 S3 Sink Connector를 사용하면서 DynamoDB도 Connector 형태로 개발한다면 하나의 플랫폼으로 빌드, 운영할 수 있게 되어 이점이 있을 것이라고 판단하였습니다.
-
-2.  **일부 요구사항에 맞게 가벼운 변형 작업이 필요합니다.**  
-     DynamoDB는 레코드를 추가할 때 Partition Key를 필수적으로 입력해야 합니다. FMS 프로젝트에서 DynamoDB 테이블은 비용/성능 효율화를 위해 [Single Table Design](https://aws.amazon.com/ko/blogs/compute/creating-a-single-table-design-with-amazon-dynamodb/) 기법으로 디자인했고 이에 맞는 Partition key가 적재되기 전에 메시지에 추가되어야 합니다. 이외에도 비용 절감을 위해 불필요한 컬럼을 삭제하는 것도 고려가 필요합니다.
-
-    여기서 Kafka Connect에는 [SMT(Single Message Transformation)](https://docs.confluent.io/platform/current/connect/transforms/overview.html)가 있어 Property 기반으로 손쉽게 메시지의 변형이 가능합니다. 물론 SMT 특성상 제약 사항이 존재하지만 필요하면 직접 Transfrom 을 구현하여 사용이 가능합니다.
-
-3.  **스트리밍 환경에서 신뢰성과 확장성이 보장되어야 합니다.**  
-    스트리밍 환경에서는 메시지를 빠르게 처리 후 적재하는 것이 중요합니다. 따라서 kafka의 메시지가 빠르게 쌓여도 Transformation & Load 레이어에서는 일관성있게 처리할 수 있어야 합니다.  
-    Kafka Connect는 `Distributed Mode`를 통해 Worker 갯수를 조정하여 Scale Out/In을 쉽게 할 수 있으며, Worker가 만약 실패하더라도 기존 Worker들에 Task들을 리밸런싱 해줘서 안전하게 운영이 가능합니다.
-
-**결과적으로 DynamoDB Sink Connector를 직접 개발하였으며, S3 Sink Connector도 추가 요구사항을 위해 Class를 Override하여 커스마이징하였습니다.**
 
 ### 3.4. Kafka Connector 레포 구성 및 구현
 
