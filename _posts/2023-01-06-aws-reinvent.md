@@ -19,15 +19,14 @@ tags:
 Cloud DB팀은 Data Architecture(DA)의 역할과 Database Administrator(DBA)역할을 수행합니다.
 DA로서는 전사 데이터의 표준화와 데이터 거버넌스를 맡고 있으며, DBA로서는 쿼리 검수, 물리 데이터 모델링, 트러블 슈팅, 장애 대응, 신규기술, 업무 자동화 등의 다양한 업무를 맡고 있습니다.
 
-AWS re:Invent는 글로벌 클라우드 시장에서 가장 큰 사업자인 AWS가 매년 신규 서비스와 활용사례 등을 발표하는 AWS의 최대규모 행사입니다.
-데이터베이스 관리자로서 쏘카에서 업무를 수행할 때 AWS에서 제공하는 다양한 서비스를 사용하고 있는데, 좋은 기회로 이번 2022년 11월 28일부터 12월 02일까지 AWS re:Invent에 참석을 하게 되었습니다. 
-이번 컨퍼런스를 통해 다음의 내용을 배울 수 있었습니다.
+AWS re:Invent는 글로벌 클라우드 시장에서 가장 큰 사업자인 AWS(Amazon Web Service)가 매년 신규 서비스와 그 활용사례를 발표하는 행사입니다.
+쏘카에서 DBA 업무를 수행할 때 AWS에서 제공하는 다양한 서비스를 사용하고 있는데, 좋은 기회로 이번 2022년 AWS re:Invent에 참석을 하여 다음 내용을 배울 수 있었습니다.
 
 - DB와 관련된 AWS 서비스의 Best Practice는 무엇인가?
 - 각각의 서비스를 어떻게 유기적으로 연결하여 사용할 수 있는가?
 - 글로벌 기업들은 대량의 트랜잭션을 다루기 위해 AWS 서비스를 어떻게 이용하였는가?
 
-다음과 같은 분들이 읽어보시면 좋습니다.
+이 글에서는 AWS re:Invent의 세션 중 DB와 관련된 세션들과 저의 후기를 소개해보려고 합니다. 다음과 같은 분들이 읽어보시면 좋습니다.
 
 - AWS re:Invent 및 AWS의 신기능에 관심있는 독자
 - 데이터베이스 관리자(DBA) 
@@ -57,7 +56,7 @@ AWS re:Invent는 글로벌 클라우드 시장에서 가장 큰 사업자인 AWS
 ![aws-reinvent-intro](/img/aws-reinvent/aws-reinvent-intro.jpg)*AWS re:Invent*
 
 AWS re:Invent는 아마존 웹 서비스(Amazon Web Service)가 개최하는 최대 규모의 행사이며, 매년 AWS의 신규 서비스와 기존 서비스의 새로운 기능을 발표하는 자리입니다. 
-각 분야의 전문가 및 관계자들이 모여 Best Pratice를 발표하고 공유하며, AWS 외에도 다양한 솔루션 업체(GitLab, Redis, Docker, MariaDB 등등)의 서비스 소개를 들어볼 수 있는 컨퍼런스 입니다.
+각 분야의 전문가 및 관계자들이 모여 Best Pratice를 발표하고 공유하며, AWS 외에도 다양한 솔루션 업체(GitLab, Redis, Docker, MariaDB 등등)의 서비스 소개를 들을 수 있는 컨퍼런스 입니다.
 
 -----
 
@@ -65,21 +64,21 @@ AWS re:Invent는 아마존 웹 서비스(Amazon Web Service)가 개최하는 최
 
 AWS re:Invent에서는 DB와 관련하여 글로벌 기업들의 아키텍처 구성,
 데이터베이스와 결합한 서비스를 제공한 사례 등에 대한 다양한 세션이 있었습니다.
-총 10개의 세션 중 인상깊었던 5개의 세션들을 아래에 소개합니다.
+DB와 관련된 총 10개의 세션 중 인상깊었던 5개의 세션들을 아래에 소개합니다.
 
 ### 2.1. 목적에 맞는 데이터베이스
 
-이 세션에서는 현대 MSA(Microservice Architecture) 환경에서 목적에 맞는 데이터베이스 선택(purpoose-built database apporach)의 중요성과 실제 기업의 데이터베이스 컨설팅 사례를 살펴봤습니다. 
+이 세션에서는 현대 MSA(Microservice Architecture) 환경에서 목적에 맞는 데이터베이스 선택(purpoose-built database apporach)의 중요성과 실제 기업의 데이터베이스 컨설팅 사례를 살펴봅니다. 
 
-MSA를 구성하는 각 서비스들은 확장성, 고가용성, 보안성, 성능 측면에서 각자 필요한 스펙이 다르기 때문에 그 목적에 맞는 데이터베이스를 선택하는게 중요하다고 설명하고 있습니다. 예를 들면 Relational / key-value / caching / time-series 등 여러 형태의 database portfolio 에서 적절한 DB를 선택할 수 있습니다. 
+MSA를 구성하는 각 서비스들은 확장성, 고가용성, 보안성, 성능 측면에서 각자 필요한 스펙이 다르기 때문에 그 목적에 맞는 데이터베이스를 선택하는게 중요합니다. 
+예를 들면 목적에 따라서 Relational / key-value / caching / time-series 등 여러 형태의 database portfolio 에서 적절한 DB를 선택하고 성능을 개선할 수 있습니다.
 
 ![AWS 가 제공하는 다양한 database](/img/aws-reinvent/database-portfolio.png)*AWS 가 제공하는 다양한 database*
 
-구체적인 사례로는 Twilio 라는 기업이 Postflight 에서 Amazon DynamoDB 로 이관하여 Data Delay 와 비용을 줄인 케이스와, ADP가 Amazon Neptune 을 사용하여 성능을 10배 이상 개선한 케이스 등을 살펴보았습니다. 
+구체적인 사례로는 Twilio 라는 기업이 Postflight 에서 Amazon DynamoDB 로 이관하여 Data Delay 와 비용을 줄인 케이스와, ADP가 Amazon Neptune 을 사용하여 성능을 10배 이상 개선한 케이스 등을 살펴보았습니다.
 
-데이터의 성격과 목적에 맞게 데이터베이스를 선택하는 일은 중요합니다. 
-데이터도 사람처럼 성격과 성향이 있는데, 데이터 모델링 시 이러한 데이터의 특성을 고려하여 알맞은 데이터베이스를 사용하는 것이 필수적입니다. 
-추후에 데이터가 방대하게 쌓이고 난 후에는 간단한 작업도 큰 작업이 될 수 있으며, 성능에 큰 영향을 미칠 수도 있기 때문입니다. 구체적으로는 단순 조회작업에 오랜 시간이 소요되거나 CPU부하가 발생할 수도 있습니다.
+개인적으로는 데이터도 사람처럼 성격과 성향이 있다고 생각합니다. 특히 데이터 모델링 시 이러한 데이터의 특성을 고려하여 알맞은 데이터베이스를 사용하는 것이 필수적입니다. 
+추후에 데이터가 방대하게 쌓이고 난 후에는 간단한 작업이 큰 작업이 되거나 성능에 큰 영향을 미칠 수도 있기 때문입니다. 구체적으로는 단순 조회작업에 오랜 시간이 소요되거나 CPU부하가 발생할 수도 있습니다.
 
 목적에 맞는 데이터베이스 선택의 예는 다음이 있습니다. 
 
@@ -106,8 +105,8 @@ MSA를 구성하는 각 서비스들은 확장성, 고가용성, 보안성, 성�
 
 해당 세션을 들으면서 빠른 응답속도를 보장하기 위해 쿠버네틱스와 함께 데이터의 손실을 방지하고자 Memory DB For Redis를 사용하는 이유를 알아볼 수 있었습니다.
 MemoryDB for Redis는 Aurora와 동일한 스토리지 구성을 가지고 있는데 이것은 데이터 안정성면에서 큰 장점입니다.
-Memory 기반의 데이터베이스인 Redis는 빠른 Return을 보장하지만 데이터에 대한 내구성이 떨어질 수 있습니다.
-하지만 관계형 데이터베이스와 동일한 스토리지 구성을 가지면 데이터의 손실이 발생하지 않도록 보장됩니다.
+Memory 기반의 데이터베이스인 Redis는 빠른 Return을 보장하지만 데이터에 대한 내구성이 떨어질 수 있는데
+관계형 데이터베이스와 동일한 스토리지 구성을 가지면 데이터의 손실이 발생하지 않도록 보장됩니다.
 
 해당 세션에서는 DB뿐만 아니라 전반적인 인프라 지식도 얻을 수 있었니다. 
 쏘카의 DB팀은 각종 데이터베이스 구성과 네트워크 설정 작업 시 인프라팀과 긴밀하게 협업을 하고 있는데, 
@@ -122,58 +121,43 @@ Memory 기반의 데이터베이스인 Redis는 빠른 Return을 보장하지만
 
 #### 마이그레이션 패턴 순서(RDBMS → NoSQL)
 
-RDBMS에서 NoSQL로 마이그레이션을 위해서는 아래와 같은 순서로 작업이 진행됩니다.
+운영중인 데이터베이스를 중단하지 않고 (다운타임을 발생시키지 않고) NoSQL로 이관하기 위해서는 RDBMS에서 NoSQL로 마이그레이션을 위해서는 아래와 같은 순서로 작업이 진행됩니다.
+
+![Migration Mechanism](/img/aws-reinvent/mechanisms.png)*마이그레이션 메카니즘*
 
 - Lift and Shifts 방식으로 OS, 데이터, 애플리케이션을 그대로 옮기는 작업을 진행
 - 요구사항에 맞는 구성으로 설계 (Ex. On-promise 환경 → Cloud 환경)
 - RDBMS의 쿼리결과를 Key-Value 로 변환
 - Cold / Hot Data의 적재 및 조회 방안 구성
 
-> Cold Data : 자주 사용되지 않는 데이터 (SELECT/UPDATE/DELETE 작업이 발생하지 않는 데이터) <br> 
-> Hot Data : 자주 사용되며 즉시 액세스 해야하는 데이터 (SELECT/UPDATE/DELETE 작업이 발생하는 데이터)
+### Cold Data Migration 
 
-자세한 작업 순서는 아래에서 소개하갰습니다.
-
-#### 마이그레이션 메커니즘
-
-운영중인 데이터베이스를 중단하지 않고 (다운타임을 발생시키지 않고) NoSQL로 이관하기 위해 필요한 메커니즘을 자세하게 소개하겠습니다. 
-마이그레이션 시 Hot Data와 Cold Data를 구분하여 작업을 진행하며, READ / WRITE / 변경 요청도 분리하여 작업합니다. 
-
-![Migration Mechanism](/img/aws-reinvent/mechanisms.png)*마이그레이션 메카니즘*
-
-- RDBMS에서 조회되는 쿼리 결과 → Key-Value 변환
-- 사전에 UPDATE 작업 또는 신규 데이터는 NoSQL 데이터베이스로 이관
-- 변경이 발생된 데이터(UPDATE/DELETE/INSERT) 및 Cold Data를 DMS를 이용하여 이관
-- 마이그레이션 간의 Down Time 해소
+Cold Data란 자주 사용되지 않는 데이터 (SELECT/UPDATE/DELETE 작업이 발생하지 않는 데이터) 를 지칭합니다.
+Cold Data의 경우 Access 요청이 발생하지 않기 때문에 이관작업의 Key-value 변환 외에는 크게 복잡하지 않습니다.
+다만, 트랜잭션이 많이 발생하는 시간대를 피해서 Cold Data의 이관작업을 진행해야합니다.
 
 
-> 이 부분에 뭔가 설명이 좀더 필요할 듯 
+### Hot Data Migration 
 
-#### READ 요청 Mechanism
+Hot Data는 Cold Data 와 반대로 자주 사용되며 즉시 액세스 해야하는 데이터 (SELECT/UPDATE/DELETE 작업이 발생하는 데이터)를 지칭합니다.
+Hot Data의 경우 실시간으로 변경이 일어나기 때문에 Cold Data 보다 작업이 복잡합니다.
+운영중인 데이터베이스에서 어떤 데이터 요청이 발생하는지 정확히 파악하기에는 한계가 존재하기 때문에 READ / WRITE / 변경 요청의 분류에 따라서
+아래 Mechanism 을 따라 마이그레이션을 진행합니다. 
 
-- NoSQL 데이터베이스로 READ 요청
-    - 운영중인 데이터베이스에 READ Request 요청하여 NoSQL에서 데이터를 반환
-    - NoSQL에서 데이터가 없어 Return을 못하는 경우, RDBMS에 READ Request 요청하면 RDBMS Return 과 함께 해당 데이터를 NoSQL로 Write 작업 진행
 
-#### Write 요청의 Mechanism
+| Mechanism | 설명                                                                                                                                                 |
+|-----------|----------------------------------------------------------------------------------------------------------------------------------------------------|
+| Read 요청   | - NoSQL 데이터베이스에 READ Request 요청 <br> - NoSQL에서 데이터가 없어 Return을 못하는 경우, RDBMS에 READ Request 요청  <br> - RDBMS Return 과 함께 해당 데이터를 NoSQL로 Write 작업 진행 |
+| Write 요청  | - NoSQL 데이터베이스로 Write 요청 <br> - RDBMS에 해당 Write 작업 결과가 존재하는지 확인 <br> - NoSQL에 데이터가 적재되지 않았다면, RDBMS → NoSQL로 데이터 적재                                |
+|변경 요청| - RDBMS와 변경건에 대한 DMS(Data Migration Service)를 이용하여 진행 <br>- 실시간 데이터 스트림 서비스인 Kinesis로 DMS로 연결 <br> - Lambda를 이용하여 변경건에 대한 Trigger 진행               |
 
-- NoSQL 데이터베이스로 Write 요청
-    - NoSQL로 Write 작업 요청
-    - RDBMS에는 해당 Write 작업 결과가 존재하는 확인
-    - NoSQL에 데이터가 적재되지 않았다면, RDBMS → NoSQL로 데이터 적재
+해당 세션에서는 실제 마이그레이션 작업에 못지않게 작업 대상에 대한 데이터의 전수조사가 중요하다는 것을 배웠습니다. 
+실제로 데이터가 어떻게 요청되고 있는지를 알아야 정확한 마이그레이션을 정확하게 진행할 수 있었습니다.
 
-#### 변경 요청에 대한 Mechanism
+또한 일반적으로 마이그레이션은 mysqldump, orcale datapump 등 마이그레이션 툴을 이용하여 작업을 진행하는데,
+해당 새션에서는 Pychon Script를 이용하여 운영중 요청이 들어오는 쿼리를 확인하고 그 결과를 NoSQL으로 적재하는 방법을 소개했습니다. 
+결과적으로 좀더 섬세하고 복잡한 마이그레이션을 안정적으로 진행하는 법을 배울 수 있었던 의미있는 세션이었습니다. 
 
-- RDBMS와 변경건에 대한 DMS(Data Migration Service)를 이용하여 진행
-    - 실시간 데이터 스트림 서비스인 Kinesis로 DMS로 연결
-    - Lambda를 이용하여 변경건에 대한 Trigger 진행
-
-해당 세션에서 배운 것은 실제 마이그레이션 작업에 못지않게 작업 대상에 대한 데이터의 전수조사가 중요하다는 것입니다.
-또한 파이썬 코드를 이용하여 update,insert,delete(DML) 작업을 구분하여 Dual Write 작업을 통해 이관을 합니다.
-
-> 요거는 무슨 뜻일까요? 
-
-단순한 코드 몇줄을 통한 이관이 아니라 마이그레이션에 대한 전 과정에 대해 들어볼 수 있었던 의미있는 세션이였습니다.
 
 ### 2.4. 데이터베이스의 블루/그린 최적화된 배포
 
@@ -182,7 +166,8 @@ Blue/Green Optimized 세션은 Aurora의 버전 업그레이드와 관련하여 
 
 이 세션에서는 기존의 방식보다 안전하게 최대 1분 이내로 업그레이드 작업을 진행할 수 있다고 발표하였습니다.
 
-**[Blue/Green Deployment 프로세스]**
+Blue/Green Deployment는 보통 서버에서 자주 이용되는 무중단 배포 기법 중 하나이며, 구 버전과 새 버전을 동시에 운영 환경에 띄워놓고 구 버전에서 새 버전으로 트래픽을 서서히 이동시키는 방법입니다.
+DB의 Blue/Green Deployment는 다음 순서로 진행됩니다. 
 
 ![Blue-green](/img/aws-reinvent/blue-green.png)*Blue-Green Deployment*
 
@@ -196,28 +181,31 @@ Blue/Green Optimized 세션은 Aurora의 버전 업그레이드와 관련하여 
 
 #### 테스트 진행 절차
 
+**테스트 세팅**
+
 - 신규 RDS Instance 생성(Aurora MySQL 5.7)
 - 더미데이터 Import 수행 (5GB 데이터 적재)
-
-![Blue-green-test](/img/aws-reinvent/test-blue-green.png)*Blue-Green Deployment Test*
-
 - Blue/Green 설정
     - Blue - Aurora MySQL 5.7
     - Green - Aurora MySQL. 8.0
-- 작업 중 New Connection 연결 시 Connection Error 미발생(작업완료 약 21분 소요, db.t3.medium)
-    - Blue / Green 접속 및 커넥션 확인
-- Blue의 데이터 변경 시, Green의 데이터 변경 확인 가능(DML/DDL)
-    - 적재된 데이터 변경작업(DML) 진행하였으나 Green에도 정상적으로 반영 확인
-- Switch Over를 이용하여 Green → Blue 배포 진행
-- 읽기 작업은 Blue(운영)쪽에서 진행 가능
-    - Read Workflow는 Blue에서 진행할 수 있다.
-- Blue/Green 배포 작업은 약 1분 이내에 수행 (Major /Minor 버전 업그레이드 포함)
-    - 내부적으로 binlog bin log를 기준으로 미러링 확인
-    - Switch Over 시 Timeout Setting - 1분
-        - 1분으로 설정했으나 1분이 초과되어 자동 Rollback
-        - 무조건 지정한 시간 내에 Switch Over가 되지 않음
-- Switch Over 시 Timeout Setting - 3분 설정
-    - 정상적으로 Blue/Green Deployment 완료 확인
+
+![Blue-green-test](/img/aws-reinvent/test-blue-green.png)*Blue-Green Deployment Test*
+
+**테스트 과정**
+
+- Blue/Green 커넥션 확인 
+  - 작업 중 New Connection 연결 시 Connection Error 미발생
+  - 약 21분 소요, db.t3.medium
+- Logical Replication 확
+  - Blue의 데이터 변경작업(DML/DDL) 진행 시 Green에도 정상적으로 반영 확인
+- Switch Over를 이용하여 Green → Blue 배포 진행 
+  - 읽기 작업은 Blue(운영)쪽에서 진행 가능
+  - 내부적으로 binlog bin log를 기준으로 미러링 확인
+  - Major /Minor 버전 업그레이드 포함
+
+
+이때 Switch Over 시 Timeout Setting 을 1분으로 설정했을 때, 실제 배포 과정이 1분이 초과되어 자동으로 Rollback이 되었습니다. 
+Timeout Setting을 3분으로 늘려 재실행 했을때는 정상적으로 Blue/Green Deployment이 완료되었습니다. 
 
 **Switch Over 결과**
 
@@ -235,14 +223,15 @@ Blue/Green Optimized 세션은 Aurora의 버전 업그레이드와 관련하여 
 
 ### 2.5. 오픈소스(Trino)를 사용하여 AWS S3 데이터 조회
 
-이번에 들었던 세션은 Open-source인 Trino를 이용한 S3 데이터 접근방법에 관련된 세션입니다.
+해당 세션은 Open-source인 Trino를 이용한 S3 데이터 접근방법에 관련된 세션입니다.
 S3의 데이터를 조회하기 위해서는 기존에는 AWS가 제공하는 서비스인 Athena를 이용하여 데이터를 조회하여 쿼리 결과를 얻을 수 있습니다.
-
-![trino-result](/img/aws-reinvent/trino-result.png)*Trino*
 
 다만, Athena를 이용하여 쿼리 결과를 얻기 위해서는 서울 리전을 기준으로 1TB당 $5의 비용이 발생합니다. 
 하지만 이번 세션에서는 Trino를 이용하여 Athena의 조회 비용을 제거하고 쿼리성능을 개선하는 방법을 소개하고 있습니다.
 단, EMR(Elastic MapReduce)의 Computing 비용을 지불합니다.
+
+
+![trino](/img/aws-reinvent/trino.png)*Trino*
 
 이러한 속도를 낼 수 있는 것은 Pushdown이라는 기능 때문입니다.
 그 이유는 MySQL에서도 비슷한 기능이 존재하며 Index Condition Pushdown 과 유사하기 때문입니다.
@@ -250,9 +239,9 @@ S3의 데이터를 조회하기 위해서는 기존에는 AWS가 제공하는 �
 
 마찬가지로 S3 Select는 지정된 바이트 수 만큼 CSV 파일에서 Range Scan(범위)을 전체 객체 스캐닝을 병렬로 처리하여 속도가 빠릅니다.
 
-![trino](/img/aws-reinvent/trino.png)*Trino*
+![trino-result](/img/aws-reinvent/trino-result.png)*Trino*
 
-아래는 S3 내 CSV 파일 데이터를 조회하는 속도를 보여 줄 수 있는 성능 그래프 입니다. 
+위 그림은 S3 내 CSV 파일 데이터를 조회하는 속도를 보여 줄 수 있는 성능 그래프 입니다. 
 S3 내 압축되어 있지 않은 3TB의 CSV 데이터를 조회할 때 S3 Select 를 이용했을 때와 아닐 때의 RunTime 차이를 알 수 있습니다.
 
 
@@ -264,7 +253,7 @@ Amazon EMR(Elastic MapReduce)에 Trino를 설치하여 S3를 연동하여 쿼리
 일반적으로 데이터베이스에서 더 이상 사용되지 않는 정적 데이터는 S3로 이관하는 것을 지향합니다.
 불필요한 데이터는 테이블을 무겁게하고 성능에도 영향을 미치며, 대량의 테이블에서는 ALTER 작업에도 CPU 부하를 유발할 수 있기 때문입니다.
 
-테이블의 경량화를 위해 S3로 이관하고 사용 빈도 적은 데이터를 빠르게 조회할 수 있는 방법에 대해 알아볼 수 있었던 세션이었습니다.
+테이블의 경량화를 위해 S3로 이관하고 사용 빈도가 적은 데이터를 빠르게 조회할 수 있는 방법에 대해 알아볼 수 있었던 세션이었습니다.
 또한 쏘카에서는 S3에 적재된 데이터를 Athena를 이용하여 조회를 하고 있는데, Athena 외에도 대체 방안을 알 수 있어서 좋았습니다.
 
 
@@ -272,7 +261,7 @@ Amazon EMR(Elastic MapReduce)에 Trino를 설치하여 S3를 연동하여 쿼리
 
 ## 3. 참석 후기
 
-업무에 AWS 툴을 적극적으로 활용하고 있는 입장에서 AWS re:Invent 를 통해 AWS에서 직접 진행하는 발표와 데모를 들어볼 수 있어 좋았습니다. 
+업무에 AWS 툴을 다양하게 활용하고 있는 입장에서 AWS re:Invent 를 통해 AWS에서 직접 진행하는 발표와 데모를 들어볼 수 있어 좋았습니다. 
 특히 관심있는 DB 툴에 대해 Deep Dive 하고 Insight를 가져볼 수 있는 값진 시간이었습니다.
 
 세션 뿐만 아니라 수백개의 파트너 사가 AWS와 관련된 솔루션을 홍보하는 자리기도 해서, 
