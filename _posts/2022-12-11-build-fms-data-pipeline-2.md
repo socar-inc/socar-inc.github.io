@@ -408,10 +408,6 @@ Github Action에서 하나의 Job은 하나의 격리된 환경에서 동작합�
 
 ## 3. 시뮬레이터를 활용한 실 데이터 기반 부하 테스트
 
-FMS 프로젝트에서 실 차량에 단말기가 부착되기 전까지 시뮬레이터를 직접 구현하여 데이터 파이프라인을 테스트하였습니다. 그리고 시뮬레이터를 이용해 파이프라인을 구성하는 주요 컴포넌트들의 부하테스트를 진행하였습니다.
-
-> 이 부분 설명이 조금 애매한 느낌 (아래에서 시뮬레이터가 설명되긴 하는데 여기서 시뮬레이터가 뭐지? 하는 느낌 . 설명 덧붙이기 애매하면 이 문장을 빼도 될수도 )
-
 ### 3.1. 부하 테스트 계획
 
 데이터 파이프라인을 구축하면서 주요하게 신경 써야 하는 부분 중 하나는 성능입니다. 위에서 언급한 것처럼 파이프라인의 각 지점은 SPoF가 되기 쉽기 때문에 높은 트래픽으로 인해 서비스가 중단되면 안됩니다. 따라서 FMS 프로젝트에서 실 차량 데이터가 들어오기 전 부하테스트를 계획하였습니다.
@@ -479,8 +475,7 @@ FMS 프로젝트에서 데이터 퀄리티를 높게 유지하기 위해서 크�
    데이터 마트 테이블 별로 도메인에 맞는 컬럼 값을 가지고 있는지 확인합니다. 예를 들어 연료량이 0~100 사이에 존재하는지, 운행한 차량들은 전부 집계가 되었는지 같은 무결성 여부를 확인합니다.
 도메인 전문가와 개발자가 분리되어 있는 경우도 많고 데이터 파이프라인의 특성상 여러 이해 관계자들이 관여하기 때문에 각 이해관계자 들이 모여 주기적으로 데이터 신뢰성을 높이기 위한 회의를 진행하였습니다. 아래와 같이 템플릿을 통해 신뢰성을 검증하는 대상들을 문서화하고 함께 논의하였습니다.
 
-![data-reliability-database](/img/build-fms-data-pipeline/data-reliability-database.png)
-![data-reliability-template](/img/build-fms-data-pipeline/data-reliability-template.png)
+![data-reliability-database](/img/build-fms-data-pipeline/data-reliability-database.png)*검증 대상이 되는 마트 테이블을 정의하여 기록하였습니다.*
 ...
 
 ### 4.3. 데이터 퀄리티 검사 파이프라인 소개
@@ -508,9 +503,7 @@ FMS 프로젝트에서 데이터 퀄리티를 높게 유지하기 위해서 크�
 
 데이터 퀄리티 검사를 진행한 후 검사 결과를 데이터베이스에 저장하는 과정이 필요합니다. 무결성 검사 결과인 SQLColumnCheckOperator의 경우 검사 실패시 Exception을 발생시키지만 데이터베이스에 결과를 저장하는 기능은 존재하지 않았습니다.
 따라서 SQLColumnCheckOperator에 새로운 기능을 적용하기 위해서 상속(Inheritance)이나 구성(Composition)방식을 통해서 새로운 Operator를 생성하였습니다.
-기본적으로 객체지향하게 코드를 작성할 때 [상속보다는 구성](https://en.wikipedia.org/wiki/Composition_over_inheritance)를 적용하는 것이 유연합니다. 또한 SQLColumnCheckOperator 뿐만 아니라 정합성 검사를 구현한 PythonOperator 등 다른 Operator도 동일하게 적용할 수 있어야 하므로 구성(Composition) 방식으로 구현하였습니다.
 
-> 상속과 구성 얘기는 생략하는게 어떨까요? 
 
 따라서 아래와 같이 `MonitoringValidationOperator`를 구현하였습니다.
 
