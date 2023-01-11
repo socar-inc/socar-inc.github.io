@@ -16,7 +16,7 @@ tags:
 
 안녕하세요! 서비스 엔지니어링 본부 Cloud DB팀의 알티입니다.
 
-Cloud DB팀은 Data Architecture(DA)의 역할과 Database Administrator(DBA)역할을 수행합니다.
+Cloud DB팀은 Data Architect(DA)의 역할과 Database Administrator(DBA)역할을 수행합니다.
 DA로서는 전사 데이터의 표준화와 데이터 거버넌스를 맡고 있으며, DBA로서는 쿼리 검수, 물리 데이터 모델링, 트러블 슈팅, 장애 대응, 신규기술, 업무 자동화 등의 다양한 업무를 맡고 있습니다.
 
 AWS re:Invent는 글로벌 클라우드 시장에서 가장 큰 사업자인 AWS(Amazon Web Service)가 매년 신규 서비스와 그 활용사례를 발표하는 행사입니다.
@@ -196,7 +196,7 @@ DB의 Blue/Green Deployment는 다음 순서로 진행됩니다.
 - Blue/Green 커넥션 확인 
   - 작업 중 New Connection 연결 시 Connection Error 미발생
   - 약 21분 소요, db.t3.medium
-- Logical Replication 확
+- Logical Replication 확인
   - Blue의 데이터 변경작업(DML/DDL) 진행 시 Green에도 정상적으로 반영 확인
 - Switch Over를 이용하여 Green → Blue 배포 진행 
   - 읽기 작업은 Blue(운영)쪽에서 진행 가능
@@ -267,7 +267,7 @@ Amazon EMR(Elastic MapReduce)에 Trino를 설치하여 S3를 연동하여 쿼리
 세션 뿐만 아니라 수백개의 파트너 사가 AWS와 관련된 솔루션을 홍보하는 자리기도 해서, 
 re:Invent 행사가 단순히 컨퍼런스의 개념만 가지고 있는 것이아니라 클라우드 기술을 통합하는 장소라는 것을 느꼈습니다.
 
-마지막으로 AWS re:Invent 를 참석할 수 있는 기회를 주신 제이든과 로원에게 감사드리며, 값진 시간을 보낼 수 있도록 도움을 주신 Cloud 팀원분에게 감사인사를 드립니다. 
-긴 글 읽어주셔서 감사합니다.
+마지막으로 AWS re:Invent를 참석할 수 있는 기회를 주신 본부장님과 그룹장님, 인프라 팀장님께 감사드리며,
+값진 시간을 보낼 수 있도록 도움을 주신 SE본부 및 오퍼레이션 구성원분께 감사인사를 드립니다. 긴 글 읽어주셔서 감사합니다.
 
 ![aws-reinvent-outro](/img/aws-reinvent/aws-reinvent-outro.jpg)
