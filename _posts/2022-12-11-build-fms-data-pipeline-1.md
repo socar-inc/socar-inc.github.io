@@ -132,51 +132,51 @@ FMS 서비스로 관리하는 차량들은 IoT 단말기 내에서 차량의 상
 
 쏘카의 차량에서 수집되는 상태 메시지는 다음과 같은 특징들이 있습니다.
 
-1. 보고하는 유형과 제어 응답 유형이 있습니다
+**보고하는 유형의 메세지과 제어 응답 유형의 메세지가 있습니다.**
 
-    일반적으로 차량을 관제하기 위해선 차량 단말기에서 차량의 상태를 주기적으로 수집해서 보고하는 것이 필요합니다. 실제로 특정 프로토콜은 차량의 위치(위도, 경도)와 속도 같은 이동 정보를 주기적으로 보고하는 역할을 합니다.  
-    또한 차량 단말기를 제어하기 위해 클라이언트에서 명령을 보낼 수 있습니다. 이떄 단말기는 명령은 수행한 후 결과를 응답하게 됩니다. 예를 들어 블랙박스에 녹화되고 있는 영상을 업로드 하라는 명령이 있습니다. 단말기는 이를 수행한 후 결과를 메시지로 수집 서버에 전송합니다.
+일반적으로 차량을 관제하기 위해선 차량 단말기에서 차량의 상태를 주기적으로 수집해서 보고하는 것이 필요합니다. 실제로 특정 프로토콜은 차량의 위치(위도, 경도)와 속도 같은 이동 정보를 주기적으로 보고하는 역할을 합니다.
+제어 유형의 메세지 : 차량 단말기를 제어하기 위해 클라이언트에서 명령을 보내는데 이떄 단말기는 명령 수행한 후 결과를 응답하게 됩니다. 예를 들어 블랙박스에 녹화되고 있는 영상을 업로드 하라는 명령이 있으면, 단말기는 이를 수행한 후 결과를 메시지로 수집 서버에 전송합니다.
 
-2. 차량의 상태를 표현하기 위한 다양한 프로토콜이 존재해 스키마 설계에 신경을 많이 썼습니다
+**차량의 상태를 표현하기 위한 다양한 프로토콜이 존재해 스키마 설계에 신경을 써야 합니다.**
 
-    FMS 서비스에서 차량 관제, 운전 효율화 등의 기능을 제공하기 위해선 다양한 수집 데이터를 필요로 합니다.
-    차량 운행 상태, 화물 차량의 온도 상태, 블랙박스 상태 등 각 역할 별로 프로토콜을 나눠서 수집해야 합니다. 실제로 현재 수집되는 메시지 프로토콜의 유형은 OO개가 넘습니다. 이들은 특성과 목적에 맞게 필드 값에 따라 분류되어 있습니다.
+FMS 서비스에서 차량 관제, 운전 효율화 등의 기능을 제공하기 위해선 다양한 수집 데이터를 필요로 합니다.
+예를 들면 차량 운행 상태, 화물 차량의 온도 상태, 블랙박스 상태 등 각 역할 별로 프로토콜을 나눠서 수집해야 합니다. 실제로 현재 수집되는 메시지 프로토콜의 유형은 OO개가 넘습니다. 이들은 특성과 목적에 맞게 필드 값에 따라 분류되어 있습니다. 
 
-    위처럼 메시지 프로토콜이 다양하다 보니 쏘카에서는 프로토콜별로 스키마를 설계할 때 프로젝트에 참여하는 주요 팀들과 함께 논의를 진행했습니다. 덕분에 스키마간의 통일성과 규칙이 생겼으며 데이터를 처리하는 쪽에서는 예측 가능하게 소프트웨어 개발이 가능했습니다. 개인적으로 스키마 설계를 할 때 이해관계자들이 함께 참여하는 것이 정말 중요하다고 느껴졌습니다.
+위처럼 메시지 프로토콜이 다양하다 보니 쏘카에서는 프로토콜별로 스키마를 설계할 때 프로젝트에 참여하는 주요 팀들과 함께 논의를 진행했습니다. 덕분에 스키마간의 통일성과 규칙이 생겼으며 데이터를 처리하는 쪽에서는 예측 가능하게 소프트웨어 개발이 가능했습니다. 개인적으로 스키마 설계를 할 때 이해관계자들이 함께 참여하는 것이 정말 중요하다고 느껴졌습니다.
 
-3. 주기적으로 보고하는 유형은 보통 배치로 묶어서 전송하기에 적재할 때 다시 풀어줘야 합니다
+**주기적으로 보고하는 유형은 보통 배치로 묶어서 전송하기에 적재할 때 다시 풀어줘야 합니다**
 
-    단말기에서 수집하는 상태 정보들은 프로토콜 별로 설정된 Hz 수집 주기에 따라 수집됩니다. 이때 메시지를 수집 서버로 전송한다면 통신비나 클라우드 리소스(IoT Core, Kafka 등)의 비용이 더 비싸집니다. 따라서 비용 효울화를 위해 상태 정보를 배치 형태로 묶어서 전송 주기에 따라 전송됩니다. 그래서 주기 보고의 메시지는 아래와 같은 형태로 구성됩니다. 최종적으로 데이터베이스에서 레코드 별로 조회하기 위해선 배치 형태를 풀어줘야 합니다.
+단말기에서 수집하는 상태 정보들은 프로토콜 별로 설정된 Hz 수집 주기에 따라 수집됩니다. 이때 메시지를 수집 서버로 전송한다면 통신비나 클라우드 리소스(IoT Core, Kafka 등)의 비용이 더 비싸집니다. 따라서 비용 효울화를 위해 상태 정보를 배치 형태로 묶어서 전송 주기에 따라 전송됩니다. 그래서 주기 보고의 메시지는 아래와 같은 형태로 구성됩니다. 최종적으로 데이터베이스에서 레코드 별로 조회하기 위해선 배치 형태를 풀어줘야 합니다.
 
-     <details>
-     <summary>주기 보고 메세지 형태</summary>
-     <div markdown="1">
-     
-     
-     ```json
-     {
-         "object": "vehicle",
-         "type": "kinematic",
-         "messaged_at": "2023-01-01T12:00:00+09:00",
-         "measurements": [
-             {
-                 "timestamp_iso": "2023-01-01T11:59:00+09:00",
-                 "speed": 30,
-                 ...
-             },
-             {
-                 "timestamp_iso": "2022-01-01T11:59:01+09:00",
-                 "speed": 30,
-                 ...
-             },
+ <details>
+ <summary>주기 보고 메세지 형태</summary>
+ <div markdown="1">
+ 
+ 
+ ```json
+ {
+     "object": "vehicle",
+     "type": "kinematic",
+     "messaged_at": "2023-01-01T12:00:00+09:00",
+     "measurements": [
+         {
+             "timestamp_iso": "2023-01-01T11:59:00+09:00",
+             "speed": 30,
              ...
-         ],
+         },
+         {
+             "timestamp_iso": "2022-01-01T11:59:01+09:00",
+             "speed": 30,
+             ...
+         },
          ...
-     }
-     ```
-     
-     </div>
-     </details>
+     ],
+     ...
+ }
+ ```
+ 
+ </div>
+ </details>
 
 ### 2.2. IoT Core에서 Kafka로
 
@@ -189,11 +189,11 @@ FMS 서비스로 관리하는 차량들은 IoT 단말기 내에서 차량의 상
 
 ### 2.3. Kafka 관리
 
-현재 MSK를 통해 kafka를 운영하고 있습니다. 현재 모니터링은 MSK의 [향상된 파티션 수준 모니터링](https://docs.aws.amazon.com/msk/latest/developerguide/metrics-details.html#topic-partition-metrics) 설정으로 kafka 운영에 필요한 주요 메트릭을 cloudwatch에서 확인하고 있습니다. 이를 통해 기본 메트릭 뿐만 아니라 Consumer Group 별로 Lag 확인이 가능해서 모니터링하는데 큰 도움이 되고 있습니다.
+FMS 파이프라인에서는 MSK를 통해 kafka를 운영하고 있습니다. 모니터링은 MSK의 [향상된 파티션 수준 모니터링](https://docs.aws.amazon.com/msk/latest/developerguide/metrics-details.html#topic-partition-metrics) 설정으로 kafka 운영에 필요한 주요 메트릭을 cloudwatch에서 확인하고 있습니다. 이를 통해 기본 메트릭 뿐만 아니라 Consumer Group 별로 Lag 확인이 가능해서 모니터링하는데 큰 도움이 되고 있습니다.
 
 토픽의 경우 메시지의 분류 필드인 `object` 별로 생성하여 관리하고 있으며, 실패한 메시지들을 저장하는 deadletter 전용 토픽이나 일부 유즈케이스에 사용되는 토픽 등이 있습니다. 주요 topic들은 partition과 replication factor를 설정해서 처리 성능과 가용성을 높게 유지하고 있습니다.
 
-![kafka-ui](/img/build-fms-data-pipeline/kafka-ui.png)
+![kafka-ui](/img/build-fms-data-pipeline/kafka-ui.png)*UI For Apache Kafka*
 저장되는 메시지는 실시간으로 **UI for Apache Kafka**를 통해 확인하고 있습니다. UI for Apache Kafka는 직관적인 UI로 kafka 관리를 위한 많은 기능들을 제공해줍니다. 특히 토픽에 쌓이는 메시지를 실시간으로 조회가 가능하며 여러 검색 방식을 지원해줘서 초기에 Kafka 관리 툴로 사용하기에 적합합니다.
 
 ## 3. 스트리밍 파이프라인 : Kafka Sink Connector로 변형/적재하기
@@ -212,6 +212,7 @@ Kafka 토픽에 저장된 메시지를 외부 데이터 싱크(DynamoDB, S3)로 
 Kafka Consumer는 높은 자유도로 개발이 가능하며, 다양한 프로그래밍 언어(JVM 계열 언어, Python, Javascript 등)로 개발할 수 있도록 SDK를 지원합니다. 일반적으로 Kafka 토픽의 메시지를 처리할 때 광범위하게 사용됩니다.
 
 Kafka Connect는 Consumer를 한단계 추상화하여 제공하는 Confluent에서 개발한 프레임워크입니다. 데이터 소스에서 Kafka로 데이터를 옮기거나 Kafka에서 데이터 싱크로 적재하는 목적으로 주로 사용됩니다. 대중적인 데이터 소스/싱크에 대한 Connector(Mysql, MongoDB, S3, ElasticSearch 등)는 이미 오픈소스로 나와있어 손쉽게 사용이 가능합니다 ([Confluent Hub](https://www.confluent.io/hub)에서 확인이 가능합니다)
+Kafka Connect에 대한 자세한 내용은 아래 토글을 눌러서 확인 부탁드립니다.
 
 <details>
 <summary>Kafka Connect의 장단점</summary>
@@ -250,7 +251,7 @@ Kafka Connect는 Consumer를 한단계 추상화하여 제공하는 Confluent에
 -   Java로 개발되어 있어 JVM 계열 언어로만 개발이 가능합니다.
 -   간단한 변형 후 적재가 아닌 비즈니스 요구사항이나 복잡한 처리가 포함된 작업을 구현할 경우 Kafka Consumer로 구현하는 것이 수월합니다.
 
-> Kafka Connect에 대한 더 자세한 설명은 [여기](https://docs.confluent.io/platform/current/connect/index.html)를 참고해주세요.
+> Kafka Connect에 대한 더 자세한 설명은 [공식 문서](https://docs.confluent.io/platform/current/connect/index.html)를 참고해주세요.
 
 </div>
 </details>
@@ -269,7 +270,7 @@ Worker는 Task를 운영하는 물리적인 프로세스로 Task의 라이프사
 
 Kafka Connect는 `Standalone Mode`와 `Distributed Mode`가 있는데, Standalone은 Worker를 1개, Distributed Mode는 Worker를 여러 개 사용할 수 있습니다. 주로 운영 환경에서 Kafka Connect는 Distributed Mode로 사용하며 여러 개의 Worker와 Task를 상황에 맞게 조정하며 변화되는 트래픽에 유연하게 대응합니다.
 
-Kafka Connect의 동작 방식에 대한 더 자세한 내용은 [여기](https://docs.confluent.io/platform/current/connect/concepts.html)를 참고해주세요.
+> Kafka Connect의 동작 방식에 대한 더 자세한 내용은 [공식 문서의 Kafka Connect Concepts 부분](https://docs.confluent.io/platform/current/connect/concepts.html)을 참고해주세요.
 
 </div>
 </details>
@@ -443,7 +444,7 @@ open class S3SinkTask : ConfluentS3SinkTask() {
 
 직접 Kafka Connector를 개발하면서 [공식 가이드](https://docs.confluent.io/platform/current/connect/devguide.html#developing-a-simple-connector)를 참고하였고 구현 코드는 S3 Sink Connector의 구현체인 [kafka-connect-storage-cloud](https://github.com/confluentinc/kafka-connect-storage-cloud) 소스코드를 보면서 빠르게 코드 작성을 할 수 있었습니다. 직접 Kafka Connector를 구현하시는 분들께 도움이 되었으면 합니다.
 
-### 3.5. Kafka Connector 변형
+### 3.5. Kafka Connector 변형(Transformation)
 
 이번에는 Kafka Connector에서 구현한 변형 기능에 대해 알아보도록 하곘습니다. 위에서 언급한 것처럼 Kafka Connector는 Propery 기반으로 Configuration 설정을 할 수 있어 Connector Task를 선언적으로 관리 할 수 있는 장점이 있습니다.  
 따라서 메시지 변형 관련 설정도 최대한 Property 기반으로 관리할 수 있도록 하였으며, 이를 위해서 비즈니스 로직은 최대한 제외하고 Property로 설정할 수 있도록 추상화하였습니다. 이를 통해 Kafka Connector가 새로 추가되는 토픽이나 다른 프로젝트에서 사용되도 문제가 없도록 하였습니다.
@@ -546,9 +547,9 @@ COPY --from=builder /usr/src/app/subprojects/dynamodb/build/libs $FMS_CONNECTOR_
 COPY --from=builder /usr/src/app/subprojects/s3/build/libs $FMS_CONNECTOR_PATH
 ```
 
-CI 파이프라인에서는 Github Action을 사용하고 있습니다. Github Action에서는 main 브랜치의 tag push가 발생했을 때 각 Connector 별 유닛 테스트와 Kafka Connect의 E2E 테스트 (Docker Compose 기반)을 수행합니다. 만약 통과했을 시 AWS ECR로 이미지를 빌드 후 배포합니다.
+CI 파이프라인에서는 Github Action을 사용합니다. Github Action에서는 main 브랜치의 tag push가 발생했을 때 각 Connector 별 유닛 테스트와 Kafka Connect의 E2E 테스트 (Docker Compose 기반)을 수행합니다. 만약 통과했을 시 AWS ECR로 이미지를 빌드 후 배포합니다.
 
-Kubernetes 프로비저닝을 위해서 Helm chart을 사용하고 있습니다. [cp-kafka-connect 차트](https://github.com/confluentinc/cp-helm-charts)를 Clone해서 사용하고 있으며 추후 [strimizi](https://strimzi.io/)로 환경을 옮길 계획입니다. Helm Chart의 배포는 ArgoCD를 사용하고 있습니다.
+Kubernetes 프로비저닝을 위해서는 Helm chart을 사용합니다. [cp-kafka-connect 차트](https://github.com/confluentinc/cp-helm-charts)를 Clone해서 사용하고 있으며 추후 [strimizi](https://strimzi.io/)로 환경을 옮길 계획입니다. Helm Chart의 배포는 ArgoCD를 사용하고 있습니다.
 
 ```yaml
 replicaCount: 3 # Worker 갯수를 설정합니다 (k8s Deployment로 관리됩니다)
@@ -603,15 +604,15 @@ done
 
 Kafka Connector를 운영하면서 신경썼던 지점들도 말씀드리겠습니다.
 
-#### 1. 메시지 중복 처리
+#### 3.7.1. 메시지 중복 처리
 
 실시간 데이터가 저장소에 저장될 때 데이터가 중복되거나 손실되지 않아야 합니다. 만약 특정 Offset의 메시지를 적재하는 과정에서 Kafka Connector가 문제가 생겨 리밸런싱이 발생한다면 메시지의 누락이나 중복이 발생할 수도 있습니다. 중복은 저장소에서 후처리를 할 수 있지만, 누락은 복구하기가 힘들어 더 조심해야 합니다.
 
 이때 메시지를 처리하는 영역(Producer, Consumer)에서는 `Message Delivery Semantics`라고 해서 메시지를 전송하는 전략을 결정합니다. 대표적으로 `At Least Once`는 적어도 한 번 이상의 메시지를 다시 보내겠다는 의미로 메시지의 누락은 발생하지 않지만 중복이 발생할 수 있습니다. 반면 `Exactly Once`는 메시지를 정확히 한 번씩만 보내겠다는 의미로 누락과 중복이 발생하지 않습니다. 이는 다운타임이 있더라도 정확하게 처리했던 메시지의 Offset을 기억해서 동작함을 의미합니다.
 
-S3 Sink Connector는 특정 조건에서 Exactly Once를 지원합니다([여기](https://docs.confluent.io/kafka-connectors/s3-sink/current/overview.html#exactly-once-delivery-on-top-of-eventual-consistency) 참고). DynamoDB Sink Connector의 경우 At Least Once 방식으로 구현을 했습니다. 이유는 DynamoDB의 경우 같은 메시지(Primiary Key가 같은 경우)는 Upsert하기 때문에 중복 이슈는 발생하지 않을 것이라 판단하였습니다.
+S3 Sink Connector는 특정 조건에서 Exactly Once를 지원합니다([공식 문서의 S3 Object Uploads 부분](https://docs.confluent.io/kafka-connectors/s3-sink/current/overview.html#exactly-once-delivery-on-top-of-eventual-consistency) 참고). DynamoDB Sink Connector의 경우 At Least Once 방식으로 구현을 했습니다. 이유는 DynamoDB의 경우 같은 메시지(Primiary Key가 같은 경우)는 Upsert하기 때문에 중복 이슈는 발생하지 않을 것이라 판단하였습니다.
 
-#### 2. 에러 핸들링
+#### 3.7.2. 에러 핸들링
 
 ![inside-kafka-connect](/img/build-fms-data-pipeline/inside-kafka-connect.jpeg)
 
@@ -653,21 +654,22 @@ Kafka 토픽의 메시지가 잘 처리되고 있는지를 나타내는 `Consume
 
 배치 처리 플랫폼 환경을 구축하기 위해 아래와 같은 요구사항들을 고려하였습니다.
 
--   **분석가들이 쿼리를 작성할 수 있는 형태의 시스템이 필요합니다**  
-    고객사에게 운영 인사이트를 제공하기 위해 데이터 분석/집계 과정이 꼭 필요합니다. 데이터를 다루는 팀원들에게 익숙한 SQL 환경을 제공해주는 것이 초기 비용 대비 생산성이 높다고 판단하였습니다. 따라서 Spark 같은 대용량 처리 엔진이 아닌 ANSI SQL에 호환되는 Athena나 Redshift로 선택지를 좁혔습니다.
+**분석가들이 쿼리를 작성할 수 있는 형태의 시스템이 필요합니다**  
 
-    Athena는 AWS에서 제공하는 대화형 쿼리 서비스로 내부적으로 Presto 엔진을 사용하고 있습니다. 프로젝트 개발 초기에 Athena를 사용하다가 일부 윈도우 함수의 지원이 되지 않고 OOO의 이유로 `Redshift`를 선택하였습니다. 그리고 Redshift에서 S3 데이터를 조회할 수 있는 `Redshift Spectrum`을 활용했습니다. Redshift Spectrum를 사용하기 위해선 데이터의 스키마를 잡아줄 수 있는 Glue External Table을 사용하므로 Glue Data Catalog도 도입하였습니다.
+고객사에게 운영 인사이트를 제공하기 위해 데이터 분석/집계 과정이 꼭 필요합니다. 데이터를 다루는 팀원들에게 익숙한 SQL 환경을 제공해주는 것이 초기 비용 대비 생산성이 높다고 판단하였습니다. 따라서 Spark 같은 대용량 처리 엔진이 아닌 ANSI SQL에 호환되는 Athena나 Redshift로 선택지를 좁혔습니다.
+Athena는 AWS에서 제공하는 대화형 쿼리 서비스로 내부적으로 Presto 엔진을 사용하고 있습니다. 프로젝트 개발 초기에 Athena를 사용하다가 일부 윈도우 함수의 지원이 되지 않고 OOO의 이유로 `Redshift`를 선택하였습니다. 그리고 Redshift에서 S3 데이터를 조회할 수 있는 `Redshift Spectrum`을 활용했습니다. Redshift Spectrum를 사용하기 위해선 데이터의 스키마를 잡아줄 수 있는 Glue External Table을 사용하므로 Glue Data Catalog도 도입하였습니다.
 
--   **S3에 적재된 데이터는 Redshift의 조회에 최적화되어야 합니다**  
-    또한 Column 기반 저장 포맷과 높은 압축률이 특징인 Parquet로 파일 포맷을 가져가는 것도 좋은 선택지입니다.
-    Redshift Spectrum을 통해 S3에서 데이터를 조회할 때 탐색 시간과 비용을 줄이기 위해선 대표적으로 해야하는 Practice들이 존재합니다 (더 자세한 내용은 [여기](https://aws.amazon.com/ko/blogs/big-data/10-best-practices-for-amazon-redshift-spectrum/)를 확인해주세요). 이 중에서 필수적으로 해야할 것 중 하나는 쿼리의 풀스캔을 막기 위해서 S3 객체들을 파티션에 따라 적재하는 것입니다(S3 Partititon 개념은 [여기](https://docs.aws.amazon.com/ko_kr/athena/latest/ug/partitions.html)를 참고해주세요)
+**S3에 적재된 데이터는 Redshift의 조회에 최적화되어야 합니다**  
 
-    S3 Sink Connector에 적재된 원본 json 데이터는 여러 타입의 메시지들이 함께 포함되어 있습니다(위에서 언급했듯이 하나의 Kafka 토픽에 여러 메시지 프로토콜이 존재합니다). 따라서 Redshft에서 테이블 단위로 조회하기 때문에 메시지들로 같은 타입으로 분류되어 있어야 합니다.
+또한 Column 기반 저장 포맷과 높은 압축률이 특징인 Parquet로 파일 포맷을 가져가는 것도 좋은 선택지입니다.
+Redshift Spectrum을 통해 S3에서 데이터를 조회할 때 탐색 시간과 비용을 줄이기 위해선 대표적으로 해야하는 Practice들이 존재합니다 (더 자세한 내용은 [여기](https://aws.amazon.com/ko/blogs/big-data/10-best-practices-for-amazon-redshift-spectrum/)를 확인해주세요). 이 중에서 필수적으로 해야할 것 중 하나는 쿼리의 풀스캔을 막기 위해서 S3 객체들을 파티션에 따라 적재하는 것입니다(S3 Partititon 개념은 [여기](https://docs.aws.amazon.com/ko_kr/athena/latest/ug/partitions.html)를 참고해주세요)
 
-    위 방식들을 적용하기 위해서 원본 데이터를 전처리하여 S3에 적재하는 도구로 `Lambda`를 선택하였습니다.
+S3 Sink Connector에 적재된 원본 json 데이터는 여러 타입의 메시지들이 함께 포함되어 있습니다(위에서 언급했듯이 하나의 Kafka 토픽에 여러 메시지 프로토콜이 존재합니다). 따라서 Redshft에서 테이블 단위로 조회하기 때문에 메시지들로 같은 타입으로 분류되어 있어야 합니다.
+위 방식들을 적용하기 위해서 원본 데이터를 전처리하여 S3에 적재하는 도구로 `Lambda`를 선택하였습니다.
 
--   **주기적으로 분석/집계하는 쿼리를 실행하고 적재 수 있어야 합니다**  
-    일, 주 단위 집계를 위해서는 주기적으로 Redshift 쿼리를 실행하고 중간 과정을 거쳐 데이터 마트에 적재해야 합니다. 집계 데이터 적재를 위한 데이터 마트는 조회가 용이한 `RDS(Mysql)`를 선택하였습니다. 또한 Redshift 쿼리 실행 및 적재를 위한 스케줄링 도구로 `MWAA(Managed Worflow Apache Airflow)`를 선택하였습니다. 데이터 본부에서는 Airflow 사용이 익숙하기도 하고 팀 내에서 Airflow 운영에 대한 전문성이 높기에 자연스럽게 결정하였습니다.
+**주기적으로 분석/집계하는 쿼리를 실행하고 적재할 수 있어야 합니다**  
+
+일, 주 단위 집계를 위해서는 주기적으로 Redshift 쿼리를 실행하고 중간 과정을 거쳐 데이터 마트에 적재해야 합니다. 집계 데이터 적재를 위한 데이터 마트는 조회가 용이한 `RDS(Mysql)`를 선택하였습니다. 또한 Redshift 쿼리 실행 및 적재를 위한 스케줄링 도구로 `MWAA(Managed Worflow Apache Airflow)`를 선택하였습니다. 데이터 본부에서는 Airflow 사용이 익숙하기도 하고 팀 내에서 Airflow 운영에 대한 전문성이 높기에 자연스럽게 결정하였습니다.
 
 ### 4.2. 배치 처리 플랫폼의 흐름
 
@@ -676,15 +678,17 @@ Kafka 토픽의 메시지가 잘 처리되고 있는지를 나타내는 `Consume
 위 이미지를 통해 배치로 데이터가 처리되는 흐름을 파악할 수 있습니다.
 
 1. **S3 Sink Connector를 통해 차량 단말기의 데이터가 S3에 Json 포맷으로 적재됩니다.**  
-   5분 주기로 각 Kafka 토픽의 메시지들이 S3에 [파티셔닝(Hive Partition)](https://docs.aws.amazon.com/ko_kr/athena/latest/ug/partitions.html)되어 적재됩니다. 예를 들어 `object=vehicle/type=kinematic/year=2022/month=12/day=25/hour=11`과 같이 시간 분류를 위한 년,월,일,시간과 메시지 프로토콜 별로 분류를 위한 파티션들로 각각 분류되어 데이터가 적재됩니다. 이렇게 파티션으로 분류된 데이터는 Athena, Redshift 같은 쿼리 엔진에서 데이터를 효율적으로 조회할 수 있습니다.
+
+5분 주기로 각 Kafka 토픽의 메시지들이 S3에 [파티셔닝(Hive Partition)](https://docs.aws.amazon.com/ko_kr/athena/latest/ug/partitions.html)되어 적재됩니다. 예를 들어 `object=vehicle/type=kinematic/year=2022/month=12/day=25/hour=11`과 같이 시간 분류를 위한 년,월,일,시간과 메시지 프로토콜 별로 분류를 위한 파티션들로 각각 분류되어 데이터가 적재됩니다. 이렇게 파티션으로 분류된 데이터는 Athena, Redshift 같은 쿼리 엔진에서 데이터를 효율적으로 조회할 수 있습니다.
 
 2. **Lambda의 이벤트 트리거를 통해 원본 JSON의 타입별로 분류하여 Parquet로 형변환하여 적재합니다**  
-   위 요구사항에서 언급한 것 처럼, Redshift에서 효율적으로 조회하기 위해서 원본 데이터의 전처리 작업이 필요합니다. Lambda 함수는 타입별로 메시지를 분류하며 Parquet로 적재합니다. 이때 Redshift의 분석 패턴에 맞게 Range 스캔이 쉽도록 `.../ymd=2022-12-25/hour=11` 다음과 같은 파티션으로 변경해서 적재합니다.  
-   적재하는 과정에서 Glue Table을 통한 메시지 Schema에 대한 검증을 진행하며 문제가 있다면 AWS SQS로 실패한 이벤트 정보를 전송합니다.
+
+위 요구사항에서 언급한 것 처럼, Redshift에서 효율적으로 조회하기 위해서 원본 데이터의 전처리 작업이 필요합니다. Lambda 함수는 타입별로 메시지를 분류하며 Parquet로 적재합니다. 이때 Redshift의 분석 패턴에 맞게 Range 스캔이 쉽도록 `.../ymd=2022-12-25/hour=11` 다음과 같은 파티션으로 변경해서 적재합니다.  
+적재하는 과정에서 Glue Table을 통한 메시지 Schema에 대한 검증을 진행하며 문제가 있다면 AWS SQS로 실패한 이벤트 정보를 전송합니다.
 
 3. **Airflow로 Redshift 집계 쿼리를 스케줄링하여 데이터 마트(RDS)에 적재합니다.**
 
-    Airflow에서 Redshift 조회 결과를 Mysql(RDS)에 적재하기 위해서 Custom Operator를 구현해서 사용하고 있습니다. 또한 Airflow는 AWS 관련 Provider를 제공해주기에 저희는 `RedshiftSQLOperator`를 사용하여 Redshift 조회 결과를 임시로 저장할 때 사용할 수 있었습니다.
+Airflow에서 Redshift 조회 결과를 Mysql(RDS)에 적재하기 위해서 Custom Operator를 구현해서 사용하고 있습니다. 또한 Airflow는 AWS 관련 Provider를 제공해주기에 저희는 `RedshiftSQLOperator`를 사용하여 Redshift 조회 결과를 임시로 저장할 때 사용할 수 있었습니다.
 
 ### 4.3. Glue Data Catalog 활용
 
