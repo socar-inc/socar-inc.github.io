@@ -1,10 +1,10 @@
 ---
 layout: post
-title: "빠르고 정확하게, 신사업 FMS 데이터 파이프라인 구축기 - 2"
-subtitle: 신뢰성 높은 데이터를 제공하기 위한 테스트 환경 소개
+title: "신사업 FMS 데이터 파이프라인 구축기 - 2편. 신뢰성 높은 데이터를 위한 테스트 환경 구성하기"
+subtitle: E2E 테스트, 데이터 퀄리티 테스트 도입하기
 date: 2022-12-11 09:00:00 +0900
 category: data
-background: "/img/advanced-airflow-for-databiz/background.jpg"
+background: "/img/build-fms-data-pipeline/background-2.jpg"
 author: grab
 comments: true
 tags:
