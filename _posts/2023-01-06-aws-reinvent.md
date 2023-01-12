@@ -1,7 +1,7 @@
 ---
 layout: post
-title:  "AWS re:Invent 2022 참석"
-subtitle: AWS re:Invent 2022 참석
+title:  "DBA의 AWS re:Invent 2022 참석 후기"
+subtitle: 데이터베이스와 관련된 AWS re:Invent 주요 세션 소개
 date: 2023-01-06 10:00:00 +0900
 category: data
 background : "/img/advanced-airflow-for-databiz/background.jpg"
@@ -97,7 +97,7 @@ MSA를 구성하는 각 서비스들은 확장성, 고가용성, 보안성, 성�
 
 전체적인 구성은 아래와 같습니다.
 
-![ACK](/img/aws-reinvent/ack.png)*ACK*
+![ACK](/img/aws-reinvent/ack.png)*ACK(AWS Controllers for Kubernetes)를 활용한 전체적인 아키텍쳐*
 
 세션 초반부에는 MSA의 정의와 Managed Service 로서의 AWS EKS의 장점, AWS Controller for Kuberenetes 를 통해 리소스를 관리하는 방법들을 설명합니다. 
 
@@ -123,23 +123,26 @@ Memory 기반의 데이터베이스인 Redis는 빠른 Return을 보장하지만
 
 운영중인 데이터베이스를 중단하지 않고 (다운타임을 발생시키지 않고) NoSQL로 이관하기 위해서는 RDBMS에서 NoSQL로 마이그레이션을 위해서는 아래와 같은 순서로 작업이 진행됩니다.
 
-![Migration Mechanism](/img/aws-reinvent/mechanisms.png)*마이그레이션 메카니즘*
+![Migration Mechanism](/img/aws-reinvent/mechanisms.png)*마이그레이션 시 cold data 와 hot data 를 나눠 작업합니다.*
 
 - Lift and Shifts 방식으로 OS, 데이터, 애플리케이션을 그대로 옮기는 작업을 진행
 - 요구사항에 맞는 구성으로 설계 (Ex. On-promise 환경 → Cloud 환경)
 - RDBMS의 쿼리결과를 Key-Value 로 변환
 - Cold / Hot Data의 적재 및 조회 방안 구성
 
+Data는 사용 빈도에 따라 크게 Cold Data와 Hot Data 로 분류됩니다. 
+Cold Data란 자주 사용되지 않는 데이터를 지칭하며, 
+Hot Data는 자주 사용되며 즉시 액세스 해야하는 데이터 (SELECT/UPDATE/DELETE 작업이 발생하는 데이터)를 지칭합니다.  
+마이그레이션 시 이런 데이터의 특성을 이해하고 각 특성에 맞게 마이그레이션 방안을 구성하는 것이 매우 중요합니다.
+
 ### Cold Data Migration 
 
-Cold Data란 자주 사용되지 않는 데이터 (SELECT/UPDATE/DELETE 작업이 발생하지 않는 데이터) 를 지칭합니다.
 Cold Data의 경우 Access 요청이 발생하지 않기 때문에 이관작업의 Key-value 변환 외에는 크게 복잡하지 않습니다.
 다만, 트랜잭션이 많이 발생하는 시간대를 피해서 Cold Data의 이관작업을 진행해야합니다.
 
 
 ### Hot Data Migration 
 
-Hot Data는 Cold Data 와 반대로 자주 사용되며 즉시 액세스 해야하는 데이터 (SELECT/UPDATE/DELETE 작업이 발생하는 데이터)를 지칭합니다.
 Hot Data의 경우 실시간으로 변경이 일어나기 때문에 Cold Data 보다 작업이 복잡합니다.
 운영중인 데이터베이스에서 어떤 데이터 요청이 발생하는지 정확히 파악하기에는 한계가 존재하기 때문에 READ / WRITE / 변경 요청의 분류에 따라서
 아래 Mechanism 을 따라 마이그레이션을 진행합니다. 
@@ -171,10 +174,12 @@ DB의 Blue/Green Deployment는 다음 순서로 진행됩니다.
 
 ![Blue-green](/img/aws-reinvent/blue-green.png)*Blue-Green Deployment*
 
-- Blue → Green 간의 Logical Replication (Blue 에서 발생하는 모든 변경 사항을 Green에서 미러링할 수 있도록 하는 작업)
-    - 변경 복제를 이용한 여러 수준의 Replication 지원(One-Level 복제)
-    - Blue와 Green 사이의 Replication을 설정하고 메트릭을 모니터링하여 모든 것이 최신상태인지 확인
-- RDS 인스턴스 버전 업그레이드 완료 및 데이터 검증 후 Blue(업그레이드 이전) 인스턴스 삭제
+- Blue → Green 간의 Logical Replication 
+  - Blue 에서 발생하는 모든 변경 사항을 Green에서 미러링하도록 설정
+  - 변경 복제를 이용한 여러 수준의 Replication 지원(One-Level 복제)
+  - 메트릭을 모니터링하여 Replication이 최신 상태인지 확인
+- RDS 인스턴스 버전 업그레이드 완료 및 데이터 검증
+- Blue(업그레이드 이전) 인스턴스 삭제
 
 해당 세션을 듣고 정말 1분 이내에 업그레이드 Switch Over를 완료할 수 있을지에 대해 의문이 들었습니다.
 개발 계정에서 신규 Aurora MySQL RDS Instance를 생성하여 Blue/Green Deployment 테스트를 진행했습니다.
@@ -231,7 +236,7 @@ S3의 데이터를 조회하기 위해서는 기존에는 AWS가 제공하는 �
 단, EMR(Elastic MapReduce)의 Computing 비용을 지불합니다.
 
 
-![trino](/img/aws-reinvent/trino.png)*Trino*
+![trino](/img/aws-reinvent/trino.png)*Trino와 AWS S3 Select*
 
 이러한 속도를 낼 수 있는 것은 Pushdown이라는 기능 때문입니다.
 그 이유는 MySQL에서도 비슷한 기능이 존재하며 Index Condition Pushdown 과 유사하기 때문입니다.
@@ -239,7 +244,7 @@ S3의 데이터를 조회하기 위해서는 기존에는 AWS가 제공하는 �
 
 마찬가지로 S3 Select는 지정된 바이트 수 만큼 CSV 파일에서 Range Scan(범위)을 전체 객체 스캐닝을 병렬로 처리하여 속도가 빠릅니다.
 
-![trino-result](/img/aws-reinvent/trino-result.png)*Trino*
+![trino-result](/img/aws-reinvent/trino-result.png)*AWS S3 Select를 사용했을 때의 조희 성능 차이*
 
 위 그림은 S3 내 CSV 파일 데이터를 조회하는 속도를 보여 줄 수 있는 성능 그래프 입니다. 
 S3 내 압축되어 있지 않은 3TB의 CSV 데이터를 조회할 때 S3 Select 를 이용했을 때와 아닐 때의 RunTime 차이를 알 수 있습니다.
