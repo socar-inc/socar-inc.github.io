@@ -34,9 +34,9 @@ tags:
 목차는 아래와 같습니다.
 
 1. [FMS 데이터 파이프라인 소개](#1-fms-데이터-파이프라인-소개)
-2. [스트리밍 파이프라인, 차량 IoT 데이터가 Kafka로 오기까지](#2-스트리밍-파이프라인-차량-iot-데이터가-kafka로-오기까지)
-3. [스트리밍 파이프라인, Kafka Connector를 통해 실시간 데이터 처리와 적재를 한 번에 하기](#3-스트리밍-파이프라인-kafka-connector를-통해-실시간-데이터-처리와-적재를-한-번에-하기)
-4. [배치 처리 플랫폼, 반정형 데이터가 분석/집계 되어 적재되기까지](#4-배치-처리-플랫폼-반정형-데이터가-분석집계-되어-적재되기까지)
+2. [스트리밍 파이프라인 : IoT Core에서 Kafka로](#2-스트리밍-파이프라인--iot-core에서-kafka로)
+3. [스트리밍 파이프라인 : Kafka Sink Connector로 변형/적재하기](#3-스트리밍-파이프라인--kafka-sink-connector로-변형적재하기)
+4. [배치 처리 플랫폼 : 반정형 데이터가 분석/집계 되어 적재되기까지](#4-배치-처리-플랫폼--반정형-데이터가-분석집계-되어-적재되기까지)
 5. [마무리](#5-마무리)
 
 분량 관계상 Kafka에 대한 기본적인 설명이나 주요 컴포넌트들의 상세한 구현 설명 및 코드는 생략하겠습니다.
@@ -124,7 +124,7 @@ Airflow는 Airbnb에서 개발한 워크플로우 관리 오픈소스로 현재 
 5. S3에 적재된 Json 포맷의 객체는 람다를 통해 분류/변형 후 S3에 적재됩니다 (Redshift, Athena 쿼리에 적합한 형태로 적재됩니다)
 6. Airflow로 스케줄링된 Redshift 쿼리를 통해 데이터를 집계하여 RDS(데이터 마트)에 저장됩니다.
 
-## 2. 스트리밍 파이프라인, 차량 IoT 데이터가 Kafka로 오기까지
+## 2. 스트리밍 파이프라인 : IoT Core에서 Kafka로
 
 ### 2.1. 차량 IoT 데이터의 특징
 
@@ -196,7 +196,7 @@ FMS 서비스로 관리하는 차량들은 IoT 단말기 내에서 차량의 상
 ![kafka-ui](/img/build-fms-data-pipeline/kafka-ui.png)
 저장되는 메시지는 실시간으로 **UI for Apache Kafka**를 통해 확인하고 있습니다. UI for Apache Kafka는 직관적인 UI로 kafka 관리를 위한 많은 기능들을 제공해줍니다. 특히 토픽에 쌓이는 메시지를 실시간으로 조회가 가능하며 여러 검색 방식을 지원해줘서 초기에 Kafka 관리 툴로 사용하기에 적합합니다.
 
-## 3. 스트리밍 파이프라인, Kafka Connector를 통해 실시간 데이터 처리와 적재를 한 번에 하기
+## 3. 스트리밍 파이프라인 : Kafka Sink Connector로 변형/적재하기
 
 Kafka 토픽에 저장된 메시지를 외부 데이터 싱크(DynamoDB, S3)로 적재하는 Kafka Sink Connector를 개발하게 된 배경과 구현 사항, 장단점 등에 대해 알아보도록 하겠습니다.
 
@@ -642,7 +642,7 @@ Kafka 토픽의 메시지가 잘 처리되고 있는지를 나타내는 `Consume
 ![grafana-slack-alert](/img/build-fms-data-pipeline/grafana-slack-alert.png)
 만약 모니터링 중 이상이 발생하는 경우 `Grafana Alert`를 사용해 슬랙 모니터링 채널로 메시지를 보내고 있습니다.
 
-## 4. 배치 처리 플랫폼, 반정형 데이터가 분석/집계 되어 적재되기까지
+## 4. 배치 처리 플랫폼 : 반정형 데이터가 분석/집계 되어 적재되기까지
 
 ![batch-platform.png](/img/build-fms-data-pipeline/batch-platform.png)
 
