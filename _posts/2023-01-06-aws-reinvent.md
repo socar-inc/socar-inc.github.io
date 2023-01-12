@@ -68,12 +68,12 @@ DB와 관련된 총 10개의 세션 중 인상 깊었던 5개의 세션들을 �
 
 ### 2.1. 목적에 맞는 데이터베이스
 
-이 세션에서는 현대 MSA(Microservice Architecture) 환경에서 목적에 맞는 데이터베이스 선택(purpoose-built database apporach)의 중요성과 실제 기업의 데이터베이스 컨설팅 사례를 살펴봅니다. 
+이 세션에서는 현대 MSA(Microservice Architecture) 환경에서 목적에 맞는 데이터베이스 선택(Purpoose-built database apporach)의 중요성과 실제 기업의 데이터베이스 컨설팅 사례를 살펴봅니다. 
 
 MSA를 구성하는 각 서비스들은 확장성, 고가용성, 보안성, 성능 측면에서 각자 필요한 스펙이 다르기 때문에 그 목적에 맞는 데이터베이스를 선택하는 게 중요합니다. 
-예를 들면 목적에 따라서 Relational / key-value / caching / time-series 등 여러 형태의 database portfolio에서 적절한 DB를 선택하고 성능을 개선할 수 있습니다.
+예를 들면 목적에 따라서 Relational / Key-value / Caching / Time-series 등 여러 형태의 Database Portfolio에서 적절한 DB를 선택하고 성능을 개선할 수 있습니다.
 
-![AWS 가 제공하는 다양한 database](/img/aws-reinvent/database-portfolio.png)*AWS 가 제공하는 다양한 database*
+![AWS 가 제공하는 다양한 Database](/img/aws-reinvent/database-portfolio.png)*AWS 가 제공하는 다양한 Database*
 
 구체적인 사례로는 Twilio라는 기업이 Postflight에서 Amazon DynamoDB로 이관하여 Data Delay 와 비용을 줄인 케이스와, ADP가 Amazon Neptune 을 사용하여 성능을 10배 이상 개선한 케이스 등을 살펴보았습니다.
 
@@ -83,14 +83,14 @@ MSA를 구성하는 각 서비스들은 확장성, 고가용성, 보안성, 성�
 목적에 맞는 데이터베이스 선택의 예는 다음이 있습니다. 
 
 * 실시간 위치를 조회하는 데이터의 경우 지속적으로 RDBMS에 UPDATE 작업을 진행해야 하는데, 이 경우 RDBMS에 대량의 데이터를 적재하기보다는 DynamoDB를 활용하는 것이 좋을 수 있습니다.
-* 실시간 데이터가 필요하다면 Redis를 활용하고 데이터 손실을 줄이기 위해서는 MemoryDB For Redis를 사용할 수 있습니다. 
+* 실시간 데이터가 필요하다면 Redis를 활용하고 데이터 손실을 줄이기 위해서는 MemoryDB for Redis를 사용할 수 있습니다. 
 * 추가로 데이터 손실을 감수하더라도 조금 더 빠른 조회를 원한다면 Memcached를 이용하면 안정적인 서비스를 제공할 수 있습니다.
 
 이 세션을 통해 다시금  “목적에 맞는 데이터베이스 선택”의 중요성을 깨닫고, 개발자와 모델링 협업 과정에서 해당 부분에 대해 어떻게 잘 커뮤니케이션할 수 있을지에 대해 고민해 볼 수 있었습니다.
 
 > 슬라이드 출처 : [How-ADP-and-Twilio-realize-business-vision-with-purpose-built-databases](https://d1.awsstatic.com/events/Summits/reinvent2022/DAT212_How-ADP-and-Twilio-realize-business-vision-with-purpose-built-databases-.pdf)
 
-### 2.2 MemoryDB For Redis와 쿠버네틱스를 활용한 초고속 애플리케이션 구축
+### 2.2 MemoryDB for Redis와 쿠버네틱스를 활용한 초고속 애플리케이션 구축
 
 해당 세션에서는 Kubernetes와 MemoryDB for Redis 결합을 통한 애플리케이션 구축의 Best Pratice를 소개했습니다.
 세션 마지막에는 소개한 구성을 실제로 구현하는 데모도 진행되었는데, 실습 내용을 포함한 전체 발표 자료는 [링크](https://d1.awsstatic.com/events/Summits/reinvent2022/DAT313-R_Build-stateful-K8s-applications-with-ultra-fast-Amazon-MemoryDB-for-Redis.pdf)에서 보실 수 있습니다.
@@ -103,9 +103,9 @@ MSA를 구성하는 각 서비스들은 확장성, 고가용성, 보안성, 성�
 
 세션 초반부에는 MSA의 정의와 Managed Service 로서의 AWS EKS의 장점, AWS Controller for Kuberenetes를 통해 리소스를 관리하는 방법들을 설명합니다. 
 
-![memorydb-durability](/img/aws-reinvent/memorydb.png)*Memory DB For Redis의 스토리지는 Aurora와 동일합니다.* 
+![memorydb-durability](/img/aws-reinvent/memorydb.png)*Memory DB for Redis의 스토리지는 Aurora와 동일합니다.* 
 
-해당 세션을 들으면서 빠른 응답속도를 보장하기 위해 쿠버네틱스와 함께 데이터의 손실을 방지하고자 Memory DB For Redis를 사용하는 이유를 알아볼 수 있었습니다.
+해당 세션을 들으면서 빠른 응답속도를 보장하기 위해 쿠버네틱스와 함께 데이터의 손실을 방지하고자 Memory DB for Redis를 사용하는 이유를 알아볼 수 있었습니다.
 MemoryDB for Redis는 Aurora와 동일한 스토리지 구성을 가지고 있는데 이것은 데이터 안정성 면에서 큰 장점입니다.
 Memory 기반의 데이터베이스인 Redis는 빠른 Return을 보장하지만 데이터에 대한 내구성이 떨어질 수 있는데
 관계형 데이터베이스와 동일한 스토리지 구성을 가지면 데이터의 손실이 발생하지 않도록 보장됩니다.
@@ -128,11 +128,11 @@ Memory 기반의 데이터베이스인 Redis는 빠른 Return을 보장하지만
 
 운영중인 데이터베이스를 중단하지 않고 (다운타임을 발생시키지 않고) NoSQL로 이관하기 위해서는 RDBMS에서 NoSQL로 마이그레이션을 위해서는 아래와 같은 순서로 작업이 진행됩니다.
 
-![Migration Mechanism](/img/aws-reinvent/mechanisms.png)*마이그레이션 시 cold data 와 hot data를 나눠 작업합니다.*
+![Migration Mechanism](/img/aws-reinvent/mechanisms.png)*마이그레이션 시 Cold Data 와 Hot Data를 나눠 작업합니다.*
 
 - Lift and Shifts 방식으로 OS, 데이터, 애플리케이션을 그대로 옮기는 작업을 진행
 - 요구사항에 맞는 구성으로 설계 (Ex. On-promise 환경 → Cloud 환경)
-- RDBMS의 쿼리 결과를 Key-Value로 변환
+- RDBMS의 쿼리 결과를 Key-value로 변환
 - Cold / Hot Data의 적재 및 조회 방안 구성
 
 Data는 사용 빈도에 따라 크게 Cold Data와 Hot Data로 분류됩니다. 
@@ -162,7 +162,7 @@ Hot Data의 경우 실시간으로 변경이 일어나기 때문에 Cold Data �
 해당 세션에서는 실제 마이그레이션 작업에 못지않게 작업 대상에 대한 데이터의 전수조사가 중요하다는 것을 배웠습니다. 
 실제로 데이터가 어떻게 요청되고 있는지를 알아야 정확한 마이그레이션을 정확하게 진행할 수 있었습니다.
 
-또한 일반적으로 마이그레이션은 mysqldump, orcale datapump 등 마이그레이션 툴을 이용하여 작업을 진행하는데,
+또한 일반적으로 마이그레이션은 `Mysqldump`, `Orcale datapump` 등 마이그레이션 툴을 이용하여 작업을 진행하는데,
 해당 세션에서는 Pychon Script를 이용하여 운영 중 요청이 들어오는 쿼리를 확인하고 그 결과를 NoSQL으로 적재하는 방법을 소개했습니다. 
 결과적으로 좀 더 섬세하고 복잡한 마이그레이션을 안정적으로 진행하는 법을 배울 수 있었던 의미 있는 세션이었습니다. 
 
@@ -207,13 +207,13 @@ DB의 Blue/Green Deployment는 다음 순서로 진행됩니다.
 
 - Blue/Green 커넥션 확인 
   - 작업 중 New Connection 연결 시 Connection Error 미발생
-  - 약 21분 소요, db.t3.medium
+  - `db.t3.medium` 기준 약 21분 소요
 - Logical Replication 확인
   - Blue의 데이터 변경 작업(DML/DDL) 진행 시 Green에도 정상적으로 반영 확인
 - Switch Over를 이용하여 Green → Blue 배포 진행 
   - 읽기 작업은 Blue(운영) 쪽에서 진행 가능
-  - 내부적으로 binlog bin log를 기준으로 미러링 확인
-  - Major /Minor 버전 업그레이드 포함
+  - 내부적으로 Bin Log를 기준으로 미러링 확인
+  - Major/Minor 버전 업그레이드 포함
 
 
 이때 Switch Over 시 Timeout Setting 을 1분으로 설정했을 때, 실제 배포 과정이 1분이 초과되어 자동으로 Rollback이 되었습니다. 
@@ -223,7 +223,7 @@ Timeout Setting을 3분으로 늘려 재실행 했을 때는 정상적으로 Blu
 
 ![Blue-green-test-result](/img/aws-reinvent/test-result.png)*Blue/Green Deployment 완료 후 위와 같이 분리*
 
-실제 작업은 위와 같은 방법으로 작업이 수행되며 db.t3.medium 기준으로 약 $91의 비용이 소요됩니다.
+실제 작업은 위와 같은 방법으로 작업이 수행되며 `db.t3.medium` 기준으로 약 $91의 비용이 소요됩니다.
 
 세션에서 들었던 것과 달리 Timeout을 1분으로 설정했을 때 Switchover 작업이 실패하였는데 정확한 원인은 파악하지 못하였습니다. 혹시 1분 기준으로 테스트를 성공하신 분이 있다면 댓글 부탁드립니다.
 
