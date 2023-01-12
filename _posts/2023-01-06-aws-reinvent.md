@@ -4,7 +4,7 @@ title:  "DBA의 AWS re:Invent 2022 참석 후기"
 subtitle: 데이터베이스와 관련된 AWS re:Invent 주요 세션 소개
 date: 2023-01-06 10:00:00 +0900
 category: data
-background : "/img/advanced-airflow-for-databiz/background.jpg"
+background : "/img/aws-reinvent/background.jpg"
 author: alti
 comments: true
 tags:
@@ -88,6 +88,8 @@ MSA를 구성하는 각 서비스들은 확장성, 고가용성, 보안성, 성�
 
 이 세션을 통해 다시금  “목적에 맞는 데이터베이스 선택”의 중요성을 깨닫고, 개발자와 모델링 협업 과정에서 해당 부분에 대해 어떻게 잘 커뮤니케이션 할 수 있을지에 대해 고민해볼 수 있었습니다.
 
+> 슬라이드 출처 : [How-ADP-and-Twilio-realize-business-vision-with-purpose-built-databases](https://d1.awsstatic.com/events/Summits/reinvent2022/DAT212_How-ADP-and-Twilio-realize-business-vision-with-purpose-built-databases-.pdf)
+
 ### 2.2 MemoryDB For Redis와 쿠버네틱스를 활용한 초고속 애플리케이션 구축
 
 해당 세션에서는 Kubernetes와 MemoryDB for Redis 결합을 통한 애플리케이션 구축의 Best Pratice를 소개했습니다.
@@ -111,6 +113,9 @@ Memory 기반의 데이터베이스인 Redis는 빠른 Return을 보장하지만
 해당 세션에서는 DB뿐만 아니라 전반적인 인프라 지식도 얻을 수 있었니다. 
 쏘카의 DB팀은 각종 데이터베이스 구성과 네트워크 설정 작업 시 인프라팀과 긴밀하게 협업을 하고 있는데, 
 이런 업무 시 인프라팀과 커뮤니케이션에 도움이 되는 세션이었습니다. 
+
+> 슬라이드 출처 : [Build-stateful-K8s-applications-with-ultra-fast-Amazon-MemoryDB-for-Redis](https://d1.awsstatic.com/events/Summits/reinvent2022/DAT313-R_Build-stateful-K8s-applications-with-ultra-fast-Amazon-MemoryDB-for-Redis.pdf)
+
 
 ### 2.3. SQL에서 NoSQL로 점진적으로 마이그레이션
 
@@ -160,6 +165,8 @@ Hot Data의 경우 실시간으로 변경이 일어나기 때문에 Cold Data �
 또한 일반적으로 마이그레이션은 mysqldump, orcale datapump 등 마이그레이션 툴을 이용하여 작업을 진행하는데,
 해당 새션에서는 Pychon Script를 이용하여 운영중 요청이 들어오는 쿼리를 확인하고 그 결과를 NoSQL으로 적재하는 방법을 소개했습니다. 
 결과적으로 좀더 섬세하고 복잡한 마이그레이션을 안정적으로 진행하는 법을 배울 수 있었던 의미있는 세션이었습니다. 
+
+> 슬라이드 출처 : [Modernize-and-gradually-migrate-your-data-model-from-SQL-to-NoSQL](https://d1.awsstatic.com/events/Summits/reinvent2022/BOA321_Modernize-and-gradually-migrate-your-data-model-from-SQL-to-NoSQL.pdf)
 
 
 ### 2.4. 데이터베이스의 블루/그린 최적화된 배포
@@ -224,7 +231,8 @@ Timeout Setting을 3분으로 늘려 재실행 했을때는 정상적으로 Blue
 또한 새로운 기능을 운영에 적용하기에는 보수적으로 생각해야 하기에 실제 적용에는 여러 고민이 되는 점이 있었습니다.
 하지만 이러한 새로운 기능을 접할 수 있어 좋았으며 AWS의 RDS가 점점 발전하고 있다는 것을 느꼈습니다.
 
- 
+> 슬라이드 출처 : [Amazon-RDS-Blue-Green-Deployments-Optimized-Writes-and-Optimized-Reads](https://d1.awsstatic.com/events/Summits/reinvent2022/DAT222_Amazon-RDS-Blue-Green-Deployments-Optimized-Writes-and-Optimized-Reads.pdf)
+
 
 ### 2.5. 오픈소스(Trino)를 사용하여 AWS S3 데이터 조회
 
@@ -260,6 +268,8 @@ Amazon EMR(Elastic MapReduce)에 Trino를 설치하여 S3를 연동하여 쿼리
 
 테이블의 경량화를 위해 S3로 이관하고 사용 빈도가 적은 데이터를 빠르게 조회할 수 있는 방법에 대해 알아볼 수 있었던 세션이었습니다.
 또한 쏘카에서는 S3에 적재된 데이터를 Athena를 이용하여 조회를 하고 있는데, Athena 외에도 대체 방안을 알 수 있어서 좋았습니다.
+
+> 슬라이드 출처 : [Accessing-data-lakes-in-Amazon-S3-using-open-source-projects.](https://d1.awsstatic.com/events/Summits/reinvent2022/OPN209-R_Accessing-data-lakes-in-Amazon-S3-using-open-source-projects.pdf)
 
 
 ---
