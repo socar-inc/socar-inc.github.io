@@ -12,7 +12,8 @@ tags:
     - data engineering
     - iot streaming
     - data platform
-    - kafka connect
+    - data reliability
+    - data quality
     - aws
 ---
 

@@ -1,7 +1,7 @@
 ---
 layout: post
-title: "신사업 FMS 데이터 파이프라인 구축기 - 1편. IoT 차량 데이터 스트리밍, 배치 파이프라인 구축기"
-subtitle: 몰라몰라
+title: "신사업 FMS 데이터 파이프라인 구축기 - 1편. IoT 차량 스트리밍, 배치 파이프라인 구축기"
+subtitle:
 date: 2022-12-11 09:00:00 +0900
 category: data
 background: "/img/build-fms-data-pipeline/background-1.jpg"
@@ -52,7 +52,7 @@ FMS 서비스를 통해 고객사는 데이터 수집/분석된 차량들의 운
 
 ### 1.2. FMS 스트리밍/배치 파이프라인 소개
 
-![batch-stream.png](/img/build-fms-data-pipeline/batch-stream.png)_배치 파이프라인과 스트리밍 파이프라인_
+![batch-streaming.png](/img/build-fms-data-pipeline/batch-and-streaming.png)_배치 파이프라인과 스트리밍 파이프라인_
 
 보통 비즈니스/분석 요구사항에 맞게 데이터 파이프라인을 구축하다 보면 배치와 스트리밍에 대한 고민을 자연스럽게 하게 됩니다.
 
@@ -140,7 +140,7 @@ FMS 서비스로 관리하는 차량들은 IoT 단말기 내에서 차량의 상
 **차량의 상태를 표현하기 위한 다양한 프로토콜이 존재해 스키마 설계에 신경을 써야 합니다.**
 
 FMS 서비스에서 차량 관제, 운전 효율화 등의 기능을 제공하기 위해선 다양한 수집 데이터를 필요로 합니다.
-차량 운행 상태, 화물 차량의 온도 상태, 블랙박스 상태 등 각 역할 별로 프로토콜을 나눠서 수집해야 합니다. 실제로 현재 수집되는 수십여 개의 메시지 프로토콜은 특성과 목적에 맞게 분류되어 있습니다.
+차량 운행 상태, 화물 차량의 온도 상태, 블랙박스 상태 등 각 역할 별로 프로토콜을 나눠서 수집해야 합니다. 실제로 현재 수집되는 수십여개의 메시지 프로토콜은 특성과 목적에 맞게 분류되어 있습니다.
 
 위처럼 메시지 프로토콜이 다양하다 보니 쏘카에서는 프로토콜별로 스키마를 설계할 때 프로젝트에 참여하는 주요 팀들과 함께 논의를 진행했습니다. 덕분에 스키마 간의 통일성과 규칙이 생겼으며 데이터를 처리하는 쪽에서는 예측 가능하게 소프트웨어 개발이 가능했습니다. 개인적으로 스키마 설계를 할 때 이해관계자들이 함께 참여하는 것이 정말 중요하다고 느껴졌습니다.
 
@@ -193,8 +193,8 @@ FMS 파이프라인에서는 MSK를 통해 Kafka를 운영하고 있습니다. �
 
 토픽의 경우 메시지의 분류 필드인 `object` 별로 생성하여 관리하고 있으며, 실패한 메시지들을 저장하는 deadletter 전용 토픽이나 일부 유즈케이스에 사용되는 토픽 등이 있습니다. 주요 topic들은 partition과 replication factor를 설정해서 처리 성능과 가용성을 높게 유지하고 있습니다.
 
-![kafka-ui](/img/build-fms-data-pipeline/kafka-ui.png)*UI For Apache Kafka*
-저장되는 메시지는 실시간으로 **UI for Apache Kafka**를 통해 확인하고 있습니다. UI for Apache Kafka는 직관적인 UI로 Kafka 관리를 위한 많은 기능들을 제공해 줍니다. 특히 토픽에 쌓이는 메시지를 실시간으로 조회가 가능하며 여러 검색 방식을 지원해 줘서 초기에 Kafka 관리 툴로 사용하기에 적합합니다.
+![kafka-ui](/img/build-fms-data-pipeline/kafka-ui.png)_UI For Apache Kafka_
+저장되는 메시지는 실시간으로 **UI for Apache Kafka**를 통해 확인하고 있습니다. UI for Apache Kafka는 직관적인 UI로 kafka 관리를 위한 많은 기능들을 제공해줍니다. 특히 토픽에 쌓이는 메시지를 실시간으로 조회가 가능하며 여러 검색 방식을 지원해줘서 초기에 Kafka 관리 툴로 사용하기에 적합합니다.
 
 ## 3. 스트리밍 파이프라인 : Kafka Sink Connector로 변형/적재하기
 
@@ -654,12 +654,12 @@ Kafka 토픽의 메시지가 잘 처리되고 있는지를 나타내는 `Consume
 
 배치 처리 플랫폼 환경을 구축하기 위해 아래와 같은 요구사항들을 고려하였습니다.
 
-**분석가들이 쿼리를 작성할 수 있는 형태의 시스템이 필요합니다**  
+**분석가들이 쿼리를 작성할 수 있는 형태의 시스템이 필요합니다**
 
-고객사에게 운영 인사이트를 제공하기 위해 데이터 분석/집계 과정이 꼭 필요합니다. 데이터를 다루는 팀원들에게 익숙한 SQL 환경을 제공해 주는 것이 초기 비용 대비 생산성이 높다고 판단하였습니다. 따라서 Spark 같은 대용량 처리 엔진이 아닌 ANSI SQL에 호환되는 Athena나 Redshift로 선택지를 좁혔습니다.
-Athena는 AWS에서 제공하는 대화형 쿼리 서비스로 내부적으로 Presto 엔진을 사용하고 있습니다. 프로젝트 개발 초기에 Athena를 사용하다가 일부 윈도우 함수의 지원이 되지 않고 OOO의 이유로 `Redshift`를 선택하였습니다. 그리고 Redshift에서 S3 데이터를 조회할 수 있는 `Redshift Spectrum`을 활용했습니다. Redshift Spectrum를 사용하기 위해선 데이터의 스키마를 잡아줄 수 있는 Glue External Table을 사용하므로 Glue Data Catalog도 도입하였습니다.
+고객사에게 운영 인사이트를 제공하기 위해 데이터 분석/집계 과정이 꼭 필요합니다. 데이터를 다루는 팀원들에게 익숙한 SQL 환경을 제공해주는 것이 초기 비용 대비 생산성이 높다고 판단하였습니다. 따라서 Spark 같은 대용량 처리 엔진이 아닌 ANSI SQL에 호환되는 Athena나 Redshift로 선택지를 좁혔습니다.
+Athena는 AWS에서 제공하는 대화형 쿼리 서비스로 내부적으로 Presto 엔진을 사용하고 있습니다. 프로젝트 개발 초기에 Athena를 사용하다가 일부 윈도우 함수의 지원이 되지 않고 퍼포먼스 측면에서 이점이 있는 `Redshift`를 선택하였습니다. 그리고 Redshift에서 S3 데이터를 조회할 수 있는 `Redshift Spectrum`을 활용했습니다. Redshift Spectrum를 사용하기 위해선 데이터의 스키마를 잡아줄 수 있는 Glue External Table을 사용하므로 Glue Data Catalog도 도입하였습니다.
 
-**S3에 적재된 데이터는 Redshift의 조회에 최적화되어야 합니다**  
+**S3에 적재된 데이터는 Redshift의 조회에 최적화되어야 합니다**
 
 또한 Column 기반 저장 포맷과 높은 압축률이 특징인 Parquet로 파일 포맷을 가져가는 것도 좋은 선택지입니다.
 Redshift Spectrum을 통해 S3에서 데이터를 조회할 때 탐색 시간과 비용을 줄이기 위해선 대표적으로 해야 하는 Practice들이 존재합니다 (더 자세한 내용은 [여기](https://aws.amazon.com/ko/blogs/big-data/10-best-practices-for-amazon-redshift-spectrum/)를 확인해 주세요). 이 중에서 필수적으로 해야 할 것 중 하나는 쿼리의 풀 스캔을 막기 위해서 S3 객체들을 파티션에 따라 적재하는 것입니다(S3 Partititon 개념은 [여기](https://docs.aws.amazon.com/ko_kr/athena/latest/ug/partitions.html)를 참고해 주세요)
@@ -667,7 +667,7 @@ Redshift Spectrum을 통해 S3에서 데이터를 조회할 때 탐색 시간과
 S3 Sink Connector에 적재된 원본 Json 데이터는 여러 타입의 메시지들이 함께 포함되어 있습니다(위에서 언급했듯이 하나의 Kafka 토픽에 여러 메시지 프로토콜이 존재합니다). 따라서 Redshft에서 테이블 단위로 조회하기 때문에 메시지들로 같은 타입으로 분류되어 있어야 합니다.
 위 방식들을 적용하기 위해서 원본 데이터를 전처리하여 S3에 적재하는 도구로 `Lambda`를 선택하였습니다.
 
-**주기적으로 분석/집계하는 쿼리를 실행하고 적재할 수 있어야 합니다**  
+**주기적으로 분석/집계하는 쿼리를 실행하고 적재할 수 있어야 합니다**
 
 일, 주 단위 집계를 위해서는 주기적으로 Redshift 쿼리를 실행하고 중간 과정을 거쳐 데이터 마트에 적재해야 합니다. 집계 데이터 적재를 위한 데이터 마트는 조회가 용이한 `RDS(Mysql)`를 선택하였습니다. 또한 Redshift 쿼리 실행 및 적재를 위한 스케줄링 도구로 `MWAA(Managed Worflow Apache Airflow)`를 선택하였습니다. 데이터 본부에서는 Airflow 사용이 익숙하기도 하고 팀 내에서 Airflow 운영에 대한 전문성이 높기에 자연스럽게 결정하였습니다.
 
@@ -677,11 +677,11 @@ S3 Sink Connector에 적재된 원본 Json 데이터는 여러 타입의 메시�
 
 위 이미지를 통해 배치로 데이터가 처리되는 흐름을 파악할 수 있습니다.
 
-**1. S3 Sink Connector를 통해 차량 단말기의 데이터가 S3에 Json 포맷으로 적재됩니다.**  
+**1. S3 Sink Connector를 통해 차량 단말기의 데이터가 S3에 Json 포맷으로 적재됩니다.**
 
 5분 주기로 각 Kafka 토픽의 메시지들이 S3에 [파티셔닝(Hive Partition)](https://docs.aws.amazon.com/ko_kr/athena/latest/ug/partitions.html) 되어 적재됩니다. 예를 들어 `object=vehicle/type=kinematic/year=2022/month=12/day=25/hour=11`과 같이 시간 분류를 위한 년, 월, 일, 시간과 메시지 프로토콜 별로 분류를 위한 파티션들로 각각 분류되어 데이터가 적재됩니다. 이렇게 파티션으로 분류된 데이터는 Athena, Redshift 같은 쿼리 엔진에서 데이터를 효율적으로 조회할 수 있습니다.
 
-**2. Lambda의 이벤트 트리거를 통해 원본 JSON의 타입별로 분류하여 Parquet로 형 변환하여 적재합니다**  
+**2. Lambda의 이벤트 트리거를 통해 원본 JSON의 타입별로 분류하여 Parquet로 형 변환하여 적재합니다**
 
 위 요구사항에서 언급한 것처럼, Redshift에서 효율적으로 조회하기 위해서 원본 데이터의 전처리 작업이 필요합니다. Lambda 함수는 타입별로 메시지를 분류하며 Parquet로 적재합니다. 이때 Redshift의 분석 패턴에 맞게 Range 스캔이 쉽도록 `.../ymd=2022-12-25/hour=11` 다음과 같은 파티션으로 변경해서 적재합니다.  
 적재하는 과정에서 Glue Table을 통한 메시지 Schema에 대한 검증을 진행하며 문제가 있다면 AWS SQS로 실패한 이벤트 정보를 전송합니다.
@@ -870,7 +870,7 @@ class S3ParquetParser:
 
 ### 4.5. Lambda 모니터링 및 Fallback 처리
 
-![grafana-lambda](/img/build-fms-data-pipeline/grafana-lambda.png)*Grafana Alert와 연동한 Slack 메시지*
+![grafana-lambda](/img/build-fms-data-pipeline/grafana-lambda.png)_Grafana Alert와 연동한 Slack 메시지_
 
 배치 처리 플랫폼의 모니터링은 마찬가지로 Grafana를 사용하고 있습니다. 현재는 주로 Lambda 함수에 대한 모니터링을 하고 있지만, Airflow의 데이터 신뢰성 검사 결과나 다른 리소스에 대한 지표들도 시각화할 계획을 하고 있습니다.
 
