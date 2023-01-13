@@ -875,7 +875,7 @@ class S3ParquetParser:
 
 ### 4.5. Lambda 모니터링 및 Fallback 처리
 
-![grafana-lambda](/img/build-fms-data-pipeline/grafana-lambda.png)
+![grafana-lambda](/img/build-fms-data-pipeline/grafana-lambda.png)*Grafana Alert와 연동한 Slack 메세지*
 
 배치 처리 플랫폼의 모니터링은 마찬가지로 Grafana를 사용하고 있습니다. 현재는 주로 Lambda 함수에 대한 모니터링을 하고 있지만, Airflow의 데이터 신뢰성 검사 결과나 다른 리소스에 대한 지표들도 시각화할 계획을 하고 있습니다.
 
