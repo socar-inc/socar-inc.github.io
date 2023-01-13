@@ -194,7 +194,7 @@ FMS 파이프라인에서는 MSK를 통해 Kafka를 운영하고 있습니다. �
 토픽의 경우 메시지의 분류 필드인 `object` 별로 생성하여 관리하고 있으며, 실패한 메시지들을 저장하는 deadletter 전용 토픽이나 일부 유즈케이스에 사용되는 토픽 등이 있습니다. 주요 topic들은 partition과 replication factor를 설정해서 처리 성능과 가용성을 높게 유지하고 있습니다.
 
 ![kafka-ui](/img/build-fms-data-pipeline/kafka-ui.png)_UI For Apache Kafka_
-저장되는 메시지는 실시간으로 **UI for Apache Kafka**를 통해 확인하고 있습니다. UI for Apache Kafka는 직관적인 UI로 kafka 관리를 위한 많은 기능들을 제공해줍니다. 특히 토픽에 쌓이는 메시지를 실시간으로 조회가 가능하며 여러 검색 방식을 지원해줘서 초기에 Kafka 관리 툴로 사용하기에 적합합니다.
+저장되는 메시지는 실시간으로 **UI for Apache Kafka**를 통해 확인하고 있습니다. UI for Apache Kafka는 직관적인 UI로 kafka 관리를 위한 많은 기능들을 제공해 줍니다. 특히 토픽에 쌓이는 메시지를 실시간으로 조회가 가능하며 여러 검색 방식을 지원해 줘서 초기에 Kafka 관리 툴로 사용하기에 적합합니다.
 
 ## 3. 스트리밍 파이프라인 : Kafka Sink Connector로 변형/적재하기
 
@@ -656,7 +656,7 @@ Kafka 토픽의 메시지가 잘 처리되고 있는지를 나타내는 `Consume
 
 **분석가들이 쿼리를 작성할 수 있는 형태의 시스템이 필요합니다**
 
-고객사에게 운영 인사이트를 제공하기 위해 데이터 분석/집계 과정이 꼭 필요합니다. 데이터를 다루는 팀원들에게 익숙한 SQL 환경을 제공해주는 것이 초기 비용 대비 생산성이 높다고 판단하였습니다. 따라서 Spark 같은 대용량 처리 엔진이 아닌 ANSI SQL에 호환되는 Athena나 Redshift로 선택지를 좁혔습니다.
+고객사에게 운영 인사이트를 제공하기 위해 데이터 분석/집계 과정이 꼭 필요합니다. 데이터를 다루는 팀원들에게 익숙한 SQL 환경을 제공해 주는 것이 초기 비용 대비 생산성이 높다고 판단하였습니다. 따라서 Spark 같은 대용량 처리 엔진이 아닌 ANSI SQL에 호환되는 Athena나 Redshift로 선택지를 좁혔습니다.
 Athena는 AWS에서 제공하는 대화형 쿼리 서비스로 내부적으로 Presto 엔진을 사용하고 있습니다. 프로젝트 개발 초기에 Athena를 사용하다가 일부 윈도우 함수의 지원이 되지 않고 퍼포먼스 측면에서 이점이 있는 `Redshift`를 선택하였습니다. 그리고 Redshift에서 S3 데이터를 조회할 수 있는 `Redshift Spectrum`을 활용했습니다. Redshift Spectrum를 사용하기 위해선 데이터의 스키마를 잡아줄 수 있는 Glue External Table을 사용하므로 Glue Data Catalog도 도입하였습니다.
 
 **S3에 적재된 데이터는 Redshift의 조회에 최적화되어야 합니다**
