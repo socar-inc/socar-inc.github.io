@@ -149,9 +149,9 @@ networks:
     driver: bridge
 ```
 
-위는 현재 파이프라인의 컴포넌트들을 띄우기 위한 docker-compose.yaml 파일의 일부입니다.
-Kafka 환경을 중심으로 모니터링 툴인 kafka-ui, aws 서비스를 로컬 환경에서 실행할 수 있도록 mocking 해주는 localstack 등이 있습니다. 이를 통해 로컬, CI 환경에서 각 컴포넌트들을 빠르게 띄우게 되며 호스트에서 localhost를 통해서 접근하거나 각 컨테이너 서비스 사이에 통신이 가능해졌습니다.
-또한 외부 Docker Compose로 실행되는 컨테이너와 통신할 수 있도록 하기 위해서 network를 추가했습니다.
+위는 현재 파이프라인의 컴포넌트들을 띄우기 위한 `docker-compose.yaml` 파일의 일부입니다.
+Kafka 환경을 중심으로 모니터링 툴인 `kafka-ui`, AWS 서비스를 로컬 환경에서 실행할 수 있도록 Mocking 해주는 `localstack` 등이 있습니다. 이를 통해 로컬, CI 환경에서 각 컴포넌트들을 빠르게 띄우게 되며 호스트에서 Localhost를 통해서 접근하거나 각 컨테이너 서비스 사이에 통신이 가능해졌습니다.
+또한 외부 Docker Compose로 실행되는 컨테이너와 통신할 수 있도록 하기 위해서 Network를 추가했습니다.
 
 ### 2.3. Git Submodule을 통한 컴포넌트 E2E 테스트
 
@@ -299,7 +299,7 @@ echo "\n=============\n 4. test dlq after putting error messages \n=============
 </div>
 </details>
 
-Kafka Sink Connector Docker Compose 환경에서 전부 실행했지만, Lambda 함수에 대한 E2E 테스트는 아래와 같이 python + pytest 환경에서 실행할 수 있습니다. 아래 코드는 Docker Compose의 일부 서비스(LocalStack S3)만 실행하여 E2E 테스트를 구현하였습니다.
+Kafka Sink Connector Docker Compose 환경에서 전부 실행했지만, Lambda 함수에 대한 E2E 테스트는 아래와 같이 Python + Pytest 환경에서 실행할 수 있습니다. 아래 코드는 Docker Compose의 일부 서비스(LocalStack S3)만 실행하여 E2E 테스트를 구현하였습니다.
 
 <details>
 <summary>Lambda E2E 테스트 코드</summary>
@@ -396,9 +396,9 @@ jobs:
 </div>
 </details>
 
-[`Checkout`](https://github.com/actions/checkout) Action을 사용하면 외부의 Github Repostiory를 손쉽게 checkout 할 수 있습니다.
-Github Action에서 하나의 Job은 하나의 격리된 환경에서 동작합니다. 따라서 E2E 환경을 구성하는 Repository로 Checkout 하여 Docker Compose로 실행한 후, 다시 원 Repository로 checkout 하여 E2E 테스트를 수행합니다.
-이때 주의할 점은 checkout 할 때 `clean` 속성을 false로 줘야 기존 볼륨을 유지할 수 있습니다 (기수행된 컨테이너에 마운트 된 볼륨이 갑자기 사라지는 이슈로 꽤 골치가 아팠습니다)
+[`Checkout`](https://github.com/actions/checkout) Action을 사용하면 외부의 Github Repostiory를 손쉽게 Checkout 할 수 있습니다.
+Github Action에서 하나의 Job은 하나의 격리된 환경에서 동작합니다. 따라서 E2E 환경을 구성하는 Repository로 Checkout 하여 Docker Compose로 실행한 후, 다시 원 Repository로 Checkout 하여 E2E 테스트를 수행합니다.
+이때 주의할 점은 checkout 할 때 `clean` 속성을 `false`로 줘야 기존 볼륨을 유지할 수 있습니다 (기수행된 컨테이너에 마운트 된 볼륨이 갑자기 사라지는 이슈로 꽤 골치가 아팠습니다.)
 
 ## 3. 부하 테스트, 시뮬레이터를 활용한 실 데이터 기반의 테스트
 
@@ -422,7 +422,7 @@ IoT Core에 메시지 전송을 시작으로 Kafka → Kafka Connect를 거쳐 D
 
 ![fms-message-simulator-diagram](/img/build-fms-data-pipeline/fms-message-simulator-diagram.png)
 
-메시지 시뮬레이터는 외부 데이터(s3 log, bigquery) 혹은 직접 생성하는 방식으로 메시지를 생성합니다. FMS 프로젝트에서 정의한 프로토콜과 쏘카 차량에서 발생하는 데이터가 유사도가 높았기에 적재된 데이터를 잘 활용하면 손쉽게 메시지를 생성할 수 있습니다. 만일 없는 프로토콜의 경우 fake 데이터를 기반으로 메시지를 생성하였습니다.
+메시지 시뮬레이터는 외부 데이터(S3 Log, Bigquery) 혹은 직접 생성하는 방식으로 메시지를 생성합니다. FMS 프로젝트에서 정의한 프로토콜과 쏘카 차량에서 발생하는 데이터가 유사도가 높았기에 적재된 데이터를 잘 활용하면 손쉽게 메시지를 생성할 수 있습니다. 만일 없는 프로토콜의 경우 fake 데이터를 기반으로 메시지를 생성하였습니다.
 
 FMS 서비스에서 여러 차량을 관제하는 것을 테스트하기 위해선 동시에 여러 차량이 차량 위치 데이터가 필요하며 차량 별로 일부 다른 데이터가 필요합니다. 이런 요구 사항들은 Simulator 객체를 통해 병렬 처리나 중간 변형 작업 등이 가능하도록 구현하였습니다.  
 마지막으로 메시지 브로커의 역할을 하는 IoT Core와 Kafka에 메시지를 전송할 수 있도록 Producer로 추상화하여 사용자가 원하는 환경으로 메시지를 쏠 수 있도록 하였습니다.
@@ -448,7 +448,7 @@ FMS 프로젝트에서 데이터 퀄리티를 높게 유지하기 위해서 크�
 1. **원본 데이터에 대한 이상 여부 검사**
 
     차량 단말기에서 전송되는 메시지의 이상 여부를 검사합니다.
-    예를 들어 gps 상태 관련하여 에러가 발생하거나 특정 필드가 누락되는 등의 이상 현상을 모니터링합니다.
+    예를 들어 GPS 상태 관련하여 에러가 발생하거나 특정 필드가 누락되는 등의 이상 현상을 모니터링합니다.
 
 2. **데이터 마트 테이블의 정합성 검사**
 
@@ -499,7 +499,7 @@ FMS 프로젝트에서 데이터 퀄리티를 높게 유지하기 위해서 크�
 class MonitoringValidationOperator(BaseOperator):
     """
         정합성/무결성 검사 결과를 Database에 저장하는 Operator입니다
-        :param operator_constructor: 검사를 진행하는 Operator를 생성 함수 형태로 입력합니다 (Airflow Dag에서 Operator 생성 감지 이슈로 인해 함수 형태로 작성)
+        :param operator_constructor: 검사를 진행하는 Operator를 생성 함수 형태로 입력합니다 (Airflow DAG에서 Operator 생성 감지 이슈로 인해 함수 형태로 작성)
         :param conn_id: Database에 연결할 connection id를 입력합니다
         :param table: 검사 결과를 저장할 table을 "{database}.{table}" 형식으로 입력합니다
         :param database: 검사 결과를 저장할 database를 입력합니다
@@ -553,7 +553,7 @@ class MonitoringValidationOperator(BaseOperator):
 </div>
 </details>
 
-SQLColumnCheckOperator가 검증에 실패하면 `AirflowFailExcpetion`을 발생시키기 때문에 공통 인터페이스로 다른 검사 로직에서 실패 시 AirflowFailException을 발생시키도록 통일하였습니다. 그리고 Operator의 execute 메서드에서 try/catch 형태로 이를 감지하여 검사 결과를 저장하도록 구현하였습니다.
+SQLColumnCheckOperator가 검증에 실패하면 `AirflowFailExcpetion`을 발생시키기 때문에 공통 인터페이스로 다른 검사 로직에서 실패 시 AirflowFailException을 발생시키도록 통일하였습니다. 그리고 Operator의 `execute` 메서드에서 `try/catch` 형태로 이를 감지하여 검사 결과를 저장하도록 구현하였습니다.
 
 실제로 아래와 같은 구조로 데이터 퀄리티 검사가 진행되고 있으며 매일 결과가 적재되고 있습니다.
 
@@ -576,7 +576,7 @@ validate_mysql = MonitoringValidationOperator(
 
 ### 4.4. 검사 결과 모니터링
 
-데이터베이스에 적재된 테스트 결과는 Grafana를 통해 시각화하였습니다. 각 테스트하는 Dag 별로 날짜별 테스트 수행 개수를 통해 데이터 퀄리티 테스트가 잘 수행되는지 확인 가능하며, 실패한 테스트의 개수를 통해 실패한 테스트를 확인할 수 있습니다.
+데이터베이스에 적재된 테스트 결과는 Grafana를 통해 시각화하였습니다. 각 테스트하는 DAG 별로 날짜별 테스트 수행 개수를 통해 데이터 퀄리티 테스트가 잘 수행되는지 확인 가능하며, 실패한 테스트의 개수를 통해 실패한 테스트를 확인할 수 있습니다.
 
 만약 실패한 테스트가 발견되는 경우 아래와 같이 슬랙 알림을 통해 확인할 수 있도록 하였습니다.
 ![data-quality-test-slack](/img/build-fms-data-pipeline/data-quality-test-slack.png)
