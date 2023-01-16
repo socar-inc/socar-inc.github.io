@@ -135,3 +135,12 @@ grab:
   links:
     blog: 'https://tansfil.tistory.com/'
     linkedin: 'https://www.linkedin.com/in/hoyeon-lee-a58702117/'
+
+alti:
+  name: 알티
+  image: '/assets/authors/alti.png'
+  position: DBA
+  introduction: 안정적인 데이터베이스 운영과 관리를 위해 고민하며, 협업을 통한 성장을 지향합니다.
+  links:
+    blog: 'https://blog.naver.com/mkmmk_aug'
+    linkedin: 'https://www.linkedin.com/in/%EB%AF%BC%EA%B7%9C-%EC%A0%95-3287511aa/'
