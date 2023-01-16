@@ -454,9 +454,11 @@ DynamoDB는 레코드를 추가할 때 Partition Key를 필수적으로 입력�
 아래는 메시지를 템플릿 언어 기반으로 변경할 수 있도록 구현한 Transform입니다.
 
 ```json
-"transforms": "InsertFieldInStringTemplate",
-"transforms.InsertFieldInStringTemplate.field": "pk",
-"transforms.InsertFieldInStringTemplate.value" : "${id}#${object}#${type}"
+{
+    "transforms": "InsertFieldInStringTemplate",
+    "transforms.InsertFieldInStringTemplate.field": "pk",
+    "transforms.InsertFieldInStringTemplate.value": "${id}#${object}#${type}"
+}
 ```
 
 -   as-is
@@ -484,8 +486,12 @@ DynamoDB는 레코드를 추가할 때 Partition Key를 필수적으로 입력�
 보통 메시지를 전처리하기 위해서 적재 전에 별도의 Consumer를 두곤 하지만, PoC 단계에서 관리 포인트를 높이고 싶지 않았습니다. 그래서 Kafka Connector에서 Property 기반으로 배치 메시지를 풀어줄 수 있도록 Converter를 구현하고 Property를 통해 조작이 가능하도록 했습니다(Kafka Connector의 Converter API와는 다릅니다).
 
 ```json
-"converter.split.list.key": "measurements" //배치 메시지를 풀어낼 필드를 입력합니다
+{
+    "converter.split.list.key": "measurements"
+}
 ```
+
+배치 메시지를 풀어낼 필드를 입력하면 아래와 같이 해당 필드의 배열을 메시지를 쪼갭니다.
 
 -   as-is
 
@@ -621,11 +627,13 @@ Kafka Sink Connector는 실행될 때 앞단에서 메시지를 검증/전처리
 FMS 프로젝트에서는 `all`을 설정해 생략되는 메시지는 Deadletter Queue로 보내도록 해 모니터링 및 재처리가 가능하도록 하였습니다. Deadletter Queue로 사용될 Topic을 생성하고 운영하는 Task 들에서 문제가 발생한 메시지는 해당 Topic으로 보내도록 설정하였습니다.
 
 ```json
-"errors.tolerance" : "all"
-"errors.deadletterqueue.topic.name":"fms.all.deadletter.msk",
-"errors.deadletterqueue.topic.replication.factor": 1,
-"errors.deadletterqueue.context.headers.enable": "true",
-"errors.log.include.messages": "true"
+{
+    "errors.tolerance": "all",
+    "errors.deadletterqueue.topic.name": "fms.all.deadletter.msk",
+    "errors.deadletterqueue.topic.replication.factor": 1,
+    "errors.deadletterqueue.context.headers.enable": "true",
+    "errors.log.include.messages": "true"
+}
 ```
 
 만약 Connector Instance에서 메시지 처리에 실패하는 경우 에러로 인해 Task가 실패할 수 있습니다. 이 경우 모니터링한 후 다시 Task를 실행해 줘야 합니다.  
