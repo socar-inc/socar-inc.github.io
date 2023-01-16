@@ -2,7 +2,7 @@
 layout: post
 title:  "DBA의 AWS re:Invent 2022 참석 후기"
 subtitle: 데이터베이스와 관련된 AWS re:Invent 주요 세션 소개
-date: 2023-01-06 10:00:00 +0900
+date: 2023-01-16 09:00:00 +0900
 category: data
 background : "/img/aws-reinvent/background.jpg"
 author: alti
@@ -34,8 +34,8 @@ AWS re:Invent는 글로벌 클라우드 시장에서 가장 큰 사업자인 AWS
 
 목차는 다음과 같습니다.
 
-1. AWS Re:Invent 소개
-2. DB와 관련된 세션 소개
+1. [AWS Re:Invent 소개](#1-aws-reinvent-2022-소개)
+2. [DB와 관련된 세션 소개](#2-db와-관련된-세션-소개)
     
     2.1. 목적에 맞는 데이터베이스
 
@@ -47,7 +47,7 @@ AWS re:Invent는 글로벌 클라우드 시장에서 가장 큰 사업자인 AWS
 
     2.5. 오픈소스(Trino)를 사용하여 AWS S3 데이터 조회
         
-3. 참석 후기
+3. [참석 후기](#3-참석-후기)
 
 ---
 
