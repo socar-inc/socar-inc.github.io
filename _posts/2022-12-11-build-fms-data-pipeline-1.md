@@ -876,7 +876,7 @@ class S3ParquetParser:
 
 메시지를 적재해 주는 `save_to_s3_in_parquet_with_partitions`에서는 AWS Data Wrangler의 s3.to_parquet를 사용합니다. Pandas Dataframe을 s3에 Parquet 형태로 저장해 주는데 이 과정에서 Glue Table과 연동이 가능합니다. 이를 통해 적재할 메시지들의 스키마가 Glue Table의 스키마와 일치하는지를 검증할 수 있으며, 파티션을 Glue Table에 추가해 줄 수 있습니다(이를 통해 Glue Crawler를 사용하지 않아도 되는 이점이 있습니다)
 
-또한 메시지를 분류하기 위해서는 원본 Json 포맷을 Serialization 해야 합니다. 먼저 Pandas의 `read_json`으로 dataframe 화해서 메시지를 분류하려고 했지만 처리 시간 및 메모리 사용량이 높은 이슈가 있었습니다. 따라서 str 객체의 `splitLines`와 `json` 모듈의 `loads`로 Serialization을 대체하였고 이를 통해 메모리 할당량을 절반 이하로 낮추고 처리 속도를 2배 이상 개선하였습니다.
+또한 메시지를 분류하기 위해서는 원본 Json 포맷을 Serialization 해야 합니다. 먼저 Pandas의 `read_json`으로 Dataframe 화해서 메시지를 분류하려고 했지만 처리 시간 및 메모리 사용량이 높은 이슈가 있었습니다. 따라서 `str` 객체의 `splitLines`와 `json` 모듈의 `loads`로 Serialization을 대체하였고 이를 통해 메모리 할당량을 절반 이하로 낮추고 처리 속도를 2배 이상 개선하였습니다.
 
 ### 4.5. Lambda 모니터링 및 Fallback 처리
 
