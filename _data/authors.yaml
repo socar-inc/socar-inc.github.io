@@ -128,10 +128,19 @@ corgi:
     image: "/assets/authors/corgi.png"
 
 grab:
-    name: 그랩
-    image: "/assets/authors/grab.png"
-    position: 데이터 엔지니어
-    introduction: 문제를 구체적으로 정의하고 소프트웨어 기반으로 문제를 해결하고 있습니다. 기술 교육과 성장에 관심이 많습니다.
-    links:
-        blog: "https://tansfil.tistory.com/"
-        linkedin: "https://www.linkedin.com/in/hoyeon-lee-a58702117/"
+  name: 그랩
+  image: '/assets/authors/grab.png'
+  position: 데이터 엔지니어
+  introduction: 문제를 구체적으로 정의하고 소프트웨어 기반으로 문제를 해결하고 있습니다. 기술 교육과 성장에 관심이 많습니다.
+  links:
+    blog: 'https://tansfil.tistory.com/'
+    linkedin: 'https://www.linkedin.com/in/hoyeon-lee-a58702117/'
+
+alti:
+  name: 알티
+  image: '/assets/authors/alti.png'
+  position: DBA
+  introduction: 안정적인 데이터베이스 운영과 관리를 위해 고민하며, 협업을 통한 성장을 지향합니다.
+  links:
+    blog: 'https://blog.naver.com/mkmmk_aug'
+    linkedin: 'https://www.linkedin.com/in/%EB%AF%BC%EA%B7%9C-%EC%A0%95-3287511aa/'
