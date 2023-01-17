@@ -103,7 +103,7 @@ MSA를 구성하는 각 서비스들은 확장성, 고가용성, 보안성, 성�
 
 세션 초반부에는 MSA의 정의와 Managed Service 로서의 AWS EKS의 장점, AWS Controller for Kuberenetes를 통해 리소스를 관리하는 방법들을 설명합니다. 
 
-![memorydb-durability](/img/aws-reinvent/memorydb.png)*Memory DB for Redis의 스토리지는 Aurora와 동일합니다.* 
+![memorydb-durability](/img/aws-reinvent/memorydb.png)*Memory DB For Redis 스토리지는 WRITE 작업 시 Log를 남겨 데이터 유실을 방지합니다.*
 
 해당 세션을 들으면서 빠른 응답속도를 보장하기 위해 쿠버네틱스와 함께 데이터의 손실을 방지하고자 Memory DB for Redis를 사용하는 이유를 알아볼 수 있었습니다.
 MemoryDB for Redis는 Aurora와 동일한 스토리지 구성을 가지고 있는데 이것은 데이터 안정성 면에서 큰 장점입니다.
