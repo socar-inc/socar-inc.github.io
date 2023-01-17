@@ -56,7 +56,7 @@ tags:
 ![nocode-state](/img/nocode-tool/2.1_state_of_nocode_tool.png)*[광범위한 노코드 툴의 세계](https://www.indiehackers.com/post/state-of-nocode-db1b90cc99)*
 
 참고 할 만한 no-code tool 정리 링크 : 
-- [<U>NoCode Journal (노코드 툴 정리 및 소개 사이트)](https://www.nocodejournal.com/state-of-nocode)
+- [<U>NoCode Journal (노코드 툴 정리 및 소개 사이트)/U>](https://www.nocodejournal.com/state-of-nocode)
 - [<U>노코드 툴로 정리된 노코드 툴 목록</U>](https://airtable.com/shrrIaogPEh9rLNQO/tbl4sLn4bzxQj3YKe) : [<U>출처</u>](https://medium.com/@mtommasi94/no-code-democratizing-software-9421c2208cb])
 
 ### 2.2 노코드 툴을 사용하는 이유
@@ -76,7 +76,7 @@ tags:
 
 - Zapier  
     Zapier는 웹 애플리케이션으로 5,000 가지 이상의 앱과 연동하여 사용할 수 있는 워크플로우 자동화 툴입니다. Zapier 무료 플랜을 사용 할 경우 한 달마다 갱신됩니다. 5개의 무료 Zap(워크플로우 자동화 로직) 을 만들 수 있고, 100개의 task 를 수행 할 수 있습니다. trigger → Action 으로 구성된 single-step Zap만 사용 가능합니다. (2개 초과 조건 설정 불가) 
-- Integromat (Make)
+- Integromat (Make)<br >
     IntegromatI(Make) 또한 웹 애플리케이션으로 1,600가지 이상의 앱과 연동하여 사용할 수 있는 워크플로우 자동화 툴입니다. Integromat 무료 플랜을 사용 할 경우 한달마다 갱신되며, 2개의 Scenario(워크플로우 자동화 로직) 를 만들 수 있고 1,000개의 모듈을 사용 가능합니다. 
     
 
@@ -116,7 +116,7 @@ Zapier는 자동화 생성을 위해 만든 프로그램을 Zap 이라는 단어
 
 2. Action 셋팅을 진행합니다. Slact 메시지를 전송 할 것이기 때문에 Send Direct message를 선택합니다. 
 ![nocode-practice](/img/nocode-tool/3.2.2_Action.png)*Action 설정*
-![nocode-practice](/img/nocode-tool/3.2.2_send_data.png)*전송할 데이터*
+![nocode-practice](/img/nocode-tool/3.2.2_send_data.png)*전송할 데이터 설정*
 ![nocode-practice](/img/nocode-tool/3.2.2_scheduling.png)*스케쥴링 옵션*
 
 3. 완성! 하지만 이렇게 완성한 Zap 을 실행하면, 10개의 모든 검색어가 아닌 rank 10의 값 1개만 슬랙으로 오는 것을 확인할 수 있습니다. 시트에 있는 데이터를 한줄한줄 모두 받아서 데이터를 발송하는 방법은 없었습니다. 
@@ -150,9 +150,9 @@ Integromat (Make 이지만 편의상 Integromat 으로 부르겠습니다.) 사�
 | --- | --- | --- |
 | 추천 | 업무 자동화 툴 입문자 | 업무 자동화 툴 익숙자 |
 | 추천 업무 | 조건이 단순한 자동화 | 조건이 복잡한 자동화 |
-| 워크플로우 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | 선형적 | 유동적 |
+| 워크플로우 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | 선형적 | 유동적 |
 | 프로그램 조건 | - Trigger가 무조건 셋팅되어야 함 <br >- 3개 이상의 Trigger 셋팅이 어려움 (webhook 사용을 추천함) | - 제한 없음 |
-| 오류 트랙킹 방법 | Zap을 실시간으로 재실행 하여 오류가 난 부분을 찾아내야함 | 대시보드를 활용하여 오류가 난 부분을 찾아낼 수 있음 |
+| 오류 트랙킹 방법  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| Zap을 실시간으로 재실행 하여 오류가 난 부분을 찾아내야함 | 대시보드를 활용하여 오류가 난 부분을 찾아낼 수 있음 |
 | 무료 플랜 비교 | - 매 월 100개의 task 수행 가능 <br >- 5개 Zap 사용 가능 <br >- trigger → Action 으로 구성된 Zap만 사용 가능 (2개 초과 조건 설정 불가)<br >- 1달마다 reset  | - 매 월 1,000개의 module 사용 가능 (1개의 Scenario 에 2개의 Module이 사용 될 경우 500번 수행)<br >- 2개의 Scenario 생성 가능<br >- 1달 마다 reset |
 
 ## 4. 실제 활용 사례와 전파
