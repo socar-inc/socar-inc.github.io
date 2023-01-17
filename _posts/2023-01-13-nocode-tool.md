@@ -56,12 +56,12 @@ tags:
 ![nocode-state](/img/nocode-tool/2.1_state_of_nocode_tool.png)*[광범위한 노코드 툴의 세계](https://www.indiehackers.com/post/state-of-nocode-db1b90cc99)*
 
 참고 할 만한 no-code tool 정리 링크 : 
-- <U>[NoCode Journal (노코드 툴 정리 및 소개 사이트)](https://www.nocodejournal.com/state-of-nocode)</U>
-- <U>[노코드 툴로 정리된 노코드 툴 목록](https://airtable.com/shrrIaogPEh9rLNQO/tbl4sLn4bzxQj3YKe) : [출처](https://medium.com/@mtommasi94/no-code-democratizing-software-9421c2208cb])</U>
+- [<U>NoCode Journal (노코드 툴 정리 및 소개 사이트)](https://www.nocodejournal.com/state-of-nocode)
+- [<U>노코드 툴로 정리된 노코드 툴 목록</U>](https://airtable.com/shrrIaogPEh9rLNQO/tbl4sLn4bzxQj3YKe) : [<U>출처</u>](https://medium.com/@mtommasi94/no-code-democratizing-software-9421c2208cb])
 
 ### 2.2 노코드 툴을 사용하는 이유
 
-노코드 툴을 사용하면 코딩을 배우지 않아도 직접 프로그램이나 앱을 구현할 수 있습니다. 개발 리소스에 의존하지 않고 직접 툴을 만들 수 있는 것입니다. 또한, 어떤 방식으로 구현 할 것인지에 대해 커뮤니케이션 하는 시간도 감소합니다. 결국 리소스 + 시간 모두 아낄 수 있다는 장점이 있습니다. 제 개인적으로는 본인이 필요한 사항을 개발하기 때문에 사용자 친화적이면서, 버그 발생에 대한 수정까지 쉽게 이루어 질 수 있는 것이 큰 장점으로 생각되었습니다. 하지만 노코드 툴에서 제공하는 기능 외에는 구현할 수 없다는 단점이 있습니다. 노코드 툴을 넘어서 로우코드, 그리고 실제 개발 까지 넘어가는 것에는 큰 도전이 필요하기 때문입니다. <U>([로우코드와 노코드의 차이](https://www.ibm.com/cloud/blog/low-code-vs-no-code)</U>가 궁금하시다면 이 블로그를 참고해보시면 좋을 것 같습니다.)
+노코드 툴을 사용하면 코딩을 배우지 않아도 직접 프로그램이나 앱을 구현할 수 있습니다. 개발 리소스에 의존하지 않고 직접 툴을 만들 수 있는 것입니다. 또한, 어떤 방식으로 구현 할 것인지에 대해 커뮤니케이션 하는 시간도 감소합니다. 결국 리소스 + 시간 모두 아낄 수 있다는 장점이 있습니다. 제 개인적으로는 본인이 필요한 사항을 개발하기 때문에 사용자 친화적이면서, 버그 발생에 대한 수정까지 쉽게 이루어 질 수 있는 것이 큰 장점으로 생각되었습니다. 하지만 노코드 툴에서 제공하는 기능 외에는 구현할 수 없다는 단점이 있습니다. 노코드 툴을 넘어서 로우코드, 그리고 실제 개발 까지 넘어가는 것에는 큰 도전이 필요하기 때문입니다. [<U>로우코드와 노코드의 차이</U>](https://www.ibm.com/cloud/blog/low-code-vs-no-code)가 궁금하시다면 이 블로그를 참고해보시면 좋을 것 같습니다.)
 
 현재 저는 현업에서 노코드 툴을 아래와 같이 활용하고 있습니다. 
 - 운영 현황 파악 : 정책이 잘 들어가졌는지 확인봇
