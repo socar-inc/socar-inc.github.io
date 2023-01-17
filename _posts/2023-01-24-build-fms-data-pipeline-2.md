@@ -1,7 +1,7 @@
 ---
 layout: post
-title: "신사업 FMS 데이터 파이프라인 구축기 - 2편. 신뢰성 높은 데이터를 위한 테스트 환경 구성하기"
-subtitle: E2E 테스트, 데이터 퀄리티 테스트 도입하기
+title: "FMS(차량 관제 시스템) 데이터 파이프라인 구축기 2편. 신뢰성 높은 데이터를 위한 테스트 환경 구축기"
+subtitle: E2E 테스트 및 데이터 퀄리티 테스트 적용하기
 date: 2023-01-25 17:00:00 +0900
 category: data
 background: "/img/build-fms-data-pipeline/background-2.jpg"
@@ -14,7 +14,6 @@ tags:
     - data platform
     - data reliability
     - data quality
-    - aws
 ---
 
 안녕하세요. 데이터 플랫폼 팀의 그랩입니다.
