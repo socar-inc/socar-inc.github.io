@@ -77,7 +77,7 @@ tags:
 
 Zapier와 Integromat (Make) 는 기본적으로는 같은 구조를 가지고 있지만, 사용하는 용어가 다르기 때문에 실습 내용을 보시기 전 참고하시면 좋을 것 같습니다.
 
-| 용어 | Zapier | Integromat (Make) |
+| 용어 | Zapier&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Integromat (Make) |
 | --- | --- | --- |
 | 자동화 로직 명칭  | Zap | Scenario |
 | 이벤트 명칭 | Trigger | Module |
@@ -131,7 +131,7 @@ Integromat (Make 이지만 편의상 Integromat 으로 부르겠습니다.) 사�
 
 예시를 보시면 아시겠지만, Zapier 는 단순한 조건을 자동화 할 수 있으나, 입문용 노코드 툴로는 적합합니다. Integromat 은 조건이 복잡한 업무도 자동화 할 수 있으나, 초심자가 작성하기엔 어려울 수 있습니다. 또한 무료 플랜의 제한에 대해 두 툴에 차이가 있기 때문에 아래 표를 참고하셔서 사용하시면 좋을 것 같습니다. 
 
-| 간단 설명 | Zapier | Integromat |
+| 간단 설명&nbsp;&nbsp;&nbsp; | Zapier&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Integromat |
 | --- | --- | --- |
 | 추천 | 업무 자동화 툴 입문자 | 업무 자동화 툴 익숙자 |
 | 추천 업무 | 조건이 단순한 자동화 | 조건이 복잡한 자동화 |
