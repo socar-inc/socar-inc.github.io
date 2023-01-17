@@ -19,15 +19,21 @@ tags:
 
 저는 이 글에서 데이터 분석가(혹은 싸이언티스트) 분들이 노코드 자동화 툴을 사용하여 업무 범위를 확장 시키는 방법에 대해 소개하고자 합니다. (데이터 분석가라고 적어두긴 하였으나 사실 모든 직장인 분들에게 꿀팁이 될 수 있을 것이라고 감히 예상합니다.) 
 
-예상 독자는 아래와 같습니다.
+다음과 같은 분들이 읽으면 좋습니다.
 
 - 노코드 툴 활용을 통해 업무 능력을 향상하고 싶은 데이터 분석가
 - 데이터 분석가가 아니더라도, 노코드 자동화에 관심이 있으신 모든 분
     - 단순 반복 업무 자동화 를 통해 업무 효율을 높이고 싶은 분
     - 비즈니스 운영 프로세스 자동화가 필요하신 분
-    - 간단한 트리거 셋팅을 통한 IT 서비스를 만들고 싶으신 분 등등…
+    - 간단한 트리거 셋팅을 통한 IT 서비스를 만들고 싶으신 분 등
 
-— 목차 — 
+목차는 아래와 같습니다.
+
+1. [들어가며](##-1.-들어가며)
+2. [노코드 툴이란?](##-2.노코드-툴이란?)
+3. [노코드 툴을 활용해보자](##-3.-노코드-툴을-활용해보자)
+4. [실제 활용 사례와 전파](##-4.-실제-활용-사례와-전파)
+5. [마치며](##5.-마치며)
 
 ## 1. 들어가며
 
@@ -46,9 +52,9 @@ tags:
 ‘노코드’란 단어 그대로 No Code. 코드 작성 없이 단순한 드래그 앤 드롭과 같은 방식으로 프로그램이나 앱을 개발을 할 수 있는 툴을 뜻합니다. 단순한 자동화 에서 부터 홈페이지 제작, 결제, 앱 제작 등 넓은 범위를 포괄합니다. 크게 분류되는 종류는 아래 사진을 참고해주시면 좋을 것 같습니다. 대개 이러한 노코드 툴은 SaaS (Software as a Service) 연동을 지원하기 때문에 SaaS 기반의 툴을 많이 사용하는 회사에 근무중이시라면 더욱 익숙하게 사용하실 수 있습니다. 
 
 참고 할 만한 no-code tool 정리 링크 : 
-- NoCode Journal (노코드 툴 정리 및 소개 사이트) : [https://www.nocodejournal.com/state-of-nocode](https://www.nocodejournal.com/state-of-nocode)
-- 노코드 툴로 정리된 노코드 툴 목록 : [https://airtable.com/shrrIaogPEh9rLNQO/tbl4sLn4bzxQj3YKe](https://airtable.com/shrrIaogPEh9rLNQO/tbl4sLn4bzxQj3YKe)
-    - 출처 : [https://medium.com/@mtommasi94/no-code-democratizing-software-9421c2208cb](https://medium.com/@mtommasi94/no-code-democratizing-software-9421c2208cb)
+- [NoCode Journal (노코드 툴 정리 및 소개 사이트)](https://www.nocodejournal.com/state-of-nocode)
+- [노코드 툴로 정리된 노코드 툴 목록](https://airtable.com/shrrIaogPEh9rLNQO/tbl4sLn4bzxQj3YKe)
+    - [출처](https://medium.com/@mtommasi94/no-code-democratizing-software-9421c2208cb])
 
 ### 2.2 노코드 툴을 사용하는 이유
 
@@ -75,7 +81,7 @@ Zapier와 Integromat (Make) 는 기본적으로는 같은 구조를 가지고 �
 | --- | --- | --- |
 | 자동화 로직 명칭  | Zap | Scenario |
 | 이벤트 명칭 | Trigger | Module |
-| 수행 명칭 | Action | Module - Actions, Searches,Triggers,Aggregators,Iterators |
+| 수행 명칭 | Action | Module - <br >Actions, Searches,Triggers,Aggregators,Iterators |
 
 ## 3. 노코드 툴을 활용해보자
 
@@ -91,7 +97,7 @@ Zapier와 Integromat (Make) 는 기본적으로는 같은 구조를 가지고 �
 
 ### 3.2 Zapier 사용해보기
 
-Zapier 사용을 위해서는 먼저 [https://zapier.com/](https://zapier.com/) 에 회원가입을 진행합니다. 무료 플랜으로 회원가입 후 [Dashboard](https://zapier.com/app/dashboard) 에서 좌측 상단 Create Zap 을 클릭하여 Zap 만들기를 시작 할 수 있습니다. 
+Zapier 사용을 위해서는 먼저 [Zapier 사이트](https://zapier.com/) 에 회원가입을 진행합니다. 무료 플랜으로 회원가입 후 [Dashboard](https://zapier.com/app/dashboard) 에서 좌측 상단 Create Zap 을 클릭하여 Zap 만들기를 시작 할 수 있습니다. 
 
 Zapier는 자동화 생성을 위해 만든 프로그램을 Zap 이라는 단어로 일컫습니다. Zap에는  “어떤 Trigger 가 발생하면 → 해당 Action을 수행한다” 라는 내용을 입력하게 됩니다. 여기서 말하는 trigger는 쉽게 어떤 이벤트가 발생한다, 예를 들면 스프레드 시트에 새로운 칼럼이 추가되었다 혹은 구글 캘린더에 새로운 일정이 잡힌다. 등의 조건을 생각하시면 됩니다. Action 의 경우는 해당 Trigger 조건과 맞을 경우 Mail을 보낸다, Slack 메시지를 보낸다 등 수행할 작업을 의미합니다. 
 
@@ -106,7 +112,7 @@ Zapier 에서 제공하는 Action 중 하나인 [Loop](https://help.zapier.com/h
 
 ### 3.3 Integromat (Make) 사용해보기
 
-Integromat (Make 이지만 편의상 Integromat 으로 부르겠습니다.) 사용을 위해 [https://www.make.com/](https://www.make.com/en) 로 접속하여 회원가입을 진행합니다. 이후 dashboard의 우측 상단에 있는 Create a new scenario 버튼을 클릭하여 Scenario를 제작 할 수 있습니다. Integromat 은 자동화 생성을 위해 만든 프로그램을 Scenario 라고 부릅니다. Scenario 는 여러개의 Module 의 집합으로 이루어지며 module 안에는 해당 moduled의 다양한 활용법이 존재합니다. Module 을 통해 데이터를 불러온 경우, Function 을 사용하여 조건 적용을 진행 할 수 있고, Tools 를 활용하여 반복 수행, 중단 등 다양한 Flow control 를 진행할 수 있습니다.
+Integromat (Make 이지만 편의상 Integromat 으로 부르겠습니다.) 사용을 위해 [Integromat(Make) 사이트](https://www.make.com/en) 로 접속하여 회원가입을 진행합니다. 이후 dashboard의 우측 상단에 있는 Create a new scenario 버튼을 클릭하여 Scenario를 제작 할 수 있습니다. Integromat 은 자동화 생성을 위해 만든 프로그램을 Scenario 라고 부릅니다. Scenario 는 여러개의 Module 의 집합으로 이루어지며 module 안에는 해당 moduled의 다양한 활용법이 존재합니다. Module 을 통해 데이터를 불러온 경우, Function 을 사용하여 조건 적용을 진행 할 수 있고, Tools 를 활용하여 반복 수행, 중단 등 다양한 Flow control 를 진행할 수 있습니다.
 
 1.  시트 데이터를 가져오는 module을 생성하겠습니다. Google sheet module 을 선택하여 데이터의 범위를 지정합니다.
 
@@ -130,17 +136,9 @@ Integromat (Make 이지만 편의상 Integromat 으로 부르겠습니다.) 사�
 | 추천 | 업무 자동화 툴 입문자 | 업무 자동화 툴 익숙자 |
 | 추천 업무 | 조건이 단순한 자동화 | 조건이 복잡한 자동화 |
 | 워크플로우 | 선형적 | 유동적 |
-| 프로그램 조건 | - Trigger가 무조건 셋팅되어야 함
-- 3개 이상의 Trigger 셋팅이 어려움 (webhook 사용을 추천함) | - 제한 없음 |
+| 프로그램 조건 | - Trigger가 무조건 셋팅되어야 함 <br >- 3개 이상의 Trigger 셋팅이 어려움 (webhook 사용을 추천함) | - 제한 없음 |
 | 오류 트랙킹 방법 | Zap을 실시간으로 재실행 하여 오류가 난 부분을 찾아내야함 | 대시보드를 활용하여 오류가 난 부분을 찾아낼 수 있음 |
-| 무료 플랜 비교 | - 매 월 100개의 task 수행 가능
-- 5개 Zap 사용 가능 
-- trigger → Action 으로 구성된 Zap만 사용 가능 (2개 초과 조건 설정 불가)
-- 1달마다 reset  | - 매 월 1,000개의 module 사용 가능 (1개의 Scenario 에 2개의 Module이 사용 될 경우 500번 수행)
-- 2개의 Scenario 생성 가능
-- 1달 마다 reset |
-| 용어  | 프로그램 명칭 : zap 
- |  |
+| 무료 플랜 비교 | - 매 월 100개의 task 수행 가능 <br >- 5개 Zap 사용 가능 <br >- trigger → Action 으로 구성된 Zap만 사용 가능 (2개 초과 조건 설정 불가)<br >- 1달마다 reset  | - 매 월 1,000개의 module 사용 가능 (1개의 Scenario 에 2개의 Module이 사용 될 경우 500번 수행)<br >- 2개의 Scenario 생성 가능<br >- 1달 마다 reset |
 
 ## 4. 실제 활용 사례와 전파
 
@@ -172,7 +170,7 @@ Integromat (Make 이지만 편의상 Integromat 으로 부르겠습니다.) 사�
 
 실제 업무에 노코드 툴을 활용하면서 얻은 노하우와 꿀팁들을 전파하는것이 많은 도움이 될 것이라고 생각하여 데이터 비즈니스 본부 온보딩에서 교육을 진행하고, 주변에 노코드 툴에 관심 있는 동료 분들에게 개인적으로 교육을 진행하여 노코드 툴 전파를 진행하였습니다. 이를 통해 다양한 노코드툴 활용법을 알 수 있게 되었고 다양한 에러들 을 trouble shooting 하면서 노코드툴 활용 능력을 향상 시킬 수 있었습니다. 
 
-## 5. 마치며…
+## 5. 마치며
 
 제가 소개한 노코드 툴의 사용법은 실제 노코드 툴 활용 방법의 1/10000000 도 되지 않을겁니다. (새발의 피 수준) 회사마다 사용하는 SaaS 툴도 다양하게 많고, 조합하는 방법도 다르기 때문에 더더욱 많은 분들이 사용하면 사용할수록 지식이 공유될 수 있을 것으로 기대합니다. 만약 제 글을 읽고 노코드 툴을 사용하여 업무에 실 사용 하셨다면 좋은 경험을 공유해주세요! 저도 인사이트를 얻어 더 좋은 방법으로 사용하며 긍정적인 자극을 받아가겠습니다.
 
