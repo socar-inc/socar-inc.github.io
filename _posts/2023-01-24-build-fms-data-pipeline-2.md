@@ -2,7 +2,7 @@
 layout: post
 title: "신사업 FMS 데이터 파이프라인 구축기 - 2편. 신뢰성 높은 데이터를 위한 테스트 환경 구성하기"
 subtitle: E2E 테스트, 데이터 퀄리티 테스트 도입하기
-date: 2022-12-11 09:00:00 +0900
+date: 2023-01-25 17:00:00 +0900
 category: data
 background: "/img/build-fms-data-pipeline/background-2.jpg"
 author: grab
