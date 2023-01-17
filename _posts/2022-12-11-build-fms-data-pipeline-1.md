@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "신사업 FMS 데이터 파이프라인 구축기 - 1편. IoT 차량 스트리밍, 배치 파이프라인 구축기"
-subtitle:
+subtitle: PoC 제품 개발을 위한 간결하고 비용 효율적인 파이프라인 설계하기
 date: 2022-12-11 09:00:00 +0900
 category: data
 background: "/img/build-fms-data-pipeline/background-1.jpg"
