@@ -338,7 +338,7 @@ Kafka Connector의 레포 구성 및 구현에 대해 알아보도록 하겠습�
 ```
 
 Kafka Connector를 구현하는 레포지토리는 Kotlin으로 작성되었으며 위와 같이 구성되어 있습니다. S3, DyanmoDB Sink Connector가 멀티 모듈 형태로 구성되어 있으며 공통 기능(변형)을 하는 모듈을 별도로 의존하고 있습니다.  
-DynamoDB의 경우 유일하게 Confluent에서 제공하는 Connector가 존재했지만 유료 라이선스이기에 직접 구현하는 것을 선택했습니다. 직접 구현하기 위해선 [connect-api](https://mvnrepository.com/artifact/org.apache.kafka/connect-api) 의존성을 추가해줬습니다.  
+DynamoDB의 경우 유일하게 Confluent에서 제공하는 Connector가 존재했지만 유료 라이선스이기에 직접 구현하는 것을 선택했습니다. 직접 구현하기 위해선 [connect-api](https://mvnrepository.com/artifact/org.apache.kafka/connect-api) 의존성을 추가해 줬습니다.  
 S3의 경우 Maven Repo에 올라와 있는 [kafka-connect-s3](https://mvnrepository.com/artifact/io.confluent/kafka-connect-s3)를 상속받아 구현하였습니다.
 
 ```gradle
