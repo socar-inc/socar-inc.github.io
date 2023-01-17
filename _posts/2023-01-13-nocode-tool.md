@@ -41,6 +41,9 @@ tags:
 
 비즈니스 운영 인프라/로직을 수립하는 팀의 데이터 분석가로서 일을 하다보면 다양한 업무를 직면하게 됩니다. 데이터 분석가라는 단어에 걸맞게 데이터 분석을 통한 인사이트 도출, 대시보드 제작 등의 업무와 비즈니스 운영 인프라/로직 수립을 위한 A/B 테스트 기획 및 진행, 데이터 적재 등의 다양한 업무를 진행합니다. 예를 들어 비즈니스 운영 자체에 있어서는 예상치 못한 운영정책 에러 발생에 대한 빠른 파악 및 대처와 비즈니스 지표 확인 등이 주된 업무입니다. 로직 수립에 있어서는 더 나은 로직을 만들기 위한 A/B 테스트, 혹은 제품화 되기 전 (즉 데이터 엔지니어링 팀 혹은 개발자 분들에게 넘어가기 전) 새로운 로직 도입 전 베타 운영 혹은 테스트 등을 진행합니다. 
 
+![nocode-intro](/img/nocode-tool/1.1_error.png)*에러에 놀라서 달려온 팀원들*
+![nocode-intro](/img/nocode-tool/1.1_logic.png)*새로운 로직을 위한 테스트 공유*
+![nocode-intro](/img/nocode-tool/1.1_test.png)*새로운 로직 도입 진행*
 
 ### 1.2 업무의 한계
 
@@ -53,8 +56,7 @@ tags:
 
 참고 할 만한 no-code tool 정리 링크 : 
 - [NoCode Journal (노코드 툴 정리 및 소개 사이트)](https://www.nocodejournal.com/state-of-nocode)
-- [노코드 툴로 정리된 노코드 툴 목록](https://airtable.com/shrrIaogPEh9rLNQO/tbl4sLn4bzxQj3YKe)
-    - [출처](https://medium.com/@mtommasi94/no-code-democratizing-software-9421c2208cb])
+- [노코드 툴로 정리된 노코드 툴 목록](https://airtable.com/shrrIaogPEh9rLNQO/tbl4sLn4bzxQj3YKe) : [출처](https://medium.com/@mtommasi94/no-code-democratizing-software-9421c2208cb])
 
 ### 2.2 노코드 툴을 사용하는 이유
 
@@ -131,11 +133,11 @@ Integromat (Make 이지만 편의상 Integromat 으로 부르겠습니다.) 사�
 
 예시를 보시면 아시겠지만, Zapier 는 단순한 조건을 자동화 할 수 있으나, 입문용 노코드 툴로는 적합합니다. Integromat 은 조건이 복잡한 업무도 자동화 할 수 있으나, 초심자가 작성하기엔 어려울 수 있습니다. 또한 무료 플랜의 제한에 대해 두 툴에 차이가 있기 때문에 아래 표를 참고하셔서 사용하시면 좋을 것 같습니다. 
 
-| 간단 설명&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Zapier&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Integromat |
+| 간단 설명 | Zapier | Integromat |
 | --- | --- | --- |
 | 추천 | 업무 자동화 툴 입문자 | 업무 자동화 툴 익숙자 |
 | 추천 업무 | 조건이 단순한 자동화 | 조건이 복잡한 자동화 |
-| 워크플로우 | 선형적 | 유동적 |
+| 워크플로우&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | 선형적 | 유동적 |
 | 프로그램 조건 | - Trigger가 무조건 셋팅되어야 함 <br >- 3개 이상의 Trigger 셋팅이 어려움 (webhook 사용을 추천함) | - 제한 없음 |
 | 오류 트랙킹 방법 | Zap을 실시간으로 재실행 하여 오류가 난 부분을 찾아내야함 | 대시보드를 활용하여 오류가 난 부분을 찾아낼 수 있음 |
 | 무료 플랜 비교 | - 매 월 100개의 task 수행 가능 <br >- 5개 Zap 사용 가능 <br >- trigger → Action 으로 구성된 Zap만 사용 가능 (2개 초과 조건 설정 불가)<br >- 1달마다 reset  | - 매 월 1,000개의 module 사용 가능 (1개의 Scenario 에 2개의 Module이 사용 될 경우 500번 수행)<br >- 2개의 Scenario 생성 가능<br >- 1달 마다 reset |
