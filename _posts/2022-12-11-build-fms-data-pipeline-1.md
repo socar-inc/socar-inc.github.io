@@ -120,7 +120,7 @@ Airflow는 Airbnb에서 개발한 워크플로 관리 오픈소스로 현재 많
 2. 수집되는 데이터는 발송 주기에 맞춰 IoT Core로 전송합니다.
 3. IoT Core 메시지 브로커에 저장된 메시지는 라우팅 규칙에 따라 상위 주제별로 Kafka Topic으로 라우팅 됩니다.
 4. Kafka Topic의 각 파티션에 저장된 메시지는 Kafka Connect를 통해 데이터 싱크(DynamoDB, S3)로 적재됩니다. (Redis는 필터링을 하는 Kafka Consumer를 통해 적재됩니다)
-5. S3에 적재된 Json 포맷의 객체는 람다를 통해 분류/변형 후 S3에 적재됩니다 (Redshift, Athena 쿼리에 적합한 형태로 적재됩니다)
+5. S3에 적재된 Json 포맷의 객체는 Lambda를 통해 분류/변형 후 S3에 적재됩니다 (Redshift, Athena 쿼리에 적합한 형태로 적재됩니다)
 6. Airflow로 스케줄링된 Redshift 쿼리를 통해 데이터를 집계하여 RDS(데이터 마트)에 저장됩니다.
 
 ## 2. 스트리밍 파이프라인 : IoT Core에서 Kafka로
