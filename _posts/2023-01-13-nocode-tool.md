@@ -56,25 +56,27 @@ tags:
 ![nocode-state](/img/nocode-tool/2.1_state_of_nocode_tool.png)*[광범위한 노코드 툴의 세계](https://www.indiehackers.com/post/state-of-nocode-db1b90cc99)*
 
 참고 할 만한 no-code tool 정리 링크 : 
-- [NoCode Journal (노코드 툴 정리 및 소개 사이트)](https://www.nocodejournal.com/state-of-nocode)
-- [노코드 툴로 정리된 노코드 툴 목록](https://airtable.com/shrrIaogPEh9rLNQO/tbl4sLn4bzxQj3YKe) : [출처](https://medium.com/@mtommasi94/no-code-democratizing-software-9421c2208cb])
+- <U>[NoCode Journal (노코드 툴 정리 및 소개 사이트)](https://www.nocodejournal.com/state-of-nocode)</U>
+- <U>[노코드 툴로 정리된 노코드 툴 목록](https://airtable.com/shrrIaogPEh9rLNQO/tbl4sLn4bzxQj3YKe) : [출처](https://medium.com/@mtommasi94/no-code-democratizing-software-9421c2208cb])</U>
 
 ### 2.2 노코드 툴을 사용하는 이유
 
-노코드 툴을 사용하면 코딩을 배우지 않아도 직접 프로그램이나 앱을 구현할 수 있습니다. 개발 리소스에 의존하지 않고 직접 툴을 만들 수 있는 것입니다. 또한, 어떤 방식으로 구현 할 것인지에 대해 커뮤니케이션 하는 시간도 감소합니다. 결국 리소스 + 시간 모두 아낄 수 있다는 장점이 있습니다. 제 개인적으로는 본인이 필요한 사항을 개발하기 때문에 사용자 친화적이면서, 버그 발생에 대한 수정까지 쉽게 이루어 질 수 있는 것이 큰 장점으로 생각되었습니다. 하지만 노코드 툴에서 제공하는 기능 외에는 구현할 수 없다는 단점이 있습니다. 노코드 툴을 넘어서 로우코드, 그리고 실제 개발 까지 넘어가는 것에는 큰 도전이 필요하기 때문입니다. ([로우코드와 노코드의 차이](https://www.ibm.com/cloud/blog/low-code-vs-no-code)가 궁금하시다면 이 블로그를 참고해보시면 좋을 것 같습니다.)
+노코드 툴을 사용하면 코딩을 배우지 않아도 직접 프로그램이나 앱을 구현할 수 있습니다. 개발 리소스에 의존하지 않고 직접 툴을 만들 수 있는 것입니다. 또한, 어떤 방식으로 구현 할 것인지에 대해 커뮤니케이션 하는 시간도 감소합니다. 결국 리소스 + 시간 모두 아낄 수 있다는 장점이 있습니다. 제 개인적으로는 본인이 필요한 사항을 개발하기 때문에 사용자 친화적이면서, 버그 발생에 대한 수정까지 쉽게 이루어 질 수 있는 것이 큰 장점으로 생각되었습니다. 하지만 노코드 툴에서 제공하는 기능 외에는 구현할 수 없다는 단점이 있습니다. 노코드 툴을 넘어서 로우코드, 그리고 실제 개발 까지 넘어가는 것에는 큰 도전이 필요하기 때문입니다. <U>([로우코드와 노코드의 차이](https://www.ibm.com/cloud/blog/low-code-vs-no-code)</U>가 궁금하시다면 이 블로그를 참고해보시면 좋을 것 같습니다.)
 
 현재 저는 현업에서 노코드 툴을 아래와 같이 활용하고 있습니다. 
 - 운영 현황 파악 : 정책이 잘 들어가졌는지 확인봇
 - 데일리 지표 파악 : 일자별 적용된 정책의 지표를 확인봇
 - 간단한 데이터 적재, 파이프라인 생성 등 : 매일 변하는 시트의 데이터를 자동으로 복사하여 데이터를 적재
+![nocode-metric](/img/nocode-tool/2.2_metric_view.png)*지표 현황 파악*
+![nocode-intro](/img/nocode-tool/2.2_data_update.png)*데이터 적재*
 
 ### 2.3 소개 할 노코드 툴 스포일러
 
 저는 수많은 노코드 툴 중 업무 자동화 툴인 Integromat(현재는 make.com으 로 변경) 과 Zapier 에 대해 소개해보려 합니다. (제가 사용했던 경험에 기반하여 작성되어 주관적일 수 있습니다.) 
 
-- **Zapier**    
+- Zapier  
     Zapier는 웹 애플리케이션으로 5,000 가지 이상의 앱과 연동하여 사용할 수 있는 워크플로우 자동화 툴입니다. Zapier 무료 플랜을 사용 할 경우 한 달마다 갱신됩니다. 5개의 무료 Zap(워크플로우 자동화 로직) 을 만들 수 있고, 100개의 task 를 수행 할 수 있습니다. trigger → Action 으로 구성된 single-step Zap만 사용 가능합니다. (2개 초과 조건 설정 불가) 
-- **Integromat (Make)**
+- Integromat (Make)
     IntegromatI(Make) 또한 웹 애플리케이션으로 1,600가지 이상의 앱과 연동하여 사용할 수 있는 워크플로우 자동화 툴입니다. Integromat 무료 플랜을 사용 할 경우 한달마다 갱신되며, 2개의 Scenario(워크플로우 자동화 로직) 를 만들 수 있고 1,000개의 모듈을 사용 가능합니다. 
     
 
@@ -97,12 +99,15 @@ Zapier와 Integromat (Make) 는 기본적으로는 같은 구조를 가지고 �
 - 구글 스프레드 시트에 bigquery 데이터 연동하여 사용 할 데이터 생성
 - Zapier / Integromat 에 스프레드 시트 연동
 - 전 날의 검색어 Top 10을 Slack 으로 메시지 전송
-
+![nocode-practice](/img/nocode-tool/3.1_sheet.png)*시트명 : top_term*
 ### 3.2 Zapier 사용해보기
 
 Zapier 사용을 위해서는 먼저 [Zapier 사이트](https://zapier.com/) 에 회원가입을 진행합니다. 무료 플랜으로 회원가입 후 [Dashboard](https://zapier.com/app/dashboard) 에서 좌측 상단 Create Zap 을 클릭하여 Zap 만들기를 시작 할 수 있습니다. 
+![nocode-practice](/img/nocode-tool/3.2_login.png)*회원 가입 및 대시보드 버튼*
 
 Zapier는 자동화 생성을 위해 만든 프로그램을 Zap 이라는 단어로 일컫습니다. Zap에는  “어떤 Trigger 가 발생하면 → 해당 Action을 수행한다” 라는 내용을 입력하게 됩니다. 여기서 말하는 trigger는 쉽게 어떤 이벤트가 발생한다, 예를 들면 스프레드 시트에 새로운 칼럼이 추가되었다 혹은 구글 캘린더에 새로운 일정이 잡힌다. 등의 조건을 생각하시면 됩니다. Action 의 경우는 해당 Trigger 조건과 맞을 경우 Mail을 보낸다, Slack 메시지를 보낸다 등 수행할 작업을 의미합니다. 
+![nocode-practice](/img/nocode-tool/3.2_trigger.png)*Trigger*
+![nocode-practice](/img/nocode-tool/3.2_Action.png)*Action*
 
 1. Trigger 셋팅을 진행합니다. 시트가 새로 생기거나, 업데이트 되는 사항을 trigger 로 지정하겠습니다. 그리고 사용할 구글 계정을 셋팅하고, continue를 넣으면 시트 내 데이터를 확인할 수 있습니다.
 
