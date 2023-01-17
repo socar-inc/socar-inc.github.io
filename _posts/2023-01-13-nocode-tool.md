@@ -110,13 +110,20 @@ Zapier는 자동화 생성을 위해 만든 프로그램을 Zap 이라는 단어
 ![nocode-practice](/img/nocode-tool/3.2_Action.png)*Action*
 
 1. Trigger 셋팅을 진행합니다. 시트가 새로 생기거나, 업데이트 되는 사항을 trigger 로 지정하겠습니다. 그리고 사용할 구글 계정을 셋팅하고, continue를 넣으면 시트 내 데이터를 확인할 수 있습니다.
-
+![nocode-practice](/img/nocode-tool/3.2.1_trigger_sheet.png)*Trigger 셋팅 -> 스프레드시트 업데이트*
+![nocode-practice](/img/nocode-tool/3.2.1_sheet.png)*계정 설정 이후 스프레드시트 연동*
+![nocode-practice](/img/nocode-tool/3.2.1_tes_data.png)*테스트 데이터 확인*
 
 2. Action 셋팅을 진행합니다. Slact 메시지를 전송 할 것이기 때문에 Send Direct message를 선택합니다. 
-
+![nocode-practice](/img/nocode-tool/3.2.2_Action.png)*Action 설정*
+![nocode-practice](/img/nocode-tool/3.2.2_send_data.png)*전송할 데이터*
+![nocode-practice](/img/nocode-tool/3.2.2_scheduling.png)*스케쥴링 옵션*
 
 3. 완성! 하지만 이렇게 완성한 Zap 을 실행하면, 10개의 모든 검색어가 아닌 rank 10의 값 1개만 슬랙으로 오는 것을 확인할 수 있습니다. 시트에 있는 데이터를 한줄한줄 모두 받아서 데이터를 발송하는 방법은 없었습니다. 
 Zapier 에서 제공하는 Action 중 하나인 [Loop](https://help.zapier.com/hc/en-us/articles/8496106701453-Loop-your-Zap-actions#create-a-loop-from-text-0-1) 을 활용하여 반복 수행을 진행해보려 했으나,  받아온 데이터의 형태가 시트 전체의 내용이 아닌 몇개의 행만 가져와지기 때문에 반복 수행을 통한 데이터 전송을 진행할 수 없었습니다. 
+
+![nocode-practice](/img/nocode-tool/3.2.3_zap.png)*Zap의 모습*
+![nocode-practice](/img/nocode-tool/3.2.3_final.png)*완성된 Zap 결과물*
 
 ### 3.3 Integromat (Make) 사용해보기
 
@@ -143,7 +150,7 @@ Integromat (Make 이지만 편의상 Integromat 으로 부르겠습니다.) 사�
 | --- | --- | --- |
 | 추천 | 업무 자동화 툴 입문자 | 업무 자동화 툴 익숙자 |
 | 추천 업무 | 조건이 단순한 자동화 | 조건이 복잡한 자동화 |
-| 워크플로우&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | 선형적 | 유동적 |
+| 워크플로우 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | 선형적 | 유동적 |
 | 프로그램 조건 | - Trigger가 무조건 셋팅되어야 함 <br >- 3개 이상의 Trigger 셋팅이 어려움 (webhook 사용을 추천함) | - 제한 없음 |
 | 오류 트랙킹 방법 | Zap을 실시간으로 재실행 하여 오류가 난 부분을 찾아내야함 | 대시보드를 활용하여 오류가 난 부분을 찾아낼 수 있음 |
 | 무료 플랜 비교 | - 매 월 100개의 task 수행 가능 <br >- 5개 Zap 사용 가능 <br >- trigger → Action 으로 구성된 Zap만 사용 가능 (2개 초과 조건 설정 불가)<br >- 1달마다 reset  | - 매 월 1,000개의 module 사용 가능 (1개의 Scenario 에 2개의 Module이 사용 될 경우 500번 수행)<br >- 2개의 Scenario 생성 가능<br >- 1달 마다 reset |
