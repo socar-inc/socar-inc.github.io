@@ -12,6 +12,9 @@ tags:
     - data analyst
     - nocode
     - automtaion
+    - zapier
+    - integromat
+    - make
 ---
 안녕하세요, 데이터 비즈니스 본부 - 비즈니스 데이터팀 클로버 입니다.
 
@@ -53,10 +56,10 @@ tags:
 
 ### 2.1 노코드 툴에 대한 정의
 ‘노코드’란 단어 그대로 No Code. 코드 작성 없이 단순한 드래그 앤 드롭과 같은 방식으로 프로그램이나 앱을 개발을 할 수 있는 툴을 뜻합니다. 단순한 자동화 에서 부터 홈페이지 제작, 결제, 앱 제작 등 넓은 범위를 포괄합니다. 크게 분류되는 종류는 아래 사진을 참고해주시면 좋을 것 같습니다. 대개 이러한 노코드 툴은 SaaS (Software as a Service) 연동을 지원하기 때문에 SaaS 기반의 툴을 많이 사용하는 회사에 근무중이시라면 더욱 익숙하게 사용하실 수 있습니다. 
-![nocode-state](/img/nocode-tool/2.1_state_of_nocode_tool.png)*[광범위한 노코드 툴의 세계](https://www.indiehackers.com/post/state-of-nocode-db1b90cc99)*
+![nocode-state](/img/nocode-tool/2.1_state_of_nocode_tool.png)*[출처 : 광범위한 노코드 툴의 세계](https://www.indiehackers.com/post/state-of-nocode-db1b90cc99)*
 
 참고 할 만한 no-code tool 정리 링크 : 
-- [<U>NoCode Journal (노코드 툴 정리 및 소개 사이트)/U>](https://www.nocodejournal.com/state-of-nocode)
+- [<U>NoCode Journal (노코드 툴 정리 및 소개 사이트)</U>](https://www.nocodejournal.com/state-of-nocode)
 - [<U>노코드 툴로 정리된 노코드 툴 목록</U>](https://airtable.com/shrrIaogPEh9rLNQO/tbl4sLn4bzxQj3YKe) : [<U>출처</u>](https://medium.com/@mtommasi94/no-code-democratizing-software-9421c2208cb])
 
 ### 2.2 노코드 툴을 사용하는 이유
