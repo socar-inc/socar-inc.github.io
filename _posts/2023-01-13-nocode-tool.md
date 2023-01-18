@@ -109,9 +109,7 @@ Zapier는 자동화 생성을 위해 만든 프로그램을 Zap 이라는 단어
 ![nocode-practice](/img/nocode-tool/3.2_trigger and action)*Trigger / Action*
 
 1. Trigger 셋팅을 진행합니다. 시트가 새로 생기거나, 업데이트 되는 사항을 trigger 로 지정하겠습니다. 그리고 사용할 구글 계정을 셋팅하고, continue를 넣으면 시트 내 데이터를 확인할 수 있습니다.
-![nocode-practice](/img/nocode-tool/3.2.1_trigger_sheet.png)*Trigger 셋팅 -> 스프레드시트 업데이트*
-![nocode-practice](/img/nocode-tool/3.2.1_sheet.png)*계정 설정 이후 스프레드시트 연동*
-![nocode-practice](/img/nocode-tool/3.2.1_tes_data.png)*테스트 데이터 확인*
+![nocode-practice](/img/nocode-tool/3.2.1.png)*Trigger 셋팅 -> 스프레드시트 업데이트 / 계정 설정 이후 스프레드시트 연동 /테스트 데이터 확인*
 
 2. Action 셋팅을 진행합니다. Slack 메시지를 전송 할 것이기 때문에 Send Direct message를 선택합니다. 
 ![nocode-practice](/img/nocode-tool/3.2.2_Action.png)*Action 설정*
