@@ -133,6 +133,7 @@ Integromat 은 자동화 생성을 위해 만든 프로그램을 Scenario 라고
 
 2. Flow Control → Repeater 를 선택하여 테이블 형태의 데이터에 row 를 1개씩 늘려가며 접근 할 수 있도록 반복 설정을 진행합니다. (조금 까다로운 부분이긴 하나 반복문의 i + 1 을 생성해주는 부분이라고 생각하시면 이해가 쉽습니다.) 
 3. Array aggeregator를 사용하여 가져올 데이터를 선정합니다. 저는 날짜, 검색어, 순위를 가져오고 반복을 위해 Repeater의 i 를 가져오겠습니다. 
+![nocode-practice](/img/nocode-tool/3.3.2-3.png)*2. Repeater / 3. Array aggregator*
 
 4. Slack module 을 선택한 뒤 계정 연동을 진행합니다. 개인 계정으로 보낼 경우에는 IM channel 을 사용하고, 채널에 전송을 하고 싶을 경우에는 Public / Private 채널을 선택하시면 됩니다.
 
