@@ -43,7 +43,6 @@ tags:
 ### 1.1 데이터 분석가의 업무
 
 비즈니스 운영 인프라/로직을 수립하는 팀의 데이터 분석가로서 일을 하다보면 다양한 업무를 직면하게 됩니다. 데이터 분석가라는 이름에 걸맞게 데이터 분석을 통한 인사이트 도출, 대시보드 제작, 비즈니스 운영 인프라/로직 수립, A/B 테스트 기획 및 진행, 데이터 적재 등의 다양한 업무를 진행합니다. 예를 들어 비즈니스 운영 자체에 있어서는 예상치 못한 운영정책 에러 발생에 대한 빠른 파악 및 대처와 비즈니스 지표 확인 등이 주된 업무입니다. 로직 수립에 있어서는 더 나은 로직을 만들기 위한 A/B 테스트, 새로운 로직 도입 전 (즉 데이터 엔지니어링 팀 혹은 개발자 분들에게 넘어가기 전) 베타 운영 혹은 테스트 등을 진행합니다. 
-
 ![nocode-intro](/img/nocode-tool/1.1_task.png)*1. 에러에 놀라서 달려온 팀원들 / 2. 새로운 로직 도입 진행 / 3. 새로운 로직을 위한 테스트 공유*
 
 ### 1.2 업무의 한계
@@ -104,19 +103,15 @@ Zapier와 Integromat (Make) 는 기본적으로는 같은 구조를 가지고 �
 
 Zapier 사용을 위해서는 먼저 [Zapier 사이트](https://zapier.com/) 에 회원가입을 진행합니다. 무료 플랜으로 회원가입 후 [Dashboard](https://zapier.com/app/dashboard) 에서 좌측 상단 Create Zap 을 클릭하여 Zap 만들기를 시작 할 수 있습니다. 
 ![nocode-practice](/img/nocode-tool/3.2_login.png)*회원 가입 및 대시보드 버튼*
-
 Zapier는 자동화 생성을 위해 만든 프로그램을 Zap 이라는 단어로 일컫습니다. Zap에는  “어떤 Trigger 가 발생하면 → 해당 Action을 수행한다” 라는 내용을 입력하게 됩니다. 여기서 말하는 trigger는 쉽게 어떤 이벤트가 발생한다, 예를 들면 스프레드 시트에 새로운 칼럼이 추가되었다 혹은 구글 캘린더에 새로운 일정이 잡힌다. 등의 조건을 생각하시면 됩니다. Action 의 경우는 해당 Trigger 조건과 맞을 경우 Mail을 보낸다, Slack 메시지를 보낸다 등 수행할 작업을 의미합니다. 
-![nocode-practice](/img/nocode-tool/3.2_trigger and action)*Trigger / Action*
+![nocode-practice](/img/nocode-tool/3.2_trigger%20and%20action.png)*Trigger / Action*
 
 1. Trigger 셋팅을 진행합니다. 시트가 새로 생기거나, 업데이트 되는 사항을 trigger 로 지정하겠습니다. 그리고 사용할 구글 계정을 셋팅하고, continue를 넣으면 시트 내 데이터를 확인할 수 있습니다.
 ![nocode-practice](/img/nocode-tool/3.2.1.png)*Trigger 셋팅 -> 스프레드시트 업데이트 / 계정 설정 이후 스프레드시트 연동 /테스트 데이터 확인*
-
 2. Action 셋팅을 진행합니다. Slack 메시지를 전송 할 것이기 때문에 Send Direct message를 선택합니다. 
 ![nocode-practice](/img/nocode-tool/3.2.2.png)*Action 설정 / 전송할 데이터 설정 / 스케쥴링 옵션*
-
 3. 완성! 하지만 이렇게 완성한 Zap 을 실행하면, 10개의 모든 검색어가 아닌 rank 10의 값 1개만 슬랙으로 오는 것을 확인할 수 있습니다. 시트에 있는 데이터를 한줄한줄 모두 받아서 데이터를 발송하는 방법은 없었습니다. 
 Zapier 에서 제공하는 Action 중 하나인 [Loop](https://help.zapier.com/hc/en-us/articles/8496106701453-Loop-your-Zap-actions#create-a-loop-from-text-0-1) 을 활용하여 반복 수행을 진행해보려 했으나,  받아온 데이터의 형태가 시트 전체의 내용이 아닌 몇개의 행만 가져와지기 때문에 반복 수행을 통한 데이터 전송을 진행할 수 없었습니다. 
-
 ![nocode-practice](/img/nocode-tool/3.2.3_zap.png)*Zap의 모습*
 ![nocode-practice](/img/nocode-tool/3.2.3_final.png)*완성된 Zap 결과물*
 
@@ -127,23 +122,17 @@ Integromat (Make 이지만 편의상 Integromat 으로 부르겠습니다.) 사�
 Integromat 은 자동화 생성을 위해 만든 프로그램을 Scenario 라고 부릅니다. Scenario 는 여러개의 Module 의 집합으로 이루어지며 module 안에는 해당 moduled의 다양한 활용법이 존재합니다. Module 을 통해 데이터를 불러온 경우, Function 을 사용하여 조건 적용을 진행 할 수 있고, Tools 를 활용하여 반복 수행, 중단 등 다양한 Flow control 를 진행할 수 있습니다.
 ![nocode-practice](/img/nocode-tool/3.3.png)*Module / Function / Tools - Flow Control*
 
-
 1.  시트 데이터를 가져오는 module을 생성하겠습니다. Google sheet module 을 선택하여 데이터의 범위를 지정합니다.
 ![nocode-practice](/img/nocode-tool/3.3.1.png)*Module 생성*
-
 2. Flow Control → Repeater 를 선택하여 테이블 형태의 데이터에 row 를 1개씩 늘려가며 접근 할 수 있도록 반복 설정을 진행합니다. (조금 까다로운 부분이긴 하나 반복문의 i + 1 을 생성해주는 부분이라고 생각하시면 이해가 쉽습니다.) 
 3. Array aggeregator를 사용하여 가져올 데이터를 선정합니다. 저는 날짜, 검색어, 순위를 가져오고 반복을 위해 Repeater의 i 를 가져오겠습니다. 
 ![nocode-practice](/img/nocode-tool/3.3.2-3.png)*2. Repeater / 3. Array aggregator*
-
 4. Slack module 을 선택한 뒤 계정 연동을 진행합니다. 개인 계정으로 보낼 경우에는 IM channel 을 사용하고, 채널에 전송을 하고 싶을 경우에는 Public / Private 채널을 선택하시면 됩니다.
 ![nocode-practice](/img/nocode-tool/3.3.4.png)*slack module*
-
 5. rank : top_term 형태로 출력되도록 repeater + array_aggregator 조합으로 만들어진 array에 접근하여 내용을 가져옵니다. 내용물의 모습은 [1,2,3,4,5,6,7,8,9,10] / [검색어들] 로 이루어져 있다고 상상하시면 됩니다. 따라서 i 를 1개씩 늘려가면서 반복을 할 수 있도록 설정을 해놓은 것으로 생각하시면 됩니다.
 ![nocode-practice](/img/nocode-tool/3.3.5.png)*message setting*
-
 6. 매일 10시에 스케쥴을 걸고, 하단 시계 모양 버튼을 누른 뒤 schedule 을 on 으로 변경하여 스케쥴링을 걸어줍니다.
 ![nocode-practice](/img/nocode-tool/3.3.6_scheduling.png)*스케쥴링 옵션*
-    
 7. 완성! 처음에 의도했던 1~10위 까지의 검색어를 확인 할 수 있는 결과물이 생성되었습니다.
 ![nocode-practice](/img/nocode-tool/3.3.7.png)*완성된 Scenario의 모습과 결과물*
 
