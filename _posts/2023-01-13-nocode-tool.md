@@ -139,8 +139,10 @@ Integromat 은 자동화 생성을 위해 만든 프로그램을 Scenario 라고
 ![nocode-practice](/img/nocode-tool/3.3.4.png)*slack module*
 
 5. rank : top_term 형태로 출력되도록 repeater + array_aggregator 조합으로 만들어진 array에 접근하여 내용을 가져옵니다. 내용물의 모습은 [1,2,3,4,5,6,7,8,9,10] / [검색어들] 로 이루어져 있다고 상상하시면 됩니다. 따라서 i 를 1개씩 늘려가면서 반복을 할 수 있도록 설정을 해놓은 것으로 생각하시면 됩니다.
+![nocode-practice](/img/nocode-tool/3.3.5.png)*message setting*
 
 6. 매일 10시에 스케쥴을 걸고, 하단 시계 모양 버튼을 누른 뒤 schedule 을 on 으로 변경하여 스케쥴링을 걸어줍니다.
+![nocode-practice](/img/nocode-tool/3.3.6_scheduling.png)*스케쥴링 옵션*
     
 7. 완성! 처음에 의도했던 1~10위 까지의 검색어를 확인 할 수 있는 결과물이 생성되었습니다.
 
