@@ -112,9 +112,7 @@ Zapier는 자동화 생성을 위해 만든 프로그램을 Zap 이라는 단어
 ![nocode-practice](/img/nocode-tool/3.2.1.png)*Trigger 셋팅 -> 스프레드시트 업데이트 / 계정 설정 이후 스프레드시트 연동 /테스트 데이터 확인*
 
 2. Action 셋팅을 진행합니다. Slack 메시지를 전송 할 것이기 때문에 Send Direct message를 선택합니다. 
-![nocode-practice](/img/nocode-tool/3.2.2_Action.png)*Action 설정*
-![nocode-practice](/img/nocode-tool/3.2.2_send_data.png)*전송할 데이터 설정*
-![nocode-practice](/img/nocode-tool/3.2.2_scheduling.png)*스케쥴링 옵션*
+![nocode-practice](/img/nocode-tool/3.2.2.png)*Action 설정 / 전송할 데이터 설정 / 스케쥴링 옵션*
 
 3. 완성! 하지만 이렇게 완성한 Zap 을 실행하면, 10개의 모든 검색어가 아닌 rank 10의 값 1개만 슬랙으로 오는 것을 확인할 수 있습니다. 시트에 있는 데이터를 한줄한줄 모두 받아서 데이터를 발송하는 방법은 없었습니다. 
 Zapier 에서 제공하는 Action 중 하나인 [Loop](https://help.zapier.com/hc/en-us/articles/8496106701453-Loop-your-Zap-actions#create-a-loop-from-text-0-1) 을 활용하여 반복 수행을 진행해보려 했으나,  받아온 데이터의 형태가 시트 전체의 내용이 아닌 몇개의 행만 가져와지기 때문에 반복 수행을 통한 데이터 전송을 진행할 수 없었습니다. 
