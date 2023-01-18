@@ -122,11 +122,14 @@ Zapier 에서 제공하는 Action 중 하나인 [Loop](https://help.zapier.com/h
 
 ### 3.3 Integromat (Make) 사용해보기
 
-Integromat (Make 이지만 편의상 Integromat 으로 부르겠습니다.) 사용을 위해 [Integromat(Make) 사이트](https://www.make.com/en) 로 접속하여 회원가입을 진행합니다. 이후 dashboard의 우측 상단에 있는 Create a new scenario 버튼을 클릭하여 Scenario를 제작 할 수 있습니다. Integromat 은 자동화 생성을 위해 만든 프로그램을 Scenario 라고 부릅니다. Scenario 는 여러개의 Module 의 집합으로 이루어지며 module 안에는 해당 moduled의 다양한 활용법이 존재합니다. Module 을 통해 데이터를 불러온 경우, Function 을 사용하여 조건 적용을 진행 할 수 있고, Tools 를 활용하여 반복 수행, 중단 등 다양한 Flow control 를 진행할 수 있습니다.
+Integromat (Make 이지만 편의상 Integromat 으로 부르겠습니다.) 사용을 위해 [Integromat(Make) 사이트](https://www.make.com/en) 로 접속하여 회원가입을 진행합니다. 이후 dashboard의 우측 상단에 있는 Create a new scenario 버튼을 클릭하여 Scenario를 제작 할 수 있습니다. 
 ![nocode-practice](/img/nocode-tool/3.3_login.png)*회원 가입*
+Integromat 은 자동화 생성을 위해 만든 프로그램을 Scenario 라고 부릅니다. Scenario 는 여러개의 Module 의 집합으로 이루어지며 module 안에는 해당 moduled의 다양한 활용법이 존재합니다. Module 을 통해 데이터를 불러온 경우, Function 을 사용하여 조건 적용을 진행 할 수 있고, Tools 를 활용하여 반복 수행, 중단 등 다양한 Flow control 를 진행할 수 있습니다.
+![nocode-practice](/img/nocode-tool/3.3.png)*Module / Function / Tools - Flow Control*
+
 
 1.  시트 데이터를 가져오는 module을 생성하겠습니다. Google sheet module 을 선택하여 데이터의 범위를 지정합니다.
-![nocode-practice](/img/nocode-tool/3.3.png)*Module / Function / Tools - Flow Control*
+![nocode-practice](/img/nocode-tool/3.3.1.png)*Module 생성*
 
 2. Flow Control → Repeater 를 선택하여 테이블 형태의 데이터에 row 를 1개씩 늘려가며 접근 할 수 있도록 반복 설정을 진행합니다. (조금 까다로운 부분이긴 하나 반복문의 i + 1 을 생성해주는 부분이라고 생각하시면 이해가 쉽습니다.) 
 3. Array aggeregator를 사용하여 가져올 데이터를 선정합니다. 저는 날짜, 검색어, 순위를 가져오고 반복을 위해 Repeater의 i 를 가져오겠습니다. 
