@@ -68,8 +68,7 @@ tags:
 - 운영 현황 파악 : 정책이 잘 들어가졌는지 확인봇
 - 데일리 지표 파악 : 일자별 적용된 정책의 지표를 확인봇
 - 간단한 데이터 적재, 파이프라인 생성 등 : 매일 변하는 시트의 데이터를 자동으로 복사하여 데이터를 적재
-![nocode-metric](/img/nocode-tool/2.2_metric_view.png)*지표 현황 파악*
-![nocode-intro](/img/nocode-tool/2.2_data_update.png)*데이터 적재*
+![nocode-metric](/img/nocode-tool/2.2_metric%20and%20update.png)*지표 현황 파악/데이터 적재*
 
 ### 2.3 소개 할 노코드 툴 스포일러
 
