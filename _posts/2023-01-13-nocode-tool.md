@@ -145,6 +145,7 @@ Integromat 은 자동화 생성을 위해 만든 프로그램을 Scenario 라고
 ![nocode-practice](/img/nocode-tool/3.3.6_scheduling.png)*스케쥴링 옵션*
     
 7. 완성! 처음에 의도했던 1~10위 까지의 검색어를 확인 할 수 있는 결과물이 생성되었습니다.
+![nocode-practice](/img/nocode-tool/3.3.7.png)*완성된 Scenario의 모습과 결과물*
 
 ### 3.4 이런 분께 추천합니다
 
