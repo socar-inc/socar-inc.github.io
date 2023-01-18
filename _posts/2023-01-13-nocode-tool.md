@@ -86,7 +86,7 @@ Zapier와 Integromat (Make) 는 기본적으로는 같은 구조를 가지고 �
 | --- | --- | --- |
 | 자동화 로직 명칭  | Zap | Scenario |
 | 이벤트 명칭 | Trigger | Module |
-| 수행 명칭 | Action | Module - <br >Actions, Searches,Triggers,Aggregators,Iterators |
+| 수행 명칭 | Action | Module - <br >Actions, Searches,Triggers<br >Aggregators,Iterators |
 
 ## 3. 노코드 툴을 활용해보자
 
@@ -106,8 +106,7 @@ Zapier 사용을 위해서는 먼저 [Zapier 사이트](https://zapier.com/) 에
 ![nocode-practice](/img/nocode-tool/3.2_login.png)*회원 가입 및 대시보드 버튼*
 
 Zapier는 자동화 생성을 위해 만든 프로그램을 Zap 이라는 단어로 일컫습니다. Zap에는  “어떤 Trigger 가 발생하면 → 해당 Action을 수행한다” 라는 내용을 입력하게 됩니다. 여기서 말하는 trigger는 쉽게 어떤 이벤트가 발생한다, 예를 들면 스프레드 시트에 새로운 칼럼이 추가되었다 혹은 구글 캘린더에 새로운 일정이 잡힌다. 등의 조건을 생각하시면 됩니다. Action 의 경우는 해당 Trigger 조건과 맞을 경우 Mail을 보낸다, Slack 메시지를 보낸다 등 수행할 작업을 의미합니다. 
-![nocode-practice](/img/nocode-tool/3.2_trigger.png)*Trigger*
-![nocode-practice](/img/nocode-tool/3.2_Action.png)*Action*
+![nocode-practice](/img/nocode-tool/3.2_trigger and action)*Trigger / Action*
 
 1. Trigger 셋팅을 진행합니다. 시트가 새로 생기거나, 업데이트 되는 사항을 trigger 로 지정하겠습니다. 그리고 사용할 구글 계정을 셋팅하고, continue를 넣으면 시트 내 데이터를 확인할 수 있습니다.
 ![nocode-practice](/img/nocode-tool/3.2.1_trigger_sheet.png)*Trigger 셋팅 -> 스프레드시트 업데이트*
