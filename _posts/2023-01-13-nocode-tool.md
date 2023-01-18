@@ -126,9 +126,7 @@ Integromat (Make 이지만 편의상 Integromat 으로 부르겠습니다.) 사�
 ![nocode-practice](/img/nocode-tool/3.3_login.png)*회원 가입*
 
 1.  시트 데이터를 가져오는 module을 생성하겠습니다. Google sheet module 을 선택하여 데이터의 범위를 지정합니다.
-![nocode-practice](/img/nocode-tool/3.3_module.png)*Module*
-![nocode-practice](/img/nocode-tool/3.3_function.png)*Function*
-![nocode-practice](/img/nocode-tool/3.3_Tools_flow_control.png)*Tools-Flow control*
+![nocode-practice](/img/nocode-tool/3.3.png)*Module / Function / Tools - Flow Control*
 
 2. Flow Control → Repeater 를 선택하여 테이블 형태의 데이터에 row 를 1개씩 늘려가며 접근 할 수 있도록 반복 설정을 진행합니다. (조금 까다로운 부분이긴 하나 반복문의 i + 1 을 생성해주는 부분이라고 생각하시면 이해가 쉽습니다.) 
 3. Array aggeregator를 사용하여 가져올 데이터를 선정합니다. 저는 날짜, 검색어, 순위를 가져오고 반복을 위해 Repeater의 i 를 가져오겠습니다. 
