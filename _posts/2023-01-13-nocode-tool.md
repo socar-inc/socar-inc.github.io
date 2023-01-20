@@ -126,7 +126,7 @@ Zapier와 Integromat (Make) 는 기본적으로는 같은 구조를 가지고 �
 
 Zapier 사용을 위해서는 먼저 [Zapier 사이트](https://zapier.com/) 에 회원가입을 진행합니다. 무료 플랜으로 회원가입 후 [Dashboard](https://zapier.com/app/dashboard) 에서 좌측 상단 Create Zap 을 클릭하여 Zap을 만들 수 있습니다. 
 ![nocode-practice](/img/nocode-tool/3.2_login.png)*회원 가입 및 대시보드 버튼*
-Zapier는 자동화 생성을 위해 만든 프로그램을 Zap 이라는 단어로 일컫습니다. Zap은  “특정 Trigger 발생 시 특정 Action을 수행한다”는 내용을 담고 있습니다. 
+Zapier는 자동화 생성을 위해 만든 프로그램을 Zap이라는 단어로 일컫습니다. Zap은  “특정 Trigger 발생 시 특정 Action을 수행한다”는 내용을 담고 있습니다. 
 구체적으로 Trigger가 스프레드 시트에 새로운 칼럼 추가, 구글 캘린더에 새로운 일정 추가 등의 특정 조건이라면, 
 Action은 Mail 전송, Slack 메시지 전송 등 Trigger 로 인해 실제로 수행되는 작업을 의미합니다. 
 ![nocode-practice](/img/nocode-tool/3.2_trigger%20and%20action.png)*Trigger / Action*
