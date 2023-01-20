@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "노코드 자동화 툴로 일잘러 데이테 분석가 되기"
+title:  "노코드 자동화 툴로 일잘러 데이터 분석가 되기"
 subtitle: Integromat 과 Zapier 를 활용한 업무 자동화
 date: 2023-01-16 10:00:00 +0900
 category: data
