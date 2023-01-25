@@ -156,35 +156,35 @@ Integromat 은 자동화 생성을 위해 만든 프로그램을 Scenario 라고
 
 2. Flow Control → Repeater 를 선택하여 테이블 형태의 데이터에 Row 를 1개씩 늘려가며 접근 할 수 있도록 반복 설정을 진행합니다. (조금 까다로운 부분이긴 하나 반복문의 i + 1 을 생성해주는 부분이라고 생각하시면 이해가 쉽습니다.) 
 
-3. Array aggeregator를 사용하여 가져올 데이터를 선정합니다. 저는 날짜, 검색어, 순위를 가져오고 반복을 위해 Repeater의 i 를 가져오겠습니다. 
+3. Array aggeregator를 사용하여 가져올 데이터를 선정합니다. 저는 날짜, 검색어, 순위를 가져오고 반복을 위해 Repeater의 i를 가져오겠습니다. 
 ![nocode-practice](/img/nocode-tool/3.3.2-3.png)*2. Repeater / 3. Array aggregator*
 
 4. Slack module 을 선택한 뒤 계정 연동을 진행합니다. 개인 계정으로 보낼 경우에는 IM channel 을 사용하고, 채널에 전송을 하고 싶을 경우에는 Public / Private 채널을 선택하시면 됩니다.
 ![nocode-practice](/img/nocode-tool/3.3.4.png)*slack module*
 
-5. Rank : top_term 형태로 출력되도록 repeater + array_aggregator 조합으로 만들어진 array에 접근하여 내용을 가져옵니다. 내용물의 모습은 [1,2,3,4,5,6,7,8,9,10] / [검색어들] 로 이루어져 있다고 상상하시면 됩니다. 따라서 i 를 1개씩 늘려가면서 반복을 할 수 있도록 설정을 해놓은 것으로 생각하시면 됩니다.
+5. Rank : top_term 형태로 출력되도록 repeater + array_aggregator 조합으로 만들어진 array에 접근하여 내용을 가져옵니다. 내용물의 모습은 [1,2,3,4,5,6,7,8,9,10] / [검색어들]로 이루어져 있다고 상상하시면 됩니다. 따라서 i를 1개씩 늘려가면서 반복을 할 수 있도록 설정을 해놓은 것으로 생각하시면 됩니다.
 ![nocode-practice](/img/nocode-tool/3.3.5.png)*message setting*
 
-6. 매일 10시에 스케쥴을 걸고, 하단 시계 모양 버튼을 누른 뒤 schedule 을 on 으로 변경하여 스케쥴링을 걸어줍니다.
+6. 매일 10시에 스케줄을 걸고, 하단 시계 모양 버튼을 누른 뒤 schedule 을 on으로 변경하여 스케줄링을 걸어줍니다.
 ![nocode-practice](/img/nocode-tool/3.3.6_scheduling.png)*스케쥴링 옵션*
 
-7. 작업이 완성되었습니다. 처음에 의도했던 1~10위 까지의 검색어를 확인 할 수 있는 결과물이 생성되었습니다.
+7. 작업이 완성되었습니다. 처음에 의도했던 1~10위까지의 검색어를 확인할 수 있는 결과물이 생성되었습니다.
 ![nocode-practice](/img/nocode-tool/3.3.7.png)*완성된 Scenario의 모습과 결과물*
 
 ### 3.4 Zapier와 Integromat 비교
  
-위의 예시를 통해 알수 있듯이 Zapier 는 단순한 조건을 자동화 할 수 있어 입문용 노코드 툴로는 적합하나, 복잡한 조건 구현에는 한계가 있습니다. 
-Integromat 은 조건이 복잡한 업무도 자동화 할 수 있으나, 초심자가 작성하기엔 어려울 수 있습니다. 
+위의 예시를 통해 알 수 있듯이 Zapier는 단순한 조건을 자동화할 수 있어 입문용 노코드 툴로는 적합하나, 복잡한 조건 구현에는 한계가 있습니다. 
+Integromat 은 조건이 복잡한 업무도 자동화할 수 있으나, 초심자가 작성하기엔 어려울 수 있습니다. 
 또한 두 툴의 무료 플랜 조건이 차이가 있기 때문에 아래 표를 참고하셔서 사용하시면 좋을 것 같습니다. 
 
 | 간단 설명 | Zapier | Integromat |
 | --- | --- | --- |
-| 추천 | 업무 자동화 툴 입문자 | 업무 자동화 툴 익숙자 |
+| 추천 | 업무 자동화 툴 입문자 | 업무 자동화 툴 숙련자 |
 | 추천 업무 | 조건이 단순한 자동화 | 조건이 복잡한 자동화 |
 | 워크플로우 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | 선형적 | 유동적 |
-| 프로그램 조건 &nbsp;&nbsp;| - Trigger가 무조건 셋팅되어야 함 <br >- 3개 이상의 Trigger 셋팅이 어려움 (webhook 사용을 추천함) | - 제한 없음 |
-| 오류 트랙킹 방법  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| Zap을 실시간으로 재실행 하여 오류가 난 부분을 찾아내야함 | 대시보드를 활용하여 오류가 난 부분을 찾아낼 수 있음 |
-| 무료 플랜 비교 | - 매 월 100개의 task 수행 가능 <br >- 5개 Zap 사용 가능 <br >- trigger → Action 으로 구성된 Zap만 사용 가능 (2개 초과 조건 설정 불가)<br >- 1달마다 reset  | - 매 월 1,000개의 module 사용 가능 (1개의 Scenario 에 2개의 Module이 사용 될 경우 500번 수행)<br >- 2개의 Scenario 생성 가능<br >- 1달 마다 reset |
+| 프로그램 조건   | - Trigger가 무조건 세팅되어야 함 <br >- 3개 이상의 Trigger 세팅이 어려움 (webhook 사용을 추천함) | - 제한 없음 |
+| 오류 트래킹 방법        | Zap을 실시간으로 재실행 하여 오류가 난 부분을 찾아내야 함 | 대시보드를 활용하여 오류가 난 부분을 찾아낼 수 있음 |
+| 무료 플랜 비교 | - 매월 100개의 task 수행 가능 <br >- 5개 Zap 사용 가능 <br >- trigger → Action으로 구성된 Zap만 사용 가능 (2개 초과 조건 설정 불가)<br >- 1달마다 reset  | - 매월 1,000개의 module 사용 가능 (1개의 Scenario에 2개의 Module이 사용될 경우 500번 수행)<br >- 2개의 Scenario 생성 가능<br >- 1달마다 reset |
 
 -----
 
