@@ -131,30 +131,30 @@ Zapier는 자동화 생성을 위해 만든 프로그램을 Zap이라는 단어�
 Action은 Mail 전송, Slack 메시지 전송 등 Trigger 로 인해 실제로 수행되는 작업을 의미합니다. 
 ![nocode-practice](/img/nocode-tool/3.2_trigger%20and%20action.png)*Trigger / Action*
 
-1. Trigger을 설정합니다. 여기서는 구글 시트가 생성되거나 업데이트 되는 상황을 Trigger 로 지정하겠습니다. 그리고 사용할 구글 계정 세팅 후 `Continue` 를 선택하면 시트 내 데이터를 확인할 수 있습니다.
-![nocode-practice](/img/nocode-tool/3.2.1.png)*Trigger 셋팅 -> 스프레드시트 업데이트 / 계정 설정 이후 스프레드시트 연동 /테스트 데이터 확인*
+1. Trigger을 설정합니다. 여기서는 구글 시트가 생성되거나 업데이트되는 상황을 Trigger로 지정하겠습니다. 그리고 사용할 구글 계정 세팅 후 `Continue`를 선택하면 시트 내 데이터를 확인할 수 있습니다.
+![nocode-practice](/img/nocode-tool/3.2.1.png)*Trigger 세팅 -> 스프레드시트 업데이트 / 계정 설정 이후 스프레드시트 연동 /테스트 데이터 확인*
 
-2. Action을 설정합니다. 특정 Trigger 가 만족될 때 Slack 메시지를 전송 할 것이기 때문에 `Send Direct Message`를 선택합니다. 
-![nocode-practice](/img/nocode-tool/3.2.2.png)*Action 설정 / 전송할 데이터 설정 / 스케쥴링 옵션*
+2. Action을 설정합니다. 특정 Trigger 가 만족될 때 Slack 메시지를 전송할 것이기 때문에 `Send Direct Message`를 선택합니다. 
+![nocode-practice](/img/nocode-tool/3.2.2.png)*Action 설정 / 전송할 데이터 설정 / 스케줄링 옵션*
 
 3. 작업이 완성되었습니다. ![nocode-practice](/img/nocode-tool/3.2.3_zap.png)*Zap의 모습*
 ![nocode-practice](/img/nocode-tool/3.2.3_final.png)*완성된 Zap 결과물*
 
-이때 아쉽게도 10개의 모든 검색어가 아닌 Rank 10의 값 1개만 슬랙으로 오는 것을 확인할 수 있습니다. 시트에 있는 데이터를 한줄한줄 모두 받아서 데이터를 발송하는 방법은 없었습니다. 
-Zapier 에서 제공하는 Action 중 하나인 [Loop](https://help.zapier.com/hc/en-us/articles/8496106701453-Loop-your-Zap-actions#create-a-loop-from-text-0-1) 을 활용하여 반복 수행을 진행해보려 했으나,  받아온 데이터의 형태가 시트 전체의 내용이 아닌 몇개의 행만 가져와지기 때문에 반복 수행을 통한 데이터 전송을 진행할 수 없었습니다. 
+이때 아쉽게도 10개의 모든 검색어가 아닌 Rank 10의 값 1개만 슬랙으로 오는 것을 확인할 수 있습니다. 시트에 있는 데이터를 한 줄 한 줄 모두 받아서 데이터를 발송하는 방법은 없었습니다. 
+Zapier에서 제공하는 Action 중 하나인 [Loop](https://help.zapier.com/hc/en-us/articles/8496106701453-Loop-your-Zap-actions#create-a-loop-from-text-0-1) 을 활용하여 반복 수행을 진행해 보려 했으나,  받아온 데이터의 형태가 시트 전체의 내용이 아닌 몇 개의 행만 가져와지기 때문에 반복 수행을 통한 데이터 전송을 진행할 수 없었습니다. 
 
 
-### 3.3 Integromat (Make) 사용해보기
+### 3.3 Integromat (Make) 사용해 보기
 
-이번에는 같은 작업을 Integromat(Make 이지만 편의상 Integromat 으로 부르겠습니다.)을 통해 만들어 보겠습니다. Integromat 사용을 위해 [Integromat(Make) 사이트](https://www.make.com/en) 로 접속하여 회원가입을 진행합니다. 이후 Dashboard의 우측 상단에 있는 `Create a new scenario` 버튼을 클릭하여 Scenario를 제작 할 수 있습니다. 
+이번에는 같은 작업을 Integromat(Make이지만 편의상 Integromat으로 부르겠습니다.)을 통해 만들어 보겠습니다. Integromat 사용을 위해 [Integromat(Make) 사이트](https://www.make.com/en)로 접속하여 회원가입을 진행합니다. 이후 Dashboard의 우측 상단에 있는 `Create a new scenario` 버튼을 클릭하여 Scenario를 제작할 수 있습니다. 
 ![nocode-practice](/img/nocode-tool/3.3_login.png)*회원 가입*
-Integromat 은 자동화 생성을 위해 만든 프로그램을 Scenario 라고 부릅니다. Scenario 는 여러개의 Module 의 집합으로 이루어지며 module 안에는 해당 moduled의 다양한 활용법이 존재합니다. Module 을 통해 데이터를 불러온 경우, Function 을 사용하여 조건 적용을 진행 할 수 있고, Tools 를 활용하여 반복 수행, 중단 등 다양한 Flow control 를 진행할 수 있습니다.
+Integromat 은 자동화 생성을 위해 만든 프로그램을 Scenario라고 부릅니다. Scenario는 여러 개의 Module의 집합으로 이루어지며 module 안에는 해당 moduled의 다양한 활용법이 존재합니다. Module 을 통해 데이터를 불러온 경우, Function 을 사용하여 조건 적용을 진행할 수 있고, Tools를 활용하여 반복 수행, 중단 등 다양한 Flow Control를 진행할 수 있습니다.
 ![nocode-practice](/img/nocode-tool/3.3.png)*Module / Function / Tools - Flow Control*
 
 1. 시트 데이터를 가져오는 Module을 생성합니다. `Google sheet module` 을 선택하여 데이터의 범위를 지정합니다.
 ![nocode-practice](/img/nocode-tool/3.3.1.png)*Module 생성*
 
-2. Flow Control → Repeater 를 선택하여 테이블 형태의 데이터에 Row 를 1개씩 늘려가며 접근 할 수 있도록 반복 설정을 진행합니다. (조금 까다로운 부분이긴 하나 반복문의 i + 1 을 생성해주는 부분이라고 생각하시면 이해가 쉽습니다.) 
+2. Flow Control → Repeater를 선택하여 테이블 형태의 데이터에 Row를 1개씩 늘려가며 접근할 수 있도록 반복 설정을 진행합니다. (조금 까다로운 부분이긴 하나 반복 문의 i + 1을 생성해 주는 부분이라고 생각하시면 이해가 쉽습니다.) 
 
 3. Array aggeregator를 사용하여 가져올 데이터를 선정합니다. 저는 날짜, 검색어, 순위를 가져오고 반복을 위해 Repeater의 i를 가져오겠습니다. 
 ![nocode-practice](/img/nocode-tool/3.3.2-3.png)*2. Repeater / 3. Array aggregator*
