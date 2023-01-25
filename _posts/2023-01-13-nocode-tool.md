@@ -84,45 +84,45 @@ tags:
 ![nocode-metric](/img/nocode-tool/2.2_metric%20and%20update.png)*지표 현황 파악/데이터 적재*
 
 노코드 툴을 사용하면 코딩 없이도 프로그램이나 앱을 구현할 수 있어 개발 리소스에 의존하지 않고 직접 필요한 툴을 만들 수 있습니다. 
-또한 어떤 방식으로 구현 할 것인지에 대해 커뮤니케이션 하는 시간도 감소하여 리소스 + 시간 모두 아낄 수 있다는 장점이 있습니다. 본인이 필요한 것을 스스로 쉽게 개발할 수 있어 사용자 친화적인 점과 버그 발생시 수정이 쉬운것 또한 장점입니다. 
+또한 어떤 방식으로 구현할 것인지에 대해 커뮤니케이션하는 시간도 감소하여 리소스 + 시간 모두 아낄 수 있다는 장점이 있습니다. 본인이 필요한 것을 스스로 쉽게 개발할 수 있어 사용자 친화적인 점과 버그 발생 시 수정이 쉬운 것 또한 장점입니다. 
 
-그러나 노코드 툴에서 제공하는 기능 외에는 구현할 수 없다는 한계점도 있습니다. 노코드 툴을 넘어서 로우코드(Low Code), 그리고 실제 개발 까지 넘어가는 것에는 큰 도전이 필요하기 때문입니다. (로우코드와 노코드의 차이가 궁금하시다면 [<U>이 블로그</U>](https://www.ibm.com/cloud/blog/low-code-vs-no-code)를 참고해보시면 좋을 것 같습니다.)
+그러나 노코드 툴에서 제공하는 기능 외에는 구현할 수 없다는 한계점도 있습니다. 노코드 툴을 넘어서 로우 코드(Low Code), 그리고 실제 개발까지 넘어가는 것에는 큰 도전이 필요하기 때문입니다. (로우 코드와 노코드의 차이가 궁금하시다면 [<U>이 블로그</U>](https://www.ibm.com/cloud/blog/low-code-vs-no-code)를 참고해 보시면 좋을 것 같습니다.)
 
 
-### 2.3 소개 할 노코드 툴 스포일러
+### 2.3 소개할 노코드 툴 스포일러
 
-저는 수많은 노코드 툴 중 업무 자동화 툴인 Integromat(현재는 make.com으 로 변경) 과 Zapier 에 대해 소개해보려 합니다. (제가 사용했던 경험에 기반하여 작성되어 주관적일 수 있습니다.) 
+저는 수많은 노코드 툴 중 업무 자동화 툴인 Integromat(현재는 make.com으로 변경) 과 Zapier에 대해 소개해 보려 합니다. (제가 사용했던 경험에 기반하여 작성되어 주관적일 수 있습니다.) 
 
 - Zapier  
-    Zapier는 웹 애플리케이션으로 5,000 가지 이상의 앱과 연동하여 사용할 수 있는 워크플로우 자동화 툴입니다. Zapier 무료 플랜을 사용할 경우 5개의 무료 Zap(워크플로우 자동화 로직) 을 만들 수 있고, 100개의 task 를 수행 할 수 있습니다. trigger → Action 으로 구성된 single-step Zap만 사용 가능합니다. (2개 초과 조건 설정 불가) 
+    Zapier는 웹 애플리케이션으로 5,000 가지 이상의 앱과 연동하여 사용할 수 있는 워크플로 자동화 툴입니다. Zapier 무료 플랜을 사용할 경우 5개의 무료 Zap(워크플로 자동화 로직) 을 만들 수 있고, 100개의 Task를 수행할 수 있습니다. Trigger → Action으로 구성된 Single-Step Zap만 사용 가능합니다. (2개 초과 조건 설정 불가) 
 - Integromat (Make)<br >
-    IntegromatI(Make) 또한 웹 애플리케이션으로 1,600가지 이상의 앱과 연동하여 사용할 수 있는 워크플로우 자동화 툴입니다. Integromat 무료 플랜을 사용 할 경우 2개의 Scenario(워크플로우 자동화 로직) 를 만들 수 있고 1,000개의 모듈을 사용 가능합니다. 
+    IntegromatI(Make) 또한 웹 애플리케이션으로 1,600가지 이상의 앱과 연동하여 사용할 수 있는 워크플로 자동화 툴입니다. Integromat 무료 플랜을 사용할 경우 2개의 Scenario(워크플로 자동화 로직)를 만들 수 있고 1,000개의 모듈을 사용 가능합니다. 
     
 
-Zapier와 Integromat (Make) 는 기본적으로는 같은 구조를 가지고 있지만, 사용하는 용어가 다르기 때문에 실습 내용을 보시기 전 참고하시면 좋을 것 같습니다.
+Zapier와 Integromat (Make)는 기본적으로는 같은 구조를 가지고 있지만, 사용하는 용어가 다르기 때문에 실습 내용을 보시기 전 참고하시면 좋을 것 같습니다.
 
 | 용어 | Zapier&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Integromat (Make) |
 | --- | --- | --- |
 | 자동화 로직 명칭  | Zap | Scenario |
 | 이벤트 명칭 | Trigger | Module |
-| 수행 명칭 | Action | Module - <br >Actions, Searches,Triggers<br >Aggregators,Iterators |
+| 수행 명칭 | Action | Module - <br >Actions, Searches, Triggers<br >Aggregators, Iterators |
 
 -----
 
-## 3. 노코드 툴을 활용해보자
+## 3. 노코드 툴을 활용해 보자
 
-위에 정리된 표를 보면 이미 눈치채셨을 수도 있지만 Integromat 이 Zapier 에 비해서 조금 더 복잡합니다. 따라서 처음 입문하시는 분이라면 Zapier 를 통해 노코드 툴에 대해 친숙해지신 뒤 Integromat 으로 넘어가시는것을 추천합니다. 
+위에 정리된 표를 보면 이미 눈치채셨을 수도 있지만 Integromat 이 Zapier에 비해서 조금 더 복잡합니다. 따라서 처음 입문하시는 분이라면 Zapier를 통해 노코드 툴에 대해 친숙해지신 뒤 Integromat으로 넘어가시는 것을 추천합니다. 
 
-### 3.1 실습내용
+### 3.1 실습 내용
 
-저는 BigQuery 에서 기본적으로 제공해주는 Dataset을 활용하여 하루 전 날의 검색어 Top 10 을 매일 오전 10시에 발송해주는 Bot 을 제작해보겠습니다. 예상되는 작업 흐름은 아래와 같습니다.
+저는 BigQuery에서 기본적으로 제공해 주는 Dataset을 활용하여 하루 전 날의 검색어 Top 10을 매일 오전 10시에 발송해 주는 Bot 을 제작해 보겠습니다. 예상되는 작업 흐름은 아래와 같습니다.
 
-- 구글 스프레드 시트에 BigQuery 데이터를 연동하여 사용할 데이터 생성
-- Zapier / Integromat 에 스프레드 시트 연동
+- 구글 스프레드시트에 BigQuery 데이터를 연동하여 사용할 데이터 생성
+- Zapier / Integromat에 스프레드시트 연동
 - 전 날의 검색어 Top 10을 Slack 으로 메시지 전송
 ![nocode-practice](/img/nocode-tool/3.1_sheet.png)*시트명 : top_term*
 
-### 3.2 Zapier 사용해보기
+### 3.2 Zapier 사용해 보기
 
 Zapier 사용을 위해서는 먼저 [Zapier 사이트](https://zapier.com/) 에 회원가입을 진행합니다. 무료 플랜으로 회원가입 후 [Dashboard](https://zapier.com/app/dashboard) 에서 좌측 상단 Create Zap 을 클릭하여 Zap을 만들 수 있습니다. 
 ![nocode-practice](/img/nocode-tool/3.2_login.png)*회원 가입 및 대시보드 버튼*
