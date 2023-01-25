@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>
+    DBA의 AWS re:Invent 2022 참석 후기 - SOCAR Tech Blog
+    
+  </title>
+
+  <meta name="description" content="데이터베이스와 관련된 AWS re:Invent 주요 세션 소개">
+
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://tech.socarcorp.kr/data/2023/01/16/aws-reinvent.html"/>
+  <meta property="og:title" content="DBA의 AWS re:Invent 2022 참석 후기"/>
+  <meta property="og:description" content="데이터베이스와 관련된 AWS re:Invent 주요 세션 소개"/>
+  <meta property="og:site_name" content="SOCAR Tech Blog"/>
+  <meta property="og:image" content="https://tech.socarcorp.kr/img/aws-reinvent/background.jpg"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="DBA의 AWS re:Invent 2022 참석 후기"/>
+  <meta name="twitter:description" content="데이터베이스와 관련된 AWS re:Invent 주요 세션 소개"/>
+  <meta name="twitter:image" content="https://tech.socarcorp.kr/img/aws-reinvent/background.jpg"/>
+
+
+  <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.11.1/tocbot.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.11.1/tocbot.css">
+
+  <link rel="stylesheet" href="/assets/vendor/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/assets/vendor/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="/assets/main.css">
+
+  <link rel="canonical" href="https://tech.socarcorp.kr/data/2023/01/16/aws-reinvent.html">
+  <link rel="alternate" type="application/rss+xml" title="SOCAR Tech Blog" href="/feed.xml">
+  <link rel="icon" type="image/png" href="/assets/icon/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/icon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/assets/icon/favicon-96x96.png">
+</head>
+
+
+<body>
+
+  <!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+  <div class="container">
+    <a class="navbar-brand" href="/">SOCAR Tech Blog</a>
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      Menu
+      <i class="fa fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="/">🏠 Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/posts">✏️ Posts</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/categories">📔 Categories</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/tags">🏷 Tags</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/authors">✍🏻 Authors</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+  <!-- Page Header -->
+
+<header class="masthead" style="background-image: url('/img/aws-reinvent/background.jpg')">
+  
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-9 col-md-9 mx-auto">
+          <div class="post-heading">
+            <h1 class="post-title">DBA의 AWS re:Invent 2022 참석 후기</h1>
+            
+            <h2 class="subheading">데이터베이스와 관련된 AWS re:Invent 주요 세션 소개</h2>
+            
+            <div class="post-meta">
+              
+              
+                
+                <span class="author"><a href="/authors#알티"><img src="/assets/authors/alti.png">알티</a></span>
+              
+                <br>
+                <span class="date">2023-01-16</span>
+                <br>
+                <span class="category"><a href="/categories#">data</a></span> 
+                <br>
+              
+                <span class="tag"><a href="/tags#aws">aws</a></span>
+              
+                <span class="tag"><a href="/tags#dba">dba</a></span>
+              
+                <span class="tag"><a href="/tags#database">database</a></span>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="toc toc-hidden" id="toc">
+    </div>
+    <div class="row">
+      <div class="col-lg-9 col-md-9 mx-auto">
+        <div class="post-content">
+        <p>안녕하세요! 서비스 엔지니어링 본부 Cloud DB 팀의 알티입니다.</p>
+
+<p>Cloud DB 팀은 Data Architect(DA)의 역할과 Database Administrator(DBA) 역할을 수행합니다.
+DA로서는 전사 데이터의 표준화와 데이터 거버넌스를 맡고 있으며, DBA로서는 쿼리 검수, 물리 데이터 모델링, 트러블 슈팅, 장애 대응, 신규 기술, 업무 자동화 등의 다양한 업무를 맡고 있습니다.</p>
+
+<p>AWS re:Invent는 글로벌 클라우드 시장에서 가장 큰 사업자인 AWS(Amazon Web Service)가 매년 신규 서비스와 그 활용 사례를 발표하는 행사입니다.
+쏘카에서 DBA 업무를 수행할 때 AWS에서 제공하는 다양한 서비스를 사용하고 있는데, 좋은 기회로 이번 2022년 AWS re:Invent에 참석을 하여 다음 내용을 배울 수 있었습니다.</p>
+
+<ul>
+  <li>DB와 관련된 AWS 서비스의 Best Practice는 무엇인가?</li>
+  <li>각각의 서비스를 어떻게 유기적으로 연결하여 사용할 수 있는가?</li>
+  <li>글로벌 기업들은 대량의 트랜잭션을 다루기 위해 AWS 서비스를 어떻게 이용하였는가?</li>
+</ul>
+
+<p>이 글에서는 AWS re:Invent의 세션 중 DB와 관련된 세션들과 저의 후기를 소개해 보려고 합니다. 다음과 같은 분들이 읽어보시면 좋습니다.</p>
+
+<ul>
+  <li>AWS re:Invent 및 AWS의 신기능에 관심 있는 독자</li>
+  <li>데이터베이스 관리자(DBA)</li>
+  <li>데이터베이스에 관심이 있는 개발자</li>
+</ul>
+
+<p>목차는 다음과 같습니다.</p>
+
+<ol>
+  <li><a href="#1-aws-reinvent-2022-소개">AWS Re:Invent 소개</a></li>
+  <li>
+    <p><a href="#2-db와-관련된-세션-소개">DB와 관련된 세션 소개</a></p>
+
+    <p>2.1. 목적에 맞는 데이터베이스</p>
+
+    <p>2.2 MemoryDB For Redis와 쿠버네틱스를 활용한 초고속 애플리케이션 구축</p>
+
+    <p>2.3. SQL에서 NoSQL로 점진적으로 마이그레이션</p>
+
+    <p>2.4. 데이터베이스의 블루/그린 최적화된 배포</p>
+
+    <p>2.5. 오픈소스(Trino)를 사용하여 AWS S3 데이터 조회</p>
+  </li>
+  <li><a href="#3-참석-후기">참석 후기</a></li>
+</ol>
+
+<hr />
+
+<h2 id="1-aws-reinvent-2022-소개">1. AWS re:Invent 2022 소개</h2>
+
+<p><img src="/img/aws-reinvent/aws-reinvent-intro.jpg" alt="aws-reinvent-intro" /><em>AWS re:Invent</em></p>
+
+<p>AWS re:Invent는 아마존 웹 서비스(Amazon Web Service)가 개최하는 최대 규모의 행사이며, 매년 AWS의 신규 서비스와 기존 서비스의 새로운 기능을 발표하는 자리입니다. 
+각 분야의 전문가 및 관계자들이 모여 Best Pratice를 발표하고 공유하며, AWS 외에도 다양한 솔루션 업체(GitLab, Redis, Docker, MariaDB 등등)의 서비스 소개를 들을 수 있는 컨퍼런스 입니다.</p>
+
+<hr />
+
+<h2 id="2-db와-관련된-세션-소개">2. DB와 관련된 세션 소개</h2>
+
+<p>AWS re:Invent에서는 DB와 관련하여 글로벌 기업들의 아키텍처 구성,
+데이터베이스와 결합한 서비스를 제공한 사례 등에 대한 다양한 세션이 있었습니다.
+DB와 관련된 총 10개의 세션 중 인상 깊었던 5개의 세션들을 아래에 소개합니다.</p>
+
+<h3 id="21-목적에-맞는-데이터베이스">2.1. 목적에 맞는 데이터베이스</h3>
+
+<p>이 세션에서는 현대 MSA(Microservice Architecture) 환경에서 목적에 맞는 데이터베이스 선택(Purpoose-built database apporach)의 중요성과 실제 기업의 데이터베이스 컨설팅 사례를 살펴봅니다.</p>
+
+<p>MSA를 구성하는 각 서비스들은 확장성, 고가용성, 보안성, 성능 측면에서 각자 필요한 스펙이 다르기 때문에 그 목적에 맞는 데이터베이스를 선택하는 게 중요합니다. 
+예를 들면 목적에 따라서 Relational / Key-value / Caching / Time-series 등 여러 형태의 Database Portfolio에서 적절한 DB를 선택하고 성능을 개선할 수 있습니다.</p>
+
+<p><img src="/img/aws-reinvent/database-portfolio.png" alt="AWS 가 제공하는 다양한 Database" /><em>AWS 가 제공하는 다양한 Database</em></p>
+
+<p>구체적인 사례로는 Twilio라는 기업이 Postflight에서 Amazon DynamoDB로 이관하여 Data Delay 와 비용을 줄인 케이스와, ADP가 Amazon Neptune 을 사용하여 성능을 10배 이상 개선한 케이스 등을 살펴보았습니다.</p>
+
+<p>개인적으로는 데이터도 사람처럼 성격과 성향이 있다고 생각합니다. 특히 데이터 모델링 시 이러한 데이터의 특성을 고려하여 알맞은 데이터베이스를 사용하는 것이 필수적입니다. 
+추후에 데이터가 방대하게 쌓이고 난 후에는 간단한 작업이 큰 작업이 되거나 성능에 큰 영향을 미칠 수도 있기 때문입니다. 구체적으로는 단순 조회 작업에 오랜 시간이 소요되거나 CPU 부하가 발생할 수도 있습니다.</p>
+
+<p>목적에 맞는 데이터베이스 선택의 예는 다음이 있습니다.</p>
+
+<ul>
+  <li>실시간 위치를 조회하는 데이터의 경우 지속적으로 RDBMS에 UPDATE 작업을 진행해야 하는데, 이 경우 RDBMS에 대량의 데이터를 적재하기보다는 DynamoDB를 활용하는 것이 좋을 수 있습니다.</li>
+  <li>실시간 데이터가 필요하다면 Redis를 활용하고 데이터 손실을 줄이기 위해서는 MemoryDB for Redis를 사용할 수 있습니다.</li>
+  <li>추가로 데이터 손실을 감수하더라도 조금 더 빠른 조회를 원한다면 Memcached를 이용하면 안정적인 서비스를 제공할 수 있습니다.</li>
+</ul>
+
+<p>이 세션을 통해 다시금  “목적에 맞는 데이터베이스 선택”의 중요성을 깨닫고, 개발자와 모델링 협업 과정에서 해당 부분에 대해 어떻게 잘 커뮤니케이션할 수 있을지에 대해 고민해 볼 수 있었습니다.</p>
+
+<blockquote>
+  <p>슬라이드 출처 : <a href="https://d1.awsstatic.com/events/Summits/reinvent2022/DAT212_How-ADP-and-Twilio-realize-business-vision-with-purpose-built-databases-.pdf">How-ADP-and-Twilio-realize-business-vision-with-purpose-built-databases</a></p>
+</blockquote>
+
+<h3 id="22-memorydb-for-redis와-쿠버네틱스를-활용한-초고속-애플리케이션-구축">2.2 MemoryDB for Redis와 쿠버네틱스를 활용한 초고속 애플리케이션 구축</h3>
+
+<p>해당 세션에서는 Kubernetes와 MemoryDB for Redis 결합을 통한 애플리케이션 구축의 Best Pratice를 소개했습니다.
+세션 마지막에는 소개한 구성을 실제로 구현하는 데모도 진행되었는데, 실습 내용을 포함한 전체 발표 자료는 <a href="https://d1.awsstatic.com/events/Summits/reinvent2022/DAT313-R_Build-stateful-K8s-applications-with-ultra-fast-Amazon-MemoryDB-for-Redis.pdf">링크</a>에서 보실 수 있습니다.</p>
+
+<p>구체적으로는 AWS EKS를 통해 Kubernetes 환경에서 MicroService Architecture(MSA) application 을 구성하는 방법과, MSA에 Memory DB for Redis가 적합한 이유를 소개하였습니다.</p>
+
+<p>전체적인 구성은 아래와 같습니다.</p>
+
+<p><img src="/img/aws-reinvent/ack.png" alt="ACK" /><em>ACK(AWS Controllers for Kubernetes)를 활용한 전체적인 아키텍처</em></p>
+
+<p>세션 초반부에는 MSA의 정의와 Managed Service 로서의 AWS EKS의 장점, AWS Controller for Kuberenetes를 통해 리소스를 관리하는 방법들을 설명합니다.</p>
+
+<p><img src="/img/aws-reinvent/memorydb.png" alt="memorydb-durability" /><em>Memory DB For Redis 스토리지는 WRITE 작업 시 Log를 남겨 데이터 유실을 방지합니다.</em></p>
+
+<p>해당 세션을 들으면서 빠른 응답속도를 보장하기 위해 쿠버네틱스와 함께 데이터의 손실을 방지하고자 Memory DB for Redis를 사용하는 이유를 알아볼 수 있었습니다.
+MemoryDB for Redis는 Aurora와 동일한 스토리지 구성을 가지고 있는데 이것은 데이터 안정성 면에서 큰 장점입니다.
+Memory 기반의 데이터베이스인 Redis는 빠른 Return을 보장하지만 데이터에 대한 내구성이 떨어질 수 있는데
+관계형 데이터베이스와 동일한 스토리지 구성을 가지면 데이터의 손실이 발생하지 않도록 보장됩니다.</p>
+
+<p>해당 세션에서는 DB뿐만 아니라 전반적인 인프라 지식도 얻을 수 있었니다. 
+쏘카의 DB 팀은 각종 데이터베이스 구성과 네트워크 설정 작업 시 인프라팀과 긴밀하게 협업을 하고 있는데, 
+이런 업무 시 인프라팀과 커뮤니케이션에 도움이 되는 세션이었습니다.</p>
+
+<blockquote>
+  <p>슬라이드 출처 : <a href="https://d1.awsstatic.com/events/Summits/reinvent2022/DAT313-R_Build-stateful-K8s-applications-with-ultra-fast-Amazon-MemoryDB-for-Redis.pdf">Build-stateful-K8s-applications-with-ultra-fast-Amazon-MemoryDB-for-Redis</a></p>
+</blockquote>
+
+<h3 id="23-sql에서-nosql로-점진적으로-마이그레이션">2.3. SQL에서 NoSQL로 점진적으로 마이그레이션</h3>
+
+<p>이 세션은 관계형 데이터베이스에 적재된 데이터를 In-Memory 기반의 데이터베이스에 데이터를 이관하는 방법을 소개합니다.</p>
+
+<p>이기종 간의 데이터베이스 동기화 및 이관작업은 상대적으로 동일한 데이터베이스로 이관하는 것보다 버전, 호환성 측면에서 신경쓸 부분이 많습니다.
+사용되는 모든 쿼리의 결과를 메모리형 데이터베이스에 적재하면서 동시에 운영 중인 데이터를 동기화해야 하기 때문입니다.</p>
+
+<h4 id="마이그레이션-패턴-순서rdbms--nosql">마이그레이션 패턴 순서(RDBMS → NoSQL)</h4>
+
+<p>운영중인 데이터베이스를 중단하지 않고 (다운타임을 발생시키지 않고) NoSQL로 이관하기 위해서는 RDBMS에서 NoSQL로 마이그레이션을 위해서는 아래와 같은 순서로 작업이 진행됩니다.</p>
+
+<p><img src="/img/aws-reinvent/mechanisms.png" alt="Migration Mechanism" /><em>마이그레이션 시 Cold Data 와 Hot Data를 나눠 작업합니다.</em></p>
+
+<ul>
+  <li>Lift and Shifts 방식으로 OS, 데이터, 애플리케이션을 그대로 옮기는 작업을 진행</li>
+  <li>요구사항에 맞는 구성으로 설계 (Ex. On-promise 환경 → Cloud 환경)</li>
+  <li>RDBMS의 쿼리 결과를 Key-value로 변환</li>
+  <li>Cold / Hot Data의 적재 및 조회 방안 구성</li>
+</ul>
+
+<p>Data는 사용 빈도에 따라 크게 Cold Data와 Hot Data로 분류됩니다. 
+Cold Data란 자주 사용되지 않는 데이터를 지칭하며, 
+Hot Data는 자주 사용되며 즉시 액세스해야 하는 데이터 (SELECT/UPDATE/DELETE 작업이 발생하는 데이터)를 지칭합니다.<br />
+마이그레이션 시 이런 데이터의 특성을 이해하고 각 특성에 맞게 마이그레이션 방안을 구성하는 것이 매우 중요합니다.</p>
+
+<h3 id="cold-data-migration">Cold Data Migration</h3>
+
+<p>Cold Data의 경우 Access 요청이 발생하지 않기 때문에 이관작업의 Key-value 변환 외에는 크게 복잡하지 않습니다.
+다만, 트랜잭션이 많이 발생하는 시간대를 피해서 Cold Data의 이관작업을 진행해야합니다.</p>
+
+<h3 id="hot-data-migration">Hot Data Migration</h3>
+
+<p>Hot Data의 경우 실시간으로 변경이 일어나기 때문에 Cold Data 보다 작업이 복잡합니다.
+운영 중인 데이터베이스에서 어떤 데이터 요청이 발생하는지 정확히 파악하기에는 한계가 존재하기 때문에 READ / WRITE / 변경 요청의 분류에 따라서
+아래 Mechanism 을 따라 마이그레이션을 진행합니다.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Mechanism</th>
+      <th>설명</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Read 요청</td>
+      <td>- NoSQL 데이터베이스에 READ Request 요청 <br /> - NoSQL에서 데이터가 없어 Return을 못하는 경우, RDBMS에 READ Request 요청  <br /> - RDBMS Return 과 함께 해당 데이터를 NoSQL로 Write 작업 진행</td>
+    </tr>
+    <tr>
+      <td>Write 요청</td>
+      <td>- NoSQL 데이터베이스로 Write 요청 <br /> - RDBMS에 해당 Write 작업 결과가 존재하는지 확인 <br /> - NoSQL에 데이터가 적재되지 않았다면, RDBMS → NoSQL로 데이터 적재</td>
+    </tr>
+    <tr>
+      <td>변경 요청</td>
+      <td>- RDBMS와 변경 건에 대한 DMS(Data Migration Service)를 이용하여 진행 <br />- 실시간 데이터 스트림 서비스인 Kinesis로 DMS로 연결 <br /> - Lambda를 이용하여 변경 건에 대한 Trigger 진행</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>해당 세션에서는 실제 마이그레이션 작업에 못지않게 작업 대상에 대한 데이터의 전수조사가 중요하다는 것을 배웠습니다. 
+실제로 데이터가 어떻게 요청되고 있는지를 알아야 정확한 마이그레이션을 정확하게 진행할 수 있었습니다.</p>
+
+<p>또한 일반적으로 마이그레이션은 <code class="highlighter-rouge">Mysqldump</code>, <code class="highlighter-rouge">Orcale datapump</code> 등 마이그레이션 툴을 이용하여 작업을 진행하는데,
+해당 세션에서는 Python Script를 이용하여 운영 중 요청이 들어오는 쿼리를 확인하고 그 결과를 NoSQL으로 적재하는 방법을 소개했습니다. 
+결과적으로 좀 더 섬세하고 복잡한 마이그레이션을 안정적으로 진행하는 법을 배울 수 있었던 의미 있는 세션이었습니다.</p>
+
+<blockquote>
+  <p>슬라이드 출처 : <a href="https://d1.awsstatic.com/events/Summits/reinvent2022/BOA321_Modernize-and-gradually-migrate-your-data-model-from-SQL-to-NoSQL.pdf">Modernize-and-gradually-migrate-your-data-model-from-SQL-to-NoSQL</a></p>
+</blockquote>
+
+<h3 id="24-데이터베이스의-블루그린-최적화된-배포">2.4. 데이터베이스의 블루/그린 최적화된 배포</h3>
+
+<p>Blue/Green Optimized 세션은 Aurora의 버전 업그레이드와 관련하여 AWS 발표한 새로운 기능에 대해 소개하는 세션입니다.
+데이터베이스의 버전 업그레이드와 그 과정에서 발생하는 다운타임을 고려하는 것은 DBA 입장에서 매우 중요한 부분이라 개인적으로도 가장 듣고 싶었던 세션이었습니다.</p>
+
+<p>이 세션에서는 기존의 방식보다 안전하게 최대 1분 이내로 업그레이드 작업을 진행할 수 있다고 발표하였습니다.</p>
+
+<p>Blue/Green Deployment는 보통 서버에서 자주 이용되는 무중단 배포 기법 중 하나이며, 구 버전과 새 버전을 동시에 운영 환경에 띄워놓고 구 버전에서 새 버전으로 트래픽을 서서히 이동시키는 방법입니다.
+DB의 Blue/Green Deployment는 다음 순서로 진행됩니다.</p>
+
+<p><img src="/img/aws-reinvent/blue-green.png" alt="Blue-green" /><em>Blue-Green Deployment</em></p>
+
+<ul>
+  <li>Blue → Green 간의 Logical Replication
+    <ul>
+      <li>Blue에서 발생하는 모든 변경 사항을 Green에서 미러링하도록 설정</li>
+      <li>변경 복제를 이용한 여러 수준의 Replication 지원(One-Level 복제)</li>
+      <li>메트릭을 모니터링하여 Replication이 최신 상태인지 확인</li>
+    </ul>
+  </li>
+  <li>RDS 인스턴스 버전 업그레이드 완료 및 데이터 검증</li>
+  <li>Blue(업그레이드 이전) 인스턴스 삭제</li>
+</ul>
+
+<p>해당 세션을 듣고 정말 1분 이내에 업그레이드 Switch Over를 완료할 수 있을지에 대해 의문이 들었습니다.
+개발 계정에서 신규 Aurora MySQL RDS Instance를 생성하여 Blue/Green Deployment 테스트를 진행했습니다.</p>
+
+<h4 id="테스트-진행-절차">테스트 진행 절차</h4>
+
+<p><strong>테스트 세팅</strong></p>
+
+<ul>
+  <li>신규 RDS Instance 생성(Aurora MySQL 5.7)</li>
+  <li>더미 데이터 Import 수행 (5GB 데이터 적재)</li>
+  <li>Blue/Green 설정
+    <ul>
+      <li>Blue - Aurora MySQL 5.7</li>
+      <li>Green - Aurora MySQL. 8.0</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="/img/aws-reinvent/test-blue-green.png" alt="Blue-green-test" /><em>Blue-Green Deployment Test</em></p>
+
+<p><strong>테스트 과정</strong></p>
+
+<ul>
+  <li>Blue/Green 커넥션 확인
+    <ul>
+      <li>작업 중 New Connection 연결 시 Connection Error 미발생</li>
+      <li><code class="highlighter-rouge">db.t3.medium</code> 기준 약 21분 소요</li>
+    </ul>
+  </li>
+  <li>Logical Replication 확인
+    <ul>
+      <li>Blue의 데이터 변경 작업(DML/DDL) 진행 시 Green에도 정상적으로 반영 확인</li>
+    </ul>
+  </li>
+  <li>Switch Over를 이용하여 Green → Blue 배포 진행
+    <ul>
+      <li>읽기 작업은 Blue(운영) 쪽에서 진행 가능</li>
+      <li>내부적으로 Bin Log를 기준으로 미러링 확인</li>
+      <li>Major/Minor 버전 업그레이드 포함</li>
+    </ul>
+  </li>
+</ul>
+
+<p>이때 Switch Over 시 Timeout Setting 을 1분으로 설정했을 때, 실제 배포 과정이 1분이 초과되어 자동으로 Rollback이 되었습니다. 
+Timeout Setting을 3분으로 늘려 재실행 했을 때는 정상적으로 Blue/Green Deployment이 완료되었습니다.</p>
+
+<p><strong>Switch Over 결과</strong></p>
+
+<p><img src="/img/aws-reinvent/test-result.png" alt="Blue-green-test-result" /><em>Blue/Green Deployment 완료 후 위와 같이 분리</em></p>
+
+<p>실제 작업은 위와 같은 방법으로 작업이 수행되며 <code class="highlighter-rouge">db.t3.medium</code> 기준으로 약 $91의 비용이 소요됩니다.</p>
+
+<p>세션에서 들었던 것과 달리 Timeout을 1분으로 설정했을 때 Switchover 작업이 실패하였는데 정확한 원인은 파악하지 못하였습니다. 혹시 1분 기준으로 테스트를 성공하신 분이 있다면 댓글 부탁드립니다.</p>
+
+<p>세션에서 소개된 내용은 빠르고 안정적이나 추가로 인스턴스가 생성되기 때문에 추가 비용이 발생할 우려가 있습니다.
+또한 새로운 기능을 운영에 적용하기에는 보수적으로 생각해야 하기에 실제 적용에는 여러 고민이 되는 점이 있었습니다.
+하지만 이러한 새로운 기능을 접할 수 있어 좋았으며 AWS의 RDS가 점점 발전하고 있다는 것을 느꼈습니다.</p>
+
+<blockquote>
+  <p>슬라이드 출처 : <a href="https://d1.awsstatic.com/events/Summits/reinvent2022/DAT222_Amazon-RDS-Blue-Green-Deployments-Optimized-Writes-and-Optimized-Reads.pdf">Amazon-RDS-Blue-Green-Deployments-Optimized-Writes-and-Optimized-Reads</a></p>
+</blockquote>
+
+<h3 id="25-오픈소스trino를-사용하여-aws-s3-데이터-조회">2.5. 오픈소스(Trino)를 사용하여 AWS S3 데이터 조회</h3>
+
+<p>해당 세션은 Open-source인 Trino를 이용한 S3 데이터 접근 방법에 관련된 세션입니다.
+S3의 데이터를 조회하기 위해서는 기존에는 AWS가 제공하는 서비스인 Athena를 이용하여 데이터를 조회하여 쿼리 결과를 얻을 수 있습니다.</p>
+
+<p>다만, Athena를 이용하여 쿼리 결과를 얻기 위해서는 서울 리전을 기준으로 1TB 당 $5의 비용이 발생합니다. 
+하지만 이번 세션에서는 Trino를 이용하여 Athena의 조회 비용을 제거하고 쿼리 성능을 개선하는 방법을 소개하고 있습니다.
+단, EMR(Elastic MapReduce)의 Computing 비용을 지불합니다.</p>
+
+<p><img src="/img/aws-reinvent/trino.png" alt="trino" /><em>Trino와 AWS S3 Select</em></p>
+
+<p>이러한 속도를 낼 수 있는 것은 Pushdown이라는 기능 때문입니다.
+그 이유는 MySQL에서도 비슷한 기능이 존재하며 Index Condition Pushdown 과 유사하기 때문입니다.
+스토리지에 Index를 밀어 넣어 필요한 데이터만을 그대로 가지고 메모리에 올려놓고 결과를 반환하는 과정과 유사합니다.</p>
+
+<p>마찬가지로 S3 Select는 지정된 바이트 수만큼 CSV 파일에서 Range Scan(범위)을 전체 객체 스캐닝을 병렬로 처리하여 속도가 빠릅니다.</p>
+
+<p><img src="/img/aws-reinvent/trino-result.png" alt="trino-result" /><em>AWS S3 Select를 사용했을 때의 조희 성능 차이</em></p>
+
+<p>위 그림은 S3 내 CSV 파일 데이터를 조회하는 속도를 보여 줄 수 있는 성능 그래프입니다. 
+S3 내 압축되어 있지 않은 3TB의 CSV 데이터를 조회할 때 S3 Select를 이용했을 때와 아닐 때의 RunTime 차이를 알 수 있습니다.</p>
+
+<p><img src="/img/aws-reinvent/data-lake-architecture.png" alt="data-lake-architecture" /><em>데이터 레이크 구조</em></p>
+
+<p>위 그림은 데이터 레이크 아키텍처를 소개한 것으로, 
+Amazon EMR(Elastic MapReduce)에 Trino를 설치하여 S3를 연동하여 쿼리를 실행할 수 있는 SQL 쿼리 엔진을 보여줍니다.</p>
+
+<p>일반적으로 데이터베이스에서 더 이상 사용되지 않는 정적 데이터는 S3로 이관하는 것을 지향합니다.
+불필요한 데이터는 테이블을 무겁게 하고 성능에도 영향을 미치며, 대량의 테이블에서는 ALTER 작업에도 CPU 부하를 유발할 수 있기 때문입니다.</p>
+
+<p>테이블의 경량화를 위해 S3로 이관하고 사용 빈도가 적은 데이터를 빠르게 조회할 수 있는 방법에 대해 알아볼 수 있었던 세션이었습니다.
+또한 쏘카에서는 S3에 적재된 데이터를 Athena를 이용하여 조회를 하고 있는데, Athena 외에도 대체 방안을 알 수 있어서 좋았습니다.</p>
+
+<blockquote>
+  <p>슬라이드 출처 : <a href="https://d1.awsstatic.com/events/Summits/reinvent2022/OPN209-R_Accessing-data-lakes-in-Amazon-S3-using-open-source-projects.pdf">Accessing-data-lakes-in-Amazon-S3-using-open-source-projects.</a></p>
+</blockquote>
+
+<hr />
+
+<h2 id="3-참석-후기">3. 참석 후기</h2>
+
+<p>업무에 AWS 툴을 다양하게 활용하고 있는 입장에서 AWS re:Invent를 통해 AWS에서 직접 진행하는 발표와 데모를 들어볼 수 있어 좋았습니다. 
+특히 관심 있는 DB 툴에 대해 Deep Dive 하고 Insight를 가져볼 수 있는 값진 시간이었습니다.</p>
+
+<p>세션 뿐만 아니라 수백개의 파트너 사가 AWS와 관련된 솔루션을 홍보하는 자리기도 해서, 
+re:Invent 행사가 단순히 콘퍼런스의 개념만 가지고 있는 것이 아니라 클라우드 기술을 통합하는 장소라는 것을 느꼈습니다.</p>
+
+<p>마지막으로 AWS re:Invent를 참석할 수 있는 기회를 주신 본부장님 아나킨과 그룹장님 제이든, 인프라 팀장님 로원께 감사드리며, 값진 시간을 보낼 수 있도록 도움을 주신 서비스 엔지니어링 본부 및 오퍼레이션 그룹 구성원분께 감사 인사를 드립니다. 긴 글 읽어주셔서 감사합니다.</p>
+
+<p><img src="/img/aws-reinvent/aws-reinvent-outro.jpg" alt="aws-reinvent-outro" /></p>
+
+        </div>
+        
+        <div class="author-card">
+          <div class="card mb-3">
+            <div class="row no-gutters">
+              <div class="col-md-4">
+                <img src="/assets/authors/alti.png" class="card-img" alt="프로필사진">
+              </div>
+              <div class="col-md-8">
+                <div class="card-body">
+                  <p class="card-title">
+                    <a href="/authors/#알티">알티</a>
+                    <small class="text-muted"> DBA</small>
+                  </p>
+                  <p class="card-text">안정적인 데이터베이스 운영과 관리를 위해 고민하며, 협업을 통한 성장을 지향합니다. </p>
+                  <p class="card-text">
+                    
+                    <a href="https://blog.naver.com/mkmmk_aug"><img src="/assets/icon/blog.png" class="link-img" alt="blog"></a>
+                    
+                    <a href="https://www.linkedin.com/in/%EB%AF%BC%EA%B7%9C-%EC%A0%95-3287511aa/"><img src="/assets/icon/linkedin.png" class="link-img" alt="linkedin"></a>
+                    
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        
+        <hr>
+        <div class="clearfix">
+          
+          <a class="btn btn-primary float-left" href="/data/2022/11/09/advanced-airflow-for-databiz.html" data-toggle="tooltip" data-placement="top" title="전사 구성원들이 사용하는 배치 데이터 플랫폼 만들기 - Airflow Advanced">&larr; Previous<span class="d-none d-md-inline">
+              Post</span></a>
+          
+          
+          <a class="btn btn-primary float-right" href="/data/2023/01/17/build-fms-data-pipeline-1.html" data-toggle="tooltip" data-placement="top" title="FMS(차량 관제 시스템) 데이터 파이프라인 구축기 1편. 스트리밍/배치 파이프라인 개발기">Next<span class="d-none d-md-inline">
+              Post</span> &rarr;</a>
+          
+        </div>
+        <div>
+          <p class="recuit">쏘카는 언제나 쏘카 서비스를 함께 만들며 기술적인 문제를 함께 풀어나갈 능력있는 개발자/디자이너/기획자/데이터 사이언티스트 등을 모시고 있습니다. 자세한 내용은 <a href="https://bit.ly/SOCAR-RECRUIT">쏘카 채용공고 페이지</a>를 확인 부탁드립니다 :)</p>
+        </div>
+      </div>
+    </div>
+    <!-- utterance comments -->
+    <script src="https://utteranc.es/client.js"
+        repo="socar-inc/techblog-comments"
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+    </script>
+  </div>
+
+<script>
+  // ref https://tscanlin.github.io/tocbot/
+  tocbot.init({
+    tocSelector: '#toc',
+    contentSelector: '.post-content',
+    headingSelector: 'h1, h2, h3',
+    hasInnerContainers: true,
+    collapseDepth: 6,
+    linkClass: 'toc-link'
+  });
+
+
+  $(window).on('scroll', function() {
+      let scrollTop = $(window).scrollTop()
+      let scrollBottom =  scrollTop + $(window).height()
+      let contentOffsetTop = $(".post-content").offset().top
+      let contentOffsetBottom = contentOffsetTop + $(".post-content").height()
+      let elementHeight = $(".post-content").height(); 
+
+      if ((scrollTop < contentOffsetTop) || (scrollBottom >= contentOffsetBottom)) {
+        // $('.toc').css('visibility', 'hidden')
+        $('.toc').addClass("toc-hidden")
+      }
+      else if (scrollTop >= contentOffsetTop) {
+        $(".toc").removeClass("toc-hidden")
+      }
+  });
+</script>
+
+
+  <!-- Footer -->
+
+<hr>
+
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-md-9 mx-auto">
+        <ul class="list-inline text-center">
+          
+          
+          
+          <li class="list-inline-item">
+            <a href="https://www.facebook.com/socarsharing">
+              <span class="fa-stack fa-lg">
+                <i class="fas fa-circle fa-stack-2x"></i>
+                <i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i>
+              </span>
+            </a>
+          </li>
+          
+          
+          
+        </ul>
+        <p class="copyright text-muted">Copyright &copy; SOCAR 2023 | tech_branding@socar.kr</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+  <script src="/assets/vendor/jquery/jquery.min.js"></script>
+<script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/assets/vendor/startbootstrap-clean-blog/js/clean-blog.min.js"></script>
+<script src="/assets/scripts.js"></script>
+<script src="/assets/mermaid-8.2.3.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.11.1/tocbot.min.js"></script>
+
+
+
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-30551922-27"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-30551922-27');
+</script>
+
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-MZ79TFM');</script>
+<!-- End Google Tag Manager -->
+
+
+</body>
+
+</html>

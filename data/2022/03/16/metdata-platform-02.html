@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>
+    데이터 디스커버리 플랫폼 도입기 - 2편. GKE에 Datahub 구축하기 - SOCAR Tech Blog
+    
+  </title>
+
+  <meta name="description" content="feat. 메타데이터 플랫폼이 실제로 배포되기까지">
+
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://tech.socarcorp.kr/data/2022/03/16/metdata-platform-02.html"/>
+  <meta property="og:title" content="데이터 디스커버리 플랫폼 도입기 - 2편. GKE에 Datahub 구축하기"/>
+  <meta property="og:description" content="feat. 메타데이터 플랫폼이 실제로 배포되기까지"/>
+  <meta property="og:site_name" content="SOCAR Tech Blog"/>
+  <meta property="og:image" content="https://tech.socarcorp.kr/img/data-discovery-platform-02/cloud-bg.jpg"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="데이터 디스커버리 플랫폼 도입기 - 2편. GKE에 Datahub 구축하기"/>
+  <meta name="twitter:description" content="feat. 메타데이터 플랫폼이 실제로 배포되기까지"/>
+  <meta name="twitter:image" content="https://tech.socarcorp.kr/img/data-discovery-platform-02/cloud-bg.jpg"/>
+
+
+  <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.11.1/tocbot.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.11.1/tocbot.css">
+
+  <link rel="stylesheet" href="/assets/vendor/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/assets/vendor/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="/assets/main.css">
+
+  <link rel="canonical" href="https://tech.socarcorp.kr/data/2022/03/16/metdata-platform-02.html">
+  <link rel="alternate" type="application/rss+xml" title="SOCAR Tech Blog" href="/feed.xml">
+  <link rel="icon" type="image/png" href="/assets/icon/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/icon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/assets/icon/favicon-96x96.png">
+</head>
+
+
+<body>
+
+  <!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+  <div class="container">
+    <a class="navbar-brand" href="/">SOCAR Tech Blog</a>
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      Menu
+      <i class="fa fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="/">🏠 Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/posts">✏️ Posts</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/categories">📔 Categories</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/tags">🏷 Tags</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/authors">✍🏻 Authors</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+  <!-- Page Header -->
+
+<header class="masthead" style="background-image: url('/img/data-discovery-platform-02/cloud-bg.jpg')">
+  
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-9 col-md-9 mx-auto">
+          <div class="post-heading">
+            <h1 class="post-title">데이터 디스커버리 플랫폼 도입기 - 2편. GKE에 Datahub 구축하기</h1>
+            
+            <h2 class="subheading">feat. 메타데이터 플랫폼이 실제로 배포되기까지</h2>
+            
+            <div class="post-meta">
+              
+              
+                
+                <span class="author"><a href="/authors#디니"><img src="/assets/authors/dini.jpeg">디니</a></span>
+              
+                <br>
+                <span class="date">2022-03-16</span>
+                <br>
+                <span class="category"><a href="/categories#">data</a></span> 
+                <br>
+              
+                <span class="tag"><a href="/tags#data">data</a></span>
+              
+                <span class="tag"><a href="/tags#metadata platform">metadata platform</a></span>
+              
+                <span class="tag"><a href="/tags#data engineering">data engineering</a></span>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="toc toc-hidden" id="toc">
+    </div>
+    <div class="row">
+      <div class="col-lg-9 col-md-9 mx-auto">
+        <div class="post-content">
+        <p>안녕하세요, 데이터 플랫폼 팀의 디니입니다.</p>
+
+<p>이번 글은 ‘쏘카의 데이터 디스커버리 플랫폼 도입기’ 3부작 중 2편입니다. <a href="https://tech.socarcorp.kr/data/2022/02/25/data-discovery-platform-01.html">1편 : 데이터 디스커버리 플랫폼 도입기 - 데이터 디스커버리란?</a>에서는 데이터 디스커버리의 개념과 쏘카가 데이터 디스커버리 플랫폼으로 Datahub를 선택하게 된 의사결정 과정을 소개했습니다.</p>
+
+<p>2편에서는 Datahub를 GKE 환경에 배포한 과정과 데이터 디스커버리 플랫폼에 필요한 추가 기능들을 어떻게 구현하였는지에 대해 소개하려고 합니다. 다음과 같은 분들이 읽으시면 도움이 되리라고 생각합니다.</p>
+
+<ul>
+  <li>메타데이터 플랫폼 도입에 관심이 있는 개발자</li>
+  <li>클라우드 환경에 메타데이터 플랫폼 배포하는 과정에 관심이 있는 사람</li>
+  <li>쏘카 데이터 플랫폼팀 업무에 관심이 있는 사람</li>
+</ul>
+
+<p>목차는 다음과 같습니다.</p>
+
+<ol>
+  <li>
+    <p><a href="#problem-definition">문제 정의</a></p>
+
+    <p>1.1. 무엇을 해야 하나요?</p>
+
+    <p>1.2. 고려해야 할 부분</p>
+  </li>
+  <li>
+    <p><a href="#datahub-on-gke">Datahub on GKE 배포 과정</a></p>
+
+    <p>2.1. GKE 배포</p>
+
+    <p>2.2. CloudSQL DB migration</p>
+
+    <p>2.3. Keycloak 인증</p>
+  </li>
+  <li>
+    <p><a href="#metadata-ingestion">메타데이터 주입 과정</a></p>
+
+    <p>3.1. 메타데이터 주입 방법</p>
+
+    <p>3.2. 메타데이터 주입 정책 결정</p>
+
+    <p>3.3. 메타데이터 주입 과정 자동화 (with Airflow)</p>
+
+    <p>3.4. 메타데이터 추출 과정의 권한 축소</p>
+  </li>
+  <li>
+    <p><a href="#wrap-up">마무리</a></p>
+  </li>
+</ol>
+
+<h2 id="1-문제-정의">1. 문제 정의<a name="problem-definition"></a></h2>
+
+<h3 id="11-무엇을-해야-하나요">1.1. 무엇을 해야 하나요?</h3>
+
+<ul>
+  <li>Datahub를 사내 클라우드 환경에 안정적으로 배포합니다.</li>
+  <li>Datahub에 메타데이터 주입 파이프라인을 자동화합니다.</li>
+</ul>
+
+<h3 id="12-고려해야-할-부분">1.2. 고려해야 할 부분</h3>
+
+<ul>
+  <li>쏘카는 데이터 소스로 MySQL(운영)과 BigQuery(분석)를 사용하고 있습니다. 두 데이터 소스의 특성을 고려한 메타데이터 주입 파이프라인이 필요합니다.</li>
+  <li>플랫폼 상의 데이터가 유실 위험 없이 안전하게 저장되어야 합니다.</li>
+  <li>인증된 사용자만 플랫폼에 접속할 수 있어야 합니다.</li>
+  <li>CI/CD 파이프라인을 이용한 배포 자동화가 되어야 합니다.</li>
+</ul>
+
+<h2 id="2-datahub-on-gke-배포-과정-">2. Datahub on GKE 배포 과정 <a name="datahub-on-gke"></a></h2>
+
+<p>먼저 Datahub를 어떻게 사내 클라우드 환경에 안정적으로 배포했는지 알아보겠습니다.</p>
+
+<blockquote>
+  <p>Datahub는 오픈소스 기반으로 매우 빠르게 업데이트되고 있습니다. 해당 배포는 6개월 전에 이루어진 것으로, 현재 Datahub 배포 및 metadata ingestion 과정과는 다소 차이가 있을 수 있습니다. 이 점 양해 부탁드립니다.</p>
+</blockquote>
+
+<h3 id="21-gke-배포">2.1. GKE 배포</h3>
+
+<p>쏘카 데이터 엔지니어링 그룹의 쿠버네티스 환경은 GCP(Google Cloud Platform)의 GKE(Google Kuberentes Engine)를 사용하고 있습니다. 또한 대부분의 애플리케이션을 <a href="https://helm.sh/">Helm</a> Chart를 이용하여 클러스터에 배포하고 있습니다. Datahub 역시 공식 <a href="https://github.com/acryldata/datahub-helm">Helm Chart</a>를 제공하고 있으며, 총 2벌의 차트로 구성되어 있습니다. Datahub Helm Chart 구성은 다음과 같습니다.</p>
+
+<ul>
+  <li><code class="highlighter-rouge">datahub</code> : Datahub 애플리케이션에 필요한 요소들 설치 (Frontend, GMS 등)</li>
+  <li><code class="highlighter-rouge">prerequisites</code> : Datahub에 필요한 사전 요소들을 설치 (MySQL, Kafka, ElasticSearch, Neo4j 등)</li>
+</ul>
+
+<p><img src="/img/data-discovery-platform-02/datahub-helm-chart-tree.png" alt="datahub-helm-chart-tree" /> <em>Datahub 차트 구조</em></p>
+
+<p>공식 Datahub Helm Chart의 Ingress를 쏘카의 환경에 맞게 수정한 뒤 배포하였습니다. 또한 원활한 테스트를 위해 개발 클러스터, 운영 클러스터에 각각 배포하였습니다.</p>
+
+<p><img src="/img/data-discovery-platform-02/datahub-pods.png" alt="datahub-pods" /> <em>Datahub 최초 배포 시 Pod 상태</em></p>
+
+<h3 id="22-cloudsql-db-migration">2.2. CloudSQL DB migration</h3>
+
+<p>Datahub는 자체 DB(storage)로 MySQL Pod을 사용합니다. 물론 PVC(PersistentVolumeClaim)이 붙어있긴 했지만, 앞으로 Datahub 애플리케이션 상에서 쌓일 데이터가 점점 늘어날 것이며 데이터의 내용 또한 중요하기 때문에, 앞으로의 확장성과 만에 하나라도 있을 유실 가능성을 방지하는 방향으로 아키텍처를 고민했습니다. 결국에는 MySQL Pod 대신 외부 데이터베이스로 GCP CloudSQL Instance를 연결하기로 결정했습니다.</p>
+
+<p>구체적으로는 다음 과정으로 진행했습니다.</p>
+
+<ul>
+  <li>CloudSQL DB (혹은 새로운 Instance) 생성</li>
+  <li>(Optional) 사용자 생성</li>
+  <li>Datahub가 CloudSQL 가리키게 하기</li>
+</ul>
+
+<p>기존 Datahub의 Helm Chart는 SQL Host로 MySQL Pod을 가리키고 있습니다. 위에서 만든 CloudSQL DB를 가리키게 하기 위해서 Helm Chart를 다음과 같이 수정합니다.</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># charts/datahub/values.yaml</span>
+<span class="na">sql</span><span class="pi">:</span>
+    <span class="na">datasource</span><span class="pi">:</span>
+      <span class="na">host</span><span class="pi">:</span> <span class="s">&lt;cloudsql_host_address&gt;:&lt;port&gt;</span>
+      <span class="na">url</span><span class="pi">:</span> <span class="s2">"</span><span class="s">jdbc:mysql://&lt;cloudsql_host_address&gt;:&lt;port&gt;/&lt;cloudsql_db_name&gt;?verifyServerCertificate=false&amp;useSSL=true&amp;useUnicode=yes&amp;characterEncoding=UTF-8&amp;enabledTLSProtocols=TLSv1.2"</span>
+      <span class="na">hostForMysqlClient</span><span class="pi">:</span> <span class="s">&lt;cloudsql_host_address&gt;</span>
+      <span class="na">port</span><span class="pi">:</span> <span class="s">&lt;port&gt;</span>
+      <span class="na">driver</span><span class="pi">:</span> <span class="s2">"</span><span class="s">com.mysql.jdbc.Driver"</span>
+      <span class="na">username</span><span class="pi">:</span> <span class="s">&lt;username&gt;</span>
+      <span class="na">password</span><span class="pi">:</span>
+        <span class="na">secretRef</span><span class="pi">:</span> <span class="s">&lt;별도로 생성한 secret 이름&gt;</span>
+        <span class="na">secretKey</span><span class="pi">:</span> <span class="s">&lt;별도로 생성한 secret 키&gt;</span>
+</code></pre></div></div>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># charts/datahub/subcharts/datahub-gms/values.yaml</span>
+
+<span class="na">sql</span><span class="pi">:</span>
+  <span class="na">datasource</span><span class="pi">:</span>
+    <span class="na">host</span><span class="pi">:</span> <span class="s">&lt;cloudsql_host_address&gt;:&lt;port&gt;</span>
+    <span class="na">url</span><span class="pi">:</span> <span class="s2">"</span><span class="s">jdbc:mysql://&lt;cloudsql_host_address&gt;:&lt;port&gt;/datahub?verifyServerCertificate=false&amp;useSSL=true"</span>
+    <span class="na">driver</span><span class="pi">:</span> <span class="s2">"</span><span class="s">com.mysql.jdbc.Driver"</span>
+    <span class="na">username</span><span class="pi">:</span> <span class="s">&lt;username&gt;</span>
+    <span class="na">password</span><span class="pi">:</span>
+      <span class="na">secretRef</span><span class="pi">:</span> <span class="s">&lt;별도로 생성한 secret 이름&gt;</span>
+      <span class="na">secretKey</span><span class="pi">:</span> <span class="s">&lt;별도로 생성한 secret 키&gt;</span>
+</code></pre></div></div>
+
+<p>실제로는 민감한 정보들을 Helm Chart에 직접 명시하지 않고 다음처럼 별도의 Secret으로 생성하여 참조하였습니다.</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="na">sql</span><span class="pi">:</span>
+    <span class="na">datasource</span><span class="pi">:</span>
+      <span class="na">host</span><span class="pi">:</span>
+        <span class="na">secretRef</span><span class="pi">:</span> <span class="s">mysql-secrets</span>
+        <span class="na">secretKey</span><span class="pi">:</span> <span class="s">mysql-host</span>
+      <span class="na">url</span><span class="pi">:</span>
+        <span class="na">secretRef</span><span class="pi">:</span> <span class="s">mysql-secrets</span>
+        <span class="na">secretKey</span><span class="pi">:</span> <span class="s">mysql-url</span>
+      <span class="na">hostForMysqlClient</span><span class="pi">:</span>
+        <span class="na">secretRef</span><span class="pi">:</span> <span class="s">mysql-secrets</span>
+        <span class="na">secretKey</span><span class="pi">:</span> <span class="s">mysql-hostForMysqlClient</span>
+      <span class="na">port</span><span class="pi">:</span> <span class="s2">"</span><span class="s">3306"</span>
+      <span class="na">driver</span><span class="pi">:</span> <span class="s2">"</span><span class="s">com.mysql.jdbc.Driver"</span>
+      <span class="na">username</span><span class="pi">:</span>
+        <span class="na">secretRef</span><span class="pi">:</span> <span class="s">mysql-secrets</span>
+        <span class="na">secretKey</span><span class="pi">:</span> <span class="s">mysql-username</span>
+      <span class="na">password</span><span class="pi">:</span>
+        <span class="na">secretRef</span><span class="pi">:</span> <span class="s">mysql-secrets</span>
+        <span class="na">secretKey</span><span class="pi">:</span> <span class="s">mysql-password</span>
+</code></pre></div></div>
+
+<p>Secret yaml 파일은 다음과 같습니다.</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">apiVersion</span><span class="pi">:</span> <span class="s">v1</span>
+<span class="na">kind</span><span class="pi">:</span> <span class="s">Secret</span>
+<span class="na">metadata</span><span class="pi">:</span>
+  <span class="na">name</span><span class="pi">:</span> <span class="s">mysql-secrets</span>
+  <span class="na">namespace</span><span class="pi">:</span> <span class="s">datahub</span>
+<span class="na">type</span><span class="pi">:</span> <span class="s">Opaque</span>
+<span class="na">data</span><span class="pi">:</span>
+  <span class="na">mysql-host</span><span class="pi">:</span> <span class="s">&lt;data&gt;</span>
+  <span class="na">mysql-hostForMysqlClient</span><span class="pi">:</span> <span class="s">&lt;data&gt;</span>
+  <span class="na">mysql-password</span><span class="pi">:</span> <span class="s">&lt;data&gt;</span>
+  <span class="na">mysql-root-password</span><span class="pi">:</span> <span class="s">&lt;data&gt;</span>
+  <span class="na">mysql-url</span><span class="pi">:</span> <span class="s">&lt;data&gt;</span>
+  <span class="na">mysql-username</span><span class="pi">:</span> <span class="s">&lt;data&gt;</span>
+
+</code></pre></div></div>
+
+<p>최종적으로 정상 작동을 테스트합니다. 예를 들어, Datahub UI 상에서 데이터를 수정한 뒤 해당 CloudSQL DB에서 동일한 데이터가 업데이트되는지 확인합니다.</p>
+
+<p><img src="/img/data-discovery-platform-02/datahub-create-policy.png" alt="create-test-policy" /><em>test_policy라는 정책을 생성해 보았습니다.</em></p>
+
+<p><img src="/img/data-discovery-platform-02/datahub-check-data.png" alt="check-data" /><em>CloudSQL DB에서 동일한 데이터가 확인됩니다.</em></p>
+
+<h3 id="23-keycloak-인증">2.3. Keycloak 인증</h3>
+
+<p>Datahub이 배포되고 나면, 인증된 사용자만 애플리케이션에 접속되어야 합니다. Datahub는 Okta, Keycloak 등 여러 SSO를 지원합니다. 쏘카에서 이미 Keycloak을 이용하고 있기 때문에 Keycloak을 사용하기로 결정했습니다.</p>
+
+<p>Datahub에 Keycloak 로그인을 적용하는 방법은 간단했습니다. Helm Chart의 <code class="highlighter-rouge">values.yaml</code>파일에서 frontend 부분에 몇 줄의 설정만 넣어주면 가능했습니다.</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">datahub-frontend</span><span class="pi">:</span>
+  <span class="s">...</span>
+  <span class="s">extraEnvs</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">AUTH_OIDC_ENABLED</span>
+      <span class="na">value</span><span class="pi">:</span> <span class="s2">"</span><span class="s">true"</span>
+    <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">AUTH_OIDC_CLIENT_ID</span>
+      <span class="na">value</span><span class="pi">:</span> <span class="s">your-client-id</span>
+    <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">AUTH_OIDC_CLIENT_SECRET</span>
+      <span class="na">value</span><span class="pi">:</span> <span class="s">your-client-secret</span>
+    <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">AUTH_OIDC_DISCOVERY_URI</span>
+      <span class="na">value</span><span class="pi">:</span> <span class="s">your-provider-discovery-url</span>  
+    <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">AUTH_OIDC_BASE_URL</span>
+      <span class="na">value</span><span class="pi">:</span> <span class="s">your-datahub-url</span>  
+</code></pre></div></div>
+
+<p>또한 다음과 같은 다양한 설정을 쉽게 정의할 수 있었습니다.</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># User and groups provisioning</span>
+
+<span class="c1"># OIDC 로그인 시, Datahub 상에 유저 없으면 자동 생성 여부</span>
+<span class="s">AUTH_OIDC_JIT_PROVISIONING_ENABLED=true</span> 
+
+<span class="c1"># OIDC 로그인 시, Datahub 상에 유저가 이미 존재해야 로그인 성공하는지 여부</span>
+<span class="s">AUTH_OIDC_PRE_PROVISIONING_REQUIRED=false</span>
+
+<span class="c1"># OIDC의 그룹 정보를 Datahub에 연동</span>
+<span class="s">AUTH_OIDC_EXTRACT_GROUPS_ENABLED=true</span> 
+<span class="s">AUTH_OIDC_GROUPS_CLAIM=&lt;your-groups-claim-name&gt;</span>
+</code></pre></div></div>
+
+<h2 id="3-메타데이터-주입-과정--">3. 메타데이터 주입 과정  <a name="metadata-ingestion"></a></h2>
+
+<p>이렇게 Datahub를 클라우드 상에 안정적으로 구축했습니다. 하지만 아직 데이터 디스커버리 플랫폼으로서의 기능을 하지는 못합니다. 데이터 소스에서 실제로 메타데이터를 가져와서 플랫폼에서 보여줘야 하고, 이렇게 메타데이터를 가져오는 과정(=metadata ingestion)이 자동화되어야 합니다.</p>
+
+<h3 id="31-메타데이터-주입-방법">3.1. 메타데이터 주입 방법</h3>
+
+<p>Datahub에서는 <code class="highlighter-rouge">recipe</code>라고 불리는 yaml 파일을 <code class="highlighter-rouge">datahub CLI</code>로 실행하여 메타데이터를 주입합니다. 다음은 BigQuery에서 메타데이터를 가져오는 recipe 파일의 기본 예시입니다.</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">source</span><span class="pi">:</span>
+ <span class="na">type</span><span class="pi">:</span> <span class="s">bigquery</span>
+ <span class="na">config</span><span class="pi">:</span>
+   <span class="na">project_id</span><span class="pi">:</span> <span class="s">&lt;project_id&gt;</span>
+   <span class="na">options</span><span class="pi">:</span>
+     <span class="na">credentials_path </span><span class="pi">:</span> <span class="s">${GOOGLE_APPLICATION_CREDENTIALS}</span>
+
+<span class="na">sink</span><span class="pi">:</span>
+ <span class="na">type</span><span class="pi">:</span> <span class="s2">"</span><span class="s">datahub-rest"</span>
+ <span class="na">config</span><span class="pi">:</span>
+   <span class="na">server</span><span class="pi">:</span> <span class="s">${DATAHUB_GMS_ADDRESS}</span> <span class="c1"># datahub 애플리케이션의 backend 서버</span>
+
+</code></pre></div></div>
+
+<ul>
+  <li><code class="highlighter-rouge">source</code> : 데이터 소스, 즉 “데이터를 어디서 가져오는지” 정의합니다.</li>
+  <li><code class="highlighter-rouge">sink</code> : “데이터를 어디에 저장하는지” 를 정의합니다. Datahub 어플리케이션에 올릴 수도 있고, 콘솔에 출력할 수도 있고, 파일로 저장할 수도 있습니다.</li>
+</ul>
+
+<p>이 형식을 바탕으로 데이터 소스를 바꿀 수도 있고 여러 설정을 적용할 수도 있습니다. 파일을 실행할 때는 <code class="highlighter-rouge">datahub ingestion -c "&lt;파일_이름&gt;"</code>으로 실행합니다.</p>
+
+<h3 id="32-메타데이터-주입-정책-결정">3.2. 메타데이터 주입 정책 결정</h3>
+
+<p>먼저 “어떤 데이터 소스”에서 메타데이터를 “얼마나 자주” 가져올 건지 결정해야 합니다.</p>
+
+<p>쏘카에서는 주요 데이터 소스로 MySQL Aurora(운영)와 BigQuery(분석)를 사용하고 있습니다. 하지만 이 데이터 소스의 모든 테이블을 가져올 필요는 없었습니다. 예를 들면 DB에 따라서 개인 정보 관련 민감한 데이터들도 있고, 분석 DB 쪽에는 굳이 전사에 공유될 필요는 없는 임시 테이블들도 다수 존재했습니다. 따라서 각 데이터 소스 별 DB의 목록을 사전에 정하고, 해당 DB의 메타데이터를 주입하기로 했습니다.</p>
+
+<p>참고로, 다음과 같이 Table 혹은 DB의 이름을 <code class="highlighter-rouge">regex pattern</code>으로 감지하여 선택적 메타데이터 주입이 가능합니다. (물론 데이터 소스마다 방법이 약간 다를 수 있습니다 - 예시는 BigQuery입니다.)</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">source</span><span class="pi">:</span>
+  <span class="na">type</span><span class="pi">:</span> <span class="s">bigquery</span>
+  <span class="na">config</span><span class="pi">:</span>
+    <span class="na">schema_pattern</span><span class="pi">:</span>
+      <span class="na">allow</span><span class="pi">:</span> <span class="c1"># 허용하는 dataset 패턴</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">my_dataset"</span>
+    <span class="na">table_pattern</span><span class="pi">:</span>
+      <span class="na">allow</span><span class="pi">:</span> <span class="c1"># 허용하는 table 패턴</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">^my_project.my_dataset.my_good_table</span><span class="err">\</span><span class="s">$"</span>
+      <span class="na">deny</span><span class="pi">:</span> <span class="c1"># 허용하지 않는 table 패턴</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">^my_project.my_dataset.my_bad_table</span><span class="err">\</span><span class="s">$"</span>
+    <span class="na">include_views</span><span class="pi">:</span> <span class="no">false</span>
+</code></pre></div></div>
+
+<p>그러면 얼마나 자주 가져와야 할까요? 매일매일 필요에 따라 테이블이 생겨났다가 사라지기도 하고, 테이블의 칼럼이 추가되거나 변경되는 일도 있을 것입니다. 하지만 이런 변화들을 꼭 실시간으로 봐야 할 필요는 없다고 생각했습니다. 하루에 한 번 정도 업데이트한다면, 리소스도 효율화하고 사내 데이터 현황을 파악하는 데 충분하다고 결정을 내렸습니다.</p>
+
+<h3 id="33-메타데이터-주입-과정-자동화-with-airflow">3.3. 메타데이터 주입 과정 자동화 (with Airflow)</h3>
+
+<p>이렇게 하루에 한 번 메타데이터 주입을 결정하고 난 뒤, 메타데이터 주입을 어떻게 자동화했는지 알아보겠습니다.</p>
+
+<p>하루에 한 번 Batch 단위의 주입이라면 <code class="highlighter-rouge">Airflow DAG</code>로 간단하게 구현할 수 있었습니다. 데이터 소스에서 메타데이터를 주입하는 Task를 만들고, 하루 한 번만 돌려주면 됐습니다. 그런데 이 작업에는 <code class="highlighter-rouge">datahub</code> 패키지를 설치해야 하는 의존성이 필요합니다.</p>
+
+<p>데이터 플랫폼 팀에서는 이런 경우 Airflow에 직접 의존성을 설치하지 않고, 필요한 의존성을 담은 Docker Image를 실행하는 <code class="highlighter-rouge">KubernetesPodOperator</code>를 만들어 해결하고 있습니다. 이렇게 하면 DAG 가 아무리 많아도 DAG 간 사용하는 라이브러리나 환경의 의존성 충돌을 방지할 수 있습니다.</p>
+
+<p><img src="/img/data-discovery-platform-02/metadata-ingestion-flow.png" alt="metadata-ingestion-flow" /> <em>메타데이터 주입 흐름</em></p>
+
+<p>작성한 Dockerfile은 다음처럼 간단합니다.</p>
+
+<div class="language-dockerfile highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># datahub-ingestion 이미지를 이용합니다. </span>
+<span class="k">FROM</span><span class="s"> linkedin/datahub-ingestion:v0.8.20 </span>
+
+<span class="c"># 미리 정의한 recipe 파일을 복사해 가져옵니다. </span>
+<span class="k">COPY</span><span class="s"> datahub-ingestion-bigquery /datahub-ingestion-bigquery </span>
+
+<span class="c"># datahub CLI를 이용하여 recipe를 실행합니다. </span>
+<span class="k">CMD</span><span class="s"> ["ingest", "-c", "/datahub-ingestion-bigquery/recipe_bigquery.yaml"] </span>
+</code></pre></div></div>
+
+<p>datahub-ingestion-bigquery 안에는 recipe 파일이 들어 있습니다.</p>
+
+<p><img src="/img/data-discovery-platform-02/datahub-ingestion-bigquery.png" alt="datahub-ingestion-bigquery" /> <em>datahub-ingestion-bigquery 디렉터리 구조</em></p>
+
+<h3 id="34-메타데이터-추출-과정의-권한-축소">3.4. 메타데이터 추출 과정의 권한 축소</h3>
+
+<h4 id="어떻게-하면-최소한의-권한으로-메타데이터를-추출할-수-있을까">어떻게 하면 최소한의 권한으로 메타데이터를 추출할 수 있을까?</h4>
+
+<p>Datahub는 메타데이터를 끌어오는 모든 대상 DB에 SELECT 권한을 허용해야 메타데이터 추출이 가능하도록 만들어져 있습니다. 예를 들면 MySQL DB에 3000개의 DB가 있다고 가정할 때, Datahub의 서비스 계정은 3000개의 DB에 대해 모두 권한이 있어야 하는 것입니다.</p>
+
+<p>하지만 이 권한을 단독 솔루션에 부여하기에는 보안상 너무 무겁다고 판단했습니다. 그래서 어떻게 하면 최소한의 DB에 접근하면서 같은 기능을 구현할 수 있을지가 큰 고민거리였습니다.</p>
+
+<h4 id="information-schema에서-직접-뽑아내-보자">Information Schema에서 직접 뽑아내 보자</h4>
+
+<p>당시 데이터 엔지니어링 팀 팀장(이시고 지금은 그룹장이신) 토마스가 아이디어를 주셨습니다.</p>
+
+<p><img src="/img/data-discovery-platform-02/file-based-ingestion-flow.png" alt="file-based-ingestion-flow" /> <em>file을 이용하여 메타데이터 상태를 저장하는 흐름</em></p>
+
+<p>Datahub에는 데이터 소스의 메타데이터를 특정 형태의 <code class="highlighter-rouge">json file</code>로 변환하여 저장하는 기능이 있습니다. 또한 같은 형식의 json file을 기반으로 메타데이터를 Datahub 플랫폼에 주입하는 것도 가능했습니다. 그리고 해당 파일 형식을 확인해 본 결과 <code class="highlighter-rouge">information_schema</code>에서 대부분(사실 모두) 가져올 수 있는 정보였습니다.</p>
+
+<p>그러면 <code class="highlighter-rouge">information_schema</code>에서 정보를 가져와서 file 형식을 맞춰 만들어주는 기능을 개발하고, 그 file을 기반으로 Datahub에 메타데이터를 주입하면 되지 않을까? 하는 생각이 들었습니다.</p>
+
+<p><img src="/img/data-discovery-platform-02/metadata-ingestion-as-is.png" alt="metadata-ingestion-as-is" /><em>metadata ingestion AS-IS 흐름</em></p>
+
+<p><img src="/img/data-discovery-platform-02/metadata-ingestion-to-be.png" alt="metadata-ingestion-to-be" /><em>metadata ingestion TO-BE 흐름</em></p>
+
+<p>그래서 앞부분은 python script로 개발하고, file을 기반으로 메타데이터를 주입하는 부분은 기존 Datahub 프레임워크를 그대로 이용했습니다.</p>
+
+<div class="language-dockerfile highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 파이썬 이미지를 이용합니다. </span>
+<span class="k">FROM</span><span class="s"> python:3.8 </span>
+
+<span class="k">COPY</span><span class="s"> datahub-ingestion-mysql /datahub-ingestion-mysql </span>
+
+<span class="k">WORKDIR</span><span class="s"> /datahub-ingestion-mysql/src</span>
+
+<span class="k">USER</span><span class="s"> root</span>
+
+<span class="c"># datahub를 포함한 필요한 의존성을 설치합니다. </span>
+<span class="k">RUN </span>pip <span class="nb">install</span> <span class="nt">--no-cache-dir</span> mysql-connector-python<span class="o">==</span>8.0.27 <span class="o">&amp;&amp;</span> pip <span class="nb">install</span> <span class="nt">--no-cache-dir</span> <span class="nt">--upgrade</span> acryl-datahub<span class="o">==</span>0.8.20 
+
+<span class="c"># information_schema에서 메타데이터를 추출하는 python script를 실행하고, datahub CLI로 Datahub 플랫폼에 주입합니다.</span>
+<span class="k">CMD</span><span class="s"> python main.py ; datahub ingest -c recipe_mysql_prod.yaml </span>
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">main.py</code>의 내용은 다음과 같습니다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># main.py
+</span>	
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">from</span> <span class="nn">get_info_from_query</span> <span class="kn">import</span> <span class="n">get_json_result</span>
+<span class="kn">from</span> <span class="nn">make_and_execute_query</span> <span class="kn">import</span> <span class="n">execute_query</span>
+<span class="kn">from</span> <span class="nn">mysql.connector</span> <span class="kn">import</span> <span class="n">Error</span><span class="p">,</span> <span class="n">connection</span><span class="p">,</span> <span class="n">errorcode</span>
+<span class="kn">from</span> <span class="nn">templates</span> <span class="kn">import</span> <span class="n">json_table_template</span>
+
+<span class="n">user</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">"USER"</span><span class="p">)</span>
+<span class="n">password</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">"PASSWORD"</span><span class="p">)</span>
+<span class="n">host</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">"HOST"</span><span class="p">)</span>
+<span class="n">pattern_conditions</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">"schema_pattern_allowed"</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">"PATTERN"</span><span class="p">)),</span>
+    <span class="s">"schema_pattern_denied"</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s">"table_pattern_allowed"</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s">"table_pattern_denied"</span><span class="p">:</span> <span class="p">[],</span>
+<span class="p">}</span>
+
+
+<span class="k">def</span> <span class="nf">get_metadata_from_info_schema</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">password</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">host</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">pattern_conditions</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">cnx</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">MySQLConnection</span><span class="p">(</span>
+            <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">,</span>
+            <span class="n">password</span><span class="o">=</span><span class="n">password</span><span class="p">,</span>
+            <span class="n">host</span><span class="o">=</span><span class="n">host</span><span class="p">,</span>
+            <span class="n">database</span><span class="o">=</span><span class="s">"information_schema"</span><span class="p">,</span>
+            <span class="n">port</span><span class="o">=</span><span class="s">"3306"</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">cursor</span> <span class="o">=</span> <span class="n">cnx</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+
+        <span class="n">table_and_column_result</span><span class="p">,</span> <span class="n">constraint_result</span> <span class="o">=</span> <span class="n">execute_query</span><span class="p">(</span>
+            <span class="n">cursor</span><span class="o">=</span><span class="n">cursor</span><span class="p">,</span> <span class="n">pattern_conditions</span><span class="o">=</span><span class="n">pattern_conditions</span>
+        <span class="p">)</span>
+        <span class="n">json_result</span> <span class="o">=</span> <span class="n">get_json_result</span><span class="p">(</span>
+            <span class="n">table_and_column_result</span><span class="p">,</span>
+            <span class="n">constraint_result</span><span class="p">,</span>
+            <span class="n">json_table_template</span><span class="o">=</span><span class="n">json_table_template</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">"metadata.json"</span><span class="p">,</span> <span class="s">"w+"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json_result</span><span class="p">)</span>
+        <span class="n">cursor</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="n">cnx</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="k">except</span> <span class="n">Error</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">err</span><span class="o">.</span><span class="n">errno</span> <span class="o">==</span> <span class="n">errorcode</span><span class="o">.</span><span class="n">ER_ACCESS_DENIED_ERROR</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">"Something is wrong with your user name or password"</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">err</span><span class="o">.</span><span class="n">errno</span> <span class="o">==</span> <span class="n">errorcode</span><span class="o">.</span><span class="n">ER_BAD_DB_ERROR</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">"Database does not exist"</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
+    <span class="n">get_metadata_from_info_schema</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">pattern_conditions</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>information_schema에서는 Table 정보, Column 정보, Constraint (Primary Key 등) 정보 등 여러 가지 정보를 추출합니다. 예를 들어 Column 정보는 다음과 같은 쿼리로 추출합니다. 이렇게 실행한 쿼리 결과를 Datahub에서 이용하는 json 형식에 맞게 바꿔줍니다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># python script 중 information_schema에서 column info를 뽑아내는 부분
+</span>
+<span class="k">def</span> <span class="nf">get_column_info_query</span><span class="p">(</span><span class="n">pattern_clause</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">column_info_query</span> <span class="o">=</span> <span class="n">f</span><span class="s">"""
+        SELECT Concat(table_schema, '.', table_name) AS schemaName,
+               column_name,
+               column_comment,
+               data_type,
+               column_type,
+               is_nullable,
+               column_key
+        FROM   information_schema.columns 
+        {pattern_clause}
+        ORDER BY schemaname,
+                 ordinal_position; 
+        """</span>
+    <span class="k">return</span> <span class="n">column_info_query</span>
+ 
+</code></pre></div></div>
+
+<h4 id="최종-테스트">최종 테스트</h4>
+
+<p>이렇게 기능을 구현한 뒤 프로젝트에 같이 참여하시고 계시는 DBA 제이든과 직접 테스트를 해보았습니다. 마지막으로 MySQL 계정 권한에 변경이 필요했습니다.</p>
+
+<ul>
+  <li>
+    <p>AS-IS : 모든 DB에 대해 SELECT 권한</p>
+  </li>
+  <li>
+    <p>TO-BE : 모든 DB에 대해 REFERENCE 권한</p>
+
+    <div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">CREATE</span> <span class="k">USER</span> <span class="s1">'&lt;username&gt;'</span><span class="o">@</span><span class="s1">'XX.XX.%'</span> <span class="n">IDENTIFIED</span> <span class="k">BY</span> <span class="s1">'&lt;password&gt;'</span><span class="p">;</span>
+<span class="k">GRANT</span> <span class="k">References</span> <span class="k">ON</span> <span class="o">*</span><span class="p">.</span><span class="o">*</span> <span class="k">TO</span> <span class="s1">'&lt;username&gt;'</span><span class="o">@</span><span class="s1">'XX.XX.%'</span><span class="p">;</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p>결과적으로 원하는 DB의 모든 메타데이터를 가져와서 Datahub에 주입하는 데에 성공했습니다.</p>
+
+<p><img src="/img/data-discovery-platform-02/datahub-test-success.png" alt="datahub-test-success" /> <em>기능 구현 내용</em></p>
+
+<p><img src="/img/data-discovery-platform-02/datahub-test-success-3.png" alt="datahub-test-success" /> <em>축소된 권한으로 모든 정보를 가져올 수 있습니다.</em></p>
+
+<p>이 기능 개발로 쏘카의 DB에 접근하는 Datahub 계정의 권한이 크게 축소되어 내부 정보보호 규칙에 맞게 보안을 개선할 수 있습니다. 그리고 Datahub 최종 도입 결정에 긍정적인 영향을 미쳤습니다.</p>
+
+<h2 id="4-마무리--">4. 마무리  <a name="wrap-up"></a></h2>
+
+<p>이러한 여러 과정 끝에, Datahub가 쏘카에 도입될 준비를 마쳤습니다. 현재는 이렇게 테스트 배포를 마치고 사내 공개를 위한 준비 작업을 하고 있습니다. 이 자리를 빌려 Datahub 도입에 힘써주신 모든 분들에게 감사드립니다.</p>
+
+<p>입사하고 맡은 첫 프로젝트였는데 쏘카 데이터 플랫폼팀의 전반적인 인프라와 배포 흐름에 대해 알 수 있는 좋은 기회였습니다. 여담으로, 구현하면서 슬랙에서 질답을 너무 많이 한 나머지 커뮤니티 기여자로 Datahub 팀과 원격 인터뷰를 하는 기회도 얻었습니다 (!)</p>
+
+<p><img src="/img/data-discovery-platform-02/datahub-swag-all.jpeg" alt="datahub-swag-all" /> <em>인터뷰 기념품으로 준 Datahub 기념품 세트</em></p>
+
+<p><img src="/img/data-discovery-platform-02/datahub-swag-thanks.jpeg" alt="datahub-swag-thanks" /><em>기념품과 함께 온 감사 메시지</em></p>
+
+<p>마지막으로 Datahub를 도입하려는 분들에게 팁을 드리자면 다음과 같습니다.</p>
+
+<p><strong>데이터 소스 특성에 따라서 메타데이터 파이프라인 구현 방법 정하기</strong></p>
+
+<ul>
+  <li>데이터 소스와 업데이트 주기를 결정한 뒤 구현 방법을 결정하기를 추천합니다.</li>
+  <li>하루 한 번 정도의 Batch 작업이라면 <code class="highlighter-rouge">Airflow DAG</code> 로도 충분합니다.</li>
+  <li>최근에는 Datahub UI 상에서 Ingestion을 설정할 수 있는 기능도 나왔습니다. 장단점을 비교해 보고 결정하시면 좋을 것 같습니다.</li>
+</ul>
+
+<p><strong>DB 특성에 따라서 메타데이터 추출 로직 조정하기</strong></p>
+
+<ul>
+  <li>권한에 민감한 DB라면 information_schema에서 바로 메타데이터를 뽑는 로직을 구현하는 방법이 있습니다.</li>
+</ul>
+
+<p><strong>Datahub 공식 Slack Workspace에 참여하기</strong></p>
+
+<ul>
+  <li>Ingestion, Deployment 등 다양한 주제별로 질답을 나눌 수 있는 채널이 있습니다.</li>
+  <li>거의 모든 질문에 빠르게 답이 달릴 정도로 커뮤니티가 활성화되어 있습니다. 적극적으로 참여하시면서 도움을 얻기를 추천드립니다.</li>
+</ul>
+
+<p>다음 편에서는 실제로 데이터 디스커버리 플랫폼이 도입된 후의 운영 방식과 효과에 대해서 살펴보겠습니다.</p>
+
+<p>긴 글 읽어주셔서 감사합니다.</p>
+
+<blockquote>
+  <p>데이터 플랫폼팀이 하는 업무가 궁금하시다면 <a href="https://tech.socarcorp.kr/data/2021/03/24/what-socar-data-engineering-team-does.html">데이터 엔지니어링 팀이 하는 일</a>과 <a href="https://www.notion.so/socarcorp/d458b6b77a2243fb873d1ac800c321f7?p=7c55b58735794368876dfb58acae96c5">쏘카 데이터 플랫폼 엔지니어 채용공고</a>를, 데이터 플랫폼 팀의 신입 온보딩 과정이 궁금하시다면 <a href="https://tech.socarcorp.kr/data/2021/12/28/data-engineering-team-onboarding.html">쏘카 신입 데이터 엔지니어 디니의 4개월 회고</a>를 보시기를 추천드립니다.</p>
+</blockquote>
+
+
+        </div>
+        
+        <div class="author-card">
+          <div class="card mb-3">
+            <div class="row no-gutters">
+              <div class="col-md-4">
+                <img src="/assets/authors/dini.jpeg" class="card-img" alt="프로필사진">
+              </div>
+              <div class="col-md-8">
+                <div class="card-body">
+                  <p class="card-title">
+                    <a href="/authors/#디니">디니</a>
+                    <small class="text-muted"> 데이터 엔지니어</small>
+                  </p>
+                  <p class="card-text">쏘카에서 가격/면책 시스템 서버 개발과 테크 블로그 운영을 맡고 있습니다. 커피챗 환영합니다. :) </p>
+                  <p class="card-text">
+                    
+                    <a href="https://diana-lab.tistory.com/"><img src="/assets/icon/blog.png" class="link-img" alt="blog"></a>
+                    
+                    <a href="https://www.linkedin.com/in/hyejinyoon/"><img src="/assets/icon/linkedin.png" class="link-img" alt="linkedin"></a>
+                    
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        
+        <hr>
+        <div class="clearfix">
+          
+          <a class="btn btn-primary float-left" href="/data/2022/02/25/data-discovery-platform-01.html" data-toggle="tooltip" data-placement="top" title="데이터 디스커버리 플랫폼 도입기 - 1편. 데이터 디스커버리란?(feat. Datahub VS Amundsen 비교 분석)">&larr; Previous<span class="d-none d-md-inline">
+              Post</span></a>
+          
+          
+          <a class="btn btn-primary float-right" href="/qa/2022/03/18/probationary-period_QA.html" data-toggle="tooltip" data-placement="top" title="쏘카 QA는 무슨 일을 하고 어떻게 일하나요?">Next<span class="d-none d-md-inline">
+              Post</span> &rarr;</a>
+          
+        </div>
+        <div>
+          <p class="recuit">쏘카는 언제나 쏘카 서비스를 함께 만들며 기술적인 문제를 함께 풀어나갈 능력있는 개발자/디자이너/기획자/데이터 사이언티스트 등을 모시고 있습니다. 자세한 내용은 <a href="https://bit.ly/SOCAR-RECRUIT">쏘카 채용공고 페이지</a>를 확인 부탁드립니다 :)</p>
+        </div>
+      </div>
+    </div>
+    <!-- utterance comments -->
+    <script src="https://utteranc.es/client.js"
+        repo="socar-inc/techblog-comments"
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+    </script>
+  </div>
+
+<script>
+  // ref https://tscanlin.github.io/tocbot/
+  tocbot.init({
+    tocSelector: '#toc',
+    contentSelector: '.post-content',
+    headingSelector: 'h1, h2, h3',
+    hasInnerContainers: true,
+    collapseDepth: 6,
+    linkClass: 'toc-link'
+  });
+
+
+  $(window).on('scroll', function() {
+      let scrollTop = $(window).scrollTop()
+      let scrollBottom =  scrollTop + $(window).height()
+      let contentOffsetTop = $(".post-content").offset().top
+      let contentOffsetBottom = contentOffsetTop + $(".post-content").height()
+      let elementHeight = $(".post-content").height(); 
+
+      if ((scrollTop < contentOffsetTop) || (scrollBottom >= contentOffsetBottom)) {
+        // $('.toc').css('visibility', 'hidden')
+        $('.toc').addClass("toc-hidden")
+      }
+      else if (scrollTop >= contentOffsetTop) {
+        $(".toc").removeClass("toc-hidden")
+      }
+  });
+</script>
+
+
+  <!-- Footer -->
+
+<hr>
+
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-md-9 mx-auto">
+        <ul class="list-inline text-center">
+          
+          
+          
+          <li class="list-inline-item">
+            <a href="https://www.facebook.com/socarsharing">
+              <span class="fa-stack fa-lg">
+                <i class="fas fa-circle fa-stack-2x"></i>
+                <i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i>
+              </span>
+            </a>
+          </li>
+          
+          
+          
+        </ul>
+        <p class="copyright text-muted">Copyright &copy; SOCAR 2023 | tech_branding@socar.kr</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+  <script src="/assets/vendor/jquery/jquery.min.js"></script>
+<script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/assets/vendor/startbootstrap-clean-blog/js/clean-blog.min.js"></script>
+<script src="/assets/scripts.js"></script>
+<script src="/assets/mermaid-8.2.3.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.11.1/tocbot.min.js"></script>
+
+
+
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-30551922-27"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-30551922-27');
+</script>
+
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-MZ79TFM');</script>
+<!-- End Google Tag Manager -->
+
+
+</body>
+
+</html>

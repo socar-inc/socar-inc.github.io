@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>
+    Android Studio 플러그인으로 코드 자동 리팩토링하기 - SOCAR Tech Blog
+    
+  </title>
+
+  <meta name="description" content="IntelliJ platform plugin을 활용한 대량의 Kotlin 코드 수정">
+
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://tech.socarcorp.kr/dev/2022/02/03/refactoring-with-intellij-plugin.html"/>
+  <meta property="og:title" content="Android Studio 플러그인으로 코드 자동 리팩토링하기"/>
+  <meta property="og:description" content="IntelliJ platform plugin을 활용한 대량의 Kotlin 코드 수정"/>
+  <meta property="og:site_name" content="SOCAR Tech Blog"/>
+  <meta property="og:image" content="https://tech.socarcorp.kr/img/intellij-plugin/plugin.png"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Android Studio 플러그인으로 코드 자동 리팩토링하기"/>
+  <meta name="twitter:description" content="IntelliJ platform plugin을 활용한 대량의 Kotlin 코드 수정"/>
+  <meta name="twitter:image" content="https://tech.socarcorp.kr/img/intellij-plugin/plugin.png"/>
+
+
+  <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.11.1/tocbot.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.11.1/tocbot.css">
+
+  <link rel="stylesheet" href="/assets/vendor/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/assets/vendor/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="/assets/main.css">
+
+  <link rel="canonical" href="https://tech.socarcorp.kr/dev/2022/02/03/refactoring-with-intellij-plugin.html">
+  <link rel="alternate" type="application/rss+xml" title="SOCAR Tech Blog" href="/feed.xml">
+  <link rel="icon" type="image/png" href="/assets/icon/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/icon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/assets/icon/favicon-96x96.png">
+</head>
+
+
+<body>
+
+  <!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+  <div class="container">
+    <a class="navbar-brand" href="/">SOCAR Tech Blog</a>
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      Menu
+      <i class="fa fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="/">🏠 Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/posts">✏️ Posts</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/categories">📔 Categories</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/tags">🏷 Tags</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/authors">✍🏻 Authors</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+  <!-- Page Header -->
+
+<header class="masthead" style="background-image: url('/img/intellij-plugin/plugin.png')">
+  
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-9 col-md-9 mx-auto">
+          <div class="post-heading">
+            <h1 class="post-title">Android Studio 플러그인으로 코드 자동 리팩토링하기</h1>
+            
+            <h2 class="subheading">IntelliJ platform plugin을 활용한 대량의 Kotlin 코드 수정</h2>
+            
+            <div class="post-meta">
+              
+              
+                
+                <span class="author"><a href="/authors#지안"><img src="/assets/authors/jian.png">지안</a></span>
+              
+                <br>
+                <span class="date">2022-02-03</span>
+                <br>
+                <span class="category"><a href="/categories#">dev</a></span> 
+                <br>
+              
+                <span class="tag"><a href="/tags#kotlin">kotlin</a></span>
+              
+                <span class="tag"><a href="/tags#intellij">intellij</a></span>
+              
+                <span class="tag"><a href="/tags#android studio">android studio</a></span>
+              
+                <span class="tag"><a href="/tags#plugin">plugin</a></span>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="toc toc-hidden" id="toc">
+    </div>
+    <div class="row">
+      <div class="col-lg-9 col-md-9 mx-auto">
+        <div class="post-content">
+        <p>안녕하세요, 쏘카 안드로이드 팀의 지안입니다.</p>
+
+<p>리팩토링 작업은 한두 개의 함수를 개선하는 것으로 충분한 때도 있지만, 때로는 여러 개의 파일을 전체적으로 고치고 나서야 끝이 나는 경우도 있습니다.
+복잡한 로직이 아닌 단순한 코드 수정 작업이라 생각하여 가볍게 시작하더라도, 리팩토링의 대상이 되는 코드가 곳곳에 사용되고 있다면 처음에 생각한 예상 시간보다 많은 시간이 걸려 난처해지는 경우도 생기곤 합니다.
+또한 그 과정에서 처음에는 예상하지 못했던 특이한 케이스라던가, 수정 과정에서 실수로 빠트리는 부분, 반복되는 동일 작업으로 인한 집중력 하락 등으로 인해 일정이 밀리다 보면 ‘리팩토링을 시작하지 말았어야 했나?’ 하는 생각이 드는 경우도 있습니다.</p>
+
+<p>저희 안드로이드 팀에서도 몇 개월 전, 광범위한 코드에 대한 리팩토링을 수행한 경험이 있습니다.
+코드 변환의 규칙은 단순했지만, 수십에서 수백 개 파일에 걸친 변경사항을 하나하나 고치려고 하다 보니 마냥 쉽지만은 않았습니다.
+그리고 자칫 길어질 뻔했던 그 반복적인 작업은 IntelliJ Platform Plugin을 통해서 훨씬 수월해질 수 있었습니다.</p>
+
+<p>당시에 리팩토링 작업을 하며 내부 세미나를 통해 발표했던 내용을, 연말연시를 맞이하여 이 글을 통해 다시금 정리해서 공유해 보고자 합니다.</p>
+
+<hr />
+<h2 id="리팩토링을-마음먹게-된-계기">리팩토링을 마음먹게 된 계기</h2>
+<h3 id="view-binding으로의-전환">View Binding으로의 전환</h3>
+<p>안드로이드에서 View에 접근하는 방식은 <a href="https://medium.com/mobile-app-development-publication/how-android-access-view-item-the-past-to-the-future-bb003ae84527">계속해서 바뀌어</a> 왔습니다.
+이러한 변화 중에서 현재 가장 이슈가 되고 있는 것은 아무래도 Jetpack Compose의 <a href="https://android-developers.googleblog.com/2021/07/jetpack-compose-announcement.html">정식 출시</a>겠지만, 이 글은 그보다 약간 이전에 있었던 사건에 관한 이야기입니다.</p>
+
+<p>2020년 말, Kotlin Synthetics 가 Kotlin Android Extensions와 함께 <a href="https://github.com/JetBrains/kotlin/releases/tag/v1.4.20">deprecated</a> 되었습니다.
+다행스럽게도 저희는 그 시점에 Kotlin Synthetics를 직접 사용하지 않고 <a href="https://github.com/JakeWharton/butterknife">ButterKnife</a> 기반의 <a href="https://github.com/Rajin9601/ButterKt">ButterKt</a>를 수정해서 활용하고 있었기 때문에 deprecation의 직접적인 영향 없이 Kotlin 버전을 업데이트할 수 있었습니다.
+그러나 ButterKnife의 README 파일에도 적혀있듯이, View Binding을 사용하라는 권고는 늘 마음 한편과 기술 부채 목록에 남아있었죠.</p>
+
+<p>하기야 View에 대한 타입 추론도 잘해주고, 속도도 이전에 비해 빨라지고, View에 대한 구조적인 접근도 가능한 View Binding을 사용하는 것에 딱히 나쁜 점은 없었습니다.
+더군다나 이렇게 <a href="https://developer.android.com/topic/libraries/view-binding/migration">Migration 가이드</a>도 제공하고 있고요.</p>
+
+<p>가이드를 보면서 저희 코드를 기준으로 얼핏 생각해 보았을 때는 기존에 사용하던 아래와 같은 코드를</p>
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">SomeActivity</span> <span class="p">:</span> <span class="nc">BaseActivity</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">private</span> <span class="kd">val</span> <span class="py">maybe_different_name</span><span class="p">:</span> <span class="nc">TextView</span> <span class="k">by</span> <span class="nf">bindView</span><span class="p">(</span><span class="nc">R</span><span class="p">.</span><span class="n">id</span><span class="p">.</span><span class="n">declared_id</span><span class="p">)</span>
+
+  <span class="k">fun</span> <span class="nf">someFunction</span><span class="p">()</span> <span class="p">{</span>
+    <span class="o">..</span><span class="p">.</span>
+    <span class="n">maybe_different_name</span><span class="p">.</span><span class="n">text</span> <span class="p">=</span> <span class="s">"value"</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>이렇게 아래처럼 변경해 주기만 하면 될 것으로 보입니다.</p>
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">ChangedActivity</span> <span class="p">:</span> <span class="nc">BaseActivity</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">fun</span> <span class="nf">changedFunction</span><span class="p">()</span> <span class="p">{</span>
+    <span class="o">..</span><span class="p">.</span>
+    <span class="n">binding</span><span class="p">.</span><span class="n">declaredId</span><span class="p">.</span><span class="n">text</span> <span class="p">=</span> <span class="s">"value"</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>그러나 이렇게 가벼운 마음으로 작업을 하다 보면 이어지는 절에서 이야기할 번거로운 부분들이 보이기 시작합니다.
+혹시 이런 번거로운 부분들을 해결해 줄 더 좋은 Migration 방법이 제공될까 싶어서 기다리다 보니, 어느새 이 작업의 우선순위는 다른 Feature들에 의해 계속해서 밀리게 되었습니다.</p>
+
+<p>하지만 역설적이게도 우선순위가 높은 Feature 화면의 개발 중에는 여전히 View의 타입이나 XML ID 매칭으로 인한 문제가 종종 발생해서 시간을 소비하곤 했습니다.
+결국 이러한 문제로 인해 개발 시간이 불필요하게 늘어나고 있다는 의견에 도달하자 View Binding으로 전환하는 리팩토링을 본격적으로 시작하게 되었습니다.
+다만, 무작정 작업에 돌입하기보다는 효율적인 방법에 대해서 생각해 볼 필요가 있었죠.</p>
+
+<hr />
+<h2 id="리팩토링-검토">리팩토링 검토</h2>
+<h3 id="view-binding-전환에-필요한-것">View Binding 전환에 필요한 것</h3>
+<p>위에서도 언급했다시피 View Binding으로 리팩토링하는 작업을 위해 요구사항을 정리하다 보면 처음에 가졌던 생각보다 번거로운 지점이 보여서 멈칫멈칫하게 되는 부분들이 있었습니다.</p>
+
+<ul>
+  <li><code class="highlighter-rouge">by bindView</code> Delegate를 사용하는 변수들을 쓰고 있는 모든 Usage에 대해 이름 변경이 필요하다.</li>
+  <li>기존 방식과는 달리 앞에 <code class="highlighter-rouge">binding.</code>을 붙여서 접근하도록 해야 한다.</li>
+</ul>
+
+<p>위의 요구사항만 놓고 보면 단순하게 Regex를 사용해서 치환해도 어떻게든 작업이 가능할 것 같다는 생각이 듭니다.</p>
+
+<p>그러나 요구사항 검토를 계속해서 진행하다가 아래와 같이 조금 더 까다로운 항목을 발견하게 되면 골치가 아파지기 시작합니다.</p>
+
+<ul>
+  <li>Kotlin 파일에서 <code class="highlighter-rouge">bindView</code>로 사용하고 있는 변수명의 케이스를 변경(<code class="highlighter-rouge">snake_case</code> → <code class="highlighter-rouge">lowerCamelCase</code>)해줘야 한다.</li>
+  <li>만약 XML에 있는 ID(<code class="highlighter-rouge">R.id.~</code>)와 다른 변수명을 사용하고 있다면 XML의 ID를 사용하도록 변경해야 한다.</li>
+</ul>
+
+<p>이 시점에서 Regex를 이용한 ‘단순’ 치환은 어렵겠다는 생각이 듭니다.
+그래도 Android Studio를 사용하고 있으니 IDE의 기능을 빌어서 <code class="highlighter-rouge">Refactoring → Rename</code> 기능을 시도해 볼 수는 있을 것 같습니다.
+변수 하나를 변경하는데 타이핑을 빠르게 하면 5~10초 정도 걸리는 것 같으니 나쁘지는 않아 보입니다.
+하지만…</p>
+
+<ul>
+  <li>Activity, Fragment, Custom View를 포함한 뷰 코드 파일들이 백 개가 넘고, 각각의 파일에는 XML ID와 연결되어 있는 변수가 수십 개 있다.</li>
+</ul>
+
+<p>이렇게 되면 하나하나 타이핑해가면서 수동으로 수정하기에는 부담스러운 분량입니다.
+수정하는 과정에서 행여나 누락되는 곳이나 실수하는 곳이 있지는 않을지 걱정도 되고요.
+단순한 작업이다 싶어서 시작한 일인데 이렇게까지 반복적인 작업을 오랜 시간에 걸쳐서 신경 써가며 작업해야 할까 싶은 생각이 듭니다.</p>
+
+<p>그렇게 해서 자동으로 Kotlin 코드를 파싱 하여 수정하는 방법들까지도 검토해 보게 되었습니다.</p>
+
+<h3 id="사용해-볼-만한-방법들">사용해 볼 만한 방법들</h3>
+<p>그런 생각을 거쳐서 아래에 있는 다섯 가지 정도의 방법을 떠올리고 간단하게 비교를 진행했습니다.</p>
+
+<ul>
+  <li>Android Studio의 Rename 기능을 변수 하나하나에 적용해서 바꾸기</li>
+  <li>Regex를 사용해서 찾아 바꾸기</li>
+  <li>Kotlin Compiler의 <a href="https://github.com/JetBrains/kotlin/tree/master/compiler/psi/src/org/jetbrains/kotlin/parsing">Parsing</a>을 사용하기</li>
+  <li>LSP와 <a href="https://github.com/fwcd/kotlin-language-server">비공식 Kotlin Language Server</a>의 <a href="https://github.com/fwcd/kotlin-language-server/pull/319">Rename</a>을 사용하기</li>
+  <li><a href="https://plugins.jetbrains.com/docs/intellij/welcome.html">IntelliJ Platform Plugin</a>을 만들어서 동작시키기</li>
+</ul>
+
+<p>이 중에서 Android Studio의 IDE 기능을 써서 Renaming 하는 방식은 신뢰도가 높고 추가적인 개발이 필요 없지만, 각각의 변수들을 하나하나 수정해야 하므로 작업에 걸리는 시간이 길어진다는 단점이 있었습니다.</p>
+
+<p>그리고 정규 표현식으로 찾아 바꾸는 작업은 여러 변수나 파일들을 한꺼번에 고칠 수는 있었지만, Reference(Usage)를 명확하게 구분해 내기가 어렵고 정규 표현식을 작성하는 것에도 시간이 많이 소요된다는 문제가 있었습니다.</p>
+
+<p>Kotlin Compiler를 써서 Parsing 하거나, LSP를 사용해서 수정하는 것은 해당 기능을 개발하기 위해 필요한 배경지식들이 과도하게 많이 필요했습니다.
+전체 작업에 드는 시간을 고려하면 변수를 하나하나 바꾸는 데 걸리는 시간이 오히려 비슷하거나 빠를 수도 있겠다는 판단도 들었습니다.
+또한 Kotlin Language Server는 아직 <a href="https://discuss.kotlinlang.org/t/any-plan-for-supporting-language-server-protocol/2471">공식적으로 제공되지 않고 있으며</a>, 비공식 Language Server에서는 <a href="https://github.com/fwcd/kotlin-language-server/pull/319">Rename 기능에 문제</a>가 있다는 이야기도 있어서 섣불리 시도해 보기도 어려웠고요.</p>
+
+<p>반면에 IntelliJ Platform Plugin은 기존에 IDE에서도 사용해왔던 기능들을 그대로 사용할 테니 Reference를 제대로 찾아서 변경해 주는 안정성이 확보되어 있다고 볼 수 있었습니다.
+또한 이미 다양한 기능을 가진 플러그인들이 Plugin Marketplace에 올라와 있는 것을 보면 단지 이번 리팩토링뿐만 아니라 다른 기능을 추가해 볼 수도 있을 것이라는 생각도 들었습니다.
+물론 개발에 들어가는 시간이 있겠지만 Kotlin Compiler나 LSP를 다루는 것보다는 빠르게 진행할 수 있으리라고 보았습니다.</p>
+
+<p>앞서 이야기한 몇몇 기준점을 가지고 각각의 방식을 간략하게 비교하면 아래의 표와 같이 정리할 수 있습니다.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center"> </th>
+      <th style="text-align: center">IntelliJ Rename</th>
+      <th style="text-align: center">Regex Replace</th>
+      <th style="text-align: center">Kotlin Parser</th>
+      <th style="text-align: center">Language Server</th>
+      <th style="text-align: center">IntelliJ Plugin</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">대량 수정(자동화)</td>
+      <td style="text-align: center">X</td>
+      <td style="text-align: center">O</td>
+      <td style="text-align: center">O</td>
+      <td style="text-align: center">O</td>
+      <td style="text-align: center"><strong>O</strong></td>
+    </tr>
+    <tr>
+      <td style="text-align: center">Usage 검색 기능</td>
+      <td style="text-align: center">O</td>
+      <td style="text-align: center">X</td>
+      <td style="text-align: center">O</td>
+      <td style="text-align: center">O</td>
+      <td style="text-align: center"><strong>O</strong></td>
+    </tr>
+    <tr>
+      <td style="text-align: center">포매팅 유지</td>
+      <td style="text-align: center">O</td>
+      <td style="text-align: center">X</td>
+      <td style="text-align: center">?</td>
+      <td style="text-align: center">?</td>
+      <td style="text-align: center"><strong>O</strong></td>
+    </tr>
+    <tr>
+      <td style="text-align: center">개발에 필요한 시간</td>
+      <td style="text-align: center">없음</td>
+      <td style="text-align: center">보통</td>
+      <td style="text-align: center">많음</td>
+      <td style="text-align: center">많음</td>
+      <td style="text-align: center">보통</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">확장성</td>
+      <td style="text-align: center">낮음</td>
+      <td style="text-align: center">낮음</td>
+      <td style="text-align: center">보통</td>
+      <td style="text-align: center">보통</td>
+      <td style="text-align: center"><strong>높음</strong></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>이러한 비교를 바탕으로 개발 시간이 많이 필요하지 않으면서도 자동화가 가능한 IntelliJ Platform Plugin 방식을 선택했고, 이를 통해 View Binding으로의 리팩토링을 진행해 보기로 했습니다.</p>
+
+<hr />
+<h2 id="intellij-platform-plugin">IntelliJ Platform Plugin</h2>
+<p>그렇다고 하더라도 자료를 찾기 어렵다면 개발 시간이 길어질 것이므로 걱정했지만, 다행스럽게도 JetBrains에서는 공식적으로 IntelliJ Platform에서 사용 가능한 <a href="https://lp.jetbrains.com/gradle-intellij-plugin/">플러그인</a> 개발에 대한 <a href="https://plugins.jetbrains.com/docs/intellij/welcome.html">문서</a>를 제공하고 있었습니다.
+이 문서의 <a href="https://plugins.jetbrains.com/docs/intellij/getting-started.html">Getting Started 페이지</a>에 따르면 아래와 같은 방식으로 플러그인을 개발하는 것을 권장하고 있습니다.</p>
+
+<blockquote>
+  <p>There are three supported workflows available for building plugins. The <strong>recommended workflow</strong> for new projects is to use <a href="https://github.com/JetBrains/intellij-platform-plugin-template">GitHub Template</a> or to use <a href="https://github.com/JetBrains/gradle-intellij-plugin">Gradle</a> to create everything from scratch. The old Plugin DevKit workflow still supports existing projects.</p>
+</blockquote>
+
+<p>이렇게 나열된 방식 중에서 비교적 간단하게 개발할 수 있는 방식인 <a href="https://github.com/JetBrains/intellij-platform-plugin-template">GitHub Template</a>를 통해 그 안에 있는 예제 플러그인 코드로부터 개발을 시작했습니다.</p>
+
+<h3 id="예제-플러그인-동작-확인">예제 플러그인 동작 확인</h3>
+<p><a href="https://github.com/JetBrains/intellij-platform-plugin-template">링크</a>로부터 예제 템플릿 레포지토리를 클론 해와서 Android Studio로 열어보면 <code class="highlighter-rouge">Run Configurations</code> 중에 <code class="highlighter-rouge">Run Plugin</code>이라는 항목을 볼 수 있습니다.
+그 항목을 선택하고 <code class="highlighter-rouge">Run</code> 버튼을 눌러서 이를 실행시키면 예제 플러그인이 설치되어 동작할 IntelliJ Community Edition이 자동으로 다운로드되고, 그 Sandbox 인스턴스 IDE가 새로 뜨며, 그 위에서 예제 플러그인이 돌아가는 것을 확인해 볼 수 있습니다.</p>
+
+<p><a href="https://github.com/JetBrains/intellij-platform-plugin-template/tree/v1.1.0#plugin-configuration-file">설명</a>에도 나와있듯이 <code class="highlighter-rouge">/src/main/resources/META-INF/plugin.xml</code> 파일에 <code class="highlighter-rouge">applicationService</code>로 지정된 <code class="highlighter-rouge">MyApplicationService.kt</code>, <code class="highlighter-rouge">projectService</code>로 지정된 <code class="highlighter-rouge">MyProjectService.kt</code>가 Sandbox IDE의 로드 시점에 수행되며, <code class="highlighter-rouge">println</code>으로 출력하는 메시지가 바깥쪽 IDE의 Run 탭에 출력되는 것을 확인할 수 있었습니다.</p>
+
+<p><img src="/img/intellij-plugin/sample.png" alt="기본 예제 확인" /></p>
+
+<h3 id="kotlin-코드-다루기">Kotlin 코드 다루기</h3>
+<p>하지만 우리가 플러그인을 통해 최종적으로 이름 변경을 하기 위해서는 Kotlin 코드를 인식하고 분석하는 기능이 필요합니다.
+기존에 Android Studio를 비롯한 IntelliJ 계열 IDE에도 Renaming 기능이 있기 때문에, 플러그인에도 관련 내용이 있으리라 판단했고, 아니나 다를까 <a href="https://plugins.jetbrains.com/docs/intellij/kotlin.html#handling-kotlin-code">이 문서</a>에서 Kotlin 관련 내용을 찾을 수 있었습니다.</p>
+
+<blockquote>
+  <p>If a plugin processes Kotlin code (e.g., providing inspections), it needs to add a dependency on the Kotlin plugin (Plugin ID <code class="highlighter-rouge">org.jetbrains.kotlin</code>) itself. Please refer to <a href="https://plugins.jetbrains.com/docs/intellij/plugin-dependencies.html">Plugin Dependencies</a> for more information.</p>
+</blockquote>
+
+<p>제시된 여러 문서를 따라가 보면 아래의 두 가지 작업으로 귀결됩니다.
+우선 <code class="highlighter-rouge">plugin.xml</code>에 아래의 코드를 추가하고,</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>...
+<span class="nt">&lt;depends&gt;</span>org.jetbrains.kotlin<span class="nt">&lt;/depends&gt;</span>
+...
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">build.gradle.kts</code>이 플러그인 의존성 값을 받아오고 있는 <code class="highlighter-rouge">gradle.properties</code> 파일에다가 아래와 같이 <code class="highlighter-rouge">java</code>, <code class="highlighter-rouge">Kotlin</code> 플러그인 의존성을 추가해서 IntelliJ <strong>Kotlin</strong> Plugin 의존성을 사용하도록 하면 됩니다.</p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">...</span>
+<span class="s">platformPlugins = ..., java, Kotlin</span>
+<span class="nn">...</span>
+</code></pre></div></div>
+
+<p>이제 해당 변경사항을 IDE가 인지할 수 있도록 <code class="highlighter-rouge">Sync Project with Gradle Files</code>를 해주면 Kotlin 코드를 다룰 준비가 되었습니다.</p>
+
+<h3 id="psi-사용하기">PSI 사용하기</h3>
+<p>실질적으로 코드를 다루는 작업은 IntelliJ platform에서 제공하는 인터페이스인 <a href="https://plugins.jetbrains.com/docs/intellij/psi.html">PSI(Program Structure Interface)</a>를 통해서 진행합니다.
+여기서 PSI란 <a href="https://plugins.jetbrains.com/docs/intellij/implementing-parser-and-psi.html">공식 문서</a>에 적혀있는 것처럼 특정 언어를 다루기 쉽도록 IntelliJ Platform이 파싱한 AST 요소들 위에 부가정보(문법적인 정보나, 언어 특유의 속성)들을 더한 것입니다.
+저희는 위에서 적었던 <code class="highlighter-rouge">platformPlugins = ..., Kotlin</code>을 통해서 IntelliJ Kotlin Plugin이 제공하는 Kotlin PSI를 사용할 수 있게 되었습니다.</p>
+
+<p>즉, 위에서 <code class="highlighter-rouge">Kotlin</code> 의존성을 추가해 줌으로써 <code class="highlighter-rouge">org.jetbrains.kotlin.psi.KtClass</code>와 같이 <code class="highlighter-rouge">org.jetbrains.kotlin</code> 패키지에 있는 내용을 우리가 만드는 플러그인 코드에서 사용할 수 있습니다.
+결과적으로 우리가 만드는 플러그인에서 PSI tree에 있는 이 Kotlin PSI Element에 대해 다음과 같은 동작들을 해볼 수 있습니다.</p>
+
+<ul>
+  <li>해당 Element가 Class인지 Property인지 Function인지 판별</li>
+  <li>이 Element를 참조하고 있는 다른 Element로 이동</li>
+  <li>AST에 있는 하위 Element들은 어떤 것들이 있는지 확인</li>
+</ul>
+
+<h3 id="모든-ktclass-이름-출력">모든 KtClass 이름 출력</h3>
+<p>Kotlin PSI를 사용해서 프로젝트에 있는 모든 <code class="highlighter-rouge">.kt</code> 파일에 정의된 Kotlin Class의 이름을 출력해 보려면 아래와 같은 함수를 만들어서 사용해 볼 수 있습니다.</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fun</span> <span class="nf">printKtClassNames</span><span class="p">(</span><span class="n">project</span><span class="p">:</span> <span class="nc">Project</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">project</span><span class="p">.</span><span class="nf">allModules</span><span class="p">().</span><span class="nf">forEach</span> <span class="p">{</span> <span class="n">module</span> <span class="p">-&gt;</span>
+        <span class="nc">FilenameIndex</span><span class="p">.</span><span class="nf">getAllFilesByExt</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="s">"kt"</span><span class="p">,</span> <span class="n">module</span><span class="p">.</span><span class="n">moduleContentScope</span><span class="p">)</span>
+            <span class="p">.</span><span class="nf">mapNotNull</span> <span class="p">{</span> <span class="n">it</span><span class="p">.</span><span class="nf">toPsiFile</span><span class="p">(</span><span class="n">project</span><span class="p">)</span> <span class="k">as</span><span class="p">?</span> <span class="nc">KtFile</span> <span class="p">}</span>
+            <span class="p">.</span><span class="nf">flatMap</span> <span class="p">{</span> <span class="n">ktFile</span> <span class="p">-&gt;</span> <span class="n">ktFile</span><span class="p">.</span><span class="n">collectDescendantsOfType</span><span class="p">&lt;</span><span class="nc">KtClass</span><span class="p">&gt;()</span> <span class="p">}</span>
+            <span class="p">.</span><span class="nf">forEach</span> <span class="p">{</span> <span class="n">ktClass</span> <span class="p">-&gt;</span> <span class="nf">println</span><span class="p">(</span><span class="n">ktClass</span><span class="p">.</span><span class="n">name</span><span class="p">)</span> <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>아래의 스크린샷은 기본 예제 프로젝트의 <code class="highlighter-rouge">MyProjectService.kt</code>파일을 수정한 뒤에 <code class="highlighter-rouge">Run Plugin</code>을 통해 실행된 테스트용 Sandbox IDE에서 동일한 프로젝트를 열었을 때 바깥쪽 IDE에 값들이 출력되는 모습입니다.</p>
+
+<p><img src="/img/intellij-plugin/ktclass.png" alt="KtClass 이름 출력" /></p>
+
+<p>Sandbox IDE에서 열린 프로젝트의 <code class="highlighter-rouge">KtClass</code> 이름들이 아래쪽의 콘솔 창에 찍힌 것을 확인해 볼 수 있습니다.
+다만 프로젝트가 열리는 시점에는 Indexing이 끝나지 않아 모듈이나 파일 목록들이 아직 구성되지 않은 상태일 수도 있기 때문에 위와 같이 <code class="highlighter-rouge">DumbService.getInstance(project).runWhenSmart()</code>를 사용해서 Indexing이 완료된 후에 실행될 수 있도록 했습니다.</p>
+
+<h3 id="특정-프로퍼티-가져오기">특정 프로퍼티 가져오기</h3>
+<p>그렇다면 <code class="highlighter-rouge">KtClass</code> 내부에 정의된 <code class="highlighter-rouge">bindView</code>를 사용하는 프로퍼티와 연결된 XML ID는 어떻게 가져올 수 있을까요?</p>
+
+<p>클래스 안에 정의된 프로퍼티를 가져와서 그 PSI tree를 보면서 <code class="highlighter-rouge">bindView</code>를 사용하고 있는지, 그리고 어떤 ID를 사용하는지 확인해 보면 됩니다.
+현재 활성화된 파일의 PSI tree가 어떤 식으로 구성되어 있는지 간단하게 확인해 보기 위해 <a href="https://plugins.jetbrains.com/docs/intellij/explore-api.html#31-use-internal-mode-and-psiviewer">이 문서</a>에 나와 있는 것처럼 IntelliJ Plugins Marketplace에 있는 <em>PsiViewer</em> 플러그인을 사용했습니다.</p>
+
+<p>해당 플러그인을 사용하면 아래와 같이 현재 커서가 있는 곳의 PSI element가 전체 트리의 어떤 위치에 있는지 파악하는 것이 가능합니다.
+<img src="/img/intellij-plugin/psi-viewer.png" alt="PsiViewer plugin" /></p>
+
+<p>이러한 기능을 바탕으로 PSI tree를 확인해서 우리가 수정할 대상인 <code class="highlighter-rouge">bindView</code> Delegate를 사용하는 프로퍼티 목록을 가져올 수 있습니다.
+가져오는 방법은 여러 가지가 있겠지만, 저는 아래와 같은 코드로 접근했습니다.</p>
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fun</span> <span class="nc">KtClass</span><span class="p">.</span><span class="nf">getBindViewProperties</span><span class="p">()</span> <span class="p">=</span> <span class="nf">getProperties</span><span class="p">()</span>
+    <span class="p">.</span><span class="nf">mapNotNull</span> <span class="p">{</span> <span class="n">property</span> <span class="p">-&gt;</span>
+        <span class="kd">val</span> <span class="py">bindViewCall</span> <span class="p">=</span> <span class="n">property</span><span class="p">.</span><span class="n">delegate</span>
+            <span class="o">?.</span><span class="n">expression</span>
+            <span class="o">?.</span><span class="n">castSafelyTo</span><span class="p">&lt;</span><span class="nc">KtCallExpression</span><span class="p">&gt;()</span>
+            <span class="o">?.</span><span class="nf">takeIf</span> <span class="p">{</span> <span class="n">it</span><span class="p">.</span><span class="nf">referenceExpression</span><span class="p">()</span><span class="o">?.</span><span class="n">text</span> <span class="p">==</span> <span class="s">"bindView"</span> <span class="p">}</span>
+        <span class="kd">val</span> <span class="py">firstArgument</span> <span class="p">=</span> <span class="n">bindViewCall</span><span class="o">?.</span><span class="n">valueArgumentList</span><span class="o">?.</span><span class="n">arguments</span><span class="o">?.</span><span class="nf">first</span><span class="p">()</span>
+        <span class="kd">val</span> <span class="py">xmlId</span> <span class="p">=</span> <span class="n">firstArgument</span><span class="o">?.</span><span class="nf">getArgumentExpression</span><span class="p">()</span><span class="o">?.</span><span class="n">lastChild</span><span class="o">?.</span><span class="n">text</span>
+        <span class="n">xmlId</span><span class="o">?.</span><span class="nf">let</span> <span class="p">{</span> <span class="nc">BindViewProperty</span><span class="p">(</span><span class="n">property</span><span class="p">,</span> <span class="n">it</span><span class="p">)</span> <span class="p">}</span>
+    <span class="p">}</span>
+
+<span class="kd">data class</span> <span class="nc">BindViewProperty</span><span class="p">(</span><span class="kd">val</span> <span class="py">property</span><span class="p">:</span> <span class="nc">KtProperty</span><span class="p">,</span> <span class="kd">val</span> <span class="py">xmlId</span><span class="p">:</span> <span class="nc">String</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="프로퍼티의-이름을-변경하기">프로퍼티의 이름을 변경하기</h3>
+<p>위쪽 단락에서 받아온 Kotlin PSI의 <code class="highlighter-rouge">KtProperty</code> 타입은 <code class="highlighter-rouge">PsiNamedElement</code>를 구현한 타입입니다.
+따라서 아래와 같이 함수를 만들어서 Reference를 포함한 모든 장소의 이름을 변경하고, 그 변경사항을 반영할 수 있습니다.</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fun</span> <span class="nc">PsiNamedElement</span><span class="p">.</span><span class="nf">renameAllReferences</span><span class="p">(</span><span class="n">project</span><span class="p">:</span> <span class="nc">Project</span><span class="p">,</span> <span class="n">newName</span><span class="p">:</span> <span class="nc">String</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nf">updateAndCommit</span><span class="p">(</span><span class="n">project</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">val</span> <span class="py">files</span> <span class="p">=</span> <span class="nc">ReferencesSearch</span><span class="p">.</span><span class="nf">search</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nf">map</span> <span class="p">{</span>
+            <span class="n">it</span><span class="p">.</span><span class="nf">handleElementRename</span><span class="p">(</span><span class="n">newName</span><span class="p">)</span>
+            <span class="n">it</span><span class="p">.</span><span class="nf">resolve</span><span class="p">()</span><span class="o">?.</span><span class="n">containingFile</span>
+        <span class="p">}</span>
+        <span class="k">this</span><span class="p">.</span><span class="nf">setName</span><span class="p">(</span><span class="n">newName</span><span class="p">)</span>
+        <span class="nf">println</span><span class="p">(</span><span class="s">"[Rename] ${this.elementType} ${this.name} -&gt; $newName"</span><span class="p">)</span>
+        <span class="n">files</span><span class="p">.</span><span class="nf">plus</span><span class="p">(</span><span class="n">containingFile</span><span class="p">).</span><span class="nf">filterNotNull</span><span class="p">()</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">fun</span> <span class="nf">updateAndCommit</span><span class="p">(</span><span class="n">project</span><span class="p">:</span> <span class="nc">Project</span><span class="p">,</span> <span class="n">action</span><span class="p">:</span> <span class="p">()</span> <span class="p">-&gt;</span> <span class="nc">Iterable</span><span class="p">&lt;</span><span class="nc">PsiFile</span><span class="p">&gt;)</span> <span class="p">{</span>
+    <span class="nc">DumbService</span><span class="p">.</span><span class="nf">getInstance</span><span class="p">(</span><span class="n">project</span><span class="p">).</span><span class="nf">runWhenSmart</span> <span class="p">{</span>
+        <span class="nc">WriteCommandAction</span><span class="p">.</span><span class="nf">runWriteCommandAction</span><span class="p">(</span><span class="n">project</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">val</span> <span class="py">filesToCommit</span> <span class="p">=</span> <span class="nf">action</span><span class="p">()</span>
+            <span class="n">filesToCommit</span><span class="p">.</span><span class="nf">toSet</span><span class="p">().</span><span class="nf">forEach</span> <span class="p">{</span> <span class="n">it</span><span class="p">.</span><span class="nf">commitAndUnblockDocument</span><span class="p">()</span> <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>View binding에서는 snake case 대신에 lower camel case를 사용하므로, 실제 코드에서는 아래와 같이 간단한 변환 함수를 활용해서 <code class="highlighter-rouge">renameAllReferences()</code>를 호출해 주었습니다.</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fun</span> <span class="nc">String</span><span class="p">.</span><span class="nf">snakeToLowerCamelCase</span><span class="p">():</span> <span class="nc">String</span> <span class="p">=</span>
+    <span class="nf">split</span><span class="p">(</span><span class="sc">'_'</span><span class="p">).</span><span class="nf">joinToString</span><span class="p">(</span><span class="s">""</span><span class="p">,</span> <span class="n">transform</span> <span class="p">=</span> <span class="nc">String</span><span class="o">::</span><span class="n">capitalize</span><span class="p">).</span><span class="nf">decapitalize</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>그 밖에도 <code class="highlighter-rouge">PsiElement.astReplace</code>를 활용하면 이름을 변경하는 것을 넘어서 직접 AST를 조작하는 것 또한 가능합니다.
+가령 아래와 같이 임의의 <code class="highlighter-rouge">PsiElement</code>를 white space로 변경시킬 수 있습니다.</p>
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">psiElement</span><span class="p">.</span><span class="nf">astReplace</span><span class="p">(</span><span class="nc">PsiWhiteSpaceImpl</span><span class="p">(</span><span class="n">text</span><span class="p">))</span>
+</code></pre></div></div>
+
+<h3 id="action으로-등록해서-사용">Action으로 등록해서 사용</h3>
+<p>앞서 말한 동작들이 프로젝트 로딩 시점마다 매번 실행되는 것은 플러그인이라는 특성상 그다지 바람직하지 않은 일입니다.
+따라서 IntelliJ에서는 <a href="https://plugins.jetbrains.com/docs/intellij/basic-action-system.html">action</a>을 등록할 수 있게 해 두었습니다.
+<code class="highlighter-rouge">plugins.xml</code>에 아래와 같이 작성하고 <code class="highlighter-rouge">Run Plugin</code>을 돌려서 켜진 Sandbox IntelliJ를 확인해 보면, 상단의 Tools 메뉴 가장 위에 Action이 등록된 것을 볼 수 있습니다.</p>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;actions&gt;</span>
+    ...
+    <span class="nt">&lt;action</span> <span class="na">class=</span><span class="s">"path.to.the.action.class"</span> <span class="na">description=</span><span class="s">"..."</span> <span class="na">id=</span><span class="s">"..."</span> <span class="na">text=</span><span class="s">"..."</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;add-to-group</span> <span class="na">anchor=</span><span class="s">"first"</span> <span class="na">group-id=</span><span class="s">"ToolsMenu"</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/action&gt;</span>
+<span class="nt">&lt;/actions&gt;</span>
+</code></pre></div></div>
+
+<p>이제 <code class="highlighter-rouge">class</code>에 지정한 클래스로 가서 Action에서 수행할 내용을 적어주면 됩니다.
+저희 플러그인에서는 아래 코드처럼 커서가 있는 <code class="highlighter-rouge">KtClass</code>에 대해서만 리팩토링을 수행하도록 했습니다.</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">BindViewRefactoring</span> <span class="p">:</span> <span class="nc">AnAction</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">override</span> <span class="k">fun</span> <span class="nf">update</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="nc">AnActionEvent</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// Set the availability based on whether a project is open</span>
+        <span class="n">event</span><span class="p">.</span><span class="n">presentation</span><span class="p">.</span><span class="n">isEnabledAndVisible</span> <span class="p">=</span> <span class="n">event</span><span class="p">.</span><span class="n">project</span> <span class="p">!=</span> <span class="k">null</span>
+    <span class="p">}</span>
+
+    <span class="k">override</span> <span class="k">fun</span> <span class="nf">actionPerformed</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="nc">AnActionEvent</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">val</span> <span class="py">elementAtCursor</span> <span class="p">=</span> <span class="n">event</span><span class="p">.</span><span class="nf">getData</span><span class="p">(</span><span class="nc">CommonDataKeys</span><span class="p">.</span><span class="nc">PSI_FILE</span><span class="p">)</span>
+            <span class="o">?.</span><span class="nf">findElementAt</span><span class="p">(</span><span class="n">event</span><span class="p">.</span><span class="nf">getData</span><span class="p">(</span><span class="nc">CommonDataKeys</span><span class="p">.</span><span class="nc">CARET</span><span class="p">)</span><span class="o">?.</span><span class="n">offset</span> <span class="o">?:</span> <span class="m">0</span><span class="p">)</span>
+        <span class="kd">val</span> <span class="py">targetElement</span> <span class="p">=</span> <span class="n">elementAtCursor</span><span class="o">?.</span><span class="n">parentOfType</span><span class="p">&lt;</span><span class="nc">KtClass</span><span class="p">&gt;()</span>
+
+        <span class="nc">Messages</span><span class="p">.</span><span class="nf">showOkCancelDialog</span><span class="p">(</span>
+            <span class="n">event</span><span class="p">.</span><span class="n">project</span><span class="p">,</span>
+            <span class="s">"리팩토링 대상: ${targetElement?.name}"</span><span class="p">,</span>
+            <span class="s">"View Binding"</span><span class="p">,</span>
+            <span class="s">"실행"</span><span class="p">,</span>
+            <span class="s">"취소"</span><span class="p">,</span>
+            <span class="nc">Messages</span><span class="p">.</span><span class="nf">getInformationIcon</span><span class="p">()</span>
+        <span class="p">).</span><span class="nf">let</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">it</span> <span class="p">==</span> <span class="nc">Messages</span><span class="p">.</span><span class="nc">OK</span> <span class="p">&amp;&amp;</span> <span class="n">targetElement</span> <span class="k">is</span> <span class="nc">KtClass</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nf">refactorBindViewProperties</span><span class="p">(</span><span class="n">project</span><span class="o">!!</span><span class="p">,</span> <span class="n">targetElement</span><span class="p">)</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<hr />
+<h2 id="마무리하며">마무리하며</h2>
+<p>이러한 과정을 거쳐서 작성한 플러그인 코드를 빌드 하여 Android Studio에 설치하고, 리팩토링에 빠르게 사용해 볼 수 있었습니다.
+<img src="/img/intellij-plugin/plugin.png" alt="Android Studio에 설치한 쏘카 플러그인" /></p>
+
+<p>또한 작성한 플러그인의 기능에는 전처리/후처리를 좀 더 편하게 할 수 있도록 위에서 언급했던 프로퍼티 변경 기능 외에도 아래와 같은 기능들을 추가했습니다.</p>
+<ul>
+  <li>View Binding Migration 페이지에 있는 것처럼 레이아웃을 <code class="highlighter-rouge">R.layout.~</code> Resource 대신 <code class="highlighter-rouge">...Binding</code> 클래스로부터 받아와서 초기화하는 코드 삽입 기능</li>
+  <li>IntelliJ에서 제공하는 <code class="highlighter-rouge">OptimizeImportsProcessor</code>, <code class="highlighter-rouge">ReformatCodeProcessor</code> 등을 사용해서 수정한 코드를 다시 정리하는 기능</li>
+</ul>
+
+<p>덕분에 <code class="highlighter-rouge">Activity</code>, <code class="highlighter-rouge">Fragment</code>, Custom View 등 100개가 넘는 파일에 있던 <code class="highlighter-rouge">bindView</code> 프로퍼티들을 한꺼번에 수정할 수 있었습니다.
+PR에서 코드 리뷰 과정을 거치는 도중, View Binding 초기화 코드를 수정하면 좋겠다는 의견이 있어서 이를 전체적으로 반영할 때에도 하나하나 파일을 찾아가며 고칠 필요가 없던 것도 큰 이득이었습니다.</p>
+
+<p>그뿐만 아니라 현재는 이 플러그인을 확장해서 Live Template으로 하기에는 까다로운 템플릿 코드 기능을 추가하는 등, 더 다양한 형태로 활용하고 있습니다.
+이런 식으로 앞으로도 IntelliJ 플러그인을 통해서 개발자들의 소중한 개발 시간을 조금이나마 절약해 볼 수 있으면 좋겠습니다.</p>
+
+<h3 id="ps">P.S.</h3>
+<p>2021년 11월 말, JetBrains에서 차세대 IDE <a href="https://www.jetbrains.com/fleet/">Fleet</a>을 발표했습니다.
+짧은 지원자 신청 기간을 거쳐 현재는 Closed Preview를 진행 중인데요, Fleet에서 Plugin 지원은 어떻게 진행할지, Language Server에 대한 정책은 어떻게 바뀔지 흥미롭습니다.
+비록 플러그인을 작성하는 방식이 기존과 달라질 수도 있겠지만, 여기서 진행했던 리팩토링 자동화 경험에 약간의 변주만 더한다면 수월하게 작업할 수 있으리라 생각합니다.</p>
+
+        </div>
+        
+        <hr>
+        <div class="clearfix">
+          
+          <a class="btn btn-primary float-left" href="/mobility/2022/01/18/socar-mobility-lab-battery-management-process-second-stage.html" data-toggle="tooltip" data-placement="top" title="자동차 배터리를 더 소중하게 공학적으로 관리하기 #2">&larr; Previous<span class="d-none d-md-inline">
+              Post</span></a>
+          
+          
+          <a class="btn btn-primary float-right" href="/mobility/2022/02/09/socar-iot-pipeline-2.html" data-toggle="tooltip" data-placement="top" title="차량용 단말을 위한 IoT 파이프라인 구축기 (feat. Kafka) #2">Next<span class="d-none d-md-inline">
+              Post</span> &rarr;</a>
+          
+        </div>
+        <div>
+          <p class="recuit">쏘카는 언제나 쏘카 서비스를 함께 만들며 기술적인 문제를 함께 풀어나갈 능력있는 개발자/디자이너/기획자/데이터 사이언티스트 등을 모시고 있습니다. 자세한 내용은 <a href="https://bit.ly/SOCAR-RECRUIT">쏘카 채용공고 페이지</a>를 확인 부탁드립니다 :)</p>
+        </div>
+      </div>
+    </div>
+    <!-- utterance comments -->
+    <script src="https://utteranc.es/client.js"
+        repo="socar-inc/techblog-comments"
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+    </script>
+  </div>
+
+<script>
+  // ref https://tscanlin.github.io/tocbot/
+  tocbot.init({
+    tocSelector: '#toc',
+    contentSelector: '.post-content',
+    headingSelector: 'h1, h2, h3',
+    hasInnerContainers: true,
+    collapseDepth: 6,
+    linkClass: 'toc-link'
+  });
+
+
+  $(window).on('scroll', function() {
+      let scrollTop = $(window).scrollTop()
+      let scrollBottom =  scrollTop + $(window).height()
+      let contentOffsetTop = $(".post-content").offset().top
+      let contentOffsetBottom = contentOffsetTop + $(".post-content").height()
+      let elementHeight = $(".post-content").height(); 
+
+      if ((scrollTop < contentOffsetTop) || (scrollBottom >= contentOffsetBottom)) {
+        // $('.toc').css('visibility', 'hidden')
+        $('.toc').addClass("toc-hidden")
+      }
+      else if (scrollTop >= contentOffsetTop) {
+        $(".toc").removeClass("toc-hidden")
+      }
+  });
+</script>
+
+
+  <!-- Footer -->
+
+<hr>
+
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-md-9 mx-auto">
+        <ul class="list-inline text-center">
+          
+          
+          
+          <li class="list-inline-item">
+            <a href="https://www.facebook.com/socarsharing">
+              <span class="fa-stack fa-lg">
+                <i class="fas fa-circle fa-stack-2x"></i>
+                <i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i>
+              </span>
+            </a>
+          </li>
+          
+          
+          
+        </ul>
+        <p class="copyright text-muted">Copyright &copy; SOCAR 2023 | tech_branding@socar.kr</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+  <script src="/assets/vendor/jquery/jquery.min.js"></script>
+<script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/assets/vendor/startbootstrap-clean-blog/js/clean-blog.min.js"></script>
+<script src="/assets/scripts.js"></script>
+<script src="/assets/mermaid-8.2.3.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.11.1/tocbot.min.js"></script>
+
+
+
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-30551922-27"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-30551922-27');
+</script>
+
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-MZ79TFM');</script>
+<!-- End Google Tag Manager -->
+
+
+</body>
+
+</html>

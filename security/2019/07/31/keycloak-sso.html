@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>
+    Keycloak를 이용한 SSO 구축(web + wifi + ssh) - SOCAR Tech Blog
+    
+  </title>
+
+  <meta name="description" content="ID 하나로 백오피스 + Wifi + 서버(SSH)에 접속 가능한 환경 구축하기">
+
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://tech.socarcorp.kr/security/2019/07/31/keycloak-sso.html"/>
+  <meta property="og:title" content="Keycloak를 이용한 SSO 구축(web + wifi + ssh)"/>
+  <meta property="og:description" content="ID 하나로 백오피스 + Wifi + 서버(SSH)에 접속 가능한 환경 구축하기"/>
+  <meta property="og:site_name" content="SOCAR Tech Blog"/>
+  <meta property="og:image" content="https://tech.socarcorp.kr/assets/images/zhen-hu-ppPciOz6Cbs-unsplash.jpg"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Keycloak를 이용한 SSO 구축(web + wifi + ssh)"/>
+  <meta name="twitter:description" content="ID 하나로 백오피스 + Wifi + 서버(SSH)에 접속 가능한 환경 구축하기"/>
+  <meta name="twitter:image" content="https://tech.socarcorp.kr/assets/images/zhen-hu-ppPciOz6Cbs-unsplash.jpg"/>
+
+
+  <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.11.1/tocbot.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.11.1/tocbot.css">
+
+  <link rel="stylesheet" href="/assets/vendor/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/assets/vendor/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="/assets/main.css">
+
+  <link rel="canonical" href="https://tech.socarcorp.kr/security/2019/07/31/keycloak-sso.html">
+  <link rel="alternate" type="application/rss+xml" title="SOCAR Tech Blog" href="/feed.xml">
+  <link rel="icon" type="image/png" href="/assets/icon/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/icon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/assets/icon/favicon-96x96.png">
+</head>
+
+
+<body>
+
+  <!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+  <div class="container">
+    <a class="navbar-brand" href="/">SOCAR Tech Blog</a>
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      Menu
+      <i class="fa fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="/">🏠 Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/posts">✏️ Posts</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/categories">📔 Categories</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/tags">🏷 Tags</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/authors">✍🏻 Authors</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+  <!-- Page Header -->
+
+<header class="masthead" style="background-image: url('/assets/images/zhen-hu-ppPciOz6Cbs-unsplash.jpg')">
+  
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-9 col-md-9 mx-auto">
+          <div class="post-heading">
+            <h1 class="post-title">Keycloak를 이용한 SSO 구축(web + wifi + ssh)</h1>
+            
+            <h2 class="subheading">ID 하나로 백오피스 + Wifi + 서버(SSH)에 접속 가능한 환경 구축하기</h2>
+            
+            <div class="post-meta">
+              
+              
+                
+                <span class="author"><a href="/authors#도마"><img src="/assets/authors/dorma.jpeg">도마</a></span>
+              
+                <br>
+                <span class="date">2019-07-31</span>
+                <br>
+                <span class="category"><a href="/categories#">security</a></span> 
+                <br>
+              
+                <span class="tag"><a href="/tags#keycloak">keycloak</a></span>
+              
+                <span class="tag"><a href="/tags#sso">sso</a></span>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="toc toc-hidden" id="toc">
+    </div>
+    <div class="row">
+      <div class="col-lg-9 col-md-9 mx-auto">
+        <div class="post-content">
+        <div class="photo-copyright">
+Photo by <a href="https://unsplash.com/@zhenhu2424?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Zhen Hu</a> on <a href="https://unsplash.com/search/photos/lock?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a>
+</div>
+
+<p>이번에 쏘카에서 사내 보안 강화를 위해 SSO(Single Sign-On)를 구축 하였습니다.<br />
+쏘팸과 파트너등이 업무에 사용하는 관리시스템(web) 및 wifi, ssh 접속 인증을 1개의 ID로 관리 하도록 하는 것이 목적입니다.</p>
+
+<p>정리된 요구 사항은 다음과 같습니다.</p>
+
+<ol>
+  <li>Web 사이트 인증.(Spring 베이스 사이트)</li>
+  <li>Wifi 인증</li>
+  <li>SSH 인증(+ Sudo 인증)</li>
+  <li>2차 인증 (OTP) 지원</li>
+  <li>유연한 권한 설정(Authorization)</li>
+</ol>
+
+<p>Identity Provider로 여러 유료 솔루션(<a href="https://www.gluu.org/">Gluu</a>, <a href="https://developers.google.com/identity/">Google Identity Platform</a> 등)도 검토 하였으나 설치형 + 오픈소스로 무료로 사용 가능한 <a href="https://www.keycloak.org/"><code class="highlighter-rouge">Keycloak</code></a>으로 구축으로 방향을 잡았습니다.</p>
+
+<p>Wifi 인증(<a href="https://freeradius.org/modules/?s=ldap&amp;mod=rlm_ldap">FreeRADIUS에서 LDAP 모듈 지원</a>)이나 ssh인증(<a href="https://www.tldp.org/HOWTO/archived/LDAP-Implementation-HOWTO/pamnss.html">pam_ldap</a>)의 경우 OpenLDAP과 연동해서 처리 하는 방법에 대한 자료가 더 많지만, Web기반으로 운용 가능한 시스템을 더 선호해서 Keycloak을 선정하게 되었습니다. <del>험한길을 가게 되었습니다.</del></p>
+
+<h2 id="목차">목차</h2>
+
+<ul>
+  <li>Keycloak 이란?</li>
+  <li>Keycloak으로 요구사항의 내용을 어떻게 구현할까?</li>
+  <li>설치 계획 및 구성</li>
+  <li>Kubernetes(AWS EKS)에 Keycloak 설치</li>
+  <li>RADIUS 서버 설치 및 Keycloak 연동 설정</li>
+</ul>
+
+<hr />
+
+<h2 id="keycloak-이란"><a href="https://www.keycloak.org/">Keycloak</a> 이란?</h2>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  - open source + 설치형
+  - OpenID / SAML 지원
+  - Restful API 지원 및 커스텀 API 추가 가능
+  - RedHat에서 지원하는 프로젝트
+  - keycloak-gatekeeper 등을 이용하면 Web 사이트 권한 처리도 용이
+</code></pre></div></div>
+
+<ul>
+  <li>github: <a href="https://github.com/keycloak/keycloak">https://github.com/keycloak/keycloak</a></li>
+  <li><a href="https://access.redhat.com/products/red-hat-single-sign-on">RedHat SSO</a>의 오픈소스 버전</li>
+</ul>
+
+<hr />
+
+<h2 id="keycloak으로-요구사항의-내용을-어떻게-구현할까">Keycloak으로 요구사항의 내용을 어떻게 구현할까?</h2>
+
+<h3 id="1-web-사이트-인증">1. Web 사이트 인증</h3>
+<ul>
+  <li>OpenID / SAML 프로토콜 지원 및 Java client 지원</li>
+  <li>reverse proxy로 동작하는 <a href="https://github.com/keycloak/keycloak-gatekeeper">gatekeepr</a>를 이용해 Web Application에서는 인증 / 권한 코드를 작성하지 않고도 처리 가능</li>
+</ul>
+
+<h3 id="2-wifi-인증">2. Wifi 인증</h3>
+<ul>
+  <li>사내에 Cisco 라우터를 사용하고 있고, RADIUS 프로토콜을 지원하므로 <a href="https://ko.wikipedia.org/wiki/RADIUS">RADIUS 서버</a>를 구축하면 가능</li>
+  <li><a href="https://freeradius.org">FreeRADIUS</a>의 <a href="https://wiki.freeradius.org/modules/Rlm_python">Python 모듈</a>에서 keycloak API를 호출해서 인증을 처리 하면 가능</li>
+</ul>
+
+<h3 id="3-ssh-인증-sudo-인증">3. SSH 인증(+ Sudo 인증)</h3>
+<ul>
+  <li><a href="https://linux.die.net/man/5/sshd_config">sshd_config</a>설정에서 UsePAM 옵션을 활성화 시키고 <a href="https://github.com/FreeRADIUS/pam_radius">pam_radius_auth.so</a>를 사용해 RADIUS 서버를 통해서 인증 가능</li>
+</ul>
+
+<h3 id="4-2차-인증-otp-지원">4. 2차 인증 (OTP) 지원</h3>
+<ul>
+  <li>TOTP 지원</li>
+  <li>Wifi 인증시에는 사용하지 않을 예정이며, SSH(+ sudo) 인증시에는 <a href="https://www.iana.org/assignments/radius-types/radius-types.xhtml">Access-Challenge + Reply-Message</a>를 회신하면 <a href="https://github.com/FreeRADIUS/pam_radius">pam_radius_auth.so</a>에서 사용자에게 추가 입력을 받을 수 있음</li>
+</ul>
+
+<h3 id="5-유연한-권한-설정authorization">5. 유연한 권한 설정(Authorization)</h3>
+<ul>
+  <li>keycloak의 권한 설정은 상당히(<del>과하게</del>) 유연함. (<a href="https://www.keycloak.org/docs/4.8/authorization_services/">참고</a>)</li>
+</ul>
+
+<hr />
+
+<h2 id="설치-계획-및-구성">설치 계획 및 구성</h2>
+
+<ul>
+  <li>Keycloak은 <code class="highlighter-rouge">Kubernetes 클러스터</code>에 설치</li>
+  <li>FreeRADIUS는 <code class="highlighter-rouge">별도 서버에 docker-compose</code>로 설치(kubernetes 클러스터에 설치해도 상관 없음)
+    <ul>
+      <li>RADIUS 프로토콜은 <code class="highlighter-rouge">UDP</code> Port2개를 사용합니다.(default: 1812, 1813)</li>
+      <li><del><code class="highlighter-rouge">UDP</code>는 AWS에서 Load Balancer를 사용할 수 없습니다.</del> <a href="https://aws.amazon.com/ko/blogs/aws/new-udp-load-balancing-for-network-load-balancer/">셋팅 완료 후 .. 얼마 전부터 지원시작</a></li>
+    </ul>
+  </li>
+  <li>대략적인 구성은 아래와 같습니다</li>
+</ul>
+<div class="mermaid">
+graph TD;
+  subgraph Wifi
+    CISCO_ROUTER[Cisco 무선공유기]
+  end
+
+  subgraph Linux-Servers
+    PAM_RADIUS[SSH 접속]
+  end
+
+  subgraph Kubernetes-Cluster
+    KEYCLOAK[Keycloak]
+    WEB_APP[웹서비스]
+  end
+  
+  subgraph Other-Server
+    FREE_RADIUS[FreeRADIUS]
+  end
+
+  CISCO_ROUTER--&gt;|RADIUS Protocol|FREE_RADIUS
+  FREE_RADIUS--&gt;|HTTP API|KEYCLOAK
+  WEB_APP--&gt;|HTTP API|KEYCLOAK
+  PAM_RADIUS --&gt;|RADIUS Protocol|FREE_RADIUS
+  USER --&gt;|관리시스템 접속|WEB_APP
+  USER --&gt;|Wifi 접속|CISCO_ROUTER
+  USER --&gt;|SSH 접속|PAM_RADIUS
+</div>
+
+<hr />
+
+<h2 id="kubernetesaws-eks에-keycloak-설치">Kubernetes(AWS EKS)에 Keycloak 설치</h2>
+<ul>
+  <li><strong><a href="https://helm.sh/">helm</a>이 설치되어 있어야 합니다.</strong></li>
+  <li>Keycloak는 <a href="https://github.com/codecentric/helm-charts/tree/master/charts/keycloak">Helm Chart</a>로 제공 되고 있습니다.</li>
+  <li>설치전에 사전에 설정되어야 할 내용들 입니다.
+    <ul>
+      <li><a href="https://github.com/helm/charts/tree/master/stable/nginx-ingress">nginx-ingress</a> 설치</li>
+      <li>AWS의 Route53에 <code class="highlighter-rouge">*.mydomain.com</code>을 nginx-ingress 설치 후 생성된 LB로 연결.
+        <ul>
+          <li>Route53에 <code class="highlighter-rouge">*.mydomain.com</code>를 사용하면 등록되지 않은 subdomain은 모두 이곳으로 연결되게 됩니다.</li>
+        </ul>
+      </li>
+      <li>RDS로 MySQL 사용.</li>
+    </ul>
+  </li>
+  <li>helm install시에는 <a href="https://github.com/codecentric/helm-charts/tree/master/charts/keycloak#configuration">command line에서 매개변수로 설정</a>을 할수도 있지만 변경해야 될 값들이 많으므로 <code class="highlighter-rouge">values.yaml</code>을 수정해서 사용합니다.</li>
+  <li>아래는 설치한 환경에 맞게 설정하기 위해 <code class="highlighter-rouge">values.yaml</code>에서 수정해야 할 할 부분 입니다.</li>
+</ul>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">...</span>
+
+<span class="na">keycloak</span><span class="pi">:</span>
+<span class="nn">...</span>
+  <span class="c1"># 초기 admin ID</span>
+  <span class="na">username</span><span class="pi">:</span> <span class="s">keycloak</span>
+
+  <span class="c1"># 초기 admin password</span>
+  <span class="c1"># 파일을 저장하거나 git 등으로 관리 할 경우 비밀번호 노출 위험이 있음.</span>
+  <span class="c1"># 설치 이후 바로 암호 변경 권장.</span>
+  <span class="na">password</span><span class="pi">:</span> <span class="s2">"</span><span class="s">keycloak1234"</span>
+
+  <span class="c1"># 위에 'password'에 암호를 직접 입력하지 않고 kubernetes의 secret를 사용할 경우 패스워드가 저장된 Secret의 이름.</span>
+  <span class="na">existingSecret</span><span class="pi">:</span> <span class="s2">"</span><span class="s">"</span>
+
+  <span class="c1"># 위 'existingSecret'에 지정한 Secret 중 사용할 값이 저장된 key 값.</span>
+  <span class="na">existingSecretKey</span><span class="pi">:</span> <span class="s">password</span>
+
+<span class="nn">...</span>
+
+  <span class="na">ingress</span><span class="pi">:</span>
+    <span class="c1"># ingress 사용 여부</span>
+    <span class="na">enabled</span><span class="pi">:</span> <span class="no">true</span>
+    <span class="na">path</span><span class="pi">:</span> <span class="s">/</span>
+
+    <span class="na">annotations</span><span class="pi">:</span> <span class="pi">{}</span>
+      <span class="c1"># ssl 오프로딩 사용을 위한 설정</span>
+      <span class="s">nginx.ingress.kubernetes.io/ssl-redirect</span><span class="pi">:</span> <span class="s2">"</span><span class="s">false"</span>
+
+    <span class="na">labels</span><span class="pi">:</span> <span class="pi">{}</span>
+    <span class="c1"># key: value</span>
+
+    <span class="na">hosts</span><span class="pi">:</span>
+      <span class="c1"># 사용할 domain</span>
+      <span class="pi">-</span> <span class="s">keycloak.mydomain.com</span>
+
+<span class="nn">...</span>
+
+  <span class="na">persistence</span><span class="pi">:</span>
+    <span class="c1"># If true, the Postgres chart is deployed</span>
+    <span class="c1"># mysql을 사용하기 위해 false로 수정.</span>
+    <span class="na">deployPostgres</span><span class="pi">:</span> <span class="no">false</span>
+
+    <span class="c1"># DB 종류 ("postgres", "mysql", "mariadb", "h2") 중 하나</span>
+    <span class="na">dbVendor</span><span class="pi">:</span> <span class="s">mysql</span>
+
+    <span class="c1"># mysql 접속 정보가 저장된 kubernetes secret 이름.</span>
+    <span class="na">existingSecret</span><span class="pi">:</span> <span class="s2">"</span><span class="s">my-db-secret"</span>
+
+    <span class="c1"># 위 'existingSecret'에 지정한 Secret 중 사용할 값이 저장된 key 값.</span>
+    <span class="na">existingSecretKey</span><span class="pi">:</span> <span class="s">password</span>
+
+    <span class="c1"># DB 접속 정보</span>
+    <span class="na">dbName</span><span class="pi">:</span> <span class="s">db-name</span>
+    <span class="na">dbHost</span><span class="pi">:</span> <span class="s">db-host</span>
+    <span class="na">dbPort</span><span class="pi">:</span> <span class="m">3306</span>
+    <span class="na">dbUser</span><span class="pi">:</span> <span class="s">db-user</span>
+
+<span class="nn">...</span>
+</code></pre></div></div>
+<ul>
+  <li>설치 합니다.</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>helm <span class="nb">install</span> <span class="nt">--name</span> keycloak <span class="nt">-f</span> values.yaml codecentric/keycloak
+</code></pre></div></div>
+
+<ul>
+  <li><code class="highlighter-rouge">(권장사항)</code> 설치 후 위 <code class="highlighter-rouge">keycloak.mydomain.com/auth/admin</code>로 접속 후 <code class="highlighter-rouge">values.yaml</code>의 username / password에 설정한 비밀번호로 로그인 후 패스워드를 변경 합니다.
+    <ul>
+      <li>values.yaml 파일을 저장해두거나 git에 올려 두거나 할 경우 노출 위험이 있습니다.</li>
+    </ul>
+  </li>
+  <li>상세 설정은 keycloak의 공식 문서를 참조
+    <ul>
+      <li>https://www.keycloak.org/documentation.html</li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="radius-서버-설치-및-keycloak-연동-설정">RADIUS 서버 설치 및 Keycloak 연동 설정</h2>
+
+<h3 id="1-eap확장-가능-인증-프로토콜">1. <a href="https://ko.wikipedia.org/wiki/%ED%99%95%EC%9E%A5_%EA%B0%80%EB%8A%A5_%EC%9D%B8%EC%A6%9D_%ED%94%84%EB%A1%9C%ED%86%A0%EC%BD%9C">EAP(확장 가능 인증 프로토콜)</a></h3>
+<ul>
+  <li>Wifi 접속 인증으로 사용하기 위해서는 RADIUS 서버가 <code class="highlighter-rouge">EAP</code>를 지원해야 합니다.
+    <ul>
+      <li>단말에서 사용자가 입력한 ID/PW를 RADIUS 서버에서 복호화해서 평문으로 추출 할수 있어야 Keycloak에 로그인 요청을 할 수 있습니다.</li>
+      <li>EAP 규격중 <code class="highlighter-rouge">EAP-TTLS</code>를 사용하고 2차인증으로 <code class="highlighter-rouge">PAP</code>를 사용합니다. PEAP, CHAP 등의 방식은 hash를 이용해 handshake하는 방식이라 RADIUS 서버에서 사용자가 입력한 Password를 알아 낼수 없습니다.</li>
+    </ul>
+  </li>
+  <li><code class="highlighter-rouge">Wifi 접속 인증이 필요없고, SSH 접속인증을 Keycloak과 연동하기 RADIUS 서버를 사용하는 경우 EAP 관련 설정은 불필요합니다.</code></li>
+</ul>
+
+<h3 id="2-구성">2. 구성</h3>
+<ul>
+  <li><a href="https://hub.docker.com/r/freeradius/freeradius-server/">Docker Hub에 공개되어 있는 이미지</a>를 기반으로 python 사용이 가능하도록 수정한 이미지를 생성해 사용합니다.</li>
+  <li>FreeRADIUS는 다양한 모듈을 제공합니다. 그중에 <a href="https://wiki.freeradius.org/modules/Rlm_python">Python 모듈(rlm_python)</a>을 이용해 keycloak과 연동합니다.
+    <ul>
+      <li><del>많은 모듈을 제공하는데 Keycloak 모듈은 없네요 ㅠ_ㅠ</del></li>
+      <li><a href="https://wiki.freeradius.org/modules/Rlm_perl">Perl 모듈(rlm_perl)</a>도 있습니다.(전 Perl을 배워 본적이 없어서…)</li>
+      <li>REST 모듈(rlm_rest)로도 할 수 있을거 같은데 keycloak 연동시에 API 요청을 여러번 해야 해서 이걸로 하면 처리가 힘들 수 있을거 같아서 python 모듈로 방향을 잡았습니다.</li>
+    </ul>
+  </li>
+  <li>처리 흐름은 아래와 같습니다.</li>
+</ul>
+
+<div class="mermaid">
+graph LR;
+  CLIENT[시작: Client] --&gt;|1. RADIUS 요청| FREE_RADIUS(FreeRADIUS)
+  subgraph Radius-Server
+    FREE_RADIUS --&gt;|2| PYTHON_MODULE(Python모듈)
+  end
+    PYTHON_MODULE --&gt;|3. 권한확인 요청| KEYCLOAK[Keycloak]
+    KEYCLOAK --&gt;|4. 권한확인 응답| PYTHON_MODULE
+    PYTHON_MODULE --&gt;|5| FREE_RADIUS
+    FREE_RADIUS --&gt;|6. RADIUS 응답| CLIENT
+</div>
+
+<h3 id="3-설치-시-주의사항-kubernetes-사용시">3. 설치 시 주의사항 (Kubernetes 사용시)</h3>
+<ul>
+  <li><strong>Radius는 <code class="highlighter-rouge">UDP</code> Port2개를 사용합니다.(default: 1812, 1813)</strong></li>
+  <li><del><code class="highlighter-rouge">UDP</code>는 AWS에서 Load Balancer를 사용할 수 없습니다.</del> <a href="https://aws.amazon.com/ko/blogs/aws/new-udp-load-balancing-for-network-load-balancer/">얼마 전부터 지원시작</a></li>
+  <li>Kubernetes에 설치시 ingress의 유형에 따라 UDP를 지원하지 않을 수 있습니다.</li>
+  <li>그냥 NodePort로 노출 시키고, Route53에서 Kubernetes에 사용된 각 Node(EC2 Instance)의 Public IP로 Round Robin으로 분산 시켜도 됩니다.<a href="https://docs.aws.amazon.com/ko_kr/Route53/latest/DeveloperGuide/routing-policy.html">(참고)</a></li>
+  <li>Kubernetes에서 NodePort를 사용 할 경우 사용가능한 Port Range는 <code class="highlighter-rouge">30000-32767</code> 입니다.(Radius의 기본 Port번호 사용 불가)</li>
+</ul>
+
+<h3 id="4-freeradius-설정-및-docker-image-생성">4. FreeRADIUS 설정 및 Docker Image 생성</h3>
+<ul>
+  <li><a href="https://hub.docker.com/r/freeradius/freeradius-server/">Docker Hub에 공개되어 있는 이미지</a>를 그대로 이용하면 좋지만… 기본 이미지는 <code class="highlighter-rouge">python</code>을 지원하지 않습니다.</li>
+  <li>저는 Python 모듈에서 암복호화 기능도 사용할 예정이므로 <a href="https://pypi.org/project/pycrypto/">pycrypto</a>도 필요합니다.</li>
+  <li>FreeRADIUS 설정 파일들은 굳이 Docker Image에 넣지 않고 실행시 mount 해도 상관없습니다만, 저는 Docker Image에 설정파일을 수정해서 포함 시켰습니다.</li>
+  <li>FreeRADIUS에서 사용 할 인증서 파일도 생성해서 이미지에 포함시킵니다.(이것도.. 실행시 mount 해도 무방합니다.)</li>
+</ul>
+
+<h3 id="5-freeradius를-기반으로-커스텀-docker-image-만들기">5. FreeRADIUS를 기반으로 커스텀 Docker Image 만들기</h3>
+
+<p><strong>step1. 설정 디렉토리 가져오기.</strong></p>
+<ul>
+  <li>먼저 <a href="https://hub.docker.com/r/freeradius/freeradius-server/">Docker Hub에 공개되어 있는 이미지</a>를 실행시킨 후 설정 디렉토리(<code class="highlighter-rouge">/etc/freeradius</code>)를 추출 합니다.</li>
+  <li>추출한 설정 파일을 적절히 수정하고, 수정한 파일을 적용해서 Docker Image를 새롭게 생성할 예정입니다.</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>docker run <span class="nt">-d</span> <span class="nt">--name</span> freeradius-server freeradius/freeradius-server
+<span class="nv">$ </span>docker <span class="nb">cp </span>freeradius-server:/etc/freeradius freeradius-config
+<span class="nv">$ </span>docker <span class="nb">kill </span>freeradius-server
+</code></pre></div></div>
+
+<ul>
+  <li>설정 디렉토리 구조(수정 불필요한 파일은 생략..)</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>.
+├── certs
+│   ├── Makefile
+│   ├── README
+│   ├── ca.cnf
+│   ├── client.cnf
+│   ├── dh
+│   ├── inner-server.cnf
+│   ├── passwords.mk
+│   └── server.cnf
+├── clients.conf
+├── mods-available
+│   ├── ...
+│   └── python
+├── mods-config
+│   └── python
+│       ├── example.py
+│       └── radiusd.py
+├── mods-enabled
+│   ├── ...
+│   └── utf8
+├── radiusd.conf
+├── sites-enabled
+│   ├── default
+│   └── inner-tunnel
+├── templates.conf
+├── trigger.conf
+└── users
+</code></pre></div></div>
+
+<p><strong>step 2. 인증서 생성(Wifi 인증)</strong></p>
+<ul>
+  <li><strong><code class="highlighter-rouge">make</code>와 <code class="highlighter-rouge">openssl</code>이 설치되어 있어야 합니다.</strong>
+    <ul>
+      <li><a href="https://macnews.tistory.com/4243">make 설치</a></li>
+      <li><a href="http://egloos.zum.com/popfly/v/6035802">openssl 설치</a></li>
+    </ul>
+  </li>
+  <li><code class="highlighter-rouge">Wifi 인증</code>에 <code class="highlighter-rouge">EAP-TLS</code>, <code class="highlighter-rouge">EAP-TTLS</code> 등을 사용해야 할 경우 필요합니다. 아닐 경우 다음 단게로…</li>
+  <li>추출한 설정 디렉토리중 <a href="https://github.com/redBorder/freeradius/blob/master/raddb/certs/README"><code class="highlighter-rouge">certs/README</code></a>를 참조해서 진행합니다.</li>
+  <li>추가로 <a href="https://wiki.alpinelinux.org/wiki/FreeRadius_EAP-TLS_configuration"><code class="highlighter-rouge">이곳</code></a>도 참조하시면 좋습니다.</li>
+  <li>먼저 기존 파일을 제거합니다. (<code class="highlighter-rouge">아래 작업들은 cert 디렉토리에서 수행합니다.</code>)</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nv">$ </span><span class="nb">rm</span> <span class="nt">-f</span> <span class="k">*</span>.pem <span class="k">*</span>.der <span class="k">*</span>.csr <span class="k">*</span>.crt <span class="k">*</span>.key <span class="k">*</span>.p12 serial<span class="k">*</span> index.txt<span class="k">*</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="highlighter-rouge">ca.cnf</code>, <code class="highlighter-rouge">server.cnf</code>, <code class="highlighter-rouge">client.cnf</code>를 열고 수정합니다.(저는 아래 항목들을 수정했습니다.)
+    <ul>
+      <li><code class="highlighter-rouge">default_days</code>: 인증서 유효기간</li>
+      <li><code class="highlighter-rouge">countryName ~ commonName</code>: 인증서에 포함시킬 정보</li>
+      <li><code class="highlighter-rouge">input_password &amp; output_password</code>: 인증서 암호</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nv">$ </span>make ca.pem
+  <span class="nv">$ </span>make ca.der
+  <span class="nv">$ </span>make server.pem
+  <span class="nv">$ </span>make server.csr
+  <span class="nv">$ </span>make client.pem
+  <span class="nv">$ </span>openssl dhparam <span class="nt">-check</span> <span class="nt">-text</span> <span class="nt">-5</span> 4096 <span class="nt">-out</span> dh   <span class="c"># 오래 걸릴 수 있음... 몇분~몇십분</span>
+</code></pre></div></div>
+
+<p><strong>step 3. FreeRADIUS 기본 설정</strong></p>
+<ul>
+  <li><code class="highlighter-rouge">...</code> 부분은 기본 설정 유지한 부분.</li>
+  <li><code class="highlighter-rouge">client.conf</code>
+    <ul>
+      <li><code class="highlighter-rouge">SHARED_SECRET</code> 실행시 환경변수로 지정합니다.
+        <ul>
+          <li>RADIUS 프로토콜에서 attribute를 암/복호화 할때 사용합니다.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-conf highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">client</span> <span class="n">localhost</span> {
+  <span class="c"># ...
+</span>	<span class="n">secret</span> = $<span class="n">ENV</span>{<span class="n">SHARED_SECRET</span>}
+  <span class="c"># ...
+</span>}
+</code></pre></div></div>
+
+<ul>
+  <li><code class="highlighter-rouge">sites-enabled/default</code>
+    <ul>
+      <li>기본 리퀘스트 처리를 위한 설정입니다.</li>
+      <li>eap 처리 설정 + authorize와 authenticate 단계에서 python 모듈을 사용하도록 추가합니다.</li>
+      <li>authorize 단계에서 실행된 python script에서 <code class="highlighter-rouge">Auth-Type=KEYCLOAK</code>를 설정 할 예정입니다.</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-conf highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">server</span> <span class="n">default</span> {
+
+    <span class="n">authorize</span> {
+        <span class="c"># ...
+</span>        <span class="n">eap</span> {
+            <span class="n">ok</span> = <span class="n">return</span>
+            <span class="n">updated</span> = <span class="n">return</span>
+        }
+        <span class="c"># ...
+</span>        <span class="n">python</span>
+    }
+
+    <span class="n">authenticate</span> {
+        <span class="c"># ...
+</span>        <span class="n">Auth</span>-<span class="n">Type</span> <span class="n">KEYCLOAK</span> {
+            <span class="n">python</span>
+        }
+        <span class="c"># ...
+</span>        <span class="n">eap</span>
+    }
+    
+<span class="c"># ...
+</span>}
+
+</code></pre></div></div>
+
+<ul>
+  <li><code class="highlighter-rouge">sites-enabled/inner-tunnel</code>
+    <ul>
+      <li><code class="highlighter-rouge">mods-enabled/eap</code>에서 EAP-TTLS의 <code class="highlighter-rouge">virtual-server</code>로 inner-tunnel이 설정 됩니다.</li>
+      <li>들어온 RADIUS요청이 EAP-TTLS일 경우 <code class="highlighter-rouge">sites-enabled/default</code>에서 eap 관련 처리가 되고 inner-tunnel로 전달 됩니다.</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-conf highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">server</span> <span class="n">inner</span>-<span class="n">tunnel</span> {
+    <span class="n">authorize</span> {
+        <span class="c"># ...
+</span>        <span class="n">pap</span>
+        <span class="n">python</span>
+    }
+
+    <span class="n">authenticate</span> {
+        <span class="n">Auth</span>-<span class="n">Type</span> <span class="n">KEYCLOAK</span> {
+            <span class="n">python</span>
+        }
+        <span class="c"># ...
+</span>        <span class="n">eap</span>
+    }
+}
+</code></pre></div></div>
+
+<ul>
+  <li><code class="highlighter-rouge">mods-enabled/eap</code>
+    <ul>
+      <li><code class="highlighter-rouge">default_eap_type</code>은 <code class="highlighter-rouge">ttls(EAP-TTLS)</code>로 지정 합니다.</li>
+      <li>tls, ttls 관련 설정을 빼고 다른 EAP Type 들은 주석처리 합니다.</li>
+      <li><code class="highlighter-rouge">private_key_password</code>는 인증서 생성시에 만들때 쓴 암호 입력를 입력합니다.</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-conf highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">eap</span> {
+  <span class="c"># ...
+</span>	<span class="n">default_eap_type</span> = <span class="n">ttls</span>
+	<span class="n">ignore_unknown_eap_types</span> = <span class="n">yes</span>
+
+	<span class="c">#md5 {
+</span>	<span class="c">#}
+</span>
+	<span class="c">#pwd {
+</span>	<span class="c">#}
+</span>
+	<span class="c">#leap {
+</span>	<span class="c">#}
+</span>
+	<span class="c">#gtc {
+</span>	<span class="c">#}
+</span>
+	<span class="n">tls</span>-<span class="n">config</span> <span class="n">tls</span>-<span class="n">common</span> {
+		<span class="n">private_key_password</span> = &lt;<span class="n">private_key_password</span>&gt;
+      <span class="c"># ...
+</span>	}
+
+
+	<span class="n">tls</span> {
+    <span class="c"># ...
+</span>		<span class="n">tls</span> = <span class="n">tls</span>-<span class="n">common</span>
+    <span class="c"># ...
+</span>	}
+
+	<span class="n">ttls</span> {
+    <span class="c"># ...
+</span>		<span class="n">tls</span> = <span class="n">tls</span>-<span class="n">common</span>
+    <span class="c"># ...
+</span>		<span class="n">virtual_server</span> = <span class="s2">"inner-tunnel"</span>
+    <span class="c"># ...
+</span>	}
+
+	<span class="c">#peap {
+</span>	<span class="c">#}
+</span>
+	<span class="c">#mschapv2 {
+</span>	<span class="c">#}
+</span>
+	<span class="c">#fast {
+</span>	<span class="c">#}
+</span>}
+</code></pre></div></div>
+
+<ul>
+  <li><code class="highlighter-rouge">mods-enabled/python</code>
+    <ul>
+      <li>python 모듈 실행 설정 입니다.</li>
+      <li><code class="highlighter-rouge">python_path</code>에 <code class="highlighter-rouge">:</code>로 구분해서 참조 할 모듈의 path를 지정</li>
+      <li>command line에서 python을 실행하는 경우 기본 python module 및 추가 설치된 module 들의 path가 기본 설정된 채로 실행되지만 FreeRADIUS에서 python을 실행해 줄때는 그렇지 않으므로 스크립트에서 사용 할(import 하는..) 모듈 들이 있는 path를 추가해 주어야함.</li>
+      <li>Dockerfile에서 이미지 생성시 추가하는 모듈들의 docker image 내 경로를 확인해서 추가해 주어야 합니다.</li>
+      <li>아래는 <code class="highlighter-rouge">pycrypto</code>가 설치된 경로를 추가한 설정입니다. (아래 Docker file 참조)</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-conf highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">python</span> {
+	<span class="n">python_path</span>=<span class="s2">"/usr/lib/python2.7/:/usr/local/lib/python2.7/dist-packages:${modconfdir}/python/:/usr/lib/python2.7/lib-dynload/"</span>
+	<span class="n">module</span> = <span class="n">keycloak</span>
+	<span class="n">pass_all_vps</span> = <span class="n">no</span>
+	<span class="n">pass_all_vps_dict</span> = <span class="n">yes</span>
+
+  <span class="c"># ...
+</span>
+	<span class="n">mod_authorize</span> = ${.<span class="n">module</span>}
+	<span class="n">func_authorize</span> = <span class="n">authorize</span>
+
+	<span class="n">mod_authenticate</span> = ${.<span class="n">module</span>}
+	<span class="n">func_authenticate</span> = <span class="n">authenticate</span>
+
+  <span class="c"># ... 
+</span>}
+</code></pre></div></div>
+
+<ul>
+  <li><code class="highlighter-rouge">mods-config/python/keycloak.py</code>
+    <ul>
+      <li>원래 해당 디렉토리에는 <code class="highlighter-rouge">radiusd.py</code> / <code class="highlighter-rouge">example.py</code> 두개 파일이 있습니다.</li>
+      <li><code class="highlighter-rouge">radiusd.py</code>는 반환값 상수 및 로그 출력을 위한 함수가 선언되어 있습니다.(<strong>자동생성된 파일로 수정해도 의미가 없습니다.</strong>)</li>
+      <li><code class="highlighter-rouge">example.py</code> -&gt; <code class="highlighter-rouge">keycloak.py</code>로 변경(위 mods-enabled/python 파일에서도 module 명을 미리 변경했습니다.)</li>
+      <li>각 단계별 함수에 넘어오는 <code class="highlighter-rouge">p</code>는 <code class="highlighter-rouge">tuple</code>이며, 일반적으로 <code class="highlighter-rouge">(('User-Name', 'dorma'), ('User-Password', 'password'), ('NAS-Identifier', 'client-identifier'), ...)</code>으로 전달 됩니다.</li>
+      <li><strong>인증 방식이 <code class="highlighter-rouge">PAP</code>가 아닐 경우 <code class="highlighter-rouge">User-Password</code>는 전달되지 않습니다.</strong></li>
+      <li><code class="highlighter-rouge">authorize</code>단계에서는 username / password가 있는 경우 <code class="highlighter-rouge">Auth-Type=KEYCLOAK</code>으로 설정하며, <code class="highlighter-rouge">authenticate</code>단계에서 실제 인증을 처리 합니다.
+        <ul>
+          <li>sites-enabled 설정의 authenticate에서 Auth-Type 분기처리가 되어있어서 username / password가 없으면 authenticate 함수는 호출되지 않습니다.</li>
+        </ul>
+      </li>
+      <li>실제 인증처리 로직은 <a href="https://www.keycloak.org/docs-api/6.0/rest-api/index.html">keycloak API</a> 참고 하셔서 구현하시면 됩니다.
+        <ul>
+          <li>꼭 keycloak과 연동 안하고 python으로 어떤 처리든 하고 결과만 반환하면 되니 원하는 서버 혹은 DB 베이스로 인증처리를 하시면 됩니다.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#! /usr/bin/env python2
+</span>
+<span class="kn">import</span> <span class="nn">radiusd</span>
+<span class="o">...</span>
+
+<span class="k">def</span> <span class="nf">authorize</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
+  <span class="n">username</span> <span class="o">=</span> <span class="n">getUserName</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+  <span class="n">password</span> <span class="o">=</span> <span class="n">getUserPassword</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+  <span class="k">if</span> <span class="n">username</span> <span class="ow">and</span> <span class="n">password</span><span class="p">:</span>
+    <span class="c1"># tuple로 반환시 `인증결과, response, FreeRADIUS 내부 처리 변수` 순으로 반환 가능
+</span>    <span class="k">return</span> <span class="p">(</span>
+      <span class="n">radiusd</span><span class="o">.</span><span class="n">RLM_MODULE_UPDATED</span><span class="p">,</span>
+      <span class="p">(),</span>
+      <span class="p">((</span><span class="s">'Auth-Type'</span><span class="p">,</span> <span class="s">"KEYCLOAK"</span><span class="p">),)</span>
+    <span class="p">)</span>
+  <span class="k">else</span> <span class="p">:</span>
+    <span class="c1"># 처리 결과 반환
+</span>    <span class="k">return</span> <span class="n">radius</span><span class="o">.</span><span class="n">RLM_MODULE_REJECT</span>
+
+<span class="k">def</span> <span class="nf">authenticate</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
+  <span class="n">username</span> <span class="o">=</span> <span class="n">getUserName</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+  <span class="n">password</span> <span class="o">=</span> <span class="n">getUserPassword</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+  <span class="n">nasId</span> <span class="o">=</span> <span class="n">getNasIdentifier</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+  
+  <span class="c1"># ...&lt;인증 처리&gt;...
+</span>
+  <span class="k">if</span> <span class="n">authResult</span> <span class="p">:</span>
+    <span class="k">return</span> <span class="n">radiusd</span><span class="o">.</span><span class="n">RLM_MODULE_OK</span>
+  <span class="k">else</span> <span class="p">:</span>
+    <span class="k">return</span> <span class="n">radiusd</span><span class="o">.</span><span class="n">RLM_MODULE_REJECT</span>
+
+<span class="o">...</span>
+
+<span class="k">def</span> <span class="nf">getNasIdentifier</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="p">:</span>
+  <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">p</span> <span class="p">:</span>
+    <span class="k">if</span> <span class="n">key</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s">"NAS-Identifier"</span><span class="o">.</span><span class="n">upper</span><span class="p">():</span>
+      <span class="k">return</span> <span class="n">val</span>
+  <span class="k">return</span> <span class="s">""</span>
+
+<span class="k">def</span> <span class="nf">getUserName</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="p">:</span>
+  <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">p</span> <span class="p">:</span>
+    <span class="k">if</span> <span class="n">key</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s">"User-Name"</span><span class="o">.</span><span class="n">upper</span><span class="p">():</span>
+      <span class="k">return</span> <span class="n">val</span>
+  <span class="k">return</span> <span class="s">""</span>
+
+<span class="k">def</span> <span class="nf">getUserPassword</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="p">:</span>
+  <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">p</span> <span class="p">:</span>
+    <span class="k">if</span> <span class="n">key</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s">"User-Password"</span><span class="o">.</span><span class="n">upper</span><span class="p">():</span>
+      <span class="k">return</span> <span class="n">val</span>
+  <span class="k">return</span> <span class="s">""</span>
+</code></pre></div></div>
+
+<p><strong>step 4. Docker Image 생성</strong></p>
+<ul>
+  <li><a href="https://hub.docker.com/r/freeradius/freeradius-server/">Docker Hub에 공개되어 있는 이미지</a>를 베이스
+    <ol>
+      <li>python 설치</li>
+      <li>python 추가 모듈 설치(아래 예시는 <a href="https://pypi.org/project/pycrypto/">pycrypto</a>, pycrypto는 설치시 빌드가 필요해서 build-essential도 설치했다가 설치 후 제거)</li>
+      <li>위에서 수정한 설정파일들을 설정 디렉토리(<code class="highlighter-rouge">/etc/raddb</code>) 아래에 덮어쓰기</li>
+    </ol>
+  </li>
+</ul>
+
+<div class="language-docker highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">FROM</span><span class="s"> freeradius/freeradius-server:3.0.17</span>
+
+<span class="k">RUN </span><span class="se">\
+</span>  apt-get update <span class="nt">--force-yes</span> <span class="nt">-y</span> <span class="o">&amp;&amp;</span> <span class="se">\
+</span>  apt-get <span class="nb">install</span> <span class="nt">--force-yes</span> <span class="nt">-y</span> python python-dev curl build-essential
+
+<span class="k">RUN </span>curl <span class="nt">-o</span> pycrypto-2.6.1.tar.gz https://ftp.dlitz.net/pub/dlitz/crypto/pycrypto/pycrypto-2.6.1.tar.gz
+<span class="k">RUN </span><span class="nb">tar</span> <span class="nt">-xzf</span> pycrypto-2.6.1.tar.gz
+<span class="k">RUN </span><span class="nb">rm</span> <span class="nt">-rf</span> pycrypto-2.6.1.tar.gz
+<span class="k">WORKDIR</span><span class="s"> /pycrypto-2.6.1</span>
+<span class="k">RUN </span>python setup.py <span class="nb">install</span>
+<span class="k">WORKDIR</span><span class="s"> /</span>
+<span class="k">RUN </span><span class="nb">rm</span> <span class="nt">-rf</span> pycrypto-2.6.1
+
+<span class="k">RUN </span>apt-get remove <span class="nt">--force-yes</span> <span class="nt">-y</span> <span class="nt">--auto-remove</span> build-essential
+<span class="k">RUN </span>apt-get purge <span class="nt">--force-yes</span> <span class="nt">-y</span> <span class="nt">--auto-remove</span> build-essential
+
+<span class="k">COPY</span><span class="s"> ./freeradius-config/radiusd.conf /etc/raddb/radiusd.conf</span>
+<span class="k">COPY</span><span class="s"> ./freeradius-config/clients.conf /etc/raddb/clients.conf</span>
+<span class="k">COPY</span><span class="s"> ./freeradius-config/sites-enabled/default /etc/raddb/sites-enabled/default</span>
+<span class="k">COPY</span><span class="s"> ./freeradius-config/sites-enabled/inner-tunnel /etc/raddb/sites-enabled/inner-tunnel</span>
+<span class="k">COPY</span><span class="s"> ./freeradius-config/mods-enabled/eap /etc/raddb/mods-enabled/eap</span>
+<span class="k">COPY</span><span class="s"> ./freeradius-config/mods-enabled/python /etc/raddb/mods-enabled/python</span>
+<span class="k">COPY</span><span class="s"> ./freeradius-config/certs /etc/raddb/certs</span>
+<span class="k">COPY</span><span class="s"> ./freeradius-config/mods-config/python /etc/raddb/mods-config/python</span>
+
+<span class="k">WORKDIR</span><span class="s"> /etc/raddb/mods-config/python</span>
+<span class="k">RUN </span><span class="nb">rm</span> <span class="nt">-rf</span> <span class="k">*</span>.pyc
+
+<span class="k">WORKDIR</span><span class="s"> /</span>
+</code></pre></div></div>
+
+<ul>
+  <li>docker build &amp; push</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>docker build <span class="nt">-t</span> socar/radius-server:0.9.1 <span class="nb">.</span>
+<span class="nv">$ </span>docker push <span class="nt">-t</span> socar/radius-server:0.9.1
+</code></pre></div></div>
+
+<h3 id="6-docker-compose로-배포하기">6. Docker-compose로 배포하기</h3>
+<ul>
+  <li><code class="highlighter-rouge">docker-compose.yml</code> 예시</li>
+</ul>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">version</span><span class="pi">:</span> <span class="s2">"</span><span class="s">3"</span>
+
+<span class="na">services</span><span class="pi">:</span>
+  <span class="na">radius-server</span><span class="pi">:</span>
+    <span class="na">container_name</span><span class="pi">:</span> <span class="s">free-radius-server</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">socarr/radius-server:0.9.1</span>
+    <span class="na">env_file</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">./config.env</span>
+    <span class="na">ports</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">31812:1812/udp</span>
+      <span class="pi">-</span> <span class="s">31813:1813/udp</span>
+    <span class="na">volumes</span><span class="pi">:</span> <span class="pi">[]</span>
+      <span class="c1">#- ./logs:/var/log/freeradius</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="highlighter-rouge">config.env</code> 예시</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">SHARED_SECRET</span><span class="o">=</span>&lt;my-shared-secret&gt;
+</code></pre></div></div>
+
+<ul>
+  <li>배포 (docker-compose.yml, config.env가 있는 경로에서 실행)</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>docker-compose up <span class="nt">-d</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="keycloak-유저로-ssh-로그인-하기">Keycloak 유저로 ssh 로그인 하기</h2>
+<ul>
+  <li><code class="highlighter-rouge">Ubuntu Linux</code> 기준으로 설정을 진행합니다.</li>
+</ul>
+
+<h3 id="1-구성도">1. 구성도</h3>
+<div class="mermaid">
+graph TD;
+  subgraph Linux
+    CLIENT[시작: ssh/sudo] --&gt;|1. PAM 모듈 호출| PAM(pam_radius_auth.so)
+    PAM --&gt;|6. 인증 완료| CLIENT
+  end
+  
+  subgraph Radius-Server
+    PAM --&gt; |2. RADIUS 요청| RADIUS_SERVER
+  end
+
+  subgraph Keycloak
+    RADIUS_SERVER --&gt;|3. 권한확인 요청| KEYCLOAK[Keycloak]
+    KEYCLOAK --&gt;|4. 권한확인 응답| RADIUS_SERVER
+  end
+  
+  RADIUS_SERVER --&gt;|5. RADIUS 응답| PAM
+</div>
+
+<h3 id="2-pam_radius_authso-빌드-하기">2. <a href="https://github.com/FreeRADIUS/pam_radius"><code class="highlighter-rouge">pam_radius_auth.so</code></a> 빌드 하기</h3>
+<ul>
+  <li>저는 Mac을 사용하므로 ubuntu docker 이미지를 사용해서 빌드합니다.</li>
+  <li>다운로드 혹은 clone 받은 소스 디렉토리에서 진행 합니다.</li>
+  <li>빌드용 이미지 생성을 위한 Dockerfile</li>
+</ul>
+
+<div class="language-docker highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">FROM</span><span class="s"> ubuntu</span>
+
+<span class="k">RUN </span><span class="se">\
+</span>  apt-get update <span class="nt">--force-yes</span> <span class="nt">-y</span> <span class="o">&amp;&amp;</span> <span class="se">\
+</span>  apt-get <span class="nb">install</span> <span class="nt">--yes</span> build-essential libpam0g-dev make
+</code></pre></div></div>
+
+<ul>
+  <li>docker build</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>docker build <span class="nt">-t</span> pam_builder <span class="nb">.</span>
+</code></pre></div></div>
+
+<ul>
+  <li>docker run</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>docker run <span class="nt">-v</span> <span class="si">$(</span><span class="nb">pwd</span><span class="si">)</span>:/pam_radius <span class="nt">-w</span> /pam_radius pam_builder ./configure
+<span class="nv">$ </span>docker run <span class="nt">-v</span> <span class="si">$(</span><span class="nb">pwd</span><span class="si">)</span>:/pam_radius <span class="nt">-w</span> /pam_radius pam_builder make
+</code></pre></div></div>
+
+<ul>
+  <li>빌드가 완료되면 <code class="highlighter-rouge">pam_radius_auth.so</code>파일이 생성됩니다.</li>
+</ul>
+
+<h3 id="3-pam_radius_authso-업로드-하기">3. <code class="highlighter-rouge">pam_radius_auth.so</code> 업로드 하기</h3>
+<ul>
+  <li>저는 ubuntu 서버에 업로드 후 <code class="highlighter-rouge">/opt/pam/pam_radius_auth.so</code> 경로에 위치 시켰습니다.</li>
+</ul>
+
+<h3 id="4-pam_radius_authso-설정하기">4. <code class="highlighter-rouge">pam_radius_auth.so</code> 설정하기</h3>
+<ol>
+  <li><code class="highlighter-rouge">/etc/raddb/server</code> 파일 생성
+    - 소스상의 <a href="https://github.com/FreeRADIUS/pam_radius/blob/master/pam_radius_auth.conf"><code class="highlighter-rouge">pam_radius_auth.conf</code></a> 파일 참조.</li>
+</ol>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>...
+<span class="c"># server[:port]             shared_secret      timeout (s)  source_ip            vrf</span>
+&lt;radius-server&gt;:&lt;auth-port&gt;	     &lt;shared_secret&gt;		&lt;<span class="nb">timeout</span><span class="o">&gt;</span>
+...
+</code></pre></div></div>
+
+<h3 id="5-sshd-설정">5. <code class="highlighter-rouge">sshd</code> 설정</h3>
+<ul>
+  <li><a href="https://github.com/FreeRADIUS/pam_radius/blob/master/USAGE">pam_radius_auth.so 설정 옵션</a> 참고</li>
+  <li><code class="highlighter-rouge">/etc/pam.d/sshd</code> 설정.
+    <ul>
+      <li><code class="highlighter-rouge">@include common-auth</code>을 남겨두고. pam_radius_auth.so의 pam option을 <code class="highlighter-rouge">[default=ignore]</code>로 설정 하면 pam_radius_auth.so를 이용한 인증이 실패 할 경우 기본 linux 사용자 인증 방식으로 인증 가능합니다.</li>
+      <li><code class="highlighter-rouge">client_id</code>는 RADIUS서버로 전달 될때 <code class="highlighter-rouge">NAS-Identifier</code>로 전달되니 여러대의 서버에 설정 할 경우 서버 및 ssh, sudo를 구분 할 수 있는 값을 사용하면 됩니다.(<a href="/posts/keycloak-radius">RADIUS 서버 설치 및 Keycloak 연동 설정</a>의 python 모듈에서 <code class="highlighter-rouge">NAS-Identifier</code> 값으로 분기처리 가능.)</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-conf highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># ...
+# Standard Un*x authentication.
+</span><span class="n">auth</span> [<span class="n">success</span>=<span class="n">done</span> <span class="n">default</span>=<span class="n">ignore</span>]	/<span class="n">opt</span>/<span class="n">pam</span>/<span class="n">pam_radius_auth</span>.<span class="n">so</span> <span class="n">client_id</span>=<span class="n">ssh</span>-<span class="m">10</span>.<span class="m">100</span>.<span class="m">13</span>.<span class="m">179</span> <span class="n">force_prompt</span> <span class="n">prompt_attribute</span>
+@<span class="n">include</span> <span class="n">common</span>-<span class="n">auth</span>
+<span class="c"># ...
+</span></code></pre></div></div>
+
+<ul>
+  <li><code class="highlighter-rouge">/etc/ssh/sshd_config</code> 기본 설정.
+    <ul>
+      <li><code class="highlighter-rouge">PasswordAuthentication no</code> 설정시 sshd에서 기본으로 출력하는 비밀번호를 묻는 prompt를 노출하지 않습니다.</li>
+      <li><code class="highlighter-rouge">ChallengeResponseAuthentication yes</code> 설정시 PAM 모듈에서 사용자에게 노출 할 prompt 메세지를 핸들링 할 수 있습니다.</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-conf highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># ...
+</span><span class="n">PasswordAuthentication</span> <span class="n">no</span>
+<span class="n">ChallengeResponseAuthentication</span> <span class="n">yes</span>
+<span class="c"># ...
+</span></code></pre></div></div>
+
+<ul>
+  <li><code class="highlighter-rouge">(선택사항)</code> <code class="highlighter-rouge">/etc/ssh/sshd_config</code> 추가설정
+    <ul>
+      <li>특정 사용자(keycloak / radius-server 접속 불가시 사용)를 제외하고 RSA key를 이용한 로그인을 막고 싶은 경우.</li>
+      <li>아래 예시와 같이 <code class="highlighter-rouge">AuthorizedKeysFile</code>를 절대경로로 지정.</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-conf highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">AuthorizedKeysFile</span>	/<span class="n">home</span>/<span class="n">dorma</span>/.<span class="n">ssh</span>/<span class="n">authorized_keys</span>
+</code></pre></div></div>
+
+<h3 id="6-sudo-설정">6. <code class="highlighter-rouge">sudo</code> 설정</h3>
+<ul>
+  <li><code class="highlighter-rouge">/etc/pam.d/sudo</code> 설정.
+    <ul>
+      <li><code class="highlighter-rouge">@include common-auth</code>을 남겨두고. pam_radius_auth.so의 pam option을 <code class="highlighter-rouge">[default=ignore]</code>로 설정 하면 pam_radius_auth.so를 이용한 인증이 실패 할 경우 기본 linux 사용자 인증 방식으로 인증 가능.</li>
+      <li><code class="highlighter-rouge">client_id</code>는 RADIUS서버로 전달 될때 <code class="highlighter-rouge">NAS-Identifier</code>로 전달되니 여러대의 서버에 설정 할 경우 서버 및 ssh, sudo를 구분 할 수 있는 값을 사용하면 됩니다.(<a href="/posts/keycloak-radius">RADIUS 서버 설치 및 Keycloak 연동 설정</a>의 python 모듈에서 <code class="highlighter-rouge">NAS-Identifier</code> 값으로 분기처리 가능.)</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-conf highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># ...
+</span><span class="n">auth</span> [<span class="n">success</span>=<span class="n">done</span> <span class="n">default</span>=<span class="n">ignore</span>] /<span class="n">opt</span>/<span class="n">pam</span>/<span class="n">pam_radius_auth</span>.<span class="n">so</span> <span class="n">client_id</span>=<span class="n">sudo</span>-<span class="m">10</span>.<span class="m">100</span>.<span class="m">13</span>.<span class="m">179</span> <span class="n">force_prompt</span> <span class="n">prompt_attribute</span>
+@<span class="n">include</span> <span class="n">common</span>-<span class="n">auth</span>
+<span class="c"># ...
+</span></code></pre></div></div>
+
+<hr />
+
+<h2 id="cisco-무선-공유기-설정">Cisco 무선 공유기 설정</h2>
+<ul>
+  <li>`무선 공유기에서 RADIUS 서버와 연동 설정을 하고 SSID를 띄웁니다.
+    <ul>
+      <li><del>자세한 설정은 네트워크 관리자에게 문의하세요?!</del></li>
+      <li>참고: <a href="https://www.cisco.com/c/en/us/support/docs/wireless-mobility/wireless-lan-wlan/211263-Configure-802-1x-PEAP-with-FreeRadius.html">Cisco 라우터에서 FreeRADIUS 연동 설정 하기</a></li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="정리--추가로-가능한-것">정리 + 추가로 가능한 것</h2>
+<ul>
+  <li><code class="highlighter-rouge">Keycloak + FreeRADIUS + pam_radius_auth.so + keycloak API로 인증처리 python 스크립트 작성</code>으로 web, wifi, ssh 인증을 <code class="highlighter-rouge">1개의 ID로 각종 사내 서비스 인증</code>을 구축 과정을 정리해 보았습니다.
+    <ul>
+      <li>사실 <code class="highlighter-rouge">설치 및 설정</code>이 과정의 대부분이고 개발(코드작성)은 <code class="highlighter-rouge">python 스크립트 100~200줄 정도</code>하였습니다.</li>
+    </ul>
+  </li>
+  <li>wifi나 ssh 인증 같은 경우 패스워드를 공유해서 사용하는 경우 보안의 구멍이 될 수 있습니다. 보완책으로 패스워드를 주기적으로 변경하는 방법을 사용하는데 wifi의 경우 크게 문제가 되지 않지만 ssh 인증 같은 경우는 서버 대수가 늘어나면 주기적인 변경이 쉽지 않습니다.</li>
+  <li><strong>위 설정의 경우 ssh 접속전에 서버별로 계정은 미리 생성이 되어있어야 접속이 가능</strong> 하지만 이후 패스워드 변경 등은 개별 사용자별로 관리가 가능합니다.</li>
+  <li>위에서는 자세히 설명하지는 않았지만 keycloak의 권한관리(authorization)를 잘 설정하고 python 스크립트에서 인증 + 권한확인을 처리하게 되면 <strong>개별 사용자별로 특정 서버에 대한 접근을 허용할지에 대한 관리도 가능</strong>해집니다.</li>
+  <li>그 밖에도 <a href="https://github.com/keycloak/keycloak-gatekeeper">keycloak-gatekeeper</a>를 잘 활용하면 API서버에서는 인증/권한 관련 코드를 한줄도 작성하지 않고 기능만 작성한 후에 gatekeeper를 활용해 url / http method 별로 접근 권한 처리도 할 수 있습니다.</li>
+</ul>
+
+        </div>
+        
+        <hr>
+        <div class="clearfix">
+          
+          
+          <a class="btn btn-primary float-right" href="/security/2019/09/02/aviatrix-fqdn.html" data-toggle="tooltip" data-placement="top" title="AWS VPC에서 FQDN Outbound Control">Next<span class="d-none d-md-inline">
+              Post</span> &rarr;</a>
+          
+        </div>
+        <div>
+          <p class="recuit">쏘카는 언제나 쏘카 서비스를 함께 만들며 기술적인 문제를 함께 풀어나갈 능력있는 개발자/디자이너/기획자/데이터 사이언티스트 등을 모시고 있습니다. 자세한 내용은 <a href="https://bit.ly/SOCAR-RECRUIT">쏘카 채용공고 페이지</a>를 확인 부탁드립니다 :)</p>
+        </div>
+      </div>
+    </div>
+    <!-- utterance comments -->
+    <script src="https://utteranc.es/client.js"
+        repo="socar-inc/techblog-comments"
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+    </script>
+  </div>
+
+<script>
+  // ref https://tscanlin.github.io/tocbot/
+  tocbot.init({
+    tocSelector: '#toc',
+    contentSelector: '.post-content',
+    headingSelector: 'h1, h2, h3',
+    hasInnerContainers: true,
+    collapseDepth: 6,
+    linkClass: 'toc-link'
+  });
+
+
+  $(window).on('scroll', function() {
+      let scrollTop = $(window).scrollTop()
+      let scrollBottom =  scrollTop + $(window).height()
+      let contentOffsetTop = $(".post-content").offset().top
+      let contentOffsetBottom = contentOffsetTop + $(".post-content").height()
+      let elementHeight = $(".post-content").height(); 
+
+      if ((scrollTop < contentOffsetTop) || (scrollBottom >= contentOffsetBottom)) {
+        // $('.toc').css('visibility', 'hidden')
+        $('.toc').addClass("toc-hidden")
+      }
+      else if (scrollTop >= contentOffsetTop) {
+        $(".toc").removeClass("toc-hidden")
+      }
+  });
+</script>
+
+
+  <!-- Footer -->
+
+<hr>
+
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-md-9 mx-auto">
+        <ul class="list-inline text-center">
+          
+          
+          
+          <li class="list-inline-item">
+            <a href="https://www.facebook.com/socarsharing">
+              <span class="fa-stack fa-lg">
+                <i class="fas fa-circle fa-stack-2x"></i>
+                <i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i>
+              </span>
+            </a>
+          </li>
+          
+          
+          
+        </ul>
+        <p class="copyright text-muted">Copyright &copy; SOCAR 2023 | tech_branding@socar.kr</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+  <script src="/assets/vendor/jquery/jquery.min.js"></script>
+<script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/assets/vendor/startbootstrap-clean-blog/js/clean-blog.min.js"></script>
+<script src="/assets/scripts.js"></script>
+<script src="/assets/mermaid-8.2.3.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.11.1/tocbot.min.js"></script>
+
+
+
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-30551922-27"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-30551922-27');
+</script>
+
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-MZ79TFM');</script>
+<!-- End Google Tag Manager -->
+
+
+</body>
+
+</html>

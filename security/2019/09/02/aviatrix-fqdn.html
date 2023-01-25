@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>
+    AWS VPC에서 FQDN Outbound Control - SOCAR Tech Blog
+    
+  </title>
+
+  <meta name="description" content="Aviatrix Gateway를 이용한 FQDN Outbound Control">
+
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://tech.socarcorp.kr/security/2019/09/02/aviatrix-fqdn.html"/>
+  <meta property="og:title" content="AWS VPC에서 FQDN Outbound Control"/>
+  <meta property="og:description" content="Aviatrix Gateway를 이용한 FQDN Outbound Control"/>
+  <meta property="og:site_name" content="SOCAR Tech Blog"/>
+  <meta property="og:image" content="https://tech.socarcorp.kr/img/big_wheel.jpg"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="AWS VPC에서 FQDN Outbound Control"/>
+  <meta name="twitter:description" content="Aviatrix Gateway를 이용한 FQDN Outbound Control"/>
+  <meta name="twitter:image" content="https://tech.socarcorp.kr/img/big_wheel.jpg"/>
+
+
+  <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.11.1/tocbot.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.11.1/tocbot.css">
+
+  <link rel="stylesheet" href="/assets/vendor/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/assets/vendor/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="/assets/main.css">
+
+  <link rel="canonical" href="https://tech.socarcorp.kr/security/2019/09/02/aviatrix-fqdn.html">
+  <link rel="alternate" type="application/rss+xml" title="SOCAR Tech Blog" href="/feed.xml">
+  <link rel="icon" type="image/png" href="/assets/icon/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/icon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/assets/icon/favicon-96x96.png">
+</head>
+
+
+<body>
+
+  <!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+  <div class="container">
+    <a class="navbar-brand" href="/">SOCAR Tech Blog</a>
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      Menu
+      <i class="fa fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="/">🏠 Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/posts">✏️ Posts</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/categories">📔 Categories</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/tags">🏷 Tags</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/authors">✍🏻 Authors</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+  <!-- Page Header -->
+
+<header class="masthead" style="background-image: url('/img/big_wheel.jpg')">
+  
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-9 col-md-9 mx-auto">
+          <div class="post-heading">
+            <h1 class="post-title">AWS VPC에서 FQDN Outbound Control</h1>
+            
+            <h2 class="subheading">Aviatrix Gateway를 이용한 FQDN Outbound Control</h2>
+            
+            <div class="post-meta">
+              
+              
+                
+                <span class="author"><a href="/authors#아이작"><img src="/assets/authors/default.png">아이작</a></span>
+              
+                <br>
+                <span class="date">2019-09-02</span>
+                <br>
+                <span class="category"><a href="/categories#">security</a></span> 
+                <br>
+              
+                <span class="tag"><a href="/tags#outbound">outbound</a></span>
+              
+                <span class="tag"><a href="/tags#aviatrix">aviatrix</a></span>
+              
+                <span class="tag"><a href="/tags#fqdn">fqdn</a></span>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="toc toc-hidden" id="toc">
+    </div>
+    <div class="row">
+      <div class="col-lg-9 col-md-9 mx-auto">
+        <div class="post-content">
+        <div class="photo-copyright">
+Photo by <a href="https://unsplash.com/@andreoiide?utm_medium=referral&amp;utm_campaign=photographer-credit&amp;utm_content=creditBadge">Andrea Enríquez Cousiño</a>
+</div>
+
+<p><strong>On-premise</strong> 환경에서 현재 회사의 성장세를 따라가기 어렵다고 판단하고, 1년 전부터 Cloud 환경으로 마이그레이션을 진행하고 있습니다. 현재는 중요 서비스의 90% 이상이 Cloud 환경으로 마이그레이션 되었으며, 그 과정에서 인프라를 구성하는 많은 구성 요소가 변경, 대체 되었습니다. 또한, 여러 보안 요구사항을 만족시키기 위해서 추가적인 시스템 도입에 대해서 고민하였고, 그 과정을 공유하고자 합니다.</p>
+
+<h2 id="목차">목차</h2>
+
+<ul>
+  <li>Outbound FQDN filtering을 하려는 이유</li>
+  <li>Cloud 환경에서 Outbound 트래픽에 대한 관리를 어떻게 할까?</li>
+  <li>Aviatrix 솔루션 구축을 통한 요구사항 검토 (AWS)</li>
+  <li>AWS Account with Aviatrix Gateway Architecture</li>
+  <li>Aviatrix 자세히 들여다보기</li>
+  <li>Multiple AWS Accounts with Role Switchin Aviatrix Architecture</li>
+  <li>정리</li>
+  <li>계획중인 Aviatrix을 이용한 다양한 환경 구축</li>
+</ul>
+
+<hr />
+
+<h2 id="outbound-fqdn-filtering을-하려는-이유">Outbound FQDN filtering을 하려는 이유</h2>
+<ul>
+  <li><code class="highlighter-rouge">멀웨어 2차 확산 방지</code>
+    <ul>
+      <li>멀웨어에 감염된 경우 Outbound FQDN Filtering을 통해 멀웨어 <a href="https://ko.wikipedia.org/wiki/C%26C_(%EC%95%85%EC%84%B1_%EC%86%8C%ED%94%84%ED%8A%B8%EC%9B%A8%EC%96%B4)">C&amp;C</a> 서버에 연결하지 못하게 하고, <u>악성 코드</u>가 컴퓨터의 데이터를 외부로 전송하려고 하면 대상에 연결하지 못하게 할 수 있습니다.</li>
+    </ul>
+  </li>
+  <li>Outbound 트래픽에 대한 무단 활동 감지</li>
+  <li>google.com 등 <strong>IP Range</strong>가 넓고, <a href="https://en.wikipedia.org/wiki/Content_delivery_network">CDN</a> 서비스 같은 지속 해서 변하는 IP 대응</li>
+  <li>AWS - Security Groups 기준 Inbound or outbound rules per security group은 60개로 <a href="https://docs.aws.amazon.com/vpc/latest/userguide/amazon-vpc-limits.html">제한</a> 됩니다. Inbound 관점에서 인터넷에서 고객 서비스는 특이사항이 아닐 수 있으나, Outbound 관점에서는 updates.ubuntu.com(IP 15), Github(IP 12) 등 타사의 업데이트 및 API를 생각하면 <u>60개의 IP 제한은 충분하지 않다</u>는 것을 알 수 있습니다.</li>
+</ul>
+
+<hr />
+
+<h2 id="cloud-환경에서-outbound-트래픽에-대한-관리를-어떻게-할까">Cloud 환경에서 Outbound 트래픽에 대한 관리를 어떻게 할까?</h2>
+<ul>
+  <li>Cloud Platform에서 <u>TCP/IP</u> Outbound에 대해서는 로그 및 관리를 다양한 Management Service로 지원하고 있지만, Outbound 트래픽 중에 IP 주소가 아닌 <a href="https://en.wikipedia.org/wiki/Fully_qualified_domain_name"><strong>FQDN</strong></a>을 기준으로 한 Filtering에 대한 지원은 Management Service 만으로 대처가 어렵다고 판단하여 별도의 솔루션 도입을 계획하게 되었고, 다음과 같이 요구사항을 정리해 보았습니다.</li>
+</ul>
+
+<div class="language-markdown highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">*</span> Outbound - FQDN filtering +@(TCP/IP)
+<span class="p">*</span> HTTP/HTTPS +@((Wildcard)<span class="err">*</span>.domain.com)
+<span class="p">*</span> Multiple Accounts and Cloud Platform Support
+<span class="p">*</span> 확장성, 관리 편의성 (Infrastructure as code, Update)
+<span class="p">*</span> 안정성 (다양한 레퍼런스, Monitoring, HA)
+<span class="p">*</span> 비용 (저렴한 구축/라이센스 비용)
+</code></pre></div></div>
+
+<p>그 이후에는 오픈소스(<a href="https://aws.amazon.com/ko/blogs/security/how-to-add-dns-filtering-to-your-nat-instance-with-squid/">Squid</a>), 유료 솔루션(<a href="https://aws.amazon.com/marketplace/pp/B00PJ2V04O?qid=1567422902264&amp;sr=0-2&amp;ref_=srh_res_product_title">paloalto</a>, <a href="https://aws.amazon.com/marketplace/pp/B01N49IN0S?qid=1567422994913&amp;sr=0-16&amp;ref_=srh_res_product_title">Cisco vMX</a> 등)을 검토 하였고, 그 중 국내에서는 레퍼런스를 찾아보기 쉽지 않지만 <a href="https://aws.amazon.com/marketplace/pp/B079T2HGWG?qid=1567423038998&amp;sr=0-1&amp;ref_=srh_res_product_title"><code class="highlighter-rouge">Aviatrix</code></a> 유료 솔루션을 선정하였습니다. 선정 과정에서 확인해본 결과 <u>해외 레퍼런스</u>의 경우에는 NASA, Netflix, Hyatt 등이 있었으며, 요구 사항에서 필요로 하는 <strong>Service(FQDN, TransitGW, VPN)에 대한</strong> 비용 및 <a href="https://en.wikipedia.org/wiki/Infrastructure_as_code">IaC</a> 배포, 구성이 타 유료 솔루션보다 이점이 있다는 것을 감안하여 Aviatrix을 선정하게 되었습니다. 선정 과정에서 참고로 한 자료는 다음과 같습니다.</p>
+
+<ul>
+  <li><a href="https://aws.amazon.com/quickstart/architecture/aviatrix-fqdn-egress-filtering/?nc1=h_ls">AWS 기반 Aviatrix FQDN Egress Filtering</a></li>
+  <li><a href="https://www.aviatrix.com/solutions/egress-security.php">Controlling Outbound VPC Traffic</a></li>
+  <li><a href="https://aws.amazon.com/answers/networking/controlling-vpc-egress-traffic/">AWS Answers - Controlling VPC Egress Traffic</a></li>
+</ul>
+
+<hr />
+
+<h2 id="aviatrix-솔루션-구축을-통한-요구사항-검토-aws">Aviatrix 솔루션 구축을 통한 요구사항 검토 (AWS)</h2>
+
+<p>Aviatrix 솔루션 테스트를 위해, AWS Marketplace에서 Aviatrix을 선택 후 <strong>Free Trial</strong> 이용이 가능한 Custom 유형을 선택하여 테스트 초기 환경을 구성합니다. <strong>AWS 인프라(EC2 등) 사용 금액이 발생</strong>하기 때문에 EC2 Instanc Type은 <strong>최소 스펙</strong>을 선택하여 테스트를 진행합니다.</p>
+<ul>
+  <li><a href="https://aws.amazon.com/marketplace/pp/B0155GB0MA?ref_=aws-mp-console-subscription-detail">AWS-Marketplace (Aviatrix Secure Networking Platform - Custom)</a></li>
+</ul>
+
+<p>설치 방법은 두가지를 제공합니다.
+<img src="/img/posts_aviatrix/cloudformation-image.png" alt="1" /></p>
+
+<ol>
+  <li>Amazon Machine Image (AMI)를 통한 직접 설치</li>
+  <li>CloudFormation Template을 이용한 자동화된 설치</li>
+</ol>
+
+<p>원활한 테스트를 위해 CloudFormation Template을 선택하여 진행합니다. Amazon Machine Image를 통한 구성 시에는 Role, Network 구성 등의 추가 설정이 필요합니다. 상세 설치 과정은 Aviatrix에서 Guide를 제공하고 있습니다. <code class="highlighter-rouge">(CloudFormation Template 의 IAM Role, Policy 등은 아래에 별도 분석하겠습니다.)</code></p>
+<ul>
+  <li><a href="https://docs.aviatrix.com/StartUpGuides/aviatrix-cloud-controller-startup-guide.html">Aviatrix CloudFormation Template Guide</a></li>
+</ul>
+
+<p>CloudFormation 배포가 완료된 상태에서 Output 카테고리에서 AviatrixControllerEIP 정보를 확인합니다. EIP에 대한 구성을 하지 않을 경우에는 AviatrixControllerPrivateIP 정보를 확인하여 웹 페이지 주소로 사용됩니다. PrivateIP는 <strong>초기 임시 패스워드</strong>로도 구성됩니다.</p>
+<ul>
+  <li>https://AviatrixControllerEIP</li>
+</ul>
+
+<p><img src="/img/posts_aviatrix/cloudformation-output.png" alt="2" /></p>
+
+<p>AviatrixControllerEIP 접속 이후 관리자 아이디 및 버전을 설정합니다.<br />
+설정을 완료할 경우에는 초기 로그인화면에서 Onboarding 화면이 노출됩니다.<br />
+화면에서 이용하고 있는 Cloud Platform을 지정하고 추가적인 설정을 진행합니다.</p>
+
+<p>모든 설정을 완료한 이후에 제공되는 Aviatrix의 사용자 페이지 입니다.
+<img src="/img/posts_aviatrix/aviatrix-1.png" alt="3" />
+EC2 의 Outbound 트래픽을 로깅 및 관리하기 위해서 우선적으로 Gateway의 설정이 필요해서, Aviatrix 사용자 카테고리에서 Gateway 설정으로 이동합니다.</p>
+
+<p>New Gateway 설정을 진행합니다.
+<img src="/img/posts_aviatrix/aviatrix-gw-add.png" alt="10" />
+“OK”를 클릭할 경우 퍼센트에 대한 상태 이미지가 노출됩니다. 이후 작업은 직접 설치를 진행하지 않아도 자동 설치 및 Gateway 서버에 대한 환경이 구성됩니다. <code class="highlighter-rouge">(HA 구성의 경우에는 다양한 방법을 제공하고 있어 아래 링크를 추가해 드립니다, Aviatrix 깊게 들여다보기(HA, Egress FQDN Discovery) 내용은 블로그 하단에 분류하였습니다.)</code></p>
+<ul>
+  <li><a href="https://docs.aviatrix.com/HowTos/gateway.html"><code class="highlighter-rouge">Gateway</code></a></li>
+  <li><a href="https://docs.aviatrix.com/HowTos/gateway.html#gateway-single-az-ha"><code class="highlighter-rouge">Gateway-HA</code></a></li>
+  <li><a href="https://docs.aviatrix.com/Solutions/gateway_ha.html"><code class="highlighter-rouge">HA-옵션</code></a></li>
+</ul>
+
+<p>Private Subnet의 Route Table을 생성해, 외부로 나가는 모든 트래픽이 Aviatrix-GW를 통해서 나가도록 설정을 진행합니다. <code class="highlighter-rouge">"0.0.0.0/0"</code> 에 대한 Target을 Aviatrix-GW <u>ENI</u>로 지정합니다. 자동 등록을 원할 경우 Aviatrix Controller 사용자 웹 페이지에서 <code class="highlighter-rouge">Gateway &gt; Aviatrix-GW: Edit &gt; Source NAT</code>를 통한 설정이 가능합니다.
+<img src="/img/posts_aviatrix/route-table-avi.png" alt="11" /></p>
+
+<p>FQDN 로깅 및 관리를 위해, Aviatrix Controller 사용자 웹 페이지에서 <strong>security &gt; Egress Control &gt; Egress FQDN Filter</strong>를 설정합니다.</p>
+
+<ol>
+  <li>Egress FQDN Filter 생성 White List/Black List &gt; Black 지정</li>
+  <li>이후 <strong>실 서버 환경</strong> 도입의 경우 Egress FQDN View Log를 확인하고, 사용하고 있는 FQDN을 보안성에 맞도록 분리하여, Egress FQDN Filter를 White List기반으로 변경할 수 있는 환경을 사전에 대비합니다.</li>
+</ol>
+
+<p>테스트를 위해서 FQDN Filter를 아래의 이미지와 같이 <u>White</u> 설정한 이후에, Aviatrix-GW를 바라 보고 있는 <code class="highlighter-rouge">Private-route-table</code> 의 <code class="highlighter-rouge">Private-Subnet</code>에서 운영되는 인스턴스에서 다음 명령어를 실행하였습니다.
+<img src="/img/posts_aviatrix/fqdn-list.png" alt="12" /></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-L</span> <span class="nt">-k</span> <span class="nt">-s</span> <span class="nt">-o</span> /dev/null <span class="nt">-w</span> <span class="s2">"%{http_code}</span><span class="se">\n</span><span class="s2">"</span> https://www.naver.com
+curl <span class="nt">-L</span> <span class="nt">-k</span> <span class="nt">-s</span> <span class="nt">-o</span> /dev/null <span class="nt">-w</span> <span class="s2">"%{http_code}</span><span class="se">\n</span><span class="s2">"</span> https://google.com
+curl <span class="nt">-L</span> <span class="nt">-k</span> <span class="nt">-s</span> <span class="nt">-o</span> /dev/null <span class="nt">-w</span> <span class="s2">"%{http_code}</span><span class="se">\n</span><span class="s2">"</span> https://www.google.com
+curl <span class="nt">-L</span> <span class="nt">-k</span> <span class="nt">-s</span> <span class="nt">-o</span> /dev/null <span class="nt">-w</span> <span class="s2">"%{http_code}</span><span class="se">\n</span><span class="s2">"</span> https://docs.google.com
+</code></pre></div></div>
+<p>테스트에 대한 Egress FQDN View Log</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="m">2019-09-01</span><span class="n">T16</span><span class="o">:</span><span class="m">40</span><span class="o">:</span><span class="m">35.886612+00</span><span class="o">:</span><span class="m">00</span><span class="w"> </span><span class="n">ip</span><span class="m">-172-31-14-85</span><span class="w"> </span><span class="n">avx</span><span class="o">-</span><span class="n">nfq</span><span class="o">:</span><span class="w"> </span><span class="n">AviatrixFQDNRule</span><span class="p">[</span><span class="n">CRIT</span><span class="p">]</span><span class="n">nfq_ssl_handle_client_hello</span><span class="p">()</span><span class="w"> </span><span class="n">L</span><span class="c1">#274  Gateway=Aviatrix-GW S_IP=172.31.24.52 D_IP=210.89.164.90 hostname=www.naver.com state=NO_MATCH drop_reason=NOT_WHITELISTED</span><span class="w">
+</span><span class="m">2019-09-01</span><span class="n">T16</span><span class="o">:</span><span class="m">40</span><span class="o">:</span><span class="m">53.442375+00</span><span class="o">:</span><span class="m">00</span><span class="w"> </span><span class="n">ip</span><span class="m">-172-31-14-85</span><span class="w"> </span><span class="n">avx</span><span class="o">-</span><span class="n">nfq</span><span class="o">:</span><span class="w"> </span><span class="n">AviatrixFQDNRule</span><span class="p">[</span><span class="n">CRIT</span><span class="p">]</span><span class="n">nfq_ssl_handle_client_hello</span><span class="p">()</span><span class="w"> </span><span class="n">L</span><span class="c1">#274  Gateway=Aviatrix-GW S_IP=172.31.24.52 D_IP=172.217.27.78 hostname=google.com state=MATCHED</span><span class="w">
+</span><span class="m">2019-09-01</span><span class="n">T16</span><span class="o">:</span><span class="m">40</span><span class="o">:</span><span class="m">53.654101+00</span><span class="o">:</span><span class="m">00</span><span class="w"> </span><span class="n">ip</span><span class="m">-172-31-14-85</span><span class="w"> </span><span class="n">avx</span><span class="o">-</span><span class="n">nfq</span><span class="o">:</span><span class="w"> </span><span class="n">AviatrixFQDNRule</span><span class="p">[</span><span class="n">CRIT</span><span class="p">]</span><span class="n">nfq_ssl_handle_client_hello</span><span class="p">()</span><span class="w"> </span><span class="n">L</span><span class="c1">#274  Gateway=Aviatrix-GW S_IP=172.31.24.52 D_IP=216.58.197.164 hostname=www.google.com state=MATCHED</span><span class="w">
+</span><span class="m">2019-09-01</span><span class="n">T16</span><span class="o">:</span><span class="m">40</span><span class="o">:</span><span class="m">58.707731+00</span><span class="o">:</span><span class="m">00</span><span class="w"> </span><span class="n">ip</span><span class="m">-172-31-14-85</span><span class="w"> </span><span class="n">avx</span><span class="o">-</span><span class="n">nfq</span><span class="o">:</span><span class="w"> </span><span class="n">AviatrixFQDNRule</span><span class="p">[</span><span class="n">CRIT</span><span class="p">]</span><span class="n">check_ip</span><span class="p">()</span><span class="w"> </span><span class="n">L</span><span class="c1">#65  Gateway=Aviatrix-GW S_IP=172.31.24.52 D_IP=216.58.197.164 hostname=www.google.com state=MATCHED</span><span class="w">
+</span><span class="m">2019-09-01</span><span class="n">T16</span><span class="o">:</span><span class="m">41</span><span class="o">:</span><span class="m">21.940692+00</span><span class="o">:</span><span class="m">00</span><span class="w"> </span><span class="n">ip</span><span class="m">-172-31-14-85</span><span class="w"> </span><span class="n">avx</span><span class="o">-</span><span class="n">nfq</span><span class="o">:</span><span class="w"> </span><span class="n">AviatrixFQDNRule</span><span class="p">[</span><span class="n">CRIT</span><span class="p">]</span><span class="n">nfq_ssl_handle_client_hello</span><span class="p">()</span><span class="w"> </span><span class="n">L</span><span class="c1">#274  Gateway=Aviatrix-GW S_IP=172.31.24.52 D_IP=172.217.26.14 hostname=docs.google.com state=MATCHED</span><span class="w">
+</span><span class="m">2019-09-01</span><span class="n">T16</span><span class="o">:</span><span class="m">41</span><span class="o">:</span><span class="m">22.323298+00</span><span class="o">:</span><span class="m">00</span><span class="w"> </span><span class="n">ip</span><span class="m">-172-31-14-85</span><span class="w"> </span><span class="n">avx</span><span class="o">-</span><span class="n">nfq</span><span class="o">:</span><span class="w"> </span><span class="n">AviatrixFQDNRule</span><span class="p">[</span><span class="n">CRIT</span><span class="p">]</span><span class="n">nfq_ssl_handle_client_hello</span><span class="p">()</span><span class="w"> </span><span class="n">L</span><span class="c1">#274  Gateway=Aviatrix-GW S_IP=172.31.24.52 D_IP=172.217.25.77 hostname=accounts.google.com state=MATCHED</span><span class="w">
+</span></code></pre></div></div>
+<p>로그를 통해 <strong>state</strong>를 확인하고 후속 조치가 가능합니다. Aviatrix 서비스에 대한 다양한 로그 관리 및 시각화 등이 가능하기 때문에, 별도 추가로 확인하고 싶으신 내용은 아래의 링크에서 확인해 주시기 바랍니다.</p>
+<ul>
+  <li><a href="https://docs.aviatrix.com/HowTos/AviatrixLogging.html">Aviatrix-Logging</a></li>
+</ul>
+
+<p>위 내용에서 google.com FQDN에 대해서 <a href="https://en.wikipedia.org/wiki/Fully_qualified_domain_name">호스트 명</a>을 지정하지 않을 때에는 <code class="highlighter-rouge">"*"</code>로 적용됩니다. (*.google.com = google.com)</p>
+
+<hr />
+
+<h2 id="aws-account-with-aviatrix-gateway-architecture">AWS Account with Aviatrix Gateway Architecture</h2>
+
+<p><img src="/img/posts_aviatrix/fqdn-architecture.png" alt="13" /></p>
+
+<p>Instance Outbound Flow &amp; Aviatrix Controller Gateway HA Flow</p>
+
+<div class="mermaid">
+graph LR;
+  CLIENT[시작: Instance] --&gt;|1.Private  Route Table| ag(Aviatrix Gateway)
+    ag --&gt;|2. Public Route Table| igw(Internet Gateway)
+    igw --&gt;|3| int[Internet]
+    ac(시작: Aviatrix Controller) --&gt; internet2[Internet]
+    internet2[Internet]--&gt;|Health Check| ag
+    internet2[Internet]--&gt;|Health Check| agha(Aviatrix Gateway HA)
+    ag--&gt;|Failover| agha(Aviatrix Gateway HA)
+    agha--&gt;|Failover| ag
+</div>
+
+<ol>
+  <li>Private Subnet에서의 Outbound 발생 시 자체 설정한 <code class="highlighter-rouge">Route table</code>을 참조</li>
+  <li>Route table에서 <code class="highlighter-rouge">"0.0.0.0/0"</code> 통신을 Aviatrix Gateway의 <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-eni.html"><code class="highlighter-rouge">ENI</code></a>로 전달</li>
+  <li>Aviatrix Gateway에 설정되어있는 <code class="highlighter-rouge">Aviatrix Controller</code> 정책에 따라 Outbound 트래픽 체크 이후에, Aviatrix Gateway에 Internet gateway로 전달</li>
+  <li>Internet Gateway을 요청한 통신을 외부(Internet)로 전달</li>
+  <li>Aviatrix Controller의 경우 Internet을 통해 Aviatrix Gateway Health Check</li>
+  <li>Aviatrix Gateway 장애 발생시 Gateway_HA의 <u>ENI</u>로 Private Subnet의 <code class="highlighter-rouge">Route table</code> <code class="highlighter-rouge">"0.0.0.0/0"</code> 업데이트</li>
+</ol>
+
+<hr />
+
+<h2 id="aviatrix-자세히-들여다보기">Aviatrix 자세히 들여다보기</h2>
+
+<h3 id="1-hahigh-availability">1. <a href="https://en.wikipedia.org/wiki/High_availability">HA(High Availability)</a></h3>
+<p>HA 구성은 모든 인프라의 <strong>기본</strong>으로 Aviatrix을 사용할 경우 아래와 같은 간단한 작업으로 적용이 가능합니다.</p>
+
+<p>Gateway &gt; Edit &gt; Gateway Single AZ HA “Enable”<br />
+Gateway &gt; Edit &gt; Gateway for High Availability Peering<br />
+(HA 구성을 위해 <u>운영</u> 중인 Gateway Subnet과 다른 <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html">AZ</a>의 <u>Public-Subnet</u>을 선택합니다.)</p>
+
+<p><img src="/img/posts_aviatrix/gateway-ha-public-b.png" alt="20" /></p>
+
+<p>HA 구성을 위한 설정은 마무리하였으며, 정상적으로 <strong>Failover</strong>가 되는지 확인을 위해 아래 구성을 진행하였습니다.</p>
+
+<div class="language-markdown highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">*</span> Private-Subnet에서 운영되는 인스턴스에 대한 실시간 모니터링 설정
+<span class="p">*</span> Failover 기능 테스트를 위해 Aviatrix-GW 인스턴스를 AWS Console에서 강제 종료(STOP)
+<span class="p">*</span> Private-Subnet에서 운영되는 인스턴스에 대한 실시간 모니터링 지표 확인
+</code></pre></div></div>
+
+<p><u>Failover</u>를 테스트하기 전의 Aviatrix Gateway 상태 이미지입니다.</p>
+
+<p><img src="/img/posts_aviatrix/gateway-status.png" alt="21" />
+<u>Failover</u>를 테스트하기 위해 Gateway를 강제 종료한 Aviatrix Gateway 상태 이미지입니다.</p>
+
+<p><img src="/img/posts_aviatrix/gateway-status-2.png" alt="22" /></p>
+
+<p>테스트 결과: Private-Subnet에서 운영되고 있는 인스턴스에 모니터링 에이전트(Telegraf)를 설정하여, ICMP 프로토콜을 이용한 <u>1s</u> 기준으로 <strong>Packet Loss</strong> 현상이 발생 되지 않았습니다. 웹사이트 기준에서는 Gateway가 Failover 되는 시점을 인지할 수 없는 정도입니다.</p>
+
+<p><img src="/img/posts_aviatrix/monitoring.png" alt="23" /></p>
+
+<ul>
+  <li><code class="highlighter-rouge">Aviatrix-Gateway HA Flow (Failover)</code></li>
+</ul>
+
+<div class="mermaid">
+graph TB
+    subgraph Public_A
+Controller[Controller]
+end
+    Controller -x |1.Health Check 실패|Gateway
+    Controller -x |2.AWS-Role을 이용한 table update|Private_Routetable
+    Private_Routetable -x |3.traffic|Gateway_HA
+    Controller--&gt;|Health Check |Gateway
+    Controller--&gt;|Health Check|Gateway_HA
+    subgraph Public
+    subgraph Public_B
+Gateway[Gateway]
+end
+    Gateway--&gt;Public_Routetable
+    subgraph Public_C
+Gateway_HA[Gateway_HA]
+end
+end
+    Gateway_HA--&gt;Public_Routetable
+    subgraph Private
+    subgraph Private_A
+Instance-A[Instance-A]
+end
+    Instance-A--&gt;Private_Routetable
+    subgraph Private_B
+Instance-B[Instance-B]
+end
+    Instance-B--&gt;Private_Routetable
+    Private_Routetable--&gt;Gateway
+end
+    Public_Routetable--&gt;Internet
+</div>
+
+<ul>
+  <li>AviatrixController -&gt; Gateway [Health Check] -&gt; <code class="highlighter-rouge">Fail</code></li>
+  <li>Gateway_HA로 네트워크 트래픽 변경
+    <ul>
+      <li>문제 되는 Gateway로 설정되어 있던 Route Table 업데이트</li>
+      <li>예) Private-Subnet &gt; Route Table &gt; <code class="highlighter-rouge">"0.0.0.0/0"</code> Target <code class="highlighter-rouge">Gateway_HA</code> ENI로 업데이트</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="2-egress-fqdn-discovery">2. <a href="https://docs.aviatrix.com/HowTos/fqdn_discovery.html">Egress FQDN Discovery</a></h3>
+
+<p>해당 기능은 <strong>실 서버</strong>에 적용하기에 앞서 실 서버에서 FQDN outbound의 <u>사용 리스트</u>를 정리하는데 유용한 기능입니다.</p>
+
+<p>Security &gt; Egress Control &gt; (Optional) Egress FQDN Discovery &gt; Gateway “Start” (선택된 Gateway는 FQDN Filter에 연결이 안 되어 있어야 합니다.)</p>
+
+<p><img src="/img/posts_aviatrix/fqdn-discovery-start.png" alt="23" /></p>
+
+<p>테스트를 위해 Private-Subnet에서 운영되고 있는 인스턴스에서 아래 명령어를 실행합니다.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-L</span> <span class="nt">-k</span> <span class="nt">-s</span> <span class="nt">-o</span> /dev/null <span class="nt">-w</span> <span class="s2">"%{http_code}</span><span class="se">\n</span><span class="s2">"</span> https://tech.socarcorp.kr
+</code></pre></div></div>
+
+<p>1번 HA 테스트로 인해 변경된 Aviatrix-GW-hagw에서 발생한 FQDN 내용을 확인할 수 있습니다.</p>
+
+<p><img src="/img/posts_aviatrix/fqdn-discovery-status.png" alt="23" /></p>
+
+<p>테스트 결과: FQDN Discovery 기능을 통해 <strong>실 서버</strong> FQDN Outbound를 모두 사전에 확인하고, 필요 유무에 따라서 FQDN Filter 정책을 정의하는 데 유용합니다.</p>
+
+<h3 id="3-httpstls-통신을-gateway가-가로채서-어디로-가는지-확인할-수-있는-이유">3. HTTPS/TLS 통신을 Gateway가 가로채서 어디로 가는지 확인할 수 있는 이유</h3>
+<p>2번 내용을 보면 HTTPS/TLS 통신을 <strong>Gateway가 어떻게?</strong> 가로 채지 라는 의문점이 있습니다, 해당 내용은 SNI에 대한 이해가 필요해서 SNI 내용을 정리해 드립니다.</p>
+
+<p><code class="highlighter-rouge">SNI(Server Name Indication)</code></p>
+<ul>
+  <li>두 TCP 피어 간 암호화된 TLS 터널을 설정할 수 있고, 클라이언트는 서버에 대한 IP 주소 만 알고 있어도 TLS Handshake를 수행 할 수 있지만, <u>서버가 각각 고유한 TLS 인증서를 가진 여러 개의 독립 사이트를 동일한 IP 주소로 운영하는 문제를 해결하기 위해</u> SNI 확장이 TLS 프로토콜에 도입되었습니다.</li>
+  <li>SNI는 <code class="highlighter-rouge">여러 개</code>의 독립 사이트 중에 <code class="highlighter-rouge">하나의 사이트</code>를 지정 하기 위해 필요한 필드입니다.</li>
+  <li>하지만, TLS Handshake에서 암호화 통신을 <code class="highlighter-rouge">하기 전인</code> <strong>ClientHello</strong> 과정에 적용됩니다.</li>
+</ul>
+
+<p><code class="highlighter-rouge">TLS Handshake</code></p>
+
+<div class="mermaid">
+sequenceDiagram
+opt 암호화 X
+    Client -&gt;&gt; Server: ClientHello
+    Server -&gt;&gt; Client: ServerHello
+    end
+opt 암호화
+    Server -&gt;&gt; Client: ServerCertificate
+    Server -&gt;&gt; Client: ServerHelloDone
+    Client -&gt;&gt; Server: KeyExhange/ChangeCipherSpec/Finished
+    Server -&gt;&gt; Client: ChangeCipherSpec/Finished
+    end
+    Server -&gt; Client: Application Date
+</div>
+
+<p><code class="highlighter-rouge">TLS_1.3 Handshake &gt; ClientHello</code></p>
+
+<div class="mermaid">
+sequenceDiagram
+    Client -&gt;&gt; Gateway: TLS ClientHello, SNI=www.socar.kr, Client`s Diffie-Hellman Key
+opt FQDN Filter
+    Client --&gt; Gateway: SNI Check
+Note right of Client: FQDN Filter 성공
+    Gateway -&gt;&gt; Server: TLS ClientHello, SNI=www.socar.kr, Client`s Diffie-Hellman Key
+end
+opt FQDN Filter
+    Client --&gt; Gateway: SNI Check
+Note right of Client: FQDN Filter 실패
+    Gateway --&gt;&gt; Client: TLS ClientHello, SNI=www.socar.kr, Client`s Diffie-Hellman Key
+end
+</div>
+
+<ul>
+  <li>Gateway가 SNI 필드를 확인하는 방법은 <code class="highlighter-rouge">암호화가 되지 않은 평문</code>으로 전송하기 때문입니다.</li>
+  <li>사용자 입장에서는 SNI는 접속하려는 사이트 주소가 암호화되지 않은 평문으로 전송되기 때문에, <code class="highlighter-rouge">타인</code>이 중간에 트래픽을 가로채서 <u>사용자가 조회하는 사이트</u>를 확인 할 수 있습니다.</li>
+  <li>TLS 1.3 최종안이 조율되는 시기에는 <code class="highlighter-rouge">Encrypted SNI</code>로 인해서 Gateway가 SNI 필드를 확인하는 방법이 불가능 할 수도 있었지만, <code class="highlighter-rouge">TLS 1.3 최종안</code> 에서는 <code class="highlighter-rouge">필수</code>가 아닌, <code class="highlighter-rouge">확장</code> 기능으로써 추가되었습니다.
+    <ul>
+      <li><a href="https://ko.wikipedia.org/wiki/%EC%84%9C%EB%B2%84_%EB%84%A4%EC%9E%84_%EC%9D%B8%EB%94%94%EC%BC%80%EC%9D%B4%EC%85%98">Encrypted SNI</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="4-aviatrix-cloudformation-template의-role-policy-이해하기">4. Aviatrix-CloudFormation Template의 role, policy 이해하기</h3>
+
+<ul>
+  <li>CloudFormation Template은 어떤 내용을 가지고 있을까?</li>
+  <li>왜 Gateway 서버가 자동으로 설치 되었을까?</li>
+  <li>왜 Private-Subnet Route Table 은 자동으로 업데이트가 되었을까?</li>
+  <li>멀티 Account 구성은 어떻게 가능할까?</li>
+</ul>
+
+<p>위에 내용은 CloudFormation Template의 <u>Role, Policy</u> 관계를 보면 알 수 있습니다.
+아래의 소스는 CloudFormation Template의 일부 내용입니다.</p>
+
+<p>EC2 생성 과정에서 aviatrix-role-ec2를 등록하는 내용입니다.</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="w">        </span><span class="nl">"IAMRoleParam"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"Description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Determine if IAM roles aviatrix-role-ec2 and aviatrix-role-app should be created."</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"Default"</span><span class="p">:</span><span class="w"> </span><span class="s2">"New"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"Type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"String"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"AllowedValues"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"aviatrix-role-ec2"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"New"</span><span class="w">
+            </span><span class="p">]</span><span class="w">
+        </span><span class="p">}</span><span class="err">,</span><span class="w">
+</span></code></pre></div></div>
+<p>EC2에 등록하기 위한 role-ec2를 생성하는 내용입니다.</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="w">        </span><span class="nl">"AviatrixRoleEC2"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"Type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AWS::IAM::Role"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"Condition"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AviatrixIAMRoleNotExist"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"Properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="nl">"RoleName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"aviatrix-role-ec2"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"AssumeRolePolicyDocument"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                    </span><span class="nl">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span><span class="w">
+                    </span><span class="nl">"Statement"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w">
+                        </span><span class="nl">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span><span class="w">
+                        </span><span class="nl">"Principal"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="nl">"Service"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                                </span><span class="s2">"ec2.amazonaws.com"</span><span class="w">
+                            </span><span class="p">]</span><span class="w">
+                        </span><span class="p">},</span><span class="w">
+                        </span><span class="nl">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                            </span><span class="s2">"sts:AssumeRole"</span><span class="w">
+                        </span><span class="p">]</span><span class="w">
+                    </span><span class="p">}]</span><span class="w">
+                </span><span class="p">},</span><span class="w">
+                </span><span class="nl">"Path"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/"</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+        </span><span class="p">}</span><span class="err">,</span><span class="w">
+</span></code></pre></div></div>
+<p>여기서 <code class="highlighter-rouge">주목할 점</code>이 있습니다, role-app을 사용할 수 있는 <a href="https://docs.aws.amazon.com/ko_kr/IAM/latest/UserGuide/reference_policies_elements_principal.html">Principal</a>에 “Ref”: “AWS::AccountId” 등록을 통해서 가능하도록 설정되는 것을 알 수 있습니다.</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="w">        </span><span class="nl">"AviatrixRoleApp"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"Type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AWS::IAM::Role"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"Condition"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AviatrixIAMRoleNotExist"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"Properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="nl">"RoleName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"aviatrix-role-app"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"AssumeRolePolicyDocument"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                    </span><span class="nl">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span><span class="w">
+                    </span><span class="nl">"Statement"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w">
+                        </span><span class="nl">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span><span class="w">
+                        </span><span class="nl">"Principal"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="nl">"AWS"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w">
+                                </span><span class="nl">"Fn::Join"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                                    </span><span class="s2">""</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="w">
+                                        </span><span class="s2">"arn:aws:iam::"</span><span class="p">,</span><span class="w">
+                                        </span><span class="p">{</span><span class="w">
+                                            </span><span class="nl">"Ref"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AWS::AccountId"</span><span class="w">
+                                        </span><span class="p">},</span><span class="w">
+                                        </span><span class="s2">":root"</span><span class="w">
+                                    </span><span class="p">]</span><span class="w">
+                                </span><span class="p">]</span><span class="w">
+                            </span><span class="p">}]</span><span class="w">
+                        </span><span class="p">},</span><span class="w">
+                        </span><span class="nl">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                            </span><span class="s2">"sts:AssumeRole"</span><span class="w">
+                        </span><span class="p">]</span><span class="w">
+                    </span><span class="p">}]</span><span class="w">
+                </span><span class="p">},</span><span class="w">
+                </span><span class="nl">"Path"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/"</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+        </span><span class="p">}</span><span class="err">,</span><span class="w">
+</span></code></pre></div></div>
+<p>여기서 <code class="highlighter-rouge">주목할 점</code>은 <u>arn:aws:iam::*:role/aviatrix-*</u> 설정에 있습니다. 해당 <code class="highlighter-rouge">"*"</code>설정으로 role-ec2의 Policy는 arn:aws:iam::<code class="highlighter-rouge">AccountId</code>:role/aviatrix-role-app의 Policy를 할당 받아서 사용할 수 있게됩니다.</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="w">        </span><span class="nl">"CreateAviatrixAssumeRolePolicy"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"Type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AWS::IAM::ManagedPolicy"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"Condition"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AviatrixIAMRoleNotExist"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"Properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="nl">"ManagedPolicyName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"aviatrix-assume-role-policy"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"Description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Policy for creating aviatrix-assume-role-policy"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"Path"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"PolicyDocument"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                    </span><span class="nl">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span><span class="w">
+                    </span><span class="nl">"Statement"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w">
+                            </span><span class="nl">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span><span class="w">
+                            </span><span class="nl">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                                </span><span class="s2">"sts:AssumeRole"</span><span class="w">
+                            </span><span class="p">],</span><span class="w">
+                            </span><span class="nl">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"arn:aws:iam::*:role/aviatrix-*"</span><span class="w">
+                        </span><span class="p">},</span><span class="w">
+                        </span><span class="p">{</span><span class="w">
+                            </span><span class="nl">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span><span class="w">
+                            </span><span class="nl">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                                </span><span class="s2">"aws-marketplace:MeterUsage"</span><span class="w">
+                            </span><span class="p">],</span><span class="w">
+                            </span><span class="nl">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span><span class="w">
+                        </span><span class="p">}</span><span class="w">
+                    </span><span class="p">]</span><span class="w">
+                </span><span class="p">},</span><span class="w">
+                </span><span class="nl">"Roles"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w">
+                    </span><span class="nl">"Ref"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AviatrixRoleEC2"</span><span class="w">
+                </span><span class="p">}]</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+        </span><span class="p">}</span><span class="err">,</span><span class="w">
+</span></code></pre></div></div>
+<p>role-app Policy의 경우에는 아래 추가된 이미지처럼 <u>많은 Action</u>이 정의되어있습니다.</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="w">        </span><span class="nl">"CreateAviatrixAppPolicy"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"Type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AWS::IAM::ManagedPolicy"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"Condition"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AviatrixIAMRoleNotExist"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"Properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="nl">"ManagedPolicyName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"aviatrix-app-policy"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"Description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Policy for creating aviatrix-app-policy"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"Path"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"PolicyDocument"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                    </span><span class="nl">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span><span class="w">
+                    </span><span class="nl">"Statement"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w">
+                            </span><span class="nl">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span><span class="w">
+                            </span><span class="nl">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="err">..........................</span><span class="w">
+</span></code></pre></div></div>
+<p><img src="/img/posts_aviatrix/role-check.png" alt="4" /></p>
+
+<p>CloudFormation Template 으로 구성된 <code class="highlighter-rouge">AWS 인프라의 이미지</code>를 통해 정리할 경우, 아래와 같은 구성이 설정됩니다.</p>
+
+<ul>
+  <li>Aviatrix Controller Instance 에 role-ec2 설정</li>
+</ul>
+
+<p><img src="/img/posts_aviatrix/role-ec2.png" alt="5" /></p>
+<ul>
+  <li>role-ec2 에 대한 Policy 는 아래와 같이 설정되며, 해당 설정에서 <u>STS 설정</u>을 주의 깊게 이해합니다.</li>
+</ul>
+
+<p><img src="/img/posts_aviatrix/role-ec2-policy.png" alt="6" /></p>
+
+<ul>
+  <li>위의 이미지를 JSON 형태로 확인하면 이해가 더 쉽습니다.</li>
+</ul>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="w">        </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"sts:AssumeRole"</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="nl">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"arn:aws:iam::*:role/aviatrix-*"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="w">
+        </span><span class="p">}</span><span class="err">,</span><span class="w">
+</span></code></pre></div></div>
+
+<ul>
+  <li>Aviatrix Controller 웹 페이지의 Onboarding 카테고리에서 Cloud Platform에 맞게 설정을 하게 되면, AWS의 경우 role-ec2가 role-app의 policy을 <code class="highlighter-rouge">위임</code> 받아서 사용할 수 있는 상태가 됩니다. role-ec2는 Aviatrix Controller Instance에 등록 되어있는 role 이기 때문에, Aviatrix Controller 웹 페이지에서 role-app에 적용 되어있는 Policy 에 대한 이용이 가능합니다. <code class="highlighter-rouge">(멀티 Account의 경우에는 멀티 Account에 설정 되어 있는 role-app에 대한 AccountId Trust 등록을 진행하여, 멀티 Account의 role-app을 Controller Account의 role-app이 공유 받아 사용하는 방법으로 동일합니다.)</code></li>
+</ul>
+
+<p><img src="/img/posts_aviatrix/role-app-trust.png" alt="7" /></p>
+
+<hr />
+
+<h2 id="multiple-aws-accounts-with-role-switchin-aviatrix-architecture">Multiple AWS Accounts with Role Switchin Aviatrix Architecture</h2>
+
+<p><img src="/img/posts_aviatrix/role-ec2-app-muac.png" alt="8" /></p>
+
+<hr />
+
+<h2 id="정리">정리</h2>
+<ul>
+  <li>자세한 설명을 하기 위해 많은 이미지가 추가 되었지만, 실질적으로는 AWS 마켓플레이스에서 라이선스 구입 이후에 진행되는 절차가 간단하며 사용자가 직접 <u>수동</u>으로 작업해야하는 내용이 <code class="highlighter-rouge">거의없습니다.</code></li>
+  <li>Aviatrix의 경우에는 기존의 Cisco 및 paloalto 와는 다른 Cloud 환경에 맞게 개발이 되었다는 것을 쉽게 느낄 수 있었습니다. <code class="highlighter-rouge">Role의 활용</code> 및 위에서는 자세하게 다루지 않았지만, <u>"EXPORT TO TERRAFORM"</u> 카테고리 부분에서 리소스 형식에 맞는 *.tf 파일들을 다운로드 받아서 IaC 환경에 활용이 가능합니다.</li>
+  <li>테스트 과정에서는 단일 Account를 활용하였지만, 쏘카에서는 <code class="highlighter-rouge">Transit GW를 이용한 트래픽 중앙 관리</code>를 통해서 운영하고 있기 때문에 On-premise 적용 등 다양한 아키텍처 구성이 가능합니다.</li>
+  <li>매니저 Cloud Platform에서 모두 운영이 가능하기 때문에 이후 확장성 및 특정 Cloud Platform에 <a href="https://en.wikipedia.org/wiki/Vendor_lock-in">Lock-in</a> 되지 않는다는 장점이 있습니다.</li>
+  <li>그 밖에 사용한 만큼만 지급하는 Cloud 방식에 맞는 <u>라이선스 정책</u>도 비용적인 부분에서는 많은 장점이 있다고 생각했습니다.</li>
+  <li><code class="highlighter-rouge">많은 장점</code> 가운데 지속가능성에 대한 문제는 있습니다, TLS 1.3 최종안이 적용된 지 얼마 되지 않은 상황이지만, Gateway가 SNI 필드를 통해 FQDN Filter 과정이 이후 <strong>SNI 암호화 이후 FQDN Filter를 어떻게 진행할 것인가</strong>에 대한 문제점이 있습니다.</li>
+</ul>
+
+<hr />
+
+<h2 id="계획중인-aviatrix을-이용한-다양한-환경-구축">계획중인 Aviatrix을 이용한 다양한 환경 구축</h2>
+<ul>
+  <li>Aviatrix 로그, 분석 (+시각화/자동화)</li>
+  <li>DMZ 구축 (+VDI)</li>
+  <li>Remote Work의 다양한 설계 (+VPN, +VDI)</li>
+  <li>Inbound 트래픽에 대한 세부적인 로그 및 분석 (+시각화)</li>
+  <li>VM to VM 간의 트래픽 관리</li>
+</ul>
+
+        </div>
+        
+        <hr>
+        <div class="clearfix">
+          
+          <a class="btn btn-primary float-left" href="/security/2019/07/31/keycloak-sso.html" data-toggle="tooltip" data-placement="top" title="Keycloak를 이용한 SSO 구축(web + wifi + ssh)">&larr; Previous<span class="d-none d-md-inline">
+              Post</span></a>
+          
+          
+          <a class="btn btn-primary float-right" href="/data/2020/01/12/oreilly-strata-newyork-2019-review.html" data-toggle="tooltip" data-placement="top" title="O'reilly Strata Data Conference New York 2019 후기">Next<span class="d-none d-md-inline">
+              Post</span> &rarr;</a>
+          
+        </div>
+        <div>
+          <p class="recuit">쏘카는 언제나 쏘카 서비스를 함께 만들며 기술적인 문제를 함께 풀어나갈 능력있는 개발자/디자이너/기획자/데이터 사이언티스트 등을 모시고 있습니다. 자세한 내용은 <a href="https://bit.ly/SOCAR-RECRUIT">쏘카 채용공고 페이지</a>를 확인 부탁드립니다 :)</p>
+        </div>
+      </div>
+    </div>
+    <!-- utterance comments -->
+    <script src="https://utteranc.es/client.js"
+        repo="socar-inc/techblog-comments"
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+    </script>
+  </div>
+
+<script>
+  // ref https://tscanlin.github.io/tocbot/
+  tocbot.init({
+    tocSelector: '#toc',
+    contentSelector: '.post-content',
+    headingSelector: 'h1, h2, h3',
+    hasInnerContainers: true,
+    collapseDepth: 6,
+    linkClass: 'toc-link'
+  });
+
+
+  $(window).on('scroll', function() {
+      let scrollTop = $(window).scrollTop()
+      let scrollBottom =  scrollTop + $(window).height()
+      let contentOffsetTop = $(".post-content").offset().top
+      let contentOffsetBottom = contentOffsetTop + $(".post-content").height()
+      let elementHeight = $(".post-content").height(); 
+
+      if ((scrollTop < contentOffsetTop) || (scrollBottom >= contentOffsetBottom)) {
+        // $('.toc').css('visibility', 'hidden')
+        $('.toc').addClass("toc-hidden")
+      }
+      else if (scrollTop >= contentOffsetTop) {
+        $(".toc").removeClass("toc-hidden")
+      }
+  });
+</script>
+
+
+  <!-- Footer -->
+
+<hr>
+
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-md-9 mx-auto">
+        <ul class="list-inline text-center">
+          
+          
+          
+          <li class="list-inline-item">
+            <a href="https://www.facebook.com/socarsharing">
+              <span class="fa-stack fa-lg">
+                <i class="fas fa-circle fa-stack-2x"></i>
+                <i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i>
+              </span>
+            </a>
+          </li>
+          
+          
+          
+        </ul>
+        <p class="copyright text-muted">Copyright &copy; SOCAR 2023 | tech_branding@socar.kr</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+  <script src="/assets/vendor/jquery/jquery.min.js"></script>
+<script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/assets/vendor/startbootstrap-clean-blog/js/clean-blog.min.js"></script>
+<script src="/assets/scripts.js"></script>
+<script src="/assets/mermaid-8.2.3.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.11.1/tocbot.min.js"></script>
+
+
+
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-30551922-27"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-30551922-27');
+</script>
+
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-MZ79TFM');</script>
+<!-- End Google Tag Manager -->
+
+
+</body>
+
+</html>
