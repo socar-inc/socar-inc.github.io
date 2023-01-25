@@ -71,7 +71,7 @@ tags:
 
 ![nocode-state](/img/nocode-tool/2.1_state_of_nocode_tool.png)*[출처 : 광범위한 노코드 툴의 세계](https://www.indiehackers.com/post/state-of-nocode-db1b90cc99)*
 
-> 참고 할 만한 no-code tool 정리 링크 : 
+> 참고할 만한 no-code tool 정리 링크 : 
 > - [<U>NoCode Journal (노코드 툴 정리 및 소개 사이트)</U>](https://www.nocodejournal.com/state-of-nocode)
 > - [<U>노코드 툴로 정리된 노코드 툴 목록</U>](https://airtable.com/shrrIaogPEh9rLNQO/tbl4sLn4bzxQj3YKe) : [<U>출처</u>](https://medium.com/@mtommasi94/no-code-democratizing-software-9421c2208cb])
 
@@ -119,16 +119,16 @@ Zapier와 Integromat (Make)는 기본적으로는 같은 구조를 가지고 있
 
 - 구글 스프레드시트에 BigQuery 데이터를 연동하여 사용할 데이터 생성
 - Zapier / Integromat에 스프레드시트 연동
-- 전 날의 검색어 Top 10을 Slack 으로 메시지 전송
+- 전 날의 검색어 Top 10을 Slack으로 메시지 전송
 ![nocode-practice](/img/nocode-tool/3.1_sheet.png)*시트명 : top_term*
 
 ### 3.2 Zapier 사용해 보기
 
-Zapier 사용을 위해서는 먼저 [Zapier 사이트](https://zapier.com/) 에 회원가입을 진행합니다. 무료 플랜으로 회원가입 후 [Dashboard](https://zapier.com/app/dashboard) 에서 좌측 상단 Create Zap 을 클릭하여 Zap을 만들 수 있습니다. 
+Zapier 사용을 위해서는 먼저 [Zapier 사이트](https://zapier.com/)에 회원가입을 진행합니다. 무료 플랜으로 회원가입 후 [Dashboard](https://zapier.com/app/dashboard)에서 좌측 상단 Create Zap 을 클릭하여 Zap을 만들 수 있습니다. 
 ![nocode-practice](/img/nocode-tool/3.2_login.png)*회원 가입 및 대시보드 버튼*
-Zapier는 자동화 생성을 위해 만든 프로그램을 Zap이라는 단어로 일컫습니다. Zap은  “특정 Trigger 발생 시 특정 Action을 수행한다”는 내용을 담고 있습니다. 
-구체적으로 Trigger가 스프레드 시트에 새로운 칼럼 추가, 구글 캘린더에 새로운 일정 추가 등의 특정 조건이라면, 
-Action은 Mail 전송, Slack 메시지 전송 등 Trigger 로 인해 실제로 수행되는 작업을 의미합니다. 
+Zapier는 자동화 생성을 위해 만든 프로그램을 Zap이라는 단어로 일컫습니다. Zap은  “특정 Trigger 발생 시 특정 Action을 수행한다"라는 내용을 담고 있습니다. 
+구체적으로 Trigger가 스프레드시트에 새로운 칼럼 추가, 구글 캘린더에 새로운 일정 추가 등의 특정 조건이라면, 
+Action은 Mail 전송, Slack 메시지 전송 등 Trigger로 인해 실제로 수행되는 작업을 의미합니다. 
 ![nocode-practice](/img/nocode-tool/3.2_trigger%20and%20action.png)*Trigger / Action*
 
 1. Trigger을 설정합니다. 여기서는 구글 시트가 생성되거나 업데이트되는 상황을 Trigger로 지정하겠습니다. 그리고 사용할 구글 계정 세팅 후 `Continue`를 선택하면 시트 내 데이터를 확인할 수 있습니다.
