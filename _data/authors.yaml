@@ -144,3 +144,11 @@ alti:
   links:
     blog: 'https://blog.naver.com/mkmmk_aug'
     linkedin: 'https://www.linkedin.com/in/%EB%AF%BC%EA%B7%9C-%EC%A0%95-3287511aa/'
+
+clover:
+  name: 클로버
+  image: '/assets/authors/clover.png'
+  position: 데이터 분석가
+  introduction: 다양한 툴을 사용하는것을 즐기고 좋아합니다. 전략적 사고와 인사이트를 통해 비즈니스 성장에 기여하고 싶습니다.
+  links:
+    linkedin: 'https://www.linkedin.com/in/minah-shin-386571177/'
