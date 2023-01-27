@@ -86,7 +86,7 @@ tags:
 노코드 툴을 사용하면 코딩 없이도 프로그램이나 앱을 구현할 수 있어 개발 리소스에 의존하지 않고 직접 필요한 툴을 만들 수 있습니다. 
 또한 어떤 방식으로 구현할 것인지에 대해 커뮤니케이션하는 시간도 감소하여 리소스 + 시간 모두 아낄 수 있다는 장점이 있습니다. 본인이 필요한 것을 스스로 쉽게 개발할 수 있어 사용자 친화적인 점과 버그 발생 시 수정이 쉬운 것 또한 장점입니다. 
 
-그러나 노코드 툴에서 제공하는 기능 외에는 구현할 수 없다는 한계점도 있습니다. 노코드 툴을 넘어서 로우 코드(Low Code), 그리고 실제 개발까지 넘어가는 것에는 큰 도전이 필요하기 때문입니다. (로우 코드와 노코드의 차이가 궁금하시다면 [<U>이 블로그</U>](https://www.ibm.com/cloud/blog/low-code-vs-no-code)를 참고 부탁드립니다.)
+그러나 노코드 툴에서 제공하는 기능 외에는 구현할 수 없다는 한계점도 있습니다. 노코드 툴을 넘어서 로우 코드(Low Code), 그리고 실제 개발까지 넘어가는 것에는 큰 도전이 필요하기 때문입니다. (로우 코드와 노코드의 차이가 궁금하시다면 [<U>IBM 블로그의 Low-Code vs. No-Code: What’s the Difference?</U>](https://www.ibm.com/cloud/blog/low-code-vs-no-code)를 참고 부탁드립니다.)
 
 
 ### 2.3 소개할 노코드 툴 스포일러
@@ -140,7 +140,7 @@ Action은 Mail 전송, Slack 메시지 전송 등 Trigger로 인해 실제로 �
 3. 작업이 완성되었습니다. ![nocode-practice](/img/nocode-tool/3.2.3_zap.png)*Zap의 모습*
 ![nocode-practice](/img/nocode-tool/3.2.3_final.png)*완성된 Zap 결과물*
 
-이때 아쉽게도 10개의 모든 검색어가 아닌 Rank 10의 값 1개만 슬랙으로 오는 것을 확인할 수 있습니다. 시트에 있는 데이터를 한 줄 한 줄 모두 받아서 데이터를 발송하는 방법은 없었습니다. 
+이때 10개의 모든 검색어가 아닌 Rank 10의 값 1개만 슬랙으로 오는 것을 확인할 수 있습니다. 시트에 있는 데이터를 한 줄 한 줄 모두 받아서 데이터를 발송하는 방법은 없었습니다. 
 Zapier에서 제공하는 Action 중 하나인 [Loop](https://help.zapier.com/hc/en-us/articles/8496106701453-Loop-your-Zap-actions#create-a-loop-from-text-0-1) 을 활용하여 반복 수행을 진행해 보려 했으나,  받아온 데이터의 형태가 시트 전체의 내용이 아닌 몇 개의 행만 가져와지기 때문에 반복 수행을 통한 데이터 전송을 진행할 수 없었습니다. 
 
 
@@ -148,22 +148,22 @@ Zapier에서 제공하는 Action 중 하나인 [Loop](https://help.zapier.com/hc
 
 이번에는 같은 작업을 Integromat(Make이지만 편의상 Integromat으로 부르겠습니다.)을 통해 만들어 보겠습니다. Integromat 사용을 위해 [Integromat(Make) 사이트](https://www.make.com/en)로 접속하여 회원가입을 진행합니다. 이후 Dashboard의 우측 상단에 있는 `Create a new scenario` 버튼을 클릭하여 Scenario를 제작할 수 있습니다. 
 ![nocode-practice](/img/nocode-tool/3.3_login.png)*회원 가입*
-Integromat 은 자동화 생성을 위해 만든 프로그램을 Scenario라고 부릅니다. Scenario는 여러 개의 Module의 집합으로 이루어지며 module 안에는 해당 moduled의 다양한 활용법이 존재합니다. Module 을 통해 데이터를 불러온 경우, Function 을 사용하여 조건 적용을 진행할 수 있고, Tools를 활용하여 반복 수행, 중단 등 다양한 Flow Control를 진행할 수 있습니다.
+Integromat 은 자동화 생성을 위해 만든 프로그램을 Scenario라고 부릅니다. Scenario는 여러 개의 Module의 집합으로 이루어지며 Module 안에는 해당 Moduled의 다양한 활용법이 존재합니다. Module 을 통해 데이터를 불러온 경우, Function 을 사용하여 조건 적용을 진행할 수 있고, Tools를 활용하여 반복 수행, 중단 등 다양한 Flow Control를 진행할 수 있습니다.
 ![nocode-practice](/img/nocode-tool/3.3.png)*Module / Function / Tools - Flow Control*
 
-1. 시트 데이터를 가져오는 Module을 생성합니다. `Google sheet module` 을 선택하여 데이터의 범위를 지정합니다.
+1. 시트 데이터를 가져오는 Module을 생성합니다. `Google sheet Module` 을 선택하여 데이터의 범위를 지정합니다.
 ![nocode-practice](/img/nocode-tool/3.3.1.png)*Module 생성*
 
 2. Flow Control → Repeater를 선택하여 테이블 형태의 데이터에 Row를 1개씩 늘려가며 접근할 수 있도록 반복 설정을 진행합니다. (조금 까다로운 부분이긴 하나 반복 문의 i + 1을 생성해 주는 부분이라고 생각하시면 이해가 쉽습니다.) 
 
-3. Array aggeregator를 사용하여 가져올 데이터를 선정합니다. 저는 날짜, 검색어, 순위를 가져오고 반복을 위해 Repeater의 i를 가져오겠습니다. 
-![nocode-practice](/img/nocode-tool/3.3.2-3.png)*2. Repeater / 3. Array aggregator*
+3. Array Aggeregator를 사용하여 가져올 데이터를 선정합니다. 저는 날짜, 검색어, 순위를 가져오고 반복을 위해 Repeater의 i를 가져오겠습니다. 
+![nocode-practice](/img/nocode-tool/3.3.2-3.png)*2. Repeater / 3. Array Aggregator*
 
-4. Slack module 을 선택한 뒤 계정 연동을 진행합니다. 개인 계정으로 보낼 경우에는 IM channel 을 사용하고, 채널에 전송을 하고 싶을 경우에는 Public / Private 채널을 선택하시면 됩니다.
-![nocode-practice](/img/nocode-tool/3.3.4.png)*slack module*
+4. Slack Module 을 선택한 뒤 계정 연동을 진행합니다. 개인 계정으로 보낼 경우에는 IM Channel 을 사용하고, 채널에 전송을 하고 싶을 경우에는 Public / Private 채널을 선택하시면 됩니다.
+![nocode-practice](/img/nocode-tool/3.3.4.png)*Slack Module*
 
-5. Rank : top_term 형태로 출력되도록 repeater + array_aggregator 조합으로 만들어진 array에 접근하여 내용을 가져옵니다. 내용물의 모습은 [1,2,3,4,5,6,7,8,9,10] / [검색어들]로 이루어져 있다고 상상하시면 됩니다. 따라서 i를 1개씩 늘려가면서 반복을 할 수 있도록 설정을 해놓은 것으로 생각하시면 됩니다.
-![nocode-practice](/img/nocode-tool/3.3.5.png)*message setting*
+5. Rank : `top_term` 형태로 출력되도록 `repeater` + `array_aggregator` 조합으로 만들어진 Array에 접근하여 내용을 가져옵니다. 내용물의 모습은 [1,2,3,4,5,6,7,8,9,10] / [검색어들]로 이루어져 있다고 상상하시면 됩니다. 따라서 i를 1개씩 늘려가면서 반복을 할 수 있도록 설정을 해놓은 것으로 생각하시면 됩니다.
+![nocode-practice](/img/nocode-tool/3.3.5.png)*Message Setting*
 
 6. 매일 10시에 스케줄을 걸고, 하단 시계 모양 버튼을 누른 뒤 schedule 을 on으로 변경하여 스케줄링을 걸어줍니다.
 ![nocode-practice](/img/nocode-tool/3.3.6_scheduling.png)*스케쥴링 옵션*
@@ -184,7 +184,7 @@ Integromat 은 조건이 복잡한 업무도 자동화할 수 있으나, 초심�
 | 워크플로우 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | 선형적                                                                                                                  | 유동적                                                                                                            |
 | 프로그램 조건   | - Trigger가 무조건 세팅되어야 함 <br >- 3개 이상의 Trigger 세팅이 어려움 (webhook 사용을 추천함)                                               | - 제한 없음                                                                                                        |
 | 오류 트래킹 방법        | Zap을 실시간으로 재실행 하여 오류가 난 부분을 찾아내야 함                                                                                   | 대시보드를 활용하여 오류가 난 부분을 찾아낼 수 있음                                                                                  |
-| 무료 플랜 비교 | - 매월 100개의 Task 수행 가능 <br >- 5개 Zap 사용 가능 <br >- Trigger → Action으로 구성된 Zap만 사용 가능 (2개 초과 조건 설정 불가)<br >- 1달마다 Reset | - 매월 1,000개의 module 사용 가능 (1개의 Scenario에 2개의 Module이 사용될 경우 500번 수행)<br >- 2개의 Scenario 생성 가능<br >- 1달마다 Reset |
+| 무료 플랜 비교 | - 매월 100개의 Task 수행 가능 <br >- 5개 Zap 사용 가능 <br >- Trigger → Action으로 구성된 Zap만 사용 가능 (2개 초과 조건 설정 불가)<br >- 1달마다 Reset | - 매월 1,000개의 Module 사용 가능 (1개의 Scenario에 2개의 Module이 사용될 경우 500번 수행)<br >- 2개의 Scenario 생성 가능<br >- 1달마다 Reset |
 
 -----
 
@@ -199,7 +199,7 @@ Integromat 은 조건이 복잡한 업무도 자동화할 수 있으나, 초심�
     마케팅 채널을 통해 인입된 예약 건을 스프레드시트로 자동으로 기입되도록 제작합니다. 이후 예약이 생성된 경우 즉 스프레드시트에 Row가 추가될 경우, 슬랙으로 메시지를 전송할 수 있도록 하여 고객 인입을 바로 확인하고 이탈을 방지할 수 있도록 하였습니다.
 
 - 비즈니스 파이프라인 구축<br >
-    세일즈 툴을 활용한 업무에 있어서, 파이프라인에서 특정 단계로 옮겨졌을 시 해당 Deal을 다른 파이프라인으로 복사하는 작업을 Zapier를 통해 진행하였습니다. 이를 통해 파이프라인 간 Deal 연동을 통해 하나의 통합된 Deal로 관리를 할 수 있었고, 통합된 Deal을 사용할 수 있었습니다.
+     세일즈 툴을 활용할 때, 특정 Deal이 파이프라인에서 특정 단계로 옮겨졌을 시  Zapier를 통해 다른 파이프라인으로 복사하는 작업을 진행했습니다. 이때 파이프라인 간 Deal 연동을 통해 하나의 통합된 Deal로 관리를 할 수 있었습니다.
 
 현재는 데이터 분석가 업무를 진행하면서 Integromat 을 활용하여 서비스 운영 안정과 임시 데이터 파이프라인을 구축하고 있습니다.
 - 안정적인 서비스 운영<br >
