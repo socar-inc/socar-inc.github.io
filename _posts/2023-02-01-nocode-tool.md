@@ -11,7 +11,7 @@ tags:
     - data
     - data analyst
     - nocode
-    - automtaion
+    - automation
     - zapier
     - integromat
     - make
