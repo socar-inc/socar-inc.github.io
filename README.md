@@ -79,8 +79,11 @@
     - Copy the master branch only 를 `체크 해제` 해줍니다.
   ![레포지토리 Fork 하고 Rename하기](/img/readme/fork.png)
 
-- Fork 한 레포지토리의 Settings > Pages에서 Branch를 `gh-pages` 로 설정해줍니다.
-  ![Fork한 레포지토리 이름 변경하기](/img/readme/branch-setting.png)
+- Fork 한 레포지토리의 Settings > Pages에서 Source를 `Github Actions` 로 설정해줍니다.
+  ![Github Action 설정](/img/readme/pages-build.png)
+
+- Actions로 들어가서 `I understand my workflows, go ahead an enabled them` 을 클릭합니다.
+  ![Workflow 설정](/img/readme/enable-workflow.png)
 
 - Fork 받은 본인의 Repository를 clone 합니다.
 
