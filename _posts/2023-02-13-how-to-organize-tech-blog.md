@@ -4,7 +4,7 @@ title: "쏘카에서 기술 블로그를 운영하는 방법"
 subtitle: "회사에서 기술 블로그를 작성하는 노하우를 공유합니다"
 date: 2023-02-13 09:00:00 +0900
 category: data
-background: '/img/how-to-organize-tech-blog/thumnail' \
+background: '/img/how-to-organize-tech-blog/thumnail' 
 author: kyle
 comments: true
 tags:
