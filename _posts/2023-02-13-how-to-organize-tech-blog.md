@@ -1,10 +1,10 @@
 ---
 layout: post
-title: "쏘카 기술 블로그를 운영(2019 ~ 2022) 회고"
+title: "쏘카에서 기술 블로그를 운영하는 방법"
 subtitle: "회사에서 기술 블로그를 작성하는 노하우를 공유합니다"
 date: 2023-02-13 09:00:00 +0900
 category: data
-background: '/img/reservation-tetris/background.jpg' #TODO
+background: '/img/how-to-organize-tech-blog/thumnail' \
 author: kyle
 comments: true
 tags:
@@ -12,7 +12,9 @@ tags:
     
 ---
 
-
+<div class="photo-copyright">
+Photo by <a href="https://unsplash.com/ko/s/%EC%82%AC%EC%A7%84/writing?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>의<a href="https://unsplash.com/@thoughtcatalog?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Thought Catalog</a>
+  
 <br>
 
 안녕하세요. 쏘카 데이터 비즈니스 본부에서 22년 7월까지 근무했으며, 2019년부터 퇴사 전까지 쏘카 기술 블로그를 운영한 카일입니다. 현재는 데이터 코칭, 데이터 교육을 하고 있습니다.
@@ -36,21 +38,6 @@ tags:
 
 TODO: 마지막에 수정 필요
 
-- IT기업 기술 블로그의 목적, 신념
-- 글 작성 플랫폼 선정하기
-- 글 작성 프로세스
-	- 칸반 운영
-	- 피드백
-	- SEO를 고려한 이름 짓기
-- 글 작성 후
-	- 바이럴 및 컨텐츠 홍보
-	- 데이터를 통한 분석
-- 성과
-	- GA 공개
-- 운영하며 겪는 어려움
-	- 반복적인 피드백 => 피드백 자동화
-	- 사람들을 글 쓰도록 격려하기 => 사내 스터디를 만들기
-	- 원인 : 번거롭다, 글 쓰는게 익숙하지 않다 / 글쓰기 플랫폼이 문제다
 
 
 ---
