@@ -12,8 +12,6 @@ tags:
     
 ---
 
-<div class="photo-copyright">
-Photo by <a href="https://unsplash.com/ko/s/%EC%82%AC%EC%A7%84/writing?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>의<a href="https://unsplash.com/@thoughtcatalog?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Thought Catalog</a>
   
 <br>
 
