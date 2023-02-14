@@ -2,7 +2,7 @@
 layout: post
 title: "쏘카 기술 블로그를 운영(2019 ~ 2022) 회고"
 subtitle: "회사에서 기술 블로그를 작성하는 노하우를 공유합니다"
-date: 2023-02-16 09:00:00 +0900
+date: 2023-02-13 09:00:00 +0900
 category: data
 background: '/img/reservation-tetris/background.jpg' #TODO
 author: kyle
