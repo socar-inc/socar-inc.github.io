@@ -91,8 +91,7 @@ tags:
 6. 맞춤법 검사
 7. 글 Publish
 
-
-위 프로세스의 단계별로 내용을 공유드리겠습니다.
+위 프로세스는 노션 페이지 및 [README](https://github.com/socar-inc/socar-inc.github.io/blob/master/README.md) 를 통해서 글 기고자에게 공유하고 있습니다. 이 글에서도 프로세스의 단계별로 내용을 상세히 공유드리겠습니다.
 
 
 ### 3.1 글감 등록
