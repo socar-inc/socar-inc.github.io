@@ -244,11 +244,29 @@ tags:
 
 따라서 Issue Comments가 생성될 때 Github Action이 실행되는 ChatOps 방법을 적용하기로 했습니다. 쏘카 기술 블로그 Github의 PR 코멘트에 `/맞춤법` 입력하면 맞춤법 검사가 실행됩니다. 
 
-Github Action의 yaml 파일은 다음과 같습니다
+맞춤법 자동화를 위한 Github Action의 `yaml` 파일은 다음과 같습니다.
 
 
-![github-action-code](/img/how-to-organize-tech-blog/github-action-code.png)*맞춤법 자동화를 위한 Github Action Yaml*
+{% raw %}
+```yaml
+name: Check korean grammar on pull request comment
 
+on:
+  issue_comment:
+    types:
+      - created
+
+jobs:
+  grammar_check:
+    if: ${{ github.event.issue.pull_request && github.event.comment.body == '/맞춤법'}}
+    runs-on: ubuntu-latest
+    steps:
+    - name: "맞춤법 검사"
+      uses: heumsi/korean-grammar-action@v0.2.8
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+```
+{% endraw %}
 
 
 `/맞춤법`을 입력하면 다음과 같이 Github Action이 순차적으로 맞춤법 검사를 해줍니다.(과정에서 코멘트가 많게는 50개 정도 달리기도 합니다)
