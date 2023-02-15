@@ -4,8 +4,6 @@
 
 [SOCAR Tech Blog](https://tech.socarcorp.kr/) 를 위한 Github Repository입니다.
 
-담당자 : @socar-dini
-
 **목차**
 1. [블로그의 목적](#1-블로그의-목적)
 2. [글쓰기 방법](#2-글쓰기-방법) 
@@ -34,7 +32,6 @@
 ### 1.2. 어떤 사람이 글을 쓸 수 있나요?
 - `개발자`, `기획자`, `디자이너`, `QA`, `데이터 분석가` 등 CTO 산하의 모든 분들이 글을 작성할 수 있습니다
 - 개발 블로그라고 개발자만 글을 작성할 수 있다는 생각보다 `기획자 관점에서 개발자와 협업하기`, `디자이너가 데이터 분석을 만날 경우`, `효율적으로 QA하는 방법` 등 다양한 직군들이 글을 작성하면 좋을 것 같습니다
-- 고민되시면 언제든 디니(@socar-dini)를 찾아주세요. 
 
 <br>
 
@@ -98,7 +95,34 @@
 - `_posts` 디렉토리에 post를 생성 합니다.
   - 파일명은 `YYYY-MM-DD-<post-name>.md`로 합니다.
   - 본문을 html로 작성할 경우 `.html`도 사용 할 수 있습니다.
+
+#### master branch 에 push해서 확인하기
+
 - master branch에 변경사항이 push 되면 1~2분 이내에 수정사항이 반영 됩니다. `socar-{닉네임}.github.io` 에서 확인할 수 있습니다.
+
+#### local에서 실시간으로 확인하기**
+
+로컬 코드의 수정 사항을 실시간으로 확인하고 싶다면 로컬에서 빌드하는 방법이 있습니다.
+이 경우 Jekyll과 필요한 의존성을 설치해야 합니다.
+
+MacOS
+
+```shell
+/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" #homebrew 설치
+brew install ruby # ruby 설치
+gem install --user-install bundler jekyll # jekyll , bundler 설치
+```
+
+Window
+
+https://rubyinstaller.org/ 에서 ruby 를 다운받습니다.
+```shell
+gem update
+gem install jekyll bundler # jekyll, bundler 설치
+```
+
+이제 `bundle exec jekyll serve` 명령어로 로컬 ( http://127.0.0.1:4000/) 에서 확인할 수 있습니다.
+
 
 > 전체적인 글 작성 및 확인 흐름은 다음과 같습니다. 
 >
@@ -113,7 +137,6 @@
 > $ git push
 > ```
 
-<br>
 
 ### 2.4. PR 요청하기
 
