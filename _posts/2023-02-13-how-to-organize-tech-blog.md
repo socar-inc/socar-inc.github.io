@@ -197,7 +197,9 @@ tags:
 
 글을 홍보한 후, 데이터를 확인하며 사람들의 반응을 확인합니다. 쏘카 기술 블로그는 Google Analytics 4를 활용해 지표를 확인하고 있습니다. 다만 AB Test를 진행한 것은 아니기 때문에 추세 정도만 확인합니다. 글을 홍보한 날짜의 일간 페이지 뷰 수가 1000 이상인지 정도를 확인하고 있습니다
 
-추가적으로 Google의 Search Console에서 데이터를 확인합니다. Search Console 개요 상단에 Search Console Insight가 존재하는데, 여기서 어떤 컨텐츠가 조회수가 높고 체류 시간이 높은지 확인할 수 있습니다. 또한 인기 검색어를 확인해 어떤 검색어로 기술 블로그에 유입하고 있는지 알 수 있습니다
+추가적으로 Google의 Search Console에서 데이터를 확인합니다. Search Console 개요 상단에 Search Console Insight가 있는데, 여기서 어떤 컨텐츠가 조회수가 높고 체류 시간이 높은지 확인할 수 있습니다. 또한 인기 검색어를 확인해 어떤 검색어로 기술 블로그에 유입하고 있는지 알 수 있습니다
+
+![search-console-insight](/img/how-to-organize-tech-blog/search-console-insight.png)*Google Search Console Insight*
 
 ### 4.3 댓글에 대한 답변
 
