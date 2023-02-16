@@ -69,7 +69,7 @@ tags:
 
 기술 블로그를 운영하기 위해 여러 가지를 고민해야 하지만, 제일 먼저 고민한 것은 **글을 어디에 작성할 것인가?**입니다. 기술 블로그 플랫폼은 매우 다양합니다. 직접 웹페이지를 구축하는 방법과 [Medium](https://medium.com/), [Tistory](https://www.tistory.com/) 혹은 [Velog](https://velog.io/) 같은 플랫폼을 사용하는 방법 등이 있습니다.
 
-당시 사내에 [Jekyll](https://jekyllrb.com/) + Github Pages로 기술 블로그를 운영해 본 경험이 있는 사람들이 존재했고, 관련 레퍼런스가 많기 때문에 Jekyll + Github Pages을 사용하기로 했습니다. 특히 처음 기술 블로그를 만들던 2019년엔 가볍게 시작하는 것이 목표였기에 사내에 익숙한 사람들이 존재하는 Jekyll이 적절하다 판단했습니다. 
+당시 사내에 [Jekyll](https://jekyllrb.com/) + [Github Pages](https://pages.github.com/)로 기술 블로그를 운영해 본 경험이 있는 사람들이 존재했고, 관련 레퍼런스가 많기 때문에 Jekyll + Github Pages을 사용하기로 했습니다. 특히 처음 기술 블로그를 만들던 2019년엔 가볍게 시작하는 것이 목표였기에 사내에 익숙한 사람들이 존재하는 Jekyll이 적절하다 판단했습니다. 
 
 
 
@@ -92,7 +92,7 @@ tags:
 5. 1차 피드백 반영해 글 보완
 6. 글 Publish
 
-위 프로세스는 노션 페이지 및 Github README를 통해서 글 기고자에게 공유하고 있습니다. 이 글에서도 프로세스의 단계별로 내용을 상세히 공유드리겠습니다.
+모든 프로세스는 노션 페이지 및 Github README를 통해서 글 기고자에게 상세히 공유하고 있습니다. 이 글에서도 프로세스의 단계별로 내용을 공유드리겠습니다.
 
 
 ### 3.1 글감 등록
@@ -113,7 +113,7 @@ tags:
 
 위 내용에 대해 대화를 진행하며 내용을 구체화합니다. 이 리뷰를 통해 나온 내용이 글의 큰 뼈대가 됩니다. 
 
-![writing-material-feedback](/img/how-to-organize-tech-blog/writing-material-feedback.png)*글감 피드백 내용*
+![writing-material-feedback](/img/how-to-organize-tech-blog/writing-material-feedback.png)*[Airflow 글](https://tech.socarcorp.kr/data/2022/11/09/advanced-airflow-for-databiz.html) 글감 피드백 내용*
 
 ### 3.3 글 작성 후 리뷰 요청
 
@@ -314,7 +314,7 @@ jobs:
 ![survey](/img/how-to-organize-tech-blog/survey.png)*기술 블로그 만족도 설문조사*
 
 예를 들어 기술 블로그 설문 조사 의견 중 "글 마지막에 기고자가 스스로를 PR 할 수 있는 기회가 있으면 동기부여가 될 것 같다"라는 피드백이 있었고, 이 피드백을 반영하여 희망하는 사람에 한 해 글 말미에 작가 카드를 추가할 수 있도록 했습니다.
-구체적으로는 `authors.yaml`에 다음과 같이 추가하면 작가 카드가 추가되도록 소스 코드를 수정하였습니다. (자세한 디자인은 이 글의 마지막에서 확인할 수 있습니다.)
+구체적으로는 `authors.yaml`에 다음과 같이 작가 정보를 추가하면 작가 카드가 추가되도록 `post.html` 코드를 수정하였습니다. (자세한 디자인은 이 글의 마지막에서 확인할 수 있습니다.)
 
 ```yaml
 dini:
@@ -327,6 +327,38 @@ dini:
         linkedin: "https://www.linkedin.com/in/hyejinyoon/"
 ```
 
+{% raw %}
+```html
+{% for page_author in page_authors %}
+  {% assign author = site.data.authors[page_author] %}
+  {% if author.introduction %}
+  <div class="author-card">
+	<div class="card mb-3">
+	  <div class="row no-gutters">
+		<div class="col-md-4">
+		  <img src="{{ author.image }}" class="card-img" alt="프로필사진">
+		</div>
+		<div class="col-md-8">
+		  <div class="card-body">
+			<p class="card-title">
+			  <a href="/authors/#{{ author.name }}">{{ author.name }}</a>
+			  <small class="text-muted"> {{ author.position }}</small>
+			</p>
+			<p class="card-text">{{ author.introduction }} </p>
+			<p class="card-text">
+			  {% for link in author.links %}
+			  <a href="{{ link[1] }}"><img src="/assets/icon/{{ link[0] }}.png" class="link-img" alt="{{ link[0] }}"></a>
+			  {% endfor %}
+			</p>
+		  </div>
+		</div>
+	  </div>
+	</div>
+  {% endif %}
+{% endfor %}
+```
+{% endraw %}
+
 ### 6.3. 글 작성의 어려움
 
 위와 같은 설문 결과에서 나온 글 작성 과정의 어려움에는 대표적으로 다음이 있었습니다. 
@@ -335,7 +367,7 @@ dini:
 2. Github으로 글을 작성하는 과정이 어렵다.
 
 첫 번째로 글 투고 경험이 많이 없는 분의 경우 글의 목차와 구조를 어떻게 구성해야 할지가 큰 고민일 수 있습니다. 
-이때 구조화된 형태로 글을 작성하는 게 어렵다면 템플릿을 사용해서 글을 사용할 수 있도록 도움을 줄 수 있습니다. 
+이때 구조화된 형태로 글을 작성하는 게 어렵다면 템플릿을 사용해서 글을 작성할 수 있도록 도움을 줄 수 있습니다. 
 예를 들어 다음과 같이 템플릿을 제시하여 글을 구조화할 수 있습니다.
 
 - 문제 정의
