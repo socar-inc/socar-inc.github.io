@@ -2,7 +2,7 @@
 layout: post
 title: "나는 어떤 강점이 있는 QA 엔지니어 일까? "
 subtitle: "쏘카에서 마크탕은 QA 엔지니어로 성장하고 있습니다."
-date: 2023-05-16 17:20:00 +0900
+date: 2023-05-15 17:20:00 +0900
 category: QA
 background: '/img/qa_marktang/marktang_background.jpg'
 author: marktang
