@@ -164,7 +164,7 @@ marktang:
   name: 마크탕
   image: '/assets/authors/marktang.png'
   position: QA
-  introduction: \"이 세상에 당연한 일은 없다\" 항상 궁금증을 품고 있는 QA Engnieer입니다.
+  introduction: '"이 세상에 당연한 일은 없다" 항상 궁금증을 품고 있는 QA Engnieer입니다.'
   links: 
     linkedin: 'https://www.linkedin.com/in/seongjun-moon-067413267'
     blog: 'https://ddanx2.tistory.com/'
