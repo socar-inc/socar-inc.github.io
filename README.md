@@ -151,7 +151,7 @@ gem install jekyll bundler # jekyll, bundler 설치
     - compare: master
   ```
 
-* PR 생성시 default 리뷰어는 디니(@socar-dini)입니다. 추가적으로 작성자의 상급자를 리뷰어를 지정해주세요 :) 
+* PR 생성시 default 리뷰어는 비에타(@socar-beata)입니다. 추가적으로 작성자의 상급자를 리뷰어를 지정해주세요 :) 
 
 > 현재 Merge 조건 및 권한은 다음과 같습니다.
 >
