@@ -50,7 +50,7 @@ tags:
 
 인증 검증 로직의 현황을 파악해 보니, 인증 토큰을 처리하는 메인 서비스, php로 이루어진 레거시 서비스 3개, 그 외의 레거시 서비스가 모두 데이터 베이스에 접근하고 있었습니다. 즉, 공통된 기능이 여러 프로젝트에 분산되어 설정값 하나를 변경하려고 해도 여러 프로젝트에 변경사항을 반복 적용해야 합니다.
 
-![[그림] - 기존 아키텍처 ](/img/handling-authentication-token-traffic-01/handling-authentication-token-traffic-01.png)
+![[그림] - 기존 아키텍처 ](/img/handling-authentication-token-traffic-01/handling-authentication-token-traffic-01.png)*[그림] - 기존 아키텍처*
 
 이런 환경에서 DB의 연결 설정을 변경하면 어떻게 될까요? 인증 토큰과 관련된 모든 프로젝트를 파악하여 같은 작업을 반복해야 합니다. 이러한 환경은 개발 내용과 직접 관련이 없음에도 영향받는 모든 프로젝트 파악이 필요해 리소스가 반복적으로 투입됩니다. 분산된 여러 프로젝트를 대상으로 중복 작업을 진행하다 실수로 하나라도 빼먹게 되면, 변경점이 적용되지 않아 서비스 장애가 발생할 수 있습니다. 
 
@@ -59,7 +59,7 @@ tags:
 DB 접근을 담당하는 하나의 계정서비스를 두어, 인증 토큰 작업이 필요한 개별 서비스는 계정 서비스로 요청만 보내면 어떨까요? 각각의 서비스는 DB 접근 설정 변경이나 코드 변경에 관심 둘 필요 없이 필요에 따라 인증처리를 위임하고 세부사항은 계정 서비스가 관리할 수 있습니다. 
 
 따라서, 계정 서비스가 인증 토큰 관련 로직을 담당하면 각각의 서비스는 변경작업이 필요 없어집니다.
-![[그림] - 개선된 아키텍쳐](/img/handling-authentication-token-traffic-01/handling-authentication-token-traffic-02.svg)
+![[그림] - 개선된 아키텍쳐](/img/handling-authentication-token-traffic-01/handling-authentication-token-traffic-02.svg)*[그림] - 개선된 아키텍쳐*
 
 ### **결과**
 
@@ -79,7 +79,7 @@ write DB와 read only DB가 별도로 존재했지만, 이를 호출하는 서�
 
 동시간 대의 write DB의 인증토큰 조회 요청 수와 read DB의 인증토큰 조회 요청 수는 다음과 같습니다.
 
-![[그림] - write DB의 요청량 ](/img/handling-authentication-token-traffic-01/handling-authentication-token-traffic-03.png) | ![[그림] - read DB의 요청량 ](/img/handling-authentication-token-traffic-01/handling-authentication-token-traffic-04.png)
+![[그림] - write DB의 요청량](/img/handling-authentication-token-traffic-01/handling-authentication-token-traffic-03.png)*[그림] - write DB의 요청량* | ![[그림] - read DB의 요청량](/img/handling-authentication-token-traffic-01/handling-authentication-token-traffic-04.png)*[그림] - read DB의 요청량*
 
 모든 요청이 write DB에 집중되는 것을 확인할 수 있습니다. 
 
@@ -87,11 +87,11 @@ write DB와 read only DB가 별도로 존재했지만, 이를 호출하는 서�
 
 DB 부하 문제는 write DB를 scale up하여 해결할 수 있습니다. 하지만 이 방법은 일시적인 서비스 중단을 피할 수 없고, 이미 고사양 장비를 사용하고 있어 적합한 해결책이 아니라고 판단했습니다.
 
-![[그림] - scale up ](/img/handling-authentication-token-traffic-01/handling-authentication-token-traffic-05.png)
+![[그림] - scale up](/img/handling-authentication-token-traffic-01/handling-authentication-token-traffic-05.png)*[그림] - scale up*
 
 따라서 scale out을 통하여 slave DB로 read 요청에 대한 부하를 분산시키고 트래픽이 늘어나면 read DB를 늘리는 해결책을 선택했습니다. 
 
-![[그림] - scale ouy ](/img/handling-authentication-token-traffic-01/handling-authentication-token-traffic-06.png)
+![[그림] - scale out](/img/handling-authentication-token-traffic-01/handling-authentication-token-traffic-06.png)*[그림] - scale out*
 
 ### **문제 해결 방안 적용 - DB 부하 분산 적용 방법**
 
@@ -116,16 +116,14 @@ class DynamicRoutingRoutingDataSource : LazyConnectionDataSourceProxy() {
 
 maria connector 2.7 버전에서 지원하는 aurora protocol을 사용하는 방법도 있습니다. read 클러스터 endpoint 추가만으로 driver 레벨에서 write, read DB 부하 분산이 가능하고 failOver까지 지원해 코드 변경을 최소화할 수 있습니다.
 
-jdbc:mariadb:aurora//**< write 클러스터 endpoint >**,**< read 클러스터 endpoint >**의 형식으로 write 클러스터의 endpoint와 read 클러스터의 endpoint를 콤마로 구분하여 입력합니다. 
+jdbc:mariadb:aurora// **< write 클러스터 endpoint >** , **< read 클러스터 endpoint >** 의 형식으로 write 클러스터의 endpoint와 read 클러스터의 endpoint를 콤마로 구분하여 입력합니다. 
 
-<aside>
-💡 단, 이 방법은 mariaConnector 3.x 이후 버전에선 지원하지 않습니다.
-</aside>
+==💡 단, 이 방법은 mariaConnector 3.x 이후 버전에선 지원하지 않습니다.==
 
 ```yaml
 spring:
   datasource:
-    url: jdbc:mariadb:aurora//**< write 클러스터 endpoint >**,**< read 클러스터 endpoint >**
+    url: jdbc:mariadb:aurora/< write 클러스터 endpoint >,< read 클러스터 endpoint >
     hikari:
       driver-class-name: org.mariadb.jdbc.Driver
 ```
@@ -135,14 +133,15 @@ spring:
 
 write, read DB 부하 분산 적용 후 인증 토큰 조회 요청 수는 다음과 같습니다.
 
-![[그림] - write DB의 요청수 ](/img/handling-authentication-token-traffic-01/handling-authentication-token-traffic-07.png) | ![[그림] - read DB의 요청수 ](/img/handling-authentication-token-traffic-01/handling-authentication-token-traffic-08.png)
+![[그림] - write DB의 요청수](/img/handling-authentication-token-traffic-01/handling-authentication-token-traffic-07.png)*[그림] - write DB의 요청수* | ![[그림] - read DB의 요청수](/img/handling-authentication-token-traffic-01/handling-authentication-token-traffic-08.png)*[그림] - read DB의 요청수*
 
-![[그림] - write DB와 read DB의 인증 토큰 조회 요청 수 ](/img/handling-authentication-token-traffic-01/handling-authentication-token-traffic-09.png)
+![[그림] - write DB와 read DB의 인증 토큰 조회 요청 수](/img/handling-authentication-token-traffic-01/handling-authentication-token-traffic-09.png)*[그림] - write DB와 read DB의 인증 토큰 조회 요청 수*
 
 적용 이후 read DB로 부하가 분산된 것을 확인할 수 있습니다.
 
-
-
+<br>
+<br>
+<br>
 ---
 
 ## 3. 인증 토큰 테이블에서 유효하지 않은 토큰 분리
@@ -176,13 +175,14 @@ MySQL과 같은 InnoDB의 인덱스는 B+tree 구조로 최신의 정렬 상태�
 
 만료 토큰을 분리하는 작업은 많은 양의 데이터 이동이 필요하여 배치를 이용했습니다.
 
-![[그림] - token compaction batch architecture](/img/handling-authentication-token-traffic-01/handling-authentication-token-traffic-10.png)
+![[그림] - token compaction batch architecture](/img/handling-authentication-token-traffic-01/handling-authentication-token-traffic-10.png)*[그림] - token compaction batch architecture*
 
 만료된 인증 토큰을 인증토큰 테이블에서 분리하는 작업은 2단계로 진행했습니다. 
 
-| Step 1 | 만료 인증 토큰 테이블을 신규 생성, 1회 성 배치를 통해서 현재 인증 토큰 테이블의 만료된 인증 토큰을 이동, 인증 토큰 테이블의 만료 인증 토큰 삭제  |
+|  |  |
 | --- | --- |
-| Step 2 | 한 시간 단위의 배치를 통해 만료된 인증 토큰을 인증토큰 테이블에서 만료 인증 토큰 테이블로 이동, 인증 토큰 테이블의 만료 인증 토큰 삭제  |
+| **Step 1** | 만료 인증 토큰 테이블을 신규 생성, 1회 성 배치를 통해서 현재 인증 토큰 테이블의 만료된 인증 토큰을 이동, 인증 토큰 테이블의 만료 인증 토큰 삭제  |
+| **Step 2** | 한 시간 단위의 배치를 통해 만료된 인증 토큰을 인증토큰 테이블에서 만료 인증 토큰 테이블로 이동, 인증 토큰 테이블의 만료 인증 토큰 삭제  |
 
 Step1은 1회 성 배치로 진행했습니다. 인증토큰 테이블에 보관한 만료된 인증 토큰을 만료 인증 토큰 테이블로 이동시키고 기존 인증 토큰 테이블에서 삭제했습니다. 이때, 한 번에 모든 토큰을 새로운 테이블에 저장하고 인증 토큰 테이블에서 삭제하는 작업이 이루어지면 데이터 베이스의 리소스를 많이 사용하여 cpu가 증가하고 부하가 발생할 수 있습니다. 이를 방지하기 위해서 5일에 걸쳐 배치 1회마다 인증 토큰의 개수를 450개로 제한하여 작업을 진행했습니다. 
 
@@ -192,7 +192,7 @@ Step1 이후부터는 1시간 단위의 만료 토큰 이동 배치를 설정하
 
 Step1 배치가 종료된 이후, 인증 토큰의 테이블 row 개수가 약 86% 감소한 2백만 개로 줄었습니다. 이후에도 만료된 토큰을 1시간마다 이동시켜 유효한 토큰만 유지하여 문제를 해결했습니다.
 
-![[그림] - 만료된 인증 토큰 분리 후 인증 토큰 테이블 데이터 개수 ](/img/handling-authentication-token-traffic-01/handling-authentication-token-traffic-11.png)
+![[그림] - 만료된 인증 토큰 분리 후 인증 토큰 테이블 데이터 개수](/img/handling-authentication-token-traffic-01/handling-authentication-token-traffic-11.png)*[그림] - 만료된 인증 토큰 분리 후 인증 토큰 테이블 데이터 개수*
 
 
 
@@ -210,7 +210,7 @@ Step1 배치가 종료된 이후, 인증 토큰의 테이블 row 개수가 약 8
 
 여기서 캐시란 무엇일까요?
 
-![[그림] - 캐시 설명 ](/img/handling-authentication-token-traffic-01/handling-authentication-token-traffic-12.png)
+![[그림] - 캐시 설명](/img/handling-authentication-token-traffic-01/handling-authentication-token-traffic-12.png)*[그림] - 캐시 설명*
 
 캐시는 반복적인 데이터를 불러오는 경우에 자주 사용하는 데이터를 미리 복사해 저장하는 임시 장소로서 DB 접근을 줄여 부하를 줄일 수 있습니다. 또한, 메모리에 데이터를 저장하고, key-value 저장 구조라 시간 복잡도가 o(1)으로 빠른 탐색이 가능해 데이터 조회 성능이 개선됩니다.
 
@@ -223,22 +223,22 @@ Step1 배치가 종료된 이후, 인증 토큰의 테이블 row 개수가 약 8
 **look aside 전략** 
 
 look aside 전략은 사용자의 조회 요청을 받으면 1) 캐시 스토어에 데이터 존재 여부를 확인하고 존재하면 데이터를 반환(cache hit) 합니다. 2) 캐시 스토어에 데이터가 없다면 DB에서 조회하여 반환(cache miss) 합니다. 3) DB에서 조회해온 데이터를 캐시 스토어에 업데이트하는 방식으로 반복적인 호출이 많은 경우 적합한 전략입니다.
-![[그림] - look aside 캐시 전략](/img/handling-authentication-token-traffic-01/handling-authentication-token-traffic-13.png)
+![[그림] - look aside 캐시 전략](/img/handling-authentication-token-traffic-01/handling-authentication-token-traffic-13.png)*[그림] - look aside 캐시 전략*
 
 **read through 패턴** 
 
 read through 패턴은 1) 캐시 스토어에 데이터 존재 여부를 확인하고 존재하면 데이터를 반환(cache hit) 합니다. 2) 캐시 스토어에 데이터가 없으면 DB에서 조회하여 반환(cache miss) 합니다. 3) DB에서 직접 캐시 스토어에 업데이트하는 방식으로 look aside와 비슷하지만 캐시 스토어에 저장하는 주체가 서버가 아닌 DB에 있다는 차이가 있습니다.
-![[그림] - read through 캐시 전략](/img/handling-authentication-token-traffic-01/handling-authentication-token-traffic-14.png)
+![[그림] - read through 캐시 전략](/img/handling-authentication-token-traffic-01/handling-authentication-token-traffic-14.png)*[그림] - read through 캐시 전략*
 
 **write back 패턴** 
 
 write back 패턴은 1) 캐시가 큐의 역할을 수행하며 모든 데이터를 캐시 스토어에 저장하고 2) 일정 시간이 지난 후 DB에 반영하는 방식입니다. 데이터 적합성이 높고 DB 요청 수를 줄일 수 있지만 캐시에 장애가 발생할 경우 데이터가 유실되며 사용하지 않는 정보까지 캐시에 저장하는 단점이 있습니다.
-![[그림] - write back 캐시 전략](/img/handling-authentication-token-traffic-01/handling-authentication-token-traffic-15.png)
+![[그림] - write back 캐시 전략](/img/handling-authentication-token-traffic-01/handling-authentication-token-traffic-15.png)*[그림] - write back 캐시 전략*
 
 **write through 패턴** 
 
 write through 패턴은 DB에 요청되는 모든 데이터가 캐시 스토어를 통해서 수행하는 방식으로 캐시가 주 DB의 역할을 수행합니다. 모든 요청이 캐시를 통해 이루어지기 때문에 데이터 적합성이 높고 캐시와 DB에 모든 변경사항이 반영되어 데이터 유실 가능성이 낮지만, 캐시와 DB에 모두 작업이 이루어져야 하기 때문에 상대적으로 느리고 사용하지 않는 정보도 캐시에 저장하는 단점이 있습니다.
-![[그림] - wrtie through 캐시 전략](/img/handling-authentication-token-traffic-01/handling-authentication-token-traffic-16.png)
+![[그림] - wrtie through 캐시 전략](/img/handling-authentication-token-traffic-01/handling-authentication-token-traffic-16.png)*[그림] - wrtie through 캐시 전략*
 
 **write around 패턴** 
 
@@ -256,13 +256,13 @@ write around 패턴은 쓰기 작업은 캐시를 거치지 않고 DB에만 진�
 
 redis cache 적용해 slave DB의 부하를 줄였습니다.
 
-![[그림] -  redis cache 적용 후 DB 요청 수](/img/handling-authentication-token-traffic-01/handling-authentication-token-traffic-17.png)
+![[그림] -  redis cache 적용 후 DB 요청 수](/img/handling-authentication-token-traffic-01/handling-authentication-token-traffic-17.png)*[그림] -  redis cache 적용 후 DB 요청 수*
 
-![[그림] -  redis cache 적용 후 write DB 와 read DB 요청 수](/img/handling-authentication-token-traffic-01/handling-authentication-token-traffic-18.png)
+![[그림] -  redis cache 적용 후 write DB 와 read DB 요청 수](/img/handling-authentication-token-traffic-01/handling-authentication-token-traffic-18.png)*[그림] -  redis cache 적용 후 write DB 와 read DB 요청 수*
 
 또한, 캐시를 이용해 요청에 빠르게 응답하여 결과적으로 latency를 줄였습니다. 
 
-![[그림] -  redis cache 적용 후 계정 서비스 latency](/img/handling-authentication-token-traffic-01/handling-authentication-token-traffic-19.png)
+![[그림] -  redis cache 적용 후 계정 서비스 latency](/img/handling-authentication-token-traffic-01/handling-authentication-token-traffic-19.png)*[그림] -  redis cache 적용 후 계정 서비스 latency*
 
 
 
