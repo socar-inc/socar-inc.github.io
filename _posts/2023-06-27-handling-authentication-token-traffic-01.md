@@ -81,6 +81,8 @@ write DB와 read only DB가 별도로 존재했지만, 이를 호출하는 서�
 동시간 대의 write DB의 인증토큰 조회 요청 수와 read DB의 인증토큰 조회 요청 수는 다음과 같습니다.
   
 ![[그림] - write DB의 요청량](/img/handling-authentication-token-traffic-01/handling-authentication-token-traffic-03.png)*[그림] - write DB의 요청량* | ![[그림] - read DB의 요청량](/img/handling-authentication-token-traffic-01/handling-authentication-token-traffic-04.png)*[그림] - read DB의 요청량*
+---|---|
+
   
 모든 요청이 write DB에 집중되는 것을 확인할 수 있습니다. 
   
@@ -119,7 +121,7 @@ maria connector 2.7 버전에서 지원하는 aurora protocol을 사용하는 �
   
 jdbc:mariadb:aurora// **< write 클러스터 endpoint >** , **< read 클러스터 endpoint >** 의 형식으로 write 클러스터의 endpoint와 read 클러스터의 endpoint를 콤마로 구분하여 입력합니다. 
   
-<span style="background-color:#ffe6a1"> 💡 단, 이 방법은 mariaConnector 3.x 이후 버전에선 지원하지 않습니다. </span>
+> 💡 단, 이 방법은 mariaConnector 3.x 이후 버전에선 지원하지 않습니다. 
   
 ```yaml
 spring:
@@ -135,6 +137,7 @@ spring:
 write, read DB 부하 분산 적용 후 인증 토큰 조회 요청 수는 다음과 같습니다.
   
 ![[그림] - write DB의 요청수](/img/handling-authentication-token-traffic-01/handling-authentication-token-traffic-07.png)*[그림] - write DB의 요청수* | ![[그림] - read DB의 요청수](/img/handling-authentication-token-traffic-01/handling-authentication-token-traffic-08.png)*[그림] - read DB의 요청수*
+---|---|
   
 ![[그림] - write DB와 read DB의 인증 토큰 조회 요청 수](/img/handling-authentication-token-traffic-01/handling-authentication-token-traffic-09.png)*[그림] - write DB와 read DB의 인증 토큰 조회 요청 수*
   
@@ -177,7 +180,7 @@ MySQL과 같은 InnoDB의 인덱스는 B+tree 구조로 최신의 정렬 상태�
   
 만료된 인증 토큰을 인증토큰 테이블에서 분리하는 작업은 2단계로 진행했습니다. 
   
-| 단계 | 설명 |
+| <center>단계</center> | <center>설명</center> |
 | --- | --- |
 | **Step 1** | 만료 인증 토큰 테이블을 신규 생성, 1회 성 배치를 통해서 현재 인증 토큰 테이블의 만료된 인증 토큰을 이동, 인증 토큰 테이블의 만료 인증 토큰 삭제  |
 | **Step 2** | 한 시간 단위의 배치를 통해 만료된 인증 토큰을 인증토큰 테이블에서 만료 인증 토큰 테이블로 이동, 인증 토큰 테이블의 만료 인증 토큰 삭제  |
