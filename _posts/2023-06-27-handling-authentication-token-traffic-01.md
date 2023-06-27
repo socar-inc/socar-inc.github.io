@@ -2,7 +2,7 @@
 layout: post
 title: "쏘카의 대규모 인증토큰 트래픽 대응 : 개발기"
 subtitle: "어카운트팀의 대규모 트래픽 대응을 소개합니다."
-date: 2023-06-27 09:00:00 +0900
+date: 2023-06-27 16:21:00 +0900
 category: dev
 background: '/img/handling-authentication-token-traffic-01/handling-authentication-token-traffic-background.jpg'
 author: oli
@@ -120,7 +120,6 @@ maria connector 2.7 버전에서 지원하는 aurora protocol을 사용하는 �
 jdbc:mariadb:aurora// **< write 클러스터 endpoint >** , **< read 클러스터 endpoint >** 의 형식으로 write 클러스터의 endpoint와 read 클러스터의 endpoint를 콤마로 구분하여 입력합니다. 
   
 > 💡 단, 이 방법은 mariaConnector 3.x 이후 버전에선 지원하지 않습니다. 
-  
 ```yaml
 spring:
   datasource:
@@ -177,7 +176,7 @@ MySQL과 같은 InnoDB의 인덱스는 B+tree 구조로 최신의 정렬 상태�
   
 만료된 인증 토큰을 인증토큰 테이블에서 분리하는 작업은 2단계로 진행했습니다. 
   
-| <center>단계</center> | <center>설명<center> |
+| <center>단계</center> | <center>설명</center> |
 | --- | --- |
 | <center>**Step 1**</center> | 만료 인증 토큰 테이블을 신규 생성, 1회 성 배치를 통해서 현재 인증 토큰 테이블의 만료된 인증 토큰을 이동, 인증 토큰 테이블의 만료 인증 토큰 삭제  |
 | <center>**Step 2**</center> | 한 시간 단위의 배치를 통해 만료된 인증 토큰을 인증토큰 테이블에서 만료 인증 토큰 테이블로 이동, 인증 토큰 테이블의 만료 인증 토큰 삭제  |
