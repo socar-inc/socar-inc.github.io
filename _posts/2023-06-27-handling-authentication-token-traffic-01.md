@@ -70,7 +70,7 @@ DB 부하 분산과 성능 개선을 위해 아키텍처 개선을 우선 수행
   
 ---
   
-## 2. DB 부하 분산
+## 2. DB 부하 분산  
   
 write DB에 집중된 인증 토큰 관련 로직 문제를 해결하여 DB 부하를 분산시킨 방법을 설명하겠습니다.
   
@@ -119,7 +119,7 @@ maria connector 2.7 버전에서 지원하는 aurora protocol을 사용하는 �
   
 jdbc:mariadb:aurora// **< write 클러스터 endpoint >** , **< read 클러스터 endpoint >** 의 형식으로 write 클러스터의 endpoint와 read 클러스터의 endpoint를 콤마로 구분하여 입력합니다. 
   
->💡 단, 이 방법은 mariaConnector 3.x 이후 버전에선 지원하지 않습니다.
+<span style="background-color:#ffe6a1"> 💡 단, 이 방법은 mariaConnector 3.x 이후 버전에선 지원하지 않습니다. </span>
   
 ```yaml
 spring:
@@ -177,8 +177,8 @@ MySQL과 같은 InnoDB의 인덱스는 B+tree 구조로 최신의 정렬 상태�
   
 만료된 인증 토큰을 인증토큰 테이블에서 분리하는 작업은 2단계로 진행했습니다. 
   
-<!-- |  |  |
-| --- | --- | -->
+| 단계 | 설명 |
+| --- | --- |
 | **Step 1** | 만료 인증 토큰 테이블을 신규 생성, 1회 성 배치를 통해서 현재 인증 토큰 테이블의 만료된 인증 토큰을 이동, 인증 토큰 테이블의 만료 인증 토큰 삭제  |
 | **Step 2** | 한 시간 단위의 배치를 통해 만료된 인증 토큰을 인증토큰 테이블에서 만료 인증 토큰 테이블로 이동, 인증 토큰 테이블의 만료 인증 토큰 삭제  |
   
@@ -196,7 +196,7 @@ Step1 배치가 종료된 이후, 인증 토큰의 테이블 row 개수가 약 8
   
 ---
   
-## 4. redis cache layer 적용
+## 4. redis cache layer 적용  
   
 ### **문제상황**
   
