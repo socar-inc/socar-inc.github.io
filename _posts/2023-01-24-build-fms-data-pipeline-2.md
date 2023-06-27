@@ -563,7 +563,7 @@ validate_mysql = MonitoringValidationOperator(
         table="validation_result",
         target_table="fms_data_mart.battery_fleet_daily",
         operator_constructor=lambda: SQLColumnCheckOperator(
-            partition_clause="std_date = '{{ execution_date.in_timezone('Asia/Seoul').strftime('%Y-%m-%d') }}'",
+            partition_clause="std_date = '{{ execution_date.in_timezone(\"Asia/Seoul\").strftime(\"%Y-%m-%d\") }}'",
             column_mapping={
                 "fleet_intg_id": {
                     "max": {"leq_to": 1}
