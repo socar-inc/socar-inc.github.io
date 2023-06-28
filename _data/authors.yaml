@@ -168,3 +168,12 @@ marktang:
   links: 
     linkedin: 'https://www.linkedin.com/in/seongjun-moon-067413267'
     blog: 'https://ddanx2.tistory.com/'
+
+oli:
+  name: 올리
+  image: '/assets/authors/oli.jpeg'
+  position: Accounts
+  introduction: 어제보다 더 나은 오늘의 개발자가 되기위해 노력합니다.
+  links: 
+    linkedin: 'https://www.linkedin.com/in/yunha-lee-87b4a3251'
+    blog: 'https://dodop-blog.tistory.com/'
