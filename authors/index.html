@@ -26,7 +26,7 @@ background: '/assets/images/home-bg-main-1.png'
     </h2>
     <ul class="post">
       {% for post in site.posts %}
-        {% if post.author === key %}
+        {% if post.author == key %}
           <li>
             {% if post.link %}
               <a href="{{ post.link }}">
