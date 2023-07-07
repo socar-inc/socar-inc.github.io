@@ -2,7 +2,7 @@
 layout: post
 title: "쏘카의 대규모 인증토큰 트래픽 대응 : 프로젝트 플래닝"
 subtitle: "어카운트팀이 큰 문제를 해결하는 방법을 소개합니다."
-date: 2023-07-07 16:21:00 +0900
+date: 2023-07-07 16:01:00 +0900
 category: dev
 background: '/img/handling-authentication-token-traffic-02/handling-authentication-token-traffic-background.jpg'
 author: chungmyoung
@@ -12,6 +12,7 @@ tags:
 - planning
 - service engineering
 ---
+
 
 안녕하세요. 어카운트 팀의 청명입니다☀️
 
@@ -28,9 +29,8 @@ tags:
 해결해야할 문제는 크게 세가지 범주로 나뉩니다.
 
 ### 트래픽 증가가 master DB 부하를 증가시키는 문제
-![[그림] - write DB의 요청량 ](/img/handling-authentication-token-traffic-02/handling-authentication-token-traffic-01.png)*[그림] - write DB의 요청량*
 
-![[그림] - read DB의 요청량 ](/img/handling-authentication-token-traffic-02/handling-authentication-token-traffic-02.png)*read DB의 요청량*
+![[그림] - write DB의 요청량 ](/img/handling-authentication-token-traffic-02/handling-authentication-token-traffic-01.png)*write DB의 요청량* | ![[그림] - read DB의 요청량 ](/img/handling-authentication-token-traffic-02/handling-authentication-token-traffic-02.png)*read DB의 요청량*
 
 쏘카 서비스는 트래픽이 증가하면 MasterDB의 부하가 같이 늘어나는 구조였습니다. 트래픽 처리에는 scale out 또는 scale up 전략을 사용할 수 있지만 쏘카는 master DB에만 부하가 몰려 scale up만 적용해왔습니다. 매년 부하가 늘어남에 따라 scale up 전략은 한계에 도달했고 효율적인 대응을 위해 scale out 전략을 사용할 수 있도록 아키텍쳐를 수정하기로 결정했습니다.
 
@@ -52,7 +52,7 @@ tags:
 
 본부장: **일정 한달 당깁시다.**
 
-어카운트: 넵!! (살려주세요.....)
+어카운트: ![[그림] - 어카운트팀의 속마음 ](/img/handling-authentication-token-traffic-02/handling-authentication-token-traffic-03.jpg)*어카운트팀의 속마음*
 
 쏘카 스테이 오픈으로 계획했던 일정이 절반으로 줄었습니다. 일정은 줄었지만 부하분산은 반드시 해내야만 하는 일이 됐습니다. 변경 전에 세웠던 일정은 아래와 같습니다.
 
@@ -84,7 +84,7 @@ tags:
 
 쏘카는 현재 모놀리식으로 이뤄진 거대한 시스템을 각 도메인별로 분리하는 시도를 하고 있습니다. 각 마이크로시스템간 통신은 gRPC를 표준프로토콜로 이용하고 있고 내부 구현은 많은 요청에 대응하기 위해 비동기 처리를 지향하고 있습니다.
 
-![[그림] - 쏘카 마이크로 서비스 표준 아키텍쳐](/img/handling-authentication-token-traffic-02/handling-authentication-token-traffic-03.png)*쏘카 마이크로 서비스 표준 아키텍쳐*
+![[그림] - 쏘카 마이크로 서비스 표준 아키텍쳐](/img/handling-authentication-token-traffic-02/handling-authentication-token-traffic-04.png)*쏘카 마이크로 서비스 표준 아키텍쳐*
 
 저희는 시니어 개발자인 팀장 한명과 저를 포함한 주니어 둘로 구성된 소규모 팀입니다. 저와 같이 작업하는 동료의 경험을 모두 합쳐도 1년이 채 되지 않는 그야말로 찐주니어로 구성된 팀입니다.
 
@@ -98,14 +98,14 @@ tags:
 
 일반적인 http protocol 과 동기방식으로 처리하는 것은 경험이 적은 저희도 충분히 잘할 수 있는 처리방식이기에 아래 그림과 같이 소화할 수 있는 방식의 아키텍쳐를 구상했습니다.
 
-![[그림] - 계정 마이크로 서비스 아키텍쳐](/img/handling-authentication-token-traffic-02/handling-authentication-token-traffic-04.png)*계정 마이크로 서비스 아키텍쳐*
+![[그림] - 계정 마이크로 서비스 아키텍쳐](/img/handling-authentication-token-traffic-02/handling-authentication-token-traffic-05.png)*계정 마이크로 서비스 아키텍쳐*
 
 우선 정복할 수 있는 방법으로 문제를 해결하고 gRPC 및 비동기 처리는 시간을 두고 천천히 진행하기로 결정했고 이 접근방법은 짧은시간내 문제를 해결하는데 큰 도움이 됐습니다. 부하 분산과 성능개선 모두 달성해야 하는 목표라는 하나의 커다란 문제일 때는 gRPC와 비동기 처리를 위해 학습비용을 쓰거나 다른 시니어 개발자의 도움을 받아야 하지만 작은 문제로 나누고 그 문제에 집중한 덕분에 주니어 개발자가 다룰 수 있는 수준으로 문제를 해결하여 ‘할 수 있을까?’에서 ‘해 볼만 하다’ 는 자신감으로 이어지게 됐습니다.
 
 ## 페이즈2
 전체 프로젝트에서 가장 많은 작업을 해야했던 페이즈2가 찾아왔습니다. 남아있는 시간에 비해 작업해야할 서비스가 매우 많았고 서비스를 수정해도 생전 처음보는 서비스의 배포까지 완료하려면 시간이 많이 필요했습니다. 배포를 제외한 수정만으로도 시간이 부족해 작업의 총량을 줄일 필요가 있어 우선순위를 파악해보기로 했습니다.
 
-![[그림] - read와 write의 요청수 차이](/img/handling-authentication-token-traffic-02/handling-authentication-token-traffic-05.png)*read와 write의 요청수 차이*
+![[그림] - read와 write의 요청수 차이](/img/handling-authentication-token-traffic-02/handling-authentication-token-traffic-06.png)*read와 write의 요청수 차이*
 
 분석 결과 api 요청은 read write api로 나눌 수 있었고 그 중에서 **read 요청수가 write보다 압도적으로 높다**는 것을 확인했습니다.
 
@@ -181,9 +181,9 @@ tags:
 
 이런 과정을 거쳐서 무슨 결과를 만들어냈을까요?
 
-![[그림] - DB 부하분산(파란색 : master, 노란색 : read)](/img/handling-authentication-token-traffic-02/handling-authentication-token-traffic-06.png)*DB 부하분산(파란색 : master, 노란색 : read)*
+![[그림] - DB 부하분산(파란색 : master, 노란색 : read)](/img/handling-authentication-token-traffic-02/handling-authentication-token-traffic-07.png)*DB 부하분산(파란색 : master, 노란색 : read)*
 
-![[그림] - cache layer 적용 후 DB 조회 쿼리 요청 수](/img/handling-authentication-token-traffic-02/handling-authentication-token-traffic-07.png)*cache layer 적용 후 DB 조회 쿼리 요청 수*
+![[그림] - cache layer 적용 후 DB 조회 쿼리 요청 수](/img/handling-authentication-token-traffic-02/handling-authentication-token-traffic-08.png)*cache layer 적용 후 DB 조회 쿼리 요청 수*
 
 이제는 성수기가 돼도 안절부절하지 않아도 되는 쏘카가 됐습니다.
 
