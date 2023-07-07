@@ -177,3 +177,12 @@ oli:
   links: 
     linkedin: 'https://www.linkedin.com/in/yunha-lee-87b4a3251'
     blog: 'https://dodop-blog.tistory.com/'
+
+chungmyoung:
+  name: 청명
+  image: '/assets/authors/chungmyoung.png'
+  position: Accounts
+  introduction: 기초가 단단한 프로그래머가 되기 위해 노력하고 있습니다.
+  links:
+    linkedin: 'https://www.linkedin.com/in/%EC%A7%80%ED%99%98-%EB%85%B8-b501b822a/'
+    blog: 'https://velog.io/@ji-ha'
