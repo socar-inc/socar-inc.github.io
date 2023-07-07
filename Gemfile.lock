@@ -10,8 +10,8 @@ GEM
       http_parser.rb (~> 0.6.0)
     eventmachine (1.2.7)
     eventmachine (1.2.7-x64-mingw32)
-    ffi (1.12.1)
-    ffi (1.12.1-x64-mingw32)
+    ffi (1.15.5)
+    ffi (1.15.5-x64-mingw32)
     forwardable-extended (2.6.0)
     http_parser.rb (0.6.0)
     i18n (0.9.5)
@@ -71,4 +71,4 @@ DEPENDENCIES
   jekyll-theme-clean-blog
 
 BUNDLED WITH
-   2.1.4
+   2.4.15
