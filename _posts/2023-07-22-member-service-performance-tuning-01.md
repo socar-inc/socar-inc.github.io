@@ -30,9 +30,8 @@ tags:
 
 ![[그림] - 느려요](/img/member-service-performance-tuning-01/slow.png)*[그림] - 느려요*
 
-```markdown
+
 느리다?! 와우 이벤트가 대박났구나!! 🎉
-```
 
 저희는 환호성을 질렀습니다. 충분한 개선을 했기에 서비스가 느려진다는 것은 예상보다 많은 트래픽이 몰려오는 것으로 해석했습니다. 정말 그랬을까요?
 
@@ -85,9 +84,9 @@ JPA가 대중화되며 JPA가 제공하는 다양한 기능을 이용해 개발�
 알았으니 개선해 봐야겠죠?
 
 ```kotlin
-@Transactional(readOnly = true) <- 1 차 개선
+@Transactional(readOnly = true) //<- 1 차 개선
 fun findByAccessToken(accessToken: String): MemberDto {
-    .. 중략..
+    //.. 중략..
 
     return MemberConverter.fromMemberToMemberDto(foundMember)
 
@@ -105,7 +104,7 @@ fun findByAccessToken(accessToken: String): MemberDto {
 시스템은 언제 db connection을 확보하고 반납할까요? auto-commit mode 에 따라 차이가 있지만 저희 시스템은 아래와 같이 동작했습니다.
 
 ```kotlin
-@Transactional(readOnly = true) <- DB 커넥션 획득
+@Transactional(readOnly = true) // <- DB 커넥션 획득
 fun findByAccessToken(accessToken: String): MemberDto {
     val foundAccessToken = accessTokenClient <- 외부 api 호출
         .findByTokenIsAndExpiredAtIsNull(accessToken)
@@ -121,7 +120,7 @@ fun findByAccessToken(accessToken: String): MemberDto {
     }
 
     return MemberConverter.fromMemberToMemberDto(foundMember)
-} <- DB 커넥션 반납
+} // <- DB 커넥션 반납
 ```
 
 [코드] - DB Connection 활용
@@ -137,9 +136,9 @@ DB 연결을 획득한 후, DB와 무관한 외부 API 호출 및 DTO 변환 작
 위 코드는 회원 정보를 조회하는 memberRepository.findById를 제외한 나머지는 모두 DB와 무관한 코드입니다. 따라서 불필요하게 설정된 Transaction scope을 줄이면 DB Connection 획득 시점과 사용/반납 시점을 최대한 가깝게 유지해 효율적으로 DB Connection을 사용할 수 있어 아래와 같이 개선했습니다.
 
 ```kotlin
-<- 불필요한 Transactional 설정 제거
+//<- 불필요한 Transactional 설정 제거
 fun findByAccessToken(accessToken: String): MemberDto {
-    ..중략..
+    //..중략..
     return MemberConverter.fromMemberToMemberDto(foundMember)
 } 
 ```
@@ -147,7 +146,7 @@ fun findByAccessToken(accessToken: String): MemberDto {
 [코드] - transaction 설정이 제거된 member service
 
 ```kotlin
-@Transactional(readOnly = true) <- Transactional 추가
+@Transactional(readOnly = true) //<- Transactional 추가
     @Repository
     interface MemberRepository : JpaRepository<Member, Int> {
         fun findByUserid(email: String?): Optional<Member>
@@ -198,7 +197,7 @@ fun fromMemberToMemberDto(member: Member): MemberDto {
         createdAt = member.createdAt,
         updatedAt = member.updatedAt,
         userid = member.userid,
-        ... 중략
+        //... 중략
     )
 }
 ```
@@ -277,7 +276,7 @@ class WarmupApplicationListener : ApplicationListener<ApplicationReadyEvent> {
         restTemplate.getForObject("$host:$port$apiPath/members/access-token-{accessToken}", String::class.java, it.token)
         restTemplate.getForObject("$host:$port$apiPath/members/email-{email}", String::class.java, warmupMemberEmail)
         restTemplate.getForObject("$host:$port$apiPath/members/id-{id}", String::class.java, warmupMemberId)
-        ... 중략... 
+        // ... 중략... 
     }
 }
 ```
