@@ -1,138 +1,138 @@
 dorma:
-    name: 도마
-    image: "/assets/authors/dorma.jpeg"
+  name: 도마
+  image: "/assets/authors/dorma.jpeg"
 
 issac:
-    name: 아이작
-    image: "/assets/authors/default.png"
+  name: 아이작
+  image: "/assets/authors/default.png"
 
 kyle:
-    name: 카일
-    image: "/assets/authors/kyle.png"
-    position:
-    introduction: 쏘카에서 데이터 관련 업무라면 가리지 않고 진행했으며, 구성원의 성장을 위해 코칭과 멘토링을 진행했습니다. 현재는 데이터 컨설팅과 인프런에서 교육을 하고 있어요.
-    links:
-      blog: 'https://zzsza.github.io/'
-      linkedin: 'https://www.linkedin.com/in/zzsza/'
-      youtube: "https://www.youtube.com/c/kyleschool"
-      inflearn: "https://www.inflearn.com/users/@kyleschool"
+  name: 카일
+  image: "/assets/authors/kyle.png"
+  position:
+  introduction: 쏘카에서 데이터 관련 업무라면 가리지 않고 진행했으며, 구성원의 성장을 위해 코칭과 멘토링을 진행했습니다. 현재는 데이터 컨설팅과 인프런에서 교육을 하고 있어요.
+  links:
+    blog: 'https://zzsza.github.io/'
+    linkedin: 'https://www.linkedin.com/in/zzsza/'
+    youtube: "https://www.youtube.com/c/kyleschool"
+    inflearn: "https://www.inflearn.com/users/@kyleschool"
 
 serena:
-    name: 세레나
-    image: "/assets/authors/default.png"
+  name: 세레나
+  image: "/assets/authors/default.png"
 
 thomas:
-    name: 토마스
-    image: "/assets/authors/thomas.jpeg"
+  name: 토마스
+  image: "/assets/authors/thomas.jpeg"
 
 gadi:
-    name: 가디
-    image: "/assets/authors/gadi.jpeg"
+  name: 가디
+  image: "/assets/authors/gadi.jpeg"
 
 purin:
-    name: 푸린
-    image: "/assets/authors/default.png"
+  name: 푸린
+  image: "/assets/authors/default.png"
 
 sandy:
-    name: 샌디
-    image: "/assets/authors/sandy.png"
+  name: 샌디
+  image: "/assets/authors/sandy.png"
 
 yamani:
-    name: 야마니
-    image: "/assets/authors/yamani.png"
+  name: 야마니
+  image: "/assets/authors/yamani.png"
 
 spock:
-    name: 스팍
-    image: "/assets/authors/spock.jpeg"
+  name: 스팍
+  image: "/assets/authors/spock.jpeg"
 
 hardy:
-    name: 하디
-    image: "/assets/authors/hardy.jpeg"
+  name: 하디
+  image: "/assets/authors/hardy.jpeg"
 
 charlie:
-    name: 찰리
-    image: "/assets/authors/charlie.png"
+  name: 찰리
+  image: "/assets/authors/charlie.png"
 
 mignon:
-    name: 미뇽
-    image: "/assets/authors/mignon.jpeg"
+  name: 미뇽
+  image: "/assets/authors/mignon.jpeg"
 
 ray:
-    name: 레이
-    image: "/assets/authors/ray.png"
+  name: 레이
+  image: "/assets/authors/ray.png"
 
 dini:
-    name: 디니
-    image: "/assets/authors/dini.jpeg"
-    position: 데이터 엔지니어
-    introduction: 쏘카에서 가격/면책 시스템 서버 개발과 테크 블로그 운영을 맡고 있습니다. 커피챗 환영합니다. :)
-    links:
-        blog: "https://diana-lab.tistory.com/"
-        linkedin: "https://www.linkedin.com/in/hyejinyoon/"
+  name: 디니
+  image: "/assets/authors/dini.jpeg"
+  position: 데이터 엔지니어
+  introduction: 쏘카에서 가격/면책 시스템 서버 개발과 테크 블로그 운영을 맡고 있습니다. 커피챗 환영합니다. :)
+  links:
+    blog: "https://diana-lab.tistory.com/"
+    linkedin: "https://www.linkedin.com/in/hyejinyoon/"
 
 jian:
-    name: 지안
-    image: "/assets/authors/jian.png"
+  name: 지안
+  image: "/assets/authors/jian.png"
 
 bada:
-    name: 바다
-    image: "/assets/authors/bada.png"
+  name: 바다
+  image: "/assets/authors/bada.png"
 
 oliver:
-    name: 올리버
-    image: "/assets/authors/oliver.png"
+  name: 올리버
+  image: "/assets/authors/oliver.png"
 
 juno:
-    name: 주노
-    image: "/assets/authors/juno.png"
+  name: 주노
+  image: "/assets/authors/juno.png"
 
 marie:
-    name: 마리
-    image: "/assets/authors/marie.png"
+  name: 마리
+  image: "/assets/authors/marie.png"
 
 camila:
-    name: 카밀라
-    image: "/assets/authors/camila.png"
+  name: 카밀라
+  image: "/assets/authors/camila.png"
 
 gigi:
-    name: 지지
-    image: "/assets/authors/gigi.png"
+  name: 지지
+  image: "/assets/authors/gigi.png"
 
 kp:
-    name: 케이피
-    image: "/assets/authors/kp.jpeg"
+  name: 케이피
+  image: "/assets/authors/kp.jpeg"
 
 esther:
-    name: 에스더
-    image: "/assets/authors/default.png"
+  name: 에스더
+  image: "/assets/authors/default.png"
 
 carrot:
-    name: 캐롯
-    image: "/assets/authors/carrot.png"
+  name: 캐롯
+  image: "/assets/authors/carrot.png"
 
 lucia:
-    name: 루시아
-    image: "/assets/authors/lucia.png"
+  name: 루시아
+  image: "/assets/authors/lucia.png"
 
 sienna:
-    name: 시에나
-    image: "/assets/authors/sienna.png"
+  name: 시에나
+  image: "/assets/authors/sienna.png"
 
 blanc:
-    name: 블랑
-    image: "/assets/authors/blanc.jpg"
+  name: 블랑
+  image: "/assets/authors/blanc.jpg"
 
 humphrey:
-    name: 험프리
-    image: "/assets/authors/humphrey.png"
+  name: 험프리
+  image: "/assets/authors/humphrey.png"
 
 bucky:
-    name: 버키
-    image: "/assets/authors/bucky.png"
+  name: 버키
+  image: "/assets/authors/bucky.png"
 
 corgi:
-    name: 코기
-    image: "/assets/authors/corgi.png"
+  name: 코기
+  image: "/assets/authors/corgi.png"
 
 grab:
   name: 그랩
@@ -165,7 +165,7 @@ marktang:
   image: '/assets/authors/marktang.png'
   position: QA
   introduction: '"이 세상에 당연한 일은 없다" 항상 궁금증을 품고 있는 QA Engnieer입니다.'
-  links: 
+  links:
     linkedin: 'https://www.linkedin.com/in/seongjun-moon-067413267'
     blog: 'https://ddanx2.tistory.com/'
 
@@ -174,7 +174,7 @@ oli:
   image: '/assets/authors/oli.jpeg'
   position: Accounts
   introduction: 어제보다 더 나은 오늘의 개발자가 되기위해 노력합니다.
-  links: 
+  links:
     linkedin: 'https://www.linkedin.com/in/yunha-lee-87b4a3251'
     blog: 'https://dodop-blog.tistory.com/'
 
@@ -186,3 +186,11 @@ chungmyoung:
   links:
     linkedin: 'https://www.linkedin.com/in/%EC%A7%80%ED%99%98-%EB%85%B8-b501b822a/'
     blog: 'https://velog.io/@ji-ha'
+
+choa:
+  name: 촤
+  image: '/assets/authors/choa.jpeg'
+  position: 플랫폼 그룹장
+  introduction: 쏘카 플랫폼을 책임지고 있습니다. 복싱을 좋아하고 공유를 통한 성장을 지향합니다.
+  links:
+    linkedin: 'https://www.linkedin.com/in/%EC%A0%95%ED%98%84-%EC%B0%A8-74923ab5/'
