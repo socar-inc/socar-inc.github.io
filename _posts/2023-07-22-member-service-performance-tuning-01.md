@@ -105,13 +105,13 @@ fun findByAccessToken(accessToken: String): MemberDto {
 ```kotlin
 @Transactional(readOnly = true) // <- DB 커넥션 획득
 fun findByAccessToken(accessToken: String): MemberDto {
-    val foundAccessToken = accessTokenClient <- 외부 api 호출
+    val foundAccessToken = accessTokenClient // <- 외부 api 호출
         .findByTokenIsAndExpiredAtIsNull(accessToken)
         .orElseThrow {
             InvalidTokenException("Access Token not found)")
         }
 
-    val foundMember = memberRepository <- DB 커넥션 사용
+    val foundMember = memberRepository // <- DB 커넥션 사용
         .findById(
         foundAccessToken.memberId!!.toInt()
     ).orElseThrow {
