@@ -89,7 +89,6 @@ fun findByAccessToken(accessToken: String): MemberDto {
     //.. 중략..
 
     return MemberConverter.fromMemberToMemberDto(foundMember)
-
 }
 ```
 
