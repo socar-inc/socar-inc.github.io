@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "싱글벙글 회원 서비스 성능 튜닝기"
-subtitle: "어카운트팀이 진행하는 서비스 성능 개선 과정에 대해 소개합니다"
+subtitle: "어카운트팀이 완료한 서비스 성능 개선 과정을 소개합니다"
 date: 2023-07-22 11:01:00 +0900
 category: dev
 background: '/img/member-service-performance-tuning-01/background.jpg'
