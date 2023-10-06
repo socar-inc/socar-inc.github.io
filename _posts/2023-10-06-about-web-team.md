@@ -3,7 +3,7 @@ layout: post
 title: "쏘카의 웹 팀에 관하여"
 subtitle: "쏘카의 웹 프론트엔드 개발자들은 어떤 일을 할까요?"
 date: 2023-10-06 16:36:00 +0900
-category: Web, FE
+category: fe
 author: lisbon
 comments: true
 tags:
