@@ -4,6 +4,7 @@ title: "쏘카의 웹 팀에 관하여"
 subtitle: "쏘카의 웹 프론트엔드 개발자들은 어떤 일을 할까요?"
 date: 2023-10-06 16:36:00 +0900
 category: fe
+background: '/img/about-web-team/img12.png'
 author: lisbon
 comments: true
 tags:
