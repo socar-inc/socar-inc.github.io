@@ -164,7 +164,7 @@ marktang:
   name: 마크탕
   image: '/assets/authors/marktang.png'
   position: QA
-  introduction: '"이 세상에 당연한 일은 없다" 항상 궁금증을 품고 있는 QA Engnieer입니다.'
+  introduction: '"이 세상에 당연한 일은 없다" 항상 궁금증을 품고 있는 QA Engineer입니다.'
   links:
     linkedin: 'https://www.linkedin.com/in/seongjun-moon-067413267'
     blog: 'https://ddanx2.tistory.com/'
@@ -194,3 +194,11 @@ choa:
   introduction: 쏘카 플랫폼을 책임지고 있습니다. 복싱을 좋아하고 공유를 통한 성장을 지향합니다.
   links:
     linkedin: 'https://www.linkedin.com/in/%EC%A0%95%ED%98%84-%EC%B0%A8-74923ab5/'
+
+lisbon:
+  name: 리스본
+  image: '/assets/authors/lisbon.jpeg'
+  position: WEB
+  introduction: 쏘카 웹 팀에서 프론트엔드 개발을 하고 있습니다. 벽 타고 잠수하는 것을 좋아합니다.
+  links:
+    linkedin: 'https://www.linkedin.com/in/%EC%9E%AC%EC%9D%80-%EC%9E%A5-993578192/'
