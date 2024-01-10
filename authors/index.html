@@ -27,6 +27,20 @@ background: '/assets/images/home-bg-main-1.png'
     <ul class="post">
       {% for post in site.posts %}
         {% assign authors = post.author | split: ", " %}
+          {% for author in authors %}
+            {% if author == key %}
+              <li>
+                {% if post.link %}
+                  <a href="{{ post.link }}">
+                {% else %}
+                  <a href="{{ site.baseurl }}{{ post.url }}">
+                {% endif %}
+                    {{ post.title }} 
+                  </a>
+                  <time>{{ post.date | date: "%Y-%m-%d" }}</time>
+              </li>
+            {% endif %}
+          {% endfor %}
       {% endfor %}
     </ul>
   {% endfor %}
