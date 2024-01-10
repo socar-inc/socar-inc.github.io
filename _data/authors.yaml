@@ -205,9 +205,19 @@ lisbon:
 
 hatnim:
   name: 햇님
+  image: '/assets/authors/hatnim.png'
+  position: data science
+  links:
+    linkedin: 'https://www.linkedin.com/in/yeonseo-kim-b4a4062a9/'
 
 knox:
   name: 녹스
+  image: '/assets/authors/knox.png'
+  position: data engineering
 
 bbiyak:
   name: 삐약
+  image: '/assets/authors/bbiyak.png'
+  position: data engineering
+  links:
+    linkedin: 'https://www.linkedin.com/in/jaejin-lee-40b0711a9/'
