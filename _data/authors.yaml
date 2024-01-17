@@ -206,18 +206,21 @@ lisbon:
 hatnim:
   name: 햇님
   image: '/assets/authors/hatnim.png'
-  position: data science
+  position: 데이터 사이언티스트
+  introduction: 쏘카에서 데이터 프로덕트를 만들고 있습니다.
   links:
     linkedin: 'https://www.linkedin.com/in/yeonseo-kim-b4a4062a9/'
 
 knox:
   name: 녹스
   image: '/assets/authors/knox.png'
-  position: data engineering
+  position: 데이터 엔지니어
+  introduction: 쏘카 데이터 프로덕트 그룹의 데이터 엔지니어링팀에서 매니저를 맡고 있습니다.
 
 bbiyak:
   name: 삐약
   image: '/assets/authors/bbiyak.png'
-  position: data engineering
+  position: 데이터 엔지니어
+  introduction: 쏘카에서 데이터 엔지니어링 업무를 하고 있습니다.
   links:
     linkedin: 'https://www.linkedin.com/in/jaejin-lee-40b0711a9/'
