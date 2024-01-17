@@ -48,7 +48,6 @@ layout: default
         </div>
         {% for page_author in page_authors %}
           {% assign author = site.data.authors[page_author] %}
-          {% if author.introduction %}
           <div class="author-card">
             <div class="card mb-3">
               <div class="row no-gutters">
@@ -61,7 +60,9 @@ layout: default
                       <a href="/authors/#{{ author.name }}">{{ author.name }}</a>
                       <small class="text-muted"> {{ author.position }}</small>
                     </p>
+                    {% if author.introduction %}
                     <p class="card-text">{{ author.introduction }} </p>
+                    {% endif %}
                     <p class="card-text">
                       {% for link in author.links %}
                       <a href="{{ link[1] }}"><img src="/assets/icon/{{ link[0] }}.png" class="link-img" alt="{{ link[0] }}"></a>
@@ -71,7 +72,6 @@ layout: default
                 </div>
               </div>
             </div>
-          {% endif %}
         {% endfor %}
         <hr>
         <div class="clearfix">
