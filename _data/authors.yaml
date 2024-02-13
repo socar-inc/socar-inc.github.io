@@ -224,3 +224,12 @@ bbiyak:
   introduction: 쏘카에서 데이터 엔지니어링 업무를 하고 있습니다.
   links:
     linkedin: 'https://www.linkedin.com/in/jaejin-lee-40b0711a9/'
+
+onestone:
+  name: 원스톤
+  image: '/assets/authors/onestone.jpeg'
+  position: Asset
+  introduction: 쏘카의 자산(Asset)인 존과 차량관련 개발을 하고 있습니다.
+  links:
+    blog: 'https://onestone9900.github.io/'
+    linkedin: 'https://www.linkedin.com/in/devsong/'
