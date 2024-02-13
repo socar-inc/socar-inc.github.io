@@ -362,7 +362,7 @@ apply {
 
 `변경예시)`
 ```groovy
-// grrovy
+// groovy
 dependencyManagement {
    imports {
       ...
