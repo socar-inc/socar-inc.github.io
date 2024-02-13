@@ -92,40 +92,40 @@ Root project ‘gradle'
  // groovy
  buildscript {
    ext {
-		kotlinVersion = '1.6.10'
-		springBootVersion = '2.4.5'
-		socarPluginVersion = '1.0.0'
-		servletVersion = "2.5"
-		poiVersion = "4.1.2"
-		springCloudAwsVersion = "2.2.6.RELEASE"
-		...
-	}
-	repository {
-		gradlePluginPortal()
-		mavenCentral()
-		maven {
-			name = 'GitHubPackages'
-			...
-		}
-	}
-	dependencies {
-		...
-		classpath('socar:kotlin-gradle-plugin:$socarPluginVersion')
-		classpath('org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion')
-		classpath('org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion')
-		...
-	}
+      kotlinVersion = '1.6.10'
+      springBootVersion = '2.4.5'
+      socarPluginVersion = '1.0.0'
+      servletVersion = "2.5"
+      poiVersion = "4.1.2"
+      springCloudAwsVersion = "2.2.6.RELEASE"
+      ...
+   }
+   repository {
+      gradlePluginPortal()
+      mavenCentral()
+      maven {
+         name = 'GitHubPackages'
+         ...
+      }
+   }
+   dependencies {
+      ...
+      classpath('socar:kotlin-gradle-plugin:$socarPluginVersion')
+      classpath('org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion')
+      classpath('org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion')
+      ...
+   }
 }
 
 allprojects {
-	repository {
-		gradlePluginPortal()
-		mavenCentral()
-      	maven {
-			name = 'GitHubPackages'
-			...
-		}
-	}
+   repository {
+      gradlePluginPortal()
+      mavenCentral()
+         maven {
+         name = 'GitHubPackages'
+         ...
+      }
+   }
 }
 
 subprojects {
@@ -133,29 +133,29 @@ subprojects {
    apply plugin: 'kotlin'
    apply plugin: 'org.springframework.boot'
    apply plugin: 'io.spring.dependency-management'
-	...
+   ...
 
-	dependencyManagement {
-      	imports {
-        	mavenBom 'org.springframework.cloud:spring-cloud-aws-dependencies:$springCloudAwsVersion'
-         	...
-      	}
+   dependencyManagement {
+      imports {
+         mavenBom 'org.springframework.cloud:spring-cloud-aws-dependencies:$springCloudAwsVersion'
+         ...
+      }
 
-      	dependencies {
-    		dependency('org.jetbrains.kotlin:kotlin-stdlib-jdk7:${kotlinVersion}')
-        	dependency('org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}')
-        	dependency('com.google.guava:guava:${guavaVersion}')
-        	...
-      	}
-   	}
-	...
+      dependencies {
+         dependency('org.jetbrains.kotlin:kotlin-stdlib-jdk7:${kotlinVersion}')
+         dependency('org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}')
+         dependency('com.google.guava:guava:${guavaVersion}')
+         ...
+      }
+   }
+   ...
 }
  ```
 
 - `buildscript {}` 블록에 루트 프로젝트 및 하위 프로젝트에서 사용할 ext 프로퍼티를 선언하고, 메이븐 센트럴 혹은 프라이빗 메이븐 레포지터리의 아티팩트(jar 파일)의 의존성을 선언합니다.
 - `allprojects {}` 블록에 루트 프로젝트 및 하위 프로젝트 전체에서 사용할 리포지터리를 선언합니다.
 - `subprojects {}` 블록에 각 서브프로젝트에서 사용할 의존성을 선언합니다.
-    - `dependencyManagement {}` 확장 블록에 mavenBom을 이용해 하위 프로젝트에서 루트 프로젝트의 스프링 버전과 호환되는 서드 파티 의존성 라이브러리들의 버전을 자동 구성합니다. 하위 `import {}` 블록으로 스프링의 의존성 봄을 가져오고 `dependencies {}` 블록에서는 스프링이 관리하는 의존성 버전을 오버라이딩하여 버전을 직접 관리합니다.
+	- `dependencyManagement {}` 확장 블록에 mavenBom을 이용해 하위 프로젝트에서 루트 프로젝트의 스프링 버전과 호환되는 서드 파티 의존성 라이브러리들의 버전을 자동 구성합니다. 하위 `import {}` 블록으로 스프링의 의존성 봄을 가져오고 `dependencies {}` 블록에서는 스프링이 관리하는 의존성 버전을 오버라이딩하여 버전을 직접 관리합니다.
 
 ---
 **Tip:**
@@ -210,26 +210,26 @@ mavenBom("org.springframework.cloud:spring-cloud-aws-dependencies:$springCloudAw
 ```groovy
 // groovy
 ext {
-	kotlinVersion = "1.6.10"
-	springBootVersion = "2.4.5"
-	socarPluginVersion = "1.0.0"
-	servletVersion = "2.5"
-	poiVersion = "4.1.2"
-	springCloudAwsVersion = "2.2.6.RELEASE"
-	...
+   kotlinVersion = "1.6.10"
+   springBootVersion = "2.4.5"
+   socarPluginVersion = "1.0.0"
+   servletVersion = "2.5"
+   poiVersion = "4.1.2"
+   springCloudAwsVersion = "2.2.6.RELEASE"
+   ...
 }
 ```
 $ \hspace*{2cm} \downarrow $
 ```kotlin
 // kotlin
 extra.apply {
-	set("kotlinVersion", "1.6.10")
-	set("springBootVersion", "2.4.5")
-	set("socarPluginVersion", "1.0.0")
-	set("servletVersion", "2.5")
-	set("poiVersion", "4.1.2")
-	set("springCloudAwsVersion", "2.2.6.RELEASE")
-	...
+   set("kotlinVersion", "1.6.10")
+   set("springBootVersion", "2.4.5")
+   set("socarPluginVersion", "1.0.0")
+   set("servletVersion", "2.5")
+   set("poiVersion", "4.1.2")
+   set("springCloudAwsVersion", "2.2.6.RELEASE")
+   ...
 }
 ```
 ---
@@ -240,38 +240,39 @@ extra.apply {
 // kotlin
 ...
 buildscript {
-	val kotlinVersion = "1.6.10"
-	val springBootVersion = "2.4.5"
-	val socarPluginVersion = "1.0.0"
-	val servletVersion = "2.5"
-	val poiVersion = "4.1.2"
-	...
+   val kotlinVersion = "1.6.10"
+   val springBootVersion = "2.4.5"
+   val socarPluginVersion = "1.0.0"
+   val servletVersion = "2.5"
+   val poiVersion = "4.1.2"
+   ...
 
-  	extra.apply {
-	  	set("kotlinVersion", kotlinVersion)
-	  	set("springBootVersion", springBootVersion)
-	  	set("socarPluginVersion", socarPluginVersion)
-	  	set("servletVersion", servletVersion)
-	  	set("poiVersion", poiVersion)
-	  	set("springCloudAwsVersion", "2.2.6.RELEASE")
-		...
-	}
+   extra.apply {
+      set("kotlinVersion", kotlinVersion)
+      set("springBootVersion", springBootVersion)
+      set("socarPluginVersion", socarPluginVersion)
+      set("servletVersion", servletVersion)
+      set("poiVersion", poiVersion)
+      set("springCloudAwsVersion", "2.2.6.RELEASE")
+      ...
+   }
 
-	repository {
-		gradlePluginPortal()
-		mavenCentral()
-		maven {
-			name = "GitHubPackages"
-			...
-		}
-	}
-	dependencies {
-		...
-		classpath("socar:kotlin-gradle-plugin:$socarPluginVersion")
-		classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion")
-		...
-	}
+   repository {
+      gradlePluginPortal()
+      mavenCentral()
+      maven {
+         name = "GitHubPackages"
+         ...
+      }
+   }
+
+   dependencies {
+      ...
+      classpath("socar:kotlin-gradle-plugin:$socarPluginVersion")
+      classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
+      classpath("org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion")
+      ...
+   }
 }
 ...
 ```
@@ -290,25 +291,25 @@ val springCloudAwsVersion by { "2.2.6.RELEASE" }
 ...
 
 buildscript {
-	val kotlinVersion = "1.6.10"
-	val springBootVersion = "2.4.5"
-	val socarPluginVersion = "1.0.0"
-	...
-	repository {
-		gradlePluginPortal()
-		mavenCentral()
-		maven {
-			name = "GitHubPackages"
-			...
-		}
-	}
-	dependencies {
-		...
-		classpath("socar:kotlin-gradle-plugin:$socarPluginVersion")
-		classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion")
-		...
-	}
+   val kotlinVersion = "1.6.10"
+   val springBootVersion = "2.4.5"
+   val socarPluginVersion = "1.0.0"
+   ...
+   repository {
+      gradlePluginPortal()
+      mavenCentral()
+      maven {
+         name = "GitHubPackages"
+         ...
+      }
+   }
+   dependencies {
+      ...
+      classpath("socar:kotlin-gradle-plugin:$socarPluginVersion")
+      classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
+      classpath("org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion")
+      ...
+   }
 }
 ...
 ```
@@ -333,9 +334,9 @@ $ \hspace*{2cm} \downarrow $
 ```kotlin
 // kotlin
 apply {
-	plugin("kotlin")
-	plugin("org.springframework.boot")
-	plugin("io.spring.dependency-management")
+   plugin("kotlin")
+   plugin("org.springframework.boot")
+   plugin("io.spring.dependency-management")
 }
 ```
 ---
@@ -347,13 +348,13 @@ apply {
 ```grrovy
 // grrovy
 dependencyManagement {
-	imports {
-		...
-	}
+   imports {
+      ...
+   }
 
-	dependencies {
-		...
-	}
+   dependencies {
+      ...
+   }
 }
 ```
 $ \hspace*{2cm} \downarrow $
@@ -364,13 +365,13 @@ import io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension
 ...
 
 the<DependencyManagementExtension>().apply {
-	imports {
-		...
-	}
+   imports {
+      ...
+   }
 
-	dependencies {
-		...
-	}
+   dependencies {
+      ...
+   }
 }
 ```
 ---
@@ -389,60 +390,60 @@ val springCloudAwsVersion by { "2.2.6.RELEASE" }
 ...
 
 buildscript {
-	val kotlinVersion = "1.6.10"
-	val springBootVersion = "2.4.5"
-	val socarPluginVersion = "1.0.0"
+   val kotlinVersion = "1.6.10"
+   val springBootVersion = "2.4.5"
+   val socarPluginVersion = "1.0.0"
 
-	repository {
-		gradlePluginPortal()
-		mavenCentral()
-		maven {
-			name = "GitHubPackages"
-			...
-		}
-	}
-	dependencies {
-		...
-		classpath("socar:kotlin-gradle-plugin:$socarPluginVersion")
-		classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion")
-		...
-	}
+   repository {
+      gradlePluginPortal()
+      mavenCentral()
+      maven {
+         name = "GitHubPackages"
+         ...
+      }
+   }
+   dependencies {
+      ...
+      classpath("socar:kotlin-gradle-plugin:$socarPluginVersion")
+      classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
+      classpath("org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion")
+      ...
+   }
 }
 
 allproject {
-	repository {
-		gradlePluginPortal()
-		mavenCentral()
-		maven {
-			name = "GitHubPackages"
-			...
-		}
-	}
+   repository {
+      gradlePluginPortal()
+      mavenCentral()
+      maven {
+         name = "GitHubPackages"
+         ...
+      }
+   }
 }
 
 subprojects {
-	apply {
-		...
-		plugin("kotlin")
-		plugin("org.springframework.boot")
-		plugin("io.spring.dependency-management")
-		...
-	}
-	...
-	the<DependencyManagementExtension>().apply {
-      	imports {
-			mavenBom("org.springframework.cloud:spring-cloud-aws-dependencies:$springCloudAwsVersion")
-			...
-      	}
+   apply {
+      ...
+      plugin("kotlin")
+      plugin("org.springframework.boot")
+      plugin("io.spring.dependency-management")
+      ...
+   }
+   ...
+   the<DependencyManagementExtension>().apply {
+      imports {
+         mavenBom("org.springframework.cloud:spring-cloud-aws-dependencies:$springCloudAwsVersion")
+         ...
+      }
 
-      	dependencies {
-        	dependency("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
-        	dependency("org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion")
-        	...
-     	}
-  	}
-	...
+      dependencies {
+         dependency("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
+         dependency("org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion")
+         ...
+      }
+   }
+   ...
 }
 ```
 <br><br><br>
@@ -499,20 +500,20 @@ val springCloudAwsVersion: String by project.extra
 ...
 
 subprojects {
-	...
-	the<DependencyManagementExtension>().apply {
-      	imports {
-        	mavenBom("org.springframework.cloud:spring-cloud-aws-dependencies:$springCloudAwsVersion")
-        	...
-      	}
+   ...
+   the<DependencyManagementExtension>().apply {
+      imports {
+         mavenBom("org.springframework.cloud:spring-cloud-aws-dependencies:$springCloudAwsVersion")
+         ...
+      }
 
-      	dependencies {
-        	dependency("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
-        	dependency("org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion")
-        	...
-      	}
-  	}
-	...
+      dependencies {
+         dependency("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
+         dependency("org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion")
+         ...
+      }
+   }
+   ...
 }
 ```
 ---
@@ -531,20 +532,20 @@ import io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension
 
 ...
 subprojects {
-	...
-	the<DependencyManagementExtension>().apply {
-      	imports {
-         	mavenBom("org.springframework.cloud:spring-cloud-aws-dependencies:$springCloudAwsVersion")
-        	...
+   ...
+   the<DependencyManagementExtension>().apply {
+      imports {
+         mavenBom("org.springframework.cloud:spring-cloud-aws-dependencies:$springCloudAwsVersion")
+         ...
       }
 
       dependencies {
-        	dependency("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
-        	dependency("org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion")
-        	...
+         dependency("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
+         dependency("org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion")
+         ...
       }
-  }
-	...
+   }
+   ...
 }
 ```
 $ \hspace*{2cm} \downarrow $
@@ -552,14 +553,14 @@ $ \hspace*{2cm} \downarrow $
 // kotlin
 ...
 subprojects {
-	...
-	dependencies {
-    	implementation(platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion"))
-    	implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
-    	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion")
+   ...
+   dependencies {
+       implementation(platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion"))
+       implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
+       implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion")
       ...
-	}
-	...
+   }
+   ...
 }
 ```
 
@@ -635,21 +636,21 @@ kotlin("plugin.spring")
 import io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension
 ...
 buildscript {
-	val kotlinVersion = "1.6.10"
-	val springBootVersion = "2.4.5"
-	val socarPluginVersion = "1.0.0"
+   val kotlinVersion = "1.6.10"
+   val springBootVersion = "2.4.5"
+   val socarPluginVersion = "1.0.0"
 
-	repository {
-		gradlePluginPortal()
-		mavenCentral()
-		maven {
-			name = "GitHubPackages"
-			...
-		}
-	}
-	dependencies {
-		classpath("socar:kotlin-gradle-plugin:$socarPluginVersion")
-	}
+   repository {
+      gradlePluginPortal()
+      mavenCentral()
+      maven {
+         name = "GitHubPackages"
+         ...
+      }
+   }
+   dependencies {
+      classpath("socar:kotlin-gradle-plugin:$socarPluginVersion")
+   }
 }
 
 plugins {
@@ -707,25 +708,25 @@ plugins {
 ```kotlin
 // kotlin
 pluginManagement {
-	resolutionStrategy {
-		eachPlugin {
-			if (requested.id.id == "kr.socar.gradle.plugin") {
-	      		useModule("kr.socar:gradle-plugin:1.13.0")
-      		}
-		}
-	}
+   resolutionStrategy {
+      eachPlugin {
+         if (requested.id.id == "kr.socar.gradle.plugin") {
+            useModule("kr.socar:gradle-plugin:1.13.0")
+         }
+      }
+   }
 
-	repositories {
-		mavenLocal()
-	  	maven {
-			url = uri("https://maven.pkg.github.com/example/maven")
-			credentials {
-				username = xxxxx
-				password = xxxxx
-			}
-		}
-		gradlePluginPortal()
-	}
+   repositories {
+      mavenLocal()
+      maven {
+         url = uri("https://maven.pkg.github.com/example/maven")
+         credentials {
+            username = xxxxx
+            password = xxxxx
+         }
+      }
+      gradlePluginPortal()
+   }
 }
 ```
  위 코드는 `plugins {}` 블록에서 id가 "kr.socar.gradle.plugin"인 아티팩트 요청이 있다면, `repositories {}`  저장소에 `"kr.socar:gradle-plugin:1.13.0"` 라이브러리를 요청하라는 것으로 해석할 수 있습니다. 
@@ -748,7 +749,7 @@ plugins {
    java
    kotlin("kapt") version kotlinVersion
    ...
-	id("kr.socar.gradle.plugin") apply false // apply false 필수
+   id("kr.socar.gradle.plugin") apply false // apply false 필수
 }
 ...
 ```
@@ -770,15 +771,15 @@ apply plugin: 'socar-gradle-plugin'
 
 ...
 exposedModelGenerator {
-   	socarZone {
-    	...
-   	}
-   	legacySocar {
-    	...
-   	}
-   	legacySocarLog {
-    	...
-   	}
+   socarZone {
+      ...
+   }
+   legacySocar {
+      ...
+   }
+   legacySocarLog {
+      ...
+   }
 }
 ...
 ```
@@ -799,15 +800,15 @@ apply {
 // 이 태스크의 명칭은 "generateSocarZone"
 // 클래스 타입은 ConventionTask를 상속받은 ExposedModelGenerator
 tasks.register<ExposedModelGenerator>("generateSocarZone") {
-	...
+   ...
 }
 
 tasks.register<ExposedModelGenerator>("generateLegacySocar") {
-	...
+   ...
 }
 
 tasks.register<ExposedModelGenerator>("generateLegacySocarLog") {
-	...
+   ...
 }
 ```
 해당 아티펙트는 사내에서 직접 만들어 배포하고 있기 때문에, 마커를 추가하여 아티펙트를 게시해 보겠습니다.
@@ -825,14 +826,14 @@ plugins {
 ...
 gradlePlugin {
    plugins {
-      	// 플러그인명
-      	socarGradlePlugin {
-        	// plugins {} 블록에서 사용할 id
-        	id = 'kr.socar.gradle.plugin'
-        	// Plugin<Project>을 상속한 클래스명
-        	implementationClass = 'kr.socar.gradle.plugin.SocarGradlePlugin'
-      	}
-   	}
+      // 플러그인명
+      socarGradlePlugin {
+         // plugins {} 블록에서 사용할 id
+         id = 'kr.socar.gradle.plugin'
+         // Plugin<Project>을 상속한 클래스명
+         implementationClass = 'kr.socar.gradle.plugin.SocarGradlePlugin'
+      }
+   }
 }
 ```
 
@@ -846,13 +847,13 @@ gradlePlugin {
 ```kotlin
 // kotlin
 plugins {
-	id("kr.socar.gradle.plugin") version "0.0.0-test"
+   id("kr.socar.gradle.plugin") version "0.0.0-test"
 }
 
 ...
 
 exposedModelGenerator {
-	...
+   ...
 }
 ```
 <br><br><br>
@@ -876,17 +877,17 @@ springCloudAwsVersion = 2.2.6.RELEASE
 ```kotlin
 // kotlin
 pluginManagement {
-	repositories {
-		mavenLocal()
-	  	maven {
-			url = uri("https://maven.pkg.github.com/example/maven")
-			credentials {
-				username = xxxxx
-				password = xxxxx
-			}
-		}
-		gradlePluginPortal()
-	}
+   repositories {
+      mavenLocal()
+      maven {
+         url = uri("https://maven.pkg.github.com/example/maven")
+         credentials {
+            username = xxxxx
+            password = xxxxx
+         }
+      }
+      gradlePluginPortal()
+   }
 }
 
 include("api")
@@ -910,46 +911,46 @@ plugins {
     val kotlinVersion = "1.8.10"
 
     java
-    kotlin("kapt") version kotlinVersion
-    kotlin("jvm") version kotlinVersion
+   kotlin("kapt") version kotlinVersion
+   kotlin("jvm") version kotlinVersion
     kotlin("plugin.spring") version kotlinVersion
     kotlin("plugin.allopen") version kotlinVersion
     id("org.springframework.boot") version "2.5.14" apply false
 }
 
 allproject {
-	repository {
-		gradlePluginPortal()
-		mavenCentral()
-		maven {
-			name = "GitHubPackages"
-			...
-		}
-	}
+   repository {
+      gradlePluginPortal()
+      mavenCentral()
+      maven {
+         name = "GitHubPackages"
+         ...
+      }
+   }
 }
 
 subprojects {
-	apply {
-		...
-		plugin("kotlin")
-		plugin("org.springframework.boot")
-		plugin("io.spring.dependency-management")
-		...
-	}
-	...
-	the<DependencyManagementExtension>().apply {
-      	imports {
-          	mavenBom("org.springframework.cloud:spring-cloud-aws-dependencies:$springCloudAwsVersion")
-			...
-      	}
+   apply {
+      ...
+      plugin("kotlin")
+      plugin("org.springframework.boot")
+      plugin("io.spring.dependency-management")
+      ...
+   }
+   ...
+   the<DependencyManagementExtension>().apply {
+      imports {
+         mavenBom("org.springframework.cloud:spring-cloud-aws-dependencies:$springCloudAwsVersion")
+         ...
+      }
 
-      	dependencies {
-        	dependency("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
-        	dependency("org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion")
-			...
-      	}
-  	}
-	...
+      dependencies {
+         dependency("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
+         dependency("org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion")
+         ...
+      }
+   }
+   ...
 }
 ```
 
@@ -957,13 +958,13 @@ subprojects {
 ```kotlin
 // kotlin
 plugins {
-	id("kr.socar.gradle.plugin") version "0.0.1-test"
+   id("kr.socar.gradle.plugin") version "0.0.1-test"
 }
 
 ...
 
 exposedModelGenerator {
-	...
+   ...
 }
 ```
 
