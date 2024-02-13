@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  (에셋팀 레거시 개선-1) 쏘카존 관리 시스템
+title:  에셋팀 레거시 개선 (1) 쏘카존 관리 시스템
 subtitle: Gradle build script 개선
 date: 2024-02-13 00:00:00 +0900
 category: dev
