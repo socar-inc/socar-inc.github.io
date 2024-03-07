@@ -109,16 +109,16 @@ DRY(Don’t Repeat Yourself) 원칙은 동일한 코드를 반복하지 말라�
 쏘카플랜은 처음부터 폴더를 세분화하지 않고, 충분히 기다렸다가 프로젝트 특성에 맞는 구조를 가져가는 전략을 취하기로 결정했습니다. 앞서 언급한 WET 원칙과 코로케이션에 따라 구조를 가져간 예시를 통해 자세히 설명하겠습니다. 
 
 <div style='display: flex; justify-contents: space-between; gap: 16px;'>
-  <img src='/img/socarplan_renewal/12.png' alt='socarplan_renewal_promotion_image' width='400' style='margin: 0;'  />
-  <img src='/img/socarplan_renewal/13.png' alt='socarplan_renewal_main_page_image' width='400' style='margin: 0;' />
+  <img src='/img/socarplan_renewal/12.png' width='400' style='margin: 0;'  />
+  <img src='/img/socarplan_renewal/13.png' width='400' style='margin: 0;' />
 </div>
 
 두 이미지는 각각 차량 리스트 화면과 필터 화면입니다. 화면 구현을 위해 먼저 코로케이션에 따라 페이지 별로 폴더를 나누고 각 화면에서 사용되는 component, context, recoil state, type guard, hook 등의 파일을 한 폴더에 담았습니다. 
 
 
 <div style='display: flex; justify-contents: space-between; gap: 16px;'>
-  <img src='/img/socarplan_renewal/14.png' alt='socarplan_renewal_promotion_image' style='margin: 0;' />
-  <img src='/img/socarplan_renewal/15.png' alt='socarplan_renewal_main_page_image' style='margin: 0;' />
+  <img src='/img/socarplan_renewal/14.png' style='margin: 0;' />
+  <img src='/img/socarplan_renewal/15.png' style='margin: 0;' width='506' height='438' />
 </div>
 두 화면에서 공통적으로 나타나는 컴포넌트 UI를 볼 수 있는데요. 바로 혜택 태그 필터 섹션입니다. 필터의 혜택 섹션과 리스트의 혜택 섹션은 정확히 같은 기능을 담당하며 둘 중 한 곳의 상태가 변경되면 다른 곳도 똑같이 상태가 변경되는 형태를 가지고 있습니다. 
 <br /><br />
@@ -126,11 +126,11 @@ DRY(Don’t Repeat Yourself) 원칙은 동일한 코드를 반복하지 말라�
 <div style='display: flex; justify-contents: space-between; gap: 16px;'>
   <div>
     (A)
-    <img src='/img/socarplan_renewal/16.png' alt='socarplan_renewal_promotion_image' style='margin: 0;' />
+    <img src='/img/socarplan_renewal/16.png' style='margin: 0;' />
   </div>
   <div>
     (B)
-    <img src='/img/socarplan_renewal/17.png' alt='socarplan_renewal_promotion_image' style='margin: 0;' />
+    <img src='/img/socarplan_renewal/17.png' style='margin: 0;' />
   </div>
 </div>
 
