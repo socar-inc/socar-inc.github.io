@@ -8,7 +8,7 @@ background: '/img/how-to-organize-tech-blog/thumbnail.jpg'
 author: haroo
 comments: true
 tags:
-    - developer
+    - fe
     - frontend
     - socarplan
     - service engineering
@@ -33,8 +33,8 @@ tags:
 - 차량 필터 기능 강화
 
 <div style='display: flex; justify-contents: space-between; gap: 16px;'>
-  <img src='/img/socarplan_renewal/1.png' alt='socarplan_renewal_promotion_image' />
-  <img src='/img/socarplan_renewal/2.png' alt='socarplan_renewal_main_page_image' />
+  <img src='/img/socarplan_renewal/1.png' alt='socarplan_renewal_promotion_image' width='400' />
+  <img src='/img/socarplan_renewal/2.png' alt='socarplan_renewal_main_page_image' width='400' />
 </div>
 
 ### 이거 개발 얼마나 걸릴 것 같아요?
@@ -43,7 +43,7 @@ tags:
 이번 프로젝트도 일정 산출을 하는 것으로부터 시작되었습니다. 쏘카플랜 개편 작업 시작 당시 저는 쏘카에 이직하여 온보딩을 막 마친 상태였습니다. 이직 후 맡게 된 첫 프로젝트로 의욕이 넘치는 상황에서 피그마 파일을 공유 받았습니다. 
 
 ![초기 디자인](/img/socarplan_renewal/3.png)
-초기 디자인
+<p style='text-align: center;'>초기 디자인</p>
 
 “이 정도 둘이서 개발하는데 얼마나 걸릴 것 같아요?”라는 질문을 받고 아래 내용을 고려해 나름대로 머리를 굴려보았습니다.
 
@@ -55,7 +55,7 @@ tags:
 “배포까지 3주면 충분히 할 수 있을 것 같네요”라고 자신있게 대답했습니다. 하지만 개발을 시작한지 3일이 채 되지 않은 시점에 제 예측이 완전히 틀렸다는 사실을 깨달았습니다. 점진적으로 추가되는 요구사항과 로직 복잡도, 디자인에 따른 최종 구현 범위는 제 예상을 크게 뛰어넘었습니다. 
 
 ![최종 디자인](/img/socarplan_renewal/4.png)
-최종 디자인
+<p style='text-align: center;'>최종 디자인</p>
 
 결국 힘을 숨기고 있던 기획, 디자인, API에게 정신없이 치이며 매일 야근을 할 수밖에 없었습니다. 프론트엔드 개발자로서 초기 단순한 화면부터 최종 구현 범위를 어느 정도 예측해야 했지만 그러지 못한 결과였습니다. 게다가 기획 중 놓친 부분이나 생각지 못한 에러를 발견할 때마다 수정해야 할 작업들은 계속해서 추가되었고 코드 품질은 떨어져만 갔습니다.
 
@@ -94,8 +94,8 @@ DRY(Don’t Repeat Yourself) 원칙은 동일한 코드를 반복하지 말라�
 결과가 이상하게 느껴질 수 있을 것입니다. 하지만 이런 과정은 조금씩 점진적으로 이루어지기 때문에 중간 과정에서는 문제를 파악하기 어렵습니다. 특히 수많은 개발자가 협업하는 과정에서는 코드가 거대해지며 맥락을 파악하기 점점 힘들어지고, 모르는 사이에 기능들이 추가되기도 합니다. 
 
 <div style='display: flex; justify-contents: space-between; gap: 16px;'>
-  <img src='/img/socarplan_renewal/10.png' />
-  <img src='/img/socarplan_renewal/11.png' />
+  <img src='/img/socarplan_renewal/10.png' width='400' />
+  <img src='/img/socarplan_renewal/11.png' width='400' />
 </div>
 
 코드 중복은 장기적 관점에서 좋지 않지만 잘못된 추상화 또한 장기적 관점에서 좋지 않을 수 있습니다. 따라서, 처음부터 코드 중복을 피하기 위해 추상화를 하기보다는 코드를 시간을 두고 관찰할 필요가 있습니다. 어느정도 시간이 흘러 코드가 안정화되었다고 판단할 때, 이전과 다른 공통점을 추출할 수도 있습니다. WET(Write Everything Twice) 원칙은 코드의 중복을 피하기 위해 추상화를 하지 말라는 것이 아닙니다. 상황에 따라 알맞는 원칙을 이해하고 적용하는 것이 중요합니다 
@@ -110,16 +110,16 @@ DRY(Don’t Repeat Yourself) 원칙은 동일한 코드를 반복하지 말라�
 쏘카플랜은 처음부터 폴더를 세분화하지 않고, 충분히 기다렸다가 프로젝트 특성에 맞는 구조를 가져가는 전략을 취하기로 결정했습니다. 앞서 언급한 WET 원칙과 코로케이션에 따라 구조를 가져간 예시를 통해 자세히 설명하겠습니다. 
 
 <div style='display: flex; justify-contents: space-between; gap: 16px;'>
-  <img src='/img/socarplan_renewal/12.png' alt='socarplan_renewal_promotion_image' />
-  <img src='/img/socarplan_renewal/13.png' alt='socarplan_renewal_main_page_image' />
+  <img src='/img/socarplan_renewal/12.png' alt='socarplan_renewal_promotion_image' width='400' />
+  <img src='/img/socarplan_renewal/13.png' alt='socarplan_renewal_main_page_image' width='400' />
 </div>
 
 두 이미지는 각각 차량 리스트 화면과 필터 화면입니다. 화면 구현을 위해 먼저 코로케이션에 따라 페이지 별로 폴더를 나누고 각 화면에서 사용되는 component, context, recoil state, type guard, hook 등의 파일을 한 폴더에 담았습니다. 
 
 
 <div style='display: flex; justify-contents: space-between; gap: 16px;'>
-  <img src='/img/socarplan_renewal/14.png' alt='socarplan_renewal_promotion_image' />
-  <img src='/img/socarplan_renewal/15.png' alt='socarplan_renewal_main_page_image' />
+  <img src='/img/socarplan_renewal/14.png' alt='socarplan_renewal_promotion_image' width='400' />
+  <img src='/img/socarplan_renewal/15.png' alt='socarplan_renewal_main_page_image' width='400' />
 </div>
 두 화면에서 공통적으로 나타나는 컴포넌트 UI를 볼 수 있는데요. 바로 혜택 태그 필터 섹션입니다. 필터의 혜택 섹션과 리스트의 혜택 섹션은 정확히 같은 기능을 담당하며 둘 중 한 곳의 상태가 변경되면 다른 곳도 똑같이 상태가 변경되는 형태를 가지고 있습니다. 
 <br /><br />
@@ -143,17 +143,17 @@ DRY(Don’t Repeat Yourself) 원칙은 동일한 코드를 반복하지 말라�
 // 예시를 위해 간소화한 코드입니다.
 
 interface Props {
-	type: 'list' | 'filter'
+  type: 'list' | 'filter'
 }
 
 const CarTagList = ({ type }: Props) => {
-	if (type === 'list') {
-		return (...)
-	}
+  if (type === 'list') {
+    return (...)
+  }
 
-	if (type === 'filter') {
-		return (...)
-	}
+  if (type === 'filter') {
+    return (...)
+  }
 }
 ```
 
@@ -161,23 +161,23 @@ const CarTagList = ({ type }: Props) => {
 
 ```tsx
 interface Props {
-	buttonType: 'rounded' | 'angular'
-	scrollType: 'overflow' | 'wrap'
+  buttonType: 'rounded' | 'angular'
+  scrollType: 'overflow' | 'wrap'
 }
 
 const CarTagList = ({ buttonType, scrollType }: Props) => {
-	if (buttonType === 'rounded') {
-		(...)
-	}
-	if (buttonType === 'angular') {
-		(...)
-	}
-	if (scrollType === 'overflow') {
-		(...)
-	}
-	if (scrollType === 'wrap') {
-		(...)
-	}
+  if (buttonType === 'rounded') {
+	(...)
+  }
+  if (buttonType === 'angular') {
+    (...)
+  }
+  if (scrollType === 'overflow') {
+    (...)
+  }
+  if (scrollType === 'wrap') {
+    (...)
+  }
 }
 ```
 
@@ -196,7 +196,7 @@ const Tag = ({ id, label, variant, selected, onSelect }: Props) => {
         selected
           ? 'border-navy-040 bg-navy-040 text-white'
           : 'border-grey-030  text-grey-050',
-				variant === 'rounded' && 'rounded-full'
+		variant === 'rounded' && 'rounded-full'
       )}
       onClick={() => onSelect(id)}
     >
@@ -214,7 +214,7 @@ export const useCarTypeTagIdsFilter = () => {
   const [selectedCarTypeTagIds, setSelectedCarTypeTagIds] = useState([])
 
   useEffect(() => {
-		// 태그 필터 초기화
+    // 태그 필터 초기화
     (...)
   }, [])
 
@@ -230,15 +230,15 @@ export const useCarTypeTagIdsFilter = () => {
 
 ```tsx
 const CarTypeTagSelection = () => {
-	const {
+  const {
     carTypeTags,
     setSelectedCarTypeTagIds,
     selectedCarTypeTagIds,
   } = useCarTypeTagIdsFilter()
 
-	const onSelect = () => {
-		(...)
-	}
+  const onSelect = () => {
+	(...)
+  }
 
   return (
     <MultipleSelectionProvider
@@ -268,7 +268,7 @@ Tag는 UI 모양만을, 나머지 혜택 태그 관련 로직은 hook을 사용�
 ![쏘카플랜 스토리북](/img/socarplan_renewal/19.png)
 쏘카플랜 스토리북
 
-# 3. QA에 대처하는 자세
+# QA에 대처하는 자세
 
 ### 배경
 
@@ -305,20 +305,20 @@ Tag는 UI 모양만을, 나머지 혜택 태그 관련 로직은 hook을 사용�
 
 <figure style='text-align: center;'>
     <img src="/img/socarplan_renewal/22.png"
-         alt="뭉크의 절규" width='400'/>
+         alt="뭉크의 절규" width='300'/>
 </figure>
 
 첫 번째 경우는 '이거 치명적인데, 빨리 고쳐야 하는데' 같은 조급함이 시야를 좀먹는 상황이었습니다. 좀 더 여유 있고 침착하게, 작성한 프로그램을 고찰했다면 금방 해결했을 문제라고 생각합니다. 조급하더라도 **푸바오**처럼 침착해야 합니다.
 
 두 번째 경우는 코드 복잡도에 따라 다르겠지만, 저희가 이관한 `이용내역` 은 코드 복잡도가 꽤 높았습니다. 계약 연장이나 차량 반납 같은 순차적인 화면 로직 상태를 추적하기 굉장히 어려웠습니다. 이것을 차근차근 분석할 시간은 없었기 때문에 우선 문제가 발생했을 때 해결하는 것에 집중했고, 백로그화해 우선 순위를 나누었습니다.
 
-세 번째 경우는 새로운 일감이 추가로 들어오는 경우인데, 이 때 한 쪽에 집중력을 온전히 쏟다가 다른 일을 누락하는 경우가 있을 수 있습니다. 이럴 때는 `To do list`를 명확히 하는 것이 중요했습니다.. 내가 할 일을 단지 나열하는 것 뿐만 아니라, 참여해야 할 다른 스케쥴이 있다면 오늘 개발할 수 있는 시간을 보수적으로 측정하여 갑작스런 상황에 대처할 수 있어야 합니다. 
+세 번째 경우는 새로운 일감이 추가로 들어오는 경우인데, 이 때 한 쪽에 집중력을 온전히 쏟다가 다른 일을 누락하는 경우가 있을 수 있습니다. 이럴 때는 `To do list`를 명확히 하는 것이 중요했습니다. 내가 할 일을 단지 나열하는 것 뿐만 아니라, 참여해야 할 다른 스케쥴이 있다면 오늘 개발할 수 있는 시간을 보수적으로 측정하여 갑작스런 상황에 대처할 수 있어야 합니다. 
 
 ![개발할 시간이 거의 없는 날이 꼭 있습니다](/img/socarplan_renewal/23.png)
 
 개발할 시간이 거의 없는 날이 꼭 있습니다
 
-## 3.2. 레거시 코드 개선
+## 레거시 코드 개선
 
 코드 개선은 제품의 성능을 향상시키는 것과 유지보수하기 편리한 코드로 만드는 작업입니다. 두 가지를 모두 양립한다면 가장 좋겠으나 쉽지 않습니다. 
 
@@ -344,13 +344,13 @@ Tag는 UI 모양만을, 나머지 혜택 태그 관련 로직은 hook을 사용�
 - any 타입 제거: any 타입이 많다면 확장자만 `.ts` 인 ECMAScript겠죠?
 - 추상화, 공통 로직 모듈화 : 위에서도 언급했지만 `추상화가 필요한가? 공통화가 필요한가?` 라는 선제 검토가 필요합니다.
 - 처음부터 다시 작성 : 일부 레거시 코드는 수정하기 너무 어려울 수 있습니다. 이 경우에는 코드를 처음부터 다시 작성하는 것이 최선일 수 있습니다. 최후의 수단이지만 유일한 해결책일 수도 있습니다.
-    <br />
+    <figure style='text-align: center;'>
     <img src='/img/socarplan_renewal/24.png' alt='처음부터 다시 시작할 수 있다면 책 표지' width='300'/>
-    <br />
-    다시 출발할 수 있다면.. 더 나아질까요…?
+    <figcaption>다시 출발할 수 있다면.. 더 나아질까요…?</figcaption>
+    </figure>
     
 
-## 3.3. 일하는 방식 개선
+## 일하는 방식 개선
 
 쏘카 개발본부는 목적조직(팀)으로 이루어져 있고, 목적조직에서 담당하고 있는 도메인들이 있어 그를 주요하게 개발합니다. 프로덕트 본부에서 기획, 디자인을 꼼꼼히 만들어주신다면 저희는 제품으로 만들어 사용자에게 출시하는 작업을 합니다. 보통 이런 구조로 프로세스가 이루어집니다.
 
@@ -360,7 +360,7 @@ Tag는 UI 모양만을, 나머지 혜택 태그 관련 로직은 hook을 사용�
 
 또한 각자의 역할에서 충실히 업무를 수행하고 계시지만 버킷 멤버들이 어떻게 생각하고 어떻게 일하는지를 알게 된다면 서로 협업하는데 더욱 도움이 될 거라 생각하여 플랜 버킷 워크숍도 개최했습니다. 팀워크를 위해 친해지는 시간을 먼저 가지고 서로에 대해 공감할 수 있었고, 풍부한 아이데이션을 통해 우리의 비전도 확인할 수 있었습니다.
 
-## 4. 회고, 요약, 마무리
+## 회고, 요약, 마무리
 
 <figure style='text-align: center;'>
     <img src='/img/socarplan_renewal/25.png' alt='무한도전 이미지' width='300'/>
