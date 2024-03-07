@@ -33,8 +33,8 @@ tags:
 - 차량 필터 기능 강화
 
 <div style='display: flex; justify-contents: space-between; gap: 16px;'>
-  <img src='/img/socarplan_renewal/1.png' alt='socarplan_renewal_promotion_image' width='400' />
-  <img src='/img/socarplan_renewal/2.png' alt='socarplan_renewal_main_page_image' width='400' />
+  <img src='/img/socarplan_renewal/1.png' alt='socarplan_renewal_promotion_image' width='20%' style='margin: 0;' />
+  <img src='/img/socarplan_renewal/2.png' alt='socarplan_renewal_main_page_image' width='400' style='margin: 0;' />
 </div>
 
 ### 이거 개발 얼마나 걸릴 것 같아요?
@@ -43,7 +43,7 @@ tags:
 이번 프로젝트도 일정 산출을 하는 것으로부터 시작되었습니다. 쏘카플랜 개편 작업 시작 당시 저는 쏘카에 이직하여 온보딩을 막 마친 상태였습니다. 이직 후 맡게 된 첫 프로젝트로 의욕이 넘치는 상황에서 피그마 파일을 공유 받았습니다. 
 
 ![초기 디자인](/img/socarplan_renewal/3.png)
-<p style='text-align: center;'>초기 디자인</p>
+<p style='text-align: center; color: #646f7c;'>초기 디자인</p>
 
 “이 정도 둘이서 개발하는데 얼마나 걸릴 것 같아요?”라는 질문을 받고 아래 내용을 고려해 나름대로 머리를 굴려보았습니다.
 
@@ -55,7 +55,7 @@ tags:
 “배포까지 3주면 충분히 할 수 있을 것 같네요”라고 자신있게 대답했습니다. 하지만 개발을 시작한지 3일이 채 되지 않은 시점에 제 예측이 완전히 틀렸다는 사실을 깨달았습니다. 점진적으로 추가되는 요구사항과 로직 복잡도, 디자인에 따른 최종 구현 범위는 제 예상을 크게 뛰어넘었습니다. 
 
 ![최종 디자인](/img/socarplan_renewal/4.png)
-<p style='text-align: center;'>최종 디자인</p>
+<p style='text-align: center; color: #646f7c;'>최종 디자인</p>
 
 결국 힘을 숨기고 있던 기획, 디자인, API에게 정신없이 치이며 매일 야근을 할 수밖에 없었습니다. 프론트엔드 개발자로서 초기 단순한 화면부터 최종 구현 범위를 어느 정도 예측해야 했지만 그러지 못한 결과였습니다. 게다가 기획 중 놓친 부분이나 생각지 못한 에러를 발견할 때마다 수정해야 할 작업들은 계속해서 추가되었고 코드 품질은 떨어져만 갔습니다.
 
@@ -110,16 +110,16 @@ DRY(Don’t Repeat Yourself) 원칙은 동일한 코드를 반복하지 말라�
 쏘카플랜은 처음부터 폴더를 세분화하지 않고, 충분히 기다렸다가 프로젝트 특성에 맞는 구조를 가져가는 전략을 취하기로 결정했습니다. 앞서 언급한 WET 원칙과 코로케이션에 따라 구조를 가져간 예시를 통해 자세히 설명하겠습니다. 
 
 <div style='display: flex; justify-contents: space-between; gap: 16px;'>
-  <img src='/img/socarplan_renewal/12.png' alt='socarplan_renewal_promotion_image' width='400' />
-  <img src='/img/socarplan_renewal/13.png' alt='socarplan_renewal_main_page_image' width='400' />
+  <img src='/img/socarplan_renewal/12.png' alt='socarplan_renewal_promotion_image' width='400' style='margin: 0;'  />
+  <img src='/img/socarplan_renewal/13.png' alt='socarplan_renewal_main_page_image' width='400' style='margin: 0;' />
 </div>
 
 두 이미지는 각각 차량 리스트 화면과 필터 화면입니다. 화면 구현을 위해 먼저 코로케이션에 따라 페이지 별로 폴더를 나누고 각 화면에서 사용되는 component, context, recoil state, type guard, hook 등의 파일을 한 폴더에 담았습니다. 
 
 
 <div style='display: flex; justify-contents: space-between; gap: 16px;'>
-  <img src='/img/socarplan_renewal/14.png' alt='socarplan_renewal_promotion_image' width='400' />
-  <img src='/img/socarplan_renewal/15.png' alt='socarplan_renewal_main_page_image' width='400' />
+  <img src='/img/socarplan_renewal/14.png' alt='socarplan_renewal_promotion_image' width='400' style='margin: 0;' />
+  <img src='/img/socarplan_renewal/15.png' alt='socarplan_renewal_main_page_image' width='500' style='margin: 0;' />
 </div>
 두 화면에서 공통적으로 나타나는 컴포넌트 UI를 볼 수 있는데요. 바로 혜택 태그 필터 섹션입니다. 필터의 혜택 섹션과 리스트의 혜택 섹션은 정확히 같은 기능을 담당하며 둘 중 한 곳의 상태가 변경되면 다른 곳도 똑같이 상태가 변경되는 형태를 가지고 있습니다. 
 <br /><br />
@@ -127,11 +127,11 @@ DRY(Don’t Repeat Yourself) 원칙은 동일한 코드를 반복하지 말라�
 <div style='display: flex; justify-contents: space-between; gap: 16px;'>
   <div>
     (A)
-    <img src='/img/socarplan_renewal/16.png' alt='socarplan_renewal_promotion_image' />
+    <img src='/img/socarplan_renewal/16.png' alt='socarplan_renewal_promotion_image' style='margin: 0;' />
   </div>
   <div>
     (B)
-    <img src='/img/socarplan_renewal/17.png' alt='socarplan_renewal_promotion_image' />
+    <img src='/img/socarplan_renewal/17.png' alt='socarplan_renewal_promotion_image' style='margin: 0;' />
   </div>
 </div>
 
@@ -266,7 +266,7 @@ Tag는 UI 모양만을, 나머지 혜택 태그 관련 로직은 hook을 사용�
 프론트엔드 개발자들 간의 협업에서는 종종 같은 컴포넌트를 중복해서 만드는 경우가 있습니다. 컴포넌트의 존재를 모르고 새로 만드는 경우도 있고, 알고는 있지만 컴포넌트 사용법을 몰라서 사용하지 않는 경우도 종종 있습니다. 서버 개발자와 프론트엔드 개발자 간에 API 명세서가 필요한 것처럼, 프론트엔드 개발자들 간에도 컴포넌트 사용법에 대한 명세가 필요합니다. 
 
 ![쏘카플랜 스토리북](/img/socarplan_renewal/19.png)
-쏘카플랜 스토리북
+<p style='text-align: center; color: #646f7c;'>쏘카플랜 스토리북</p>
 
 # QA에 대처하는 자세
 
@@ -277,7 +277,7 @@ Tag는 UI 모양만을, 나머지 혜택 태그 관련 로직은 hook을 사용�
 <figure>
     <img src="/img/socarplan_renewal/20.png"
          alt="QA 주간에 발견된 이슈 개수" width='400'/>
-    <figcaption>군생활 때 눈 치우는 것처럼 어? 치웠는데 또 있네? 느낌입니다</figcaption>
+    <figcaption style='color: #646f7c;'>군생활 때 눈 치우는 것처럼 어? 치웠는데 또 있네? 느낌입니다</figcaption>
 </figure>
 
 쏘카플랜의 런칭 일정은 6월 21일이었는데, QA/QC 진행 또한 6월 15일부터 20일까지 과중한 일정이었습니다. 촉박한 개발은 단지 몸이 축나고 피곤하다는 결과만을 초래하진 않았습니다. 코드베이스의 안정성 또한 크게 떨어진다는 것을 처음으로 실감했습니다. 단 며칠 간의 품질 검증으로 130개의 이슈가 발행되었습니다(거의 3~40개 / 1day). 이 중 10건 가량이 크리티컬한 이슈였는데, 이번에 개발한 범위와 이관한 범위에서 골고루 발생했습니다.
@@ -294,7 +294,7 @@ Tag는 UI 모양만을, 나머지 혜택 태그 관련 로직은 hook을 사용�
 <figure>
     <img src="/img/socarplan_renewal/21.png"
          alt="크런치 주간의 github 잔디 색상" width='400'/>
-    <figcaption>QA 주간의 크런치 모드 (마지막 주는 정말…)</figcaption>
+    <figcaption style='color: #646f7c;'>QA 주간의 크런치 모드 (마지막 주는 정말…)</figcaption>
 </figure>
 
 ### 특히 어려웠던 상황
@@ -315,8 +315,7 @@ Tag는 UI 모양만을, 나머지 혜택 태그 관련 로직은 hook을 사용�
 세 번째 경우는 새로운 일감이 추가로 들어오는 경우인데, 이 때 한 쪽에 집중력을 온전히 쏟다가 다른 일을 누락하는 경우가 있을 수 있습니다. 이럴 때는 `To do list`를 명확히 하는 것이 중요했습니다. 내가 할 일을 단지 나열하는 것 뿐만 아니라, 참여해야 할 다른 스케쥴이 있다면 오늘 개발할 수 있는 시간을 보수적으로 측정하여 갑작스런 상황에 대처할 수 있어야 합니다. 
 
 ![개발할 시간이 거의 없는 날이 꼭 있습니다](/img/socarplan_renewal/23.png)
-
-개발할 시간이 거의 없는 날이 꼭 있습니다
+<p style='text-align: center; color: #646f7c;'>개발할 시간이 거의 없는 날이 꼭 있습니다</p>
 
 ## 레거시 코드 개선
 
@@ -346,7 +345,7 @@ Tag는 UI 모양만을, 나머지 혜택 태그 관련 로직은 hook을 사용�
 - 처음부터 다시 작성 : 일부 레거시 코드는 수정하기 너무 어려울 수 있습니다. 이 경우에는 코드를 처음부터 다시 작성하는 것이 최선일 수 있습니다. 최후의 수단이지만 유일한 해결책일 수도 있습니다.
     <figure style='text-align: center;'>
     <img src='/img/socarplan_renewal/24.png' alt='처음부터 다시 시작할 수 있다면 책 표지' width='300'/>
-    <figcaption>다시 출발할 수 있다면.. 더 나아질까요…?</figcaption>
+    <figcaption style='color: #646f7c;'>다시 출발할 수 있다면.. 더 나아질까요…?</figcaption>
     </figure>
     
 
