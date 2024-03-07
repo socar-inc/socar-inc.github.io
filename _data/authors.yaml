@@ -233,3 +233,10 @@ onestone:
   links:
     blog: 'https://onestone9900.github.io/'
     linkedin: 'https://www.linkedin.com/in/devsong/'
+
+
+haroo:
+  name: 하루
+  image: '/assets/authors/haroo.png'
+  position: Asset팀 프론트엔드 개발자
+  introduction: 쏘카의 자산(Asset)팀에서 프론트엔드 개발을 맡고 있습니다.
