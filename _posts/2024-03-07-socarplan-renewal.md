@@ -32,8 +32,7 @@ tags:
 - 디자인 개편
 - 차량 필터 기능 강화
 
-<div style='display: flex; justify-contents: space-between; gap: 16px;'>
-  <img src='/img/socarplan_renewal/1.png' alt='socarplan_renewal_promotion_image' width='20%' style='margin: 0;' />
+<div>
   <img src='/img/socarplan_renewal/2.png' alt='socarplan_renewal_main_page_image' width='400' style='margin: 0;' />
 </div>
 
@@ -118,8 +117,8 @@ DRY(Don’t Repeat Yourself) 원칙은 동일한 코드를 반복하지 말라�
 
 
 <div style='display: flex; justify-contents: space-between; gap: 16px;'>
-  <img src='/img/socarplan_renewal/14.png' alt='socarplan_renewal_promotion_image' width='400' style='margin: 0;' />
-  <img src='/img/socarplan_renewal/15.png' alt='socarplan_renewal_main_page_image' width='500' style='margin: 0;' />
+  <img src='/img/socarplan_renewal/14.png' alt='socarplan_renewal_promotion_image' style='margin: 0;' />
+  <img src='/img/socarplan_renewal/15.png' alt='socarplan_renewal_main_page_image' style='margin: 0;' />
 </div>
 두 화면에서 공통적으로 나타나는 컴포넌트 UI를 볼 수 있는데요. 바로 혜택 태그 필터 섹션입니다. 필터의 혜택 섹션과 리스트의 혜택 섹션은 정확히 같은 기능을 담당하며 둘 중 한 곳의 상태가 변경되면 다른 곳도 똑같이 상태가 변경되는 형태를 가지고 있습니다. 
 <br /><br />
@@ -277,7 +276,7 @@ Tag는 UI 모양만을, 나머지 혜택 태그 관련 로직은 hook을 사용�
 <figure>
     <img src="/img/socarplan_renewal/20.png"
          alt="QA 주간에 발견된 이슈 개수" width='400'/>
-    <figcaption style='color: #646f7c;'>군생활 때 눈 치우는 것처럼 어? 치웠는데 또 있네? 느낌입니다</figcaption>
+    <figcaption style='text-align: center; color: #646f7c;'>군생활 때 눈 치우는 것처럼 어? 치웠는데 또 있네? 느낌입니다</figcaption>
 </figure>
 
 쏘카플랜의 런칭 일정은 6월 21일이었는데, QA/QC 진행 또한 6월 15일부터 20일까지 과중한 일정이었습니다. 촉박한 개발은 단지 몸이 축나고 피곤하다는 결과만을 초래하진 않았습니다. 코드베이스의 안정성 또한 크게 떨어진다는 것을 처음으로 실감했습니다. 단 며칠 간의 품질 검증으로 130개의 이슈가 발행되었습니다(거의 3~40개 / 1day). 이 중 10건 가량이 크리티컬한 이슈였는데, 이번에 개발한 범위와 이관한 범위에서 골고루 발생했습니다.
@@ -294,7 +293,7 @@ Tag는 UI 모양만을, 나머지 혜택 태그 관련 로직은 hook을 사용�
 <figure>
     <img src="/img/socarplan_renewal/21.png"
          alt="크런치 주간의 github 잔디 색상" width='400'/>
-    <figcaption style='color: #646f7c;'>QA 주간의 크런치 모드 (마지막 주는 정말…)</figcaption>
+    <figcaption style='text-align: center; color: #646f7c;'>QA 주간의 크런치 모드 (마지막 주는 정말…)</figcaption>
 </figure>
 
 ### 특히 어려웠던 상황
