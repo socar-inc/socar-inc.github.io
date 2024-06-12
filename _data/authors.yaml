@@ -239,3 +239,15 @@ haroo:
   image: '/assets/authors/haroo.png'
   position: Asset팀 프론트엔드 개발자
   introduction: 쏘카의 자산(Asset)팀에서 프론트엔드 개발을 맡고 있습니다.
+
+marco:
+  name: 마르코
+  image: '/assets/authors/marco.jpeg'
+  position: FMS 엔지니어링팀 서버 개발자
+  introduction: FMS 서버 개발을 하고 있습니다.
+
+marco:
+  name: 렉스
+  image: '/assets/authors/rex.png'
+  position: FMS 엔지니어링팀 서버 개발자
+  introduction: FMS 서버 개발을 하고 있습니다.
