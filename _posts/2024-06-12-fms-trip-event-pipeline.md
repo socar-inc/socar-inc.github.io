@@ -2,7 +2,7 @@
 layout: post
 title:  "FMS(Fleet Management System) 주행이벤트 파이프라인 개선기"
 subtitle: "FMS 엔지니어링팀에서 파이프라인을 지속적으로 개선한 경험을 공유합니다."
-date: 2024-06-12 16:00:00 +0900
+date: 2024-06-12 07:00:00 +0900
 category: dev
 background : '/img/fms-trip-event-pipeline/교차도록 배경이미지.jpg'
 author: rex, marco
