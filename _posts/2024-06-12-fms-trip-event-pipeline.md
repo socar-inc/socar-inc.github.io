@@ -103,7 +103,7 @@ FMS 플랫폼에서는 차량의 주행 시작부터 주행 종료까지를 하�
 트립에서 발생하는 주행 이벤트를 시각화하여, 이동 정보와 실제 지도상의 이동 경로를 제공합니다.
 
 ![서비스 화면](/img/fms-trip-event-pipeline/서비스화면.png)
-<p style='text-align: center; color: #646f7c;'>위 이미지는 테스트 차량 기반의 화면입니다</p>
+<p style='text-align: center; color: #646f7c;'>위 이미지는 테스트 차량 기반의 화면입니다.</p>
 
 # 3. 첫 번째 파이프라인 개선기
 
