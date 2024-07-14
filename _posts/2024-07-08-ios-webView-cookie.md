@@ -2,9 +2,9 @@
 layout: post
 title: "iOS 웹 뷰 세션쿠키 소실되는 이유"
 subtitle: "iOS 웹 뷰 환경에서 세션쿠키가 소실되는 이유와 해결방법을 알아봅니다."
-date: 2024-07-08 07:00:00 +0900
+date: 2024-07-14 07:00:00 +0900
 category: dev
-background: "/img/fms-trip-event-pipeline/교차도록 배경이미지.jpg"
+background: "/img/ios-webView-cookie/backgroundImage.jpg"
 author: rio
 comments: true
 tags:
