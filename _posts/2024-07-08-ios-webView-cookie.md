@@ -41,7 +41,7 @@ iOS 웹 뷰에서 세션쿠키가 갑자기 소실되는 현상을 마주한 적
 <br>
 
 <p align="center">
-<img src="../img/ios-webView-cookie/expired.gif" width="50%" />
+<img src="/img/ios-webView-cookie/expired.gif" width="50%" hight="50%"/>
 </p>
 <p style='text-align: center; color: #646f7c;'> 웹 뷰 백그라운드 → 특정 시간 후 포그라운드 → 웹 뷰 리프레시 → 서버 호출 시 에러</p>
 <p style='text-align: center; color: #646f7c;'>영상 제공을 허락해주신 ios 미남 3인방 감사합니다🙇‍♂️</p>
@@ -82,7 +82,7 @@ iOS 웹 뷰에서 세션쿠키가 갑자기 소실되는 현상을 마주한 적
 <br>
 
 <p align="center">
-<img src="../img/ios-webView-cookie/maintenance.gif" width="50%" />
+<img src="/img/ios-webView-cookie/maintenance.gif" width="50%" hight="50%"/>
 </p>
 <p style='text-align: center; color: #646f7c;'>포그라운드 -> 웹 뷰 리프레시 -> 쿠기 유지 -> 서버 호출 시 정상적으로 동작</p>
 
