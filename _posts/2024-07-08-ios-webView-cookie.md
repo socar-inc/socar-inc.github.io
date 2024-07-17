@@ -44,14 +44,15 @@ iOS 웹 뷰에서 세션쿠키가 갑자기 소실되는 현상을 마주한 적
 <img src="/img/ios-webView-cookie/expired.gif" width="50%" hight="50%"/>
 </p>
 <p style='text-align: center; color: #646f7c;'> 웹 뷰 백그라운드 → 특정 시간 후 포그라운드 → 웹 뷰 리프레시 → 서버 호출 시 에러</p>
-<p style='text-align: center; color: #646f7c;'>영상 제공을 허락해주신 ios 미남 3인방 감사합니다🙇‍♂️</p>
+<p style='text-align: center; color: #646f7c;'>영상 제공을 허락해주신 iOS 미남 3인방 감사합니다🙇‍♂️</p>
 <br>
 
 첨부한 영상처럼 처음에는 서버 문제라고 생각해서 서버 담당자의 도움을 받아 이슈 트래킹 툴을 분석한 결과, 서버 요청 시 특정 정보가 누락되어 요청이 이루어지고 있었음을 알게 되었습니다.
 
 누락된 정보는 사용자가 어떤 기종을 사용하고 있는지, 앱의 버전 정보였습니다. 이 정보는 `웹의 쿠키에 저장된 값`으로, 앱이 웹 뷰를 띄울 때 사용자 정보를 전달하고 웹은 그 정보를 쿠키에 저장한 후 서버 요청 시 활용하고 있었습니다.
 
-> 사용자가 이용하는 쏘카 앱의 버전에 따라 분기 처리가 필요한 경우에 이용됩니다.
+> - Q: 앱의 버전 정보를 쿠키에 저장하는 이유는 무엇인가요?
+> - A: 앱의 버전 정보를 쿠키에 저장하는 이유는 앱 버전에 따라 서버에서 다른 로직을 처리하기 위함입니다.
 
 그럼 왜 세션쿠키가 손실되어 요청 보내는지 원인 파악을 하기 위해 여러 가설을 토대로 여러 기종에서 테스트를 진행했습니다. 그 결과 다음과 같은 결론을 낼 수 있었습니다.
 
@@ -68,9 +69,9 @@ iOS 웹 뷰에서 세션쿠키가 갑자기 소실되는 현상을 마주한 적
 
 관련 이슈와 동일한 버그 리포트도 첨부합니다.
 
-- https://forums.developer.apple.com/forums/thread/745912
-- https://github.com/react-native-webview/react-native-webview/issues/2228
-- https://medium.com/axel-springer-tech/synchronization-of-native-and-webview-sessions-with-ios-9fe2199b44c9
+- [developer.apple](https://forums.developer.apple.com/forums/thread/745912)
+- [react-native-webview](https://github.com/react-native-webview/react-native-webview/issues/2228#issuecomment-2170404006)
+- [iOS와 네이티브 및 WebView 세션 동기화](https://medium.com/axel-springer-tech/synchronization-of-native-and-webview-sessions-with-ios-9fe2199b44c9)
 
 ## 해결 방법
 
@@ -94,8 +95,8 @@ AS-IS : 하루 평균 약 246건 이슈 발생 => TO-BE : 하루 평균 약 0.85
 
 **하루 평균 `약 99.66%의 이슈가 감소`한 것을 알 수 있습니다.**
 
-이제 쏘카 웹 서비스를 한층 더 안정성 있게 제공할 수 있게 됐습니다!!
-![issue](/img/ios-webView-cookie/issue.jpg)
+엄청난 효과이지 않나요? 이제 쏘카 웹 서비스를 한층 더 안정성 있게 제공할 수 있게 됐습니다!!
+![issue](/img/iOS-webView-cookie/issue.jpg)
 
 ## 한 줄 요약
 
