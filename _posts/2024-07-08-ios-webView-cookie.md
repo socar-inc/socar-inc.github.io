@@ -96,7 +96,7 @@ AS-IS : 하루 평균 약 246건 이슈 발생 => TO-BE : 하루 평균 약 0.85
 **하루 평균 `약 99.66%의 이슈가 감소`한 것을 알 수 있습니다.**
 
 엄청난 효과이지 않나요? 이제 쏘카 웹 서비스를 한층 더 안정성 있게 제공할 수 있게 됐습니다!!
-![issue](/img/iOS-webView-cookie/issue.jpg)
+![issue](/img/ios-webView-cookie/issue.jpg)
 
 ## 한 줄 요약
 
