@@ -251,3 +251,9 @@ marco:
   image: '/assets/authors/marco.jpeg'
   position: FMS 엔지니어링팀 서버 개발자
   introduction: FMS 서버 개발을 하고 있습니다.
+
+rio:
+  name: 리우
+  image: '/assets/authors/rio.png'
+  position: Marketing 엔지니어링팀 프론트 개발자
+  introduction: 쏘카의 마케팅 엔지니어링팀에서 프론트엔드 개발을 하고 있습니다.
