@@ -229,7 +229,7 @@ onestone:
   name: 원스톤
   image: '/assets/authors/onestone.jpeg'
   position: 애셋(Asset)팀 Tech Leader
-  introduction: 쏘카의 애셋(Asset)팀의 Tech 존과 차량관련 개발을 하고 있습니다.
+  introduction: 쏘카의 자산(Asset)인 존과 차량관련 개발을 하고 있습니다.
   links:
     blog: 'https://onestone9900.github.io/'
     linkedin: 'https://www.linkedin.com/in/devsong/'
