@@ -143,7 +143,7 @@ class CarRelocationProcess(
 ## 4.2. 책임분리
 ### 4.2.1. 다이어그램
 키네시스를 카프카로 변경하기 위해 비즈니스 로직만 재사용하고 나머지를 모두 분리하기로 했습니다.
-![로직 분리 및 처리 흐름](/img/2024-07-24-legacy-car-relocation/legacy-car-relocation_img_1.png)
+![로직 분리 및 처리 흐름](/img/2024-07-24-legacy-car-relocation/legacy-car-relocation_img_1.png) *간단하게 도식화한 다이어그램*
     
 개발 전 간단한 다이어그램을 통해 구조를 잡았습니다. 키네시스 로직은 카프카 로직으로 변경하고 클래스를 분리했습니다. 스프링 로직은 상속을 사용하지 않고 어노테이션과 DI로 처리했습니다. 비즈니스 로직은 세 부분으로 나눴습니다. `CarRelocationKafKaController`는 카프카 로직이 전달하는 파라미터에 대한 검증을 진행하고, `CarRelocationService`는 차량재배치 비즈니스 로직을 처리합니다. 하지만 실제 동작은 전달받은 파라미터의 상태에 따라 `CarRelocationDrivingService` 또는 `CarRelocationCancelService`가 담당합니다.
 
@@ -353,7 +353,7 @@ open class CarRelocationServiceTest : CarRelocationServiceTestSetup() {
 # 6. 리펙터링과 전략패턴
 기술 로직과 비즈니스 로직을 분리하여 책임이 나뉘었고 테스트 코드도 생겼기 때문에 사이드이펙트 걱정이 줄었습니다. 하지만 스프링 DI를 사용하면서 `CarRelocationService`의 실제 행동을 처리 하는 `carRelocationCancelService`과 `carRelocationDrivingService`를 직접 참조하게 됐습니다. 그렇기 때문에 처리해야 할 상태가 추가되거나 변경되면 `CarRelocationService` 또한 변경되어야 합니다.
 
-![차량재배치 비즈니스 도메인의 UML](/img/2024-07-24-legacy-car-relocation/legacy-car-relocation_img_2.png)
+![차량재배치 비즈니스 도메인의 UML](/img/2024-07-24-legacy-car-relocation/legacy-car-relocation_img_2.png) *차량재배치 서비스 UML*
 `CarRelocationService`에서 `CarRelocationDrivingService`아 `CarRelocationCancelService`를 직접 참조하지 않게하기 위해 클래스 하나를 추가합니다. 그리고 `CarRelocationService`가 그 새로운 클래스를 사용하도록 리펙터링 합니다.
 
 `CarRelocationActionServiceSelector`는 예약 상태에 따라 수행할 행동을 하는 클래스를 선택하여 반환하는 책임이 있습니다.
@@ -424,16 +424,16 @@ class CarRelocationService(
 ```kotlin
 ...
 @Service(CAR_RELOCATION_CANCEL_SERVICE_BEAN_NAME)
-class CarRelocationCancelService(...) { ... }
+class CarRelocationCancelService(...) { // 취소 상태의 예약에 해당하는 차량 처리 로직 }
 ```
 ```kotlin
 ...
 @Service(CAR_RELOCATION_DRIVING_SERVICE_BEAN_NAME)
-class CarRelocationDrivingService(...) { ... }
+class CarRelocationDrivingService(...) { // 운행중 상태의 예약에 해당하는 차량 처리 로직 }
 ```
 
 
-![리팩터링된 차량재배치 비즈니스 도메인의 UML](/img/2024-07-24-legacy-car-relocation/legacy-car-relocation_img_3.png)
+![리팩터링된 차량재배치 비즈니스 도메인의 UML](/img/2024-07-24-legacy-car-relocation/legacy-car-relocation_img_3.png) *리펙터링된 차량재배치 서비스 UML*
 
 추가된 `CarRelocationActionServiceSelector` 클래스에 대한 테스트코드를 추가해주면 작업은 마무리됩니다.
 
