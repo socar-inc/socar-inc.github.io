@@ -2,7 +2,7 @@
 layout: post
 title:  "쏘카 프론트엔드 모노레포 - Part1. 프로젝트 구성하기"
 subtitle: 모노레포 환경에서 프로젝트를 구성하는 방법에 대해 알아봅시다.
-date: 2024-08-30 17:00:00 +0900
+date: 2024-08-29 12:00:00 +0900
 category: fe
 background : "/assets/images/onboarding-bg.jpg"
 author: riaco
