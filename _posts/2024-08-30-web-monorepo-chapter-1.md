@@ -193,7 +193,7 @@ Multi-Repo 방식의 프로젝트 관리를 하면서 해당 템플릿을 받아
 
 쏘카 모노레포 환경은 위에서 언급한 것과 같이 Turborepo로 이루어져 있습니다. Turborepo에서는 모노레포 패키지를 보다 효율적으로 활용할 수 있는 제너레이팅 라이브러리 [`turbo/gen`](https://turbo.build/repo/docs/guides/generating-code)을 제공합니다.
 
-제공하는 `turbo/gen`의 기반은 JavaScript로 정의할 수 있는 프롬프트 라이브러리인 [`plop`](https://plopjs.com/)을 활용합니다. 이를 통해 새로운 컨트롤러와 구성 요소가 변경되어도 손쉽게 유지 보수 할 수 있는 스크립트 코드를 작성할 수 있습니다.
+제공하는 `turbo/gen`의 기반은 JavaScript로 정의할 수 있는 프롬프트 라이브러리인 [`plop`](https://plopjs.com/)을 활용합니다. 이를 통해 새로운 컨트롤러와 구성 요소가 변경되어도 손쉽게 유지 보수할 수 있는 스크립트 코드를 작성할 수 있습니다.
 
 다음은 Code Gen 구성을 위한 Plop Config에 대한 예제입니다. 기본적으로 Plop 문법을 따르고 있으며 Generator 할 수 있는 Plop Action들을 정의해 사용할 수 있습니다.
 
