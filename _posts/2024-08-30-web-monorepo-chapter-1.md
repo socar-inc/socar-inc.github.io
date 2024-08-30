@@ -269,7 +269,7 @@ export const socarDesignSystemPlopConfig: PlopTypes.PlopGeneratorConfig = {
  
 ![demo](/img/web-monorepo-chapter-1/demo.gif)
 
-![result](/img/web-monorepo-chapter-1/directory.png)*Generate 결과*
+![result](/img/web-monorepo-chapter-1/directory.png)*Generate 결과. 이 외로도 Github Action 등 설정*
 
 
 <br />
