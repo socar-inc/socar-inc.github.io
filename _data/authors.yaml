@@ -257,3 +257,11 @@ rio:
   image: '/assets/authors/rio.png'
   position: Marketing 엔지니어링팀 프론트 개발자
   introduction: 쏘카의 마케팅 엔지니어링팀에서 프론트엔드 개발을 하고 있습니다.
+
+riaco:
+  name: 리아코
+  image: '/assets/authors/riaco.gif'
+  position: Common Resource팀 프론트엔드 개발자
+  introduction: 쏘카의 Common Resource팀에서 프론트엔드 개발을 하고 있습니다.
+  links:
+    linkedin: 'https://www.linkedin.com/in/minsgy/'
