@@ -260,7 +260,7 @@ rio:
 
 riaco:
   name: 리아코
-  image: '/assets/authors/riaco.png'
+  image: '/assets/authors/riaco.gif'
   position: Sharing FE 프론트 개발자
   introduction: 쏘카의 카셰어링 도메인과 관련 된 프론트엔드 개발을 하고 있습니다.
   links:
