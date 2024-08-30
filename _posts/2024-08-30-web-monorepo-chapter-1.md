@@ -127,7 +127,7 @@ tags:
 
 <br />
 
-## 4. 프로젝트 세팅 비용 단축하기
+# 4. 프로젝트 세팅 비용 단축하기
 
 멀티레포 환경에서 모노레포로 이관하면서 고민했던 문제들과 프로젝트 세팅을 위한 Code Generator에 대해 소개합니다.
 
@@ -139,7 +139,7 @@ tags:
 ```
 <br />
 
-### 4.1 기존 멀티레포 환경에서의 프로젝트 세팅
+## 4.1 기존 멀티레포 환경에서의 프로젝트 세팅
 
 쏘카 웹 프론트엔드 프로젝트 템플릿은 [Github Repository Template](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-template-repository) 기능으로 프로젝트 환경을 2개로 나누어서 사용 중이었습니다.
  
@@ -165,7 +165,7 @@ Multi-Repo 방식의 프로젝트 관리를 하면서 해당 템플릿을 받아
 
 <br />
 
-### 4.2 모노레포 환경 구성 세팅하기
+## 4.2 모노레포 환경 구성 세팅하기
 
 쏘카 프론트엔드 모노레포는 [Turborepo](https://turbo.build/repo) 기반으로 모노레포 환경을 구성했습니다. 멀티 레포와 다르게 하나의 Repository로 프로젝트들을 관리하게 되면서 새로운 스캐폴딩 방식 중 하나인 `Code Generator`를 도입하게 되었습니다.
 
@@ -189,7 +189,7 @@ Multi-Repo 방식의 프로젝트 관리를 하면서 해당 템플릿을 받아
 
 <br />
 
-### 4.3 Code Generator를 활용한 프로젝트 세팅
+## 4.3 Code Generator를 활용한 프로젝트 세팅
 
 쏘카 모노레포 환경은 위에서 언급한 것과 같이 Turborepo로 이루어져 있습니다. Turborepo에서는 모노레포 패키지를 보다 효율적으로 활용할 수 있는 제너레이팅 라이브러리 [`turbo/gen`](https://turbo.build/repo/docs/guides/generating-code)을 제공합니다.
 
@@ -274,7 +274,7 @@ export const socarDesignSystemPlopConfig: PlopTypes.PlopGeneratorConfig = {
 
 <br />
 
-### 4.4 결론
+## 4.4 결론
 
 저희는 위와 같이 Code Generator를 도입하여 다음과 같은 이점을 얻을 수 있었습니다.
 
@@ -297,7 +297,9 @@ export const socarDesignSystemPlopConfig: PlopTypes.PlopGeneratorConfig = {
 
 위와 같은 개선은 개발자들의 생산성 향상과 코드 품질 개선으로 이어지고 더 나은 제품을 더 빠르게 제공할 수 있게 해주었고 긍정적인 결과를 보여주었습니다.
 
-## 5. 마치며
+<br />
+
+# 5. 마치며
 
 모노레포 도입 이전부터 프로젝트 구성에는 기초 지식이 필요했습니다. 이러한 진입 장벽을 낮추고 개발자들의 부담을 줄이고자 우리는 앞서 소개한 도구들을 도입하게 되었습니다. 개발 팀이 성장하고 프로젝트 규모가 커짐에 따라, 이러한 개선 노력들이 큰 효과를 발휘하기 시작했습니다. 결과적으로 우리는 개발자들이 복잡한 환경 설정보다는 실제 서비스 로직에 더 집중할 수 있는 환경을 만들어가고 있습니다.
 
