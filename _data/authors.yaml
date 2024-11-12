@@ -265,3 +265,11 @@ riaco:
   introduction: 쏘카의 Common Resource팀에서 프론트엔드 개발을 하고 있습니다.
   links:
     linkedin: 'https://www.linkedin.com/in/minsgy/'
+
+wade:
+  name: 웨이드
+  image: '/assets/authors/wade.png'
+  position: 카셰어링 프로덕트팀 프로덕트 매니저
+  introduction: 쏘카플랜 PM입니다.
+  links:
+    linkedin: 'https://www.linkedin.com/in/jeonyijun/'
