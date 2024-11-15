@@ -265,3 +265,10 @@ riaco:
   introduction: 쏘카의 Common Resource팀에서 프론트엔드 개발을 하고 있습니다.
   links:
     linkedin: 'https://www.linkedin.com/in/minsgy/'
+
+kain:
+  name: 카인
+  image: '/assets/authors/kain.jpg'
+  position: Common Resource팀 프론트엔드 개발자
+  introduction: 쏘카의 Common Resource팀에서 프론트엔드 개발을 하고 있습니다.
+
