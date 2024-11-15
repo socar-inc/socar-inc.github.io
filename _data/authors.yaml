@@ -266,14 +266,6 @@ riaco:
   links:
     linkedin: 'https://www.linkedin.com/in/minsgy/'
 
-wade:
-  name: 웨이드
-  image: '/assets/authors/wade.png'
-  position: 카셰어링 프로덕트팀 프로덕트 매니저
-  introduction: 쏘카플랜 PM입니다.
-  links:
-    linkedin: 'https://www.linkedin.com/in/jeonyijun/'
-
 kain:
   name: 카인
   image: '/assets/authors/kain.jpg'
